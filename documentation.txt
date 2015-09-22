@@ -16,11 +16,11 @@ ISSUES
 - how did sGraphics get an " " as one of its keys? noticed when trying to fill the tooltips in render
 - can't copy the text instructions to the clipboard, at least not when open in the IDE
 - I think sExpanded is silently assuming the current doc
-- repace hack that overwrites project title node's coord for dive/rise links in calcLinkCoord
+- replace hack that overwrites project title node's coord for dive/rise links in calcLinkCoord
 - userInfo, check to be sure input is formatted correctly
 - userFile, I gave up on figuring out absolute-vs-relative paths for files
 -- the application itself is going to run in a folder
--- the user is probably going to work on thier project in an entirely different folder
+-- the user is probably going to work on their project in an entirely different folder
 -- they might pull in files from even more different folders
 -- at a minimum, platypus should store the filename & extension
 -- but what if the project has folders? store the relative path? search for the file?
@@ -28,67 +28,56 @@ ISSUES
 
 FEATURES
 - sync
+-- flow link between two nodes with the same type (both change, etc) syncs them
+-- they aren't the same record, but look like the same node from either direction
+-- whatever is available to one is available to the other
+-- duplicate tags will both display (two titles, etc)
 -- in style file
 -- default for syncer is to use the other end
 -- default for syncee is to not use the other end
 -- can go down to level of turning on/off each indivdual tag in each synced node in the style file if necessary
 - style file
--- same name as platypus file with a different extension
+-- same name as .how file with a different extension
 - web app
 -- could stay local
--- could be synced to wareium as a backup and/or discovery
+-- could be synced to howstr.com as a backup and/or discovery
 - universal pointer URI
 -- need to record enough to get to thing somewhere else
 -- system(process), folder/file, doc, rec, tag
 -- for external links it should be a normal URL
 -- for internal it should keep working even if some minor stuff changes
--- if platyvue moves something it can leave behind a redirect file or update a log
--- maybe platyvue assignes a unique file name and the user picks the project name, which is stored in the file, so if the user changes the project name the file name is unaffected
+-- if howstr moves something it can leave behind a redirect file or update a log
+-- maybe howstr assignes a unique file name and the user picks the project name, which is stored in the file, so if the user changes the project name the file name is unaffected
 -- ?file=123456&doc=1&rec=83&tag=title
 -- file name is just a long string that won't be the same as any other file name
 -- pointer: localhost?file=234o957&doc=1&rec=34,localhost?file=234o957&doc=1&rec=34
--- if it points to a doc/rec in the same file, then leave the file parameter off so that if someone clones the file contents into a new file with its own name platyvue will still know to serve up the recs in the open file and not go looking for another file or convert the file name
+-- if it points to a doc/rec in the same file, then leave the file parameter off so that if someone clones the file contents into a new file with its own name howstr will still know to serve up the recs in the open file and not go looking for another file or convert the file name
 -- do a dependency check, otherwise the clone won't bring all of the other files the pointers might point to
--- when cloning a file, store the old and new file name in rec 0. first thing platyvue does when it can't find the file is check the log in rec 0
+-- when cloning a file, store the old and new file name in rec 0. first thing howstr does when it can't find the file is check the log in rec 0
 -- just parse into an array
-- modified weight tag
+- modified weight tag (include equipment/material information)
 -- instead of # it would be #,#
 -- so if you supply 1 hammer, the weight would be 1,1 meaning you also return one hammer
 -- if you supply 2,1 bolts, you put in 2, and then get 1 back
 - style file for alternatives
 -- multiple flow into the same state will actually be kind of rare since it means there's more than one way to make the exact same thing
 -- the style file will automatically populate with all states that have two or more supply links
--- the user will then turn them on or off as desired. that choice will only be recorded in the style file and it will then affect how platyvue calculates and renders the unchanged platypus file
+-- the user will then turn them on or off as desired. that choice will only be recorded in the style file and it will then affect how howstr calculates and renders the unchanged .how file
 - tag: reversible
 -- tag a change as reversible means the supply and demand can be switched with no loss of accuracy
-- drain true/false
--- not required. if missing assumed to be false
--- can be applied to state and/or link from state to change
--- value in link overrides value in state; if present in link then state not checked
--- actually, this is only part of correcting the supplyDemand calculation. also need proper serial/parallel tag, which can be overriden by style file. so full answer needs both tags and style file
+-- maybe that will be useful in the future to create both assembly and disassembly from the same .how file
 - extent of calculation
--- the point is to build a massive platynet
+-- the point is to build a massive howverse
 -- that means anything linked into it needs to be told when to stop including more flows in its calculations
 -- default might be nothing outside of the current document, or nothing outside of the scope of the highest case node in the current document, or nothing by another author, etc
 - exploded parts diagram
 -- all encased states available in case node on their own canvas to be arranged to show physical layout and assembly/disassembly
--- perhaps each state has a canvas, then changes combine all state canvases, then the case node combines all change canvases
-- resource string
--- function that returns the summary of in/thru/out-puts of the flow inside a top-scope node
--- important part of projects included in other projects
--- use in the resource tab for the current document
--- just expand current script to do every top-scope node and include all in/thru/out-put data of same-level
--- problem: didn't assign a key, so possible for many nodes to be marked 3,top (or whatever) and many unconnected batches of flows to be dumped into the same [3] list-- need to assign unique index to clarify which top-scope node the in/thru/out nodes belong to
--- have rec so just check skim/trim for in/out, but can't for thru
+-- perhaps each node has a canvas, then changes combine all state canvases, then the case node combines all change canvases
+-- that would probably fit well with the idea that the project is encased in the auto-generated state. the first canvas you see is that node's canvas
 - unusual reserved words
 -- maybe change the default keywords to something that isn't a real word
 -- like instead of "type" use "epyt"
--- that way users can assign any tag they feel like and it won't conflict
-- sync link
--- flow link between two nodes with the same type (both change, etc) syncs them
--- they aren't the same record, but look like the same node from either direction
--- whatever is available to one is available to the other
--- duplicate tags will both display (two titles, etc)
+-- that way users can assign any tag they feel like and it can't possibly conflict
 - create backwards links
 -- right now you have to click on the origin and then the terminal nodes for the link
 -- need to be able to at least reverse the direction of a link
@@ -101,13 +90,13 @@ FEATURES
 - handle more supply balancing options
 -- right now all supplying links are increased by the same gravity
 -- it could be possible to produce less or zero excess by "solving" all the available supply options; increase gravity on each supply action differently to minimize supply/demand differential
-- allow user to specify different gravity sharing among suppliers
+- allow user to specify different gravity sharing among suppliers in style file
 -- if supply needs to be increased, and there is more than one supplier of that state, it's possible for them to share the gravity unequally
 - use style file to specify series/parallel change
--- use subgraph instead of tags?
+-- use encased subgraph instead of tags?
 -- if you have to do it 4 times, you could do 4-series, or 4-parallel, or 2-series in parallel, etc.
 -- the math for input/output depends on which approach the user wants to choose. there's a different equipment max for each, and in a project mgmt sense different resources need to be available at different times.
--- also, a subgraph in a change can describe a multi-node process that can be done in parallel. at the moment series/parallel calculations only work for a single change node, not for multiple nodes, but that scope could be a subgraph and the one node could be done in parallel
+-- also, an encased subgraph in a change can describe a multi-node process that can be done in parallel. at the moment series/parallel calculations only work for a single change node, not for multiple nodes, but that scope could be a subgraph and the one node could be done in parallel
 - display dive/rise more intuitively
 -- maybe a new, sightly smaller border for the graph group with the container node embedded in it
 -- maybe an outline around the contained nodes
@@ -117,20 +106,16 @@ FEATURES
 -- time (duration tag with units)
 -- PERT, slack, critical path, GANTT chart, etc
 - maybe use popup to create a right-click menu for entering information
-- maybe timestamp each record? don't have a use for it at the moment
+- maybe timestamp each record? don't have a use for it at the moment. not clear which time reference to use
 - auto select new node when created
-- write interactive instruction view
+- add interaction to instructions tab
 -- allow selecting and editing through the instructions display
 -- rewrite to display in a list; maybe a datagrid form, maybe rTree
 - write flow alternatives
 -- at the moment all links are assumed to be necessary
 -- need some kind of boolean to create alternatives
 -- use style file; don't include idle alternatives in sMainShort; all existing logic will continue to work
-- create style file
--- everyone will make slightly different choices in a complex project
--- need to save those choices, but keep them separate from platypus itself
 - enable non-text data
-- convert pointers to full URL
 - architect the graphicalNetwork the same as rTree
 -- pass it an array describing everything it's supposed to do in one formatted place
 -- at the moment it's being calculated piecemeal

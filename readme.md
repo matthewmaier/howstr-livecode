@@ -1,6 +1,6 @@
 ## Synopsis
 
-Platyvue manipulates the Platypus documentation schema. This GUI makes it easy to understand and edit a network (nodes and links) of snippets of information. Ultimately you can manage all of the files relevant to a project (how to turn something into something else) using Platypus/vue and collaborate with someone through the internet. 
+Howstr manipulates the NotionAll documentation schema. This GUI makes it easy to understand and edit a network (nodes and links) of snippets of information. Ultimately you can manage all of the files relevant to a project (how to turn something into something else) using Howstr and collaborate with someone through the internet. 
 
 ## Code Example
 
@@ -12,9 +12,12 @@ I want to collaborate on hardware projects with other people wherever they happe
 
 ## Installation
 
-Download the community (open source) version of Livecode (version 7) http://livecode.com/download/
-Open the "platyvue alpha.livecode" stack in the IDE
-In Platyvue, open the "shepard example.plat" file
+To run Howstr as a standalone:
+Get the appropriate desktop application for your OS in the Howstr_Alpha folder.
+
+To run Howstr from the Livecode IDE:
+Download the community (open source) version of Livecode (version 8, highest DP) http://downloads.livecode.com/livecode/
+Open the "howstr alpha.livecode" stack in the IDE
 
 ## API Reference
 
@@ -30,4 +33,4 @@ All participation welcome! I self-taught so that I could get this prototype buil
 
 ## License
 
-LGPLv3 Using Platypus will make the world better. I don't see any reason to place restrictions on usage.
+Apache 2.0 Using Howstr will make the world better. I don't see any reason to place restrictions on usage.
