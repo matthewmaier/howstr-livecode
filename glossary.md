@@ -1,8 +1,8 @@
 # Howstr Glossary
 Start with these terms:
-- [state](##state)
-- [change](##change)
-- [step](##step)
+- [state](#state)
+- [change](#change)
+- [step](#step)
 
 ##change
 A type of [node](##node)
@@ -26,6 +26,21 @@ A type of [dimension](##dimension)
 A type of [node](##node)
 States are an important part of the [sequence](##sequence) dimension. They are like a noun. They are assumed to represent a description of a thing that is true at some instant in time. It is possible for states to cover a span of time provided the entire description is true for the entire span of time (like if something sits unchanged in storage).
 All of the information attached to a state must be true simultaneously and must not leave out any details necessary to distinguish one state from another.
+
+g
+g
+g
+g
+g
+g
+g
+g
+g
+g
+g
+g
+g
+g
 
 ##step
 A [node](##node) or a [link](##link)
