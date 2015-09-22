@@ -29,6 +29,8 @@ To run Howstr from the Livecode IDE:
 Download the community (open source) version of Livecode (version 8, highest DP) http://downloads.livecode.com/livecode/
 Open the "howstr alpha.livecode" stack in the IDE
 
+You can open the example files or build networks from scratch. Howstr automatically produces Instructions and a Bill Of Materials. 
+
 ## API Reference
 
 No API yet. You can help with that.
