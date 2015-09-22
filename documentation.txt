@@ -1,0 +1,308 @@
+ISSUES
+- overlapping scope
+-- a node could encase flow that is larger than another node encasing part of the same flow, or just encase overlapping parts of the same flow
+-- that's probably a problem
+-- not sure how to check for it
+-- maybe have to just walk the network and throw a warning when find a trim-flow-trim instead of trim-flow-skim (or vice versa). but no obvious way to be sure you started from the larger scope, or even that it's the smaller scope that's in error
+-- so need a general warning when scope overlaps; maybe run that first
+- sync logic
+-- flow between same type of node creates sync link
+-- whatever is available in one node is available in the other
+-- that will change logic that's already written
+-- maybe a function that answers "is this a sync link?"; returns false or all of the other node's info
+- fix supplyDemand
+-- highest level case nodes must themselves have only read & bulk; additionally, all of the nodes they're linked to must be clean in/out. can't have both next and prev unless one of them is a sync link
+-- need to make a couple jumps to determine all that
+- how did sGraphics get an " " as one of its keys? noticed when trying to fill the tooltips in render
+- can't copy the text instructions to the clipboard, at least not when open in the IDE
+- I think sExpanded is silently assuming the current doc
+- repace hack that overwrites project title node's coord for dive/rise links in calcLinkCoord
+- userInfo, check to be sure input is formatted correctly
+- userFile, I gave up on figuring out absolute-vs-relative paths for files
+-- the application itself is going to run in a folder
+-- the user is probably going to work on thier project in an entirely different folder
+-- they might pull in files from even more different folders
+-- at a minimum, platypus should store the filename & extension
+-- but what if the project has folders? store the relative path? search for the file?
+-- livecode has a lesson converting-an-absolute-path-to-a-relative-path
+
+FEATURES
+- sync
+-- in style file
+-- default for syncer is to use the other end
+-- default for syncee is to not use the other end
+-- can go down to level of turning on/off each indivdual tag in each synced node in the style file if necessary
+- style file
+-- same name as platypus file with a different extension
+- web app
+-- could stay local
+-- could be synced to wareium as a backup and/or discovery
+- universal pointer URI
+-- need to record enough to get to thing somewhere else
+-- system(process), folder/file, doc, rec, tag
+-- for external links it should be a normal URL
+-- for internal it should keep working even if some minor stuff changes
+-- if platyvue moves something it can leave behind a redirect file or update a log
+-- maybe platyvue assignes a unique file name and the user picks the project name, which is stored in the file, so if the user changes the project name the file name is unaffected
+-- ?file=123456&doc=1&rec=83&tag=title
+-- file name is just a long string that won't be the same as any other file name
+-- pointer: localhost?file=234o957&doc=1&rec=34,localhost?file=234o957&doc=1&rec=34
+-- if it points to a doc/rec in the same file, then leave the file parameter off so that if someone clones the file contents into a new file with its own name platyvue will still know to serve up the recs in the open file and not go looking for another file or convert the file name
+-- do a dependency check, otherwise the clone won't bring all of the other files the pointers might point to
+-- when cloning a file, store the old and new file name in rec 0. first thing platyvue does when it can't find the file is check the log in rec 0
+-- just parse into an array
+- modified weight tag
+-- instead of # it would be #,#
+-- so if you supply 1 hammer, the weight would be 1,1 meaning you also return one hammer
+-- if you supply 2,1 bolts, you put in 2, and then get 1 back
+- style file for alternatives
+-- multiple flow into the same state will actually be kind of rare since it means there's more than one way to make the exact same thing
+-- the style file will automatically populate with all states that have two or more supply links
+-- the user will then turn them on or off as desired. that choice will only be recorded in the style file and it will then affect how platyvue calculates and renders the unchanged platypus file
+- tag: reversible
+-- tag a change as reversible means the supply and demand can be switched with no loss of accuracy
+- drain true/false
+-- not required. if missing assumed to be false
+-- can be applied to state and/or link from state to change
+-- value in link overrides value in state; if present in link then state not checked
+-- actually, this is only part of correcting the supplyDemand calculation. also need proper serial/parallel tag, which can be overriden by style file. so full answer needs both tags and style file
+- extent of calculation
+-- the point is to build a massive platynet
+-- that means anything linked into it needs to be told when to stop including more flows in its calculations
+-- default might be nothing outside of the current document, or nothing outside of the scope of the highest case node in the current document, or nothing by another author, etc
+- exploded parts diagram
+-- all encased states available in case node on their own canvas to be arranged to show physical layout and assembly/disassembly
+-- perhaps each state has a canvas, then changes combine all state canvases, then the case node combines all change canvases
+- resource string
+-- function that returns the summary of in/thru/out-puts of the flow inside a top-scope node
+-- important part of projects included in other projects
+-- use in the resource tab for the current document
+-- just expand current script to do every top-scope node and include all in/thru/out-put data of same-level
+-- problem: didn't assign a key, so possible for many nodes to be marked 3,top (or whatever) and many unconnected batches of flows to be dumped into the same [3] list-- need to assign unique index to clarify which top-scope node the in/thru/out nodes belong to
+-- have rec so just check skim/trim for in/out, but can't for thru
+- unusual reserved words
+-- maybe change the default keywords to something that isn't a real word
+-- like instead of "type" use "epyt"
+-- that way users can assign any tag they feel like and it won't conflict
+- sync link
+-- flow link between two nodes with the same type (both change, etc) syncs them
+-- they aren't the same record, but look like the same node from either direction
+-- whatever is available to one is available to the other
+-- duplicate tags will both display (two titles, etc)
+- create backwards links
+-- right now you have to click on the origin and then the terminal nodes for the link
+-- need to be able to at least reverse the direction of a link
+-- maybe be able to create a link to/from a node you can't click on right now?
+- work with multiple open documents
+-- how do you link to a node in another document?
+-- have both open in separate screens simultaneously?
+-- have some kind of clipboard?
+-- a search/selection menu?
+- handle more supply balancing options
+-- right now all supplying links are increased by the same gravity
+-- it could be possible to produce less or zero excess by "solving" all the available supply options; increase gravity on each supply action differently to minimize supply/demand differential
+- allow user to specify different gravity sharing among suppliers
+-- if supply needs to be increased, and there is more than one supplier of that state, it's possible for them to share the gravity unequally
+- use style file to specify series/parallel change
+-- use subgraph instead of tags?
+-- if you have to do it 4 times, you could do 4-series, or 4-parallel, or 2-series in parallel, etc.
+-- the math for input/output depends on which approach the user wants to choose. there's a different equipment max for each, and in a project mgmt sense different resources need to be available at different times.
+-- also, a subgraph in a change can describe a multi-node process that can be done in parallel. at the moment series/parallel calculations only work for a single change node, not for multiple nodes, but that scope could be a subgraph and the one node could be done in parallel
+- display dive/rise more intuitively
+-- maybe a new, sightly smaller border for the graph group with the container node embedded in it
+-- maybe an outline around the contained nodes
+-- maybe multi-segment dive/rise links
+- project management
+-- people and labor
+-- time (duration tag with units)
+-- PERT, slack, critical path, GANTT chart, etc
+- maybe use popup to create a right-click menu for entering information
+- maybe timestamp each record? don't have a use for it at the moment
+- auto select new node when created
+- write interactive instruction view
+-- allow selecting and editing through the instructions display
+-- rewrite to display in a list; maybe a datagrid form, maybe rTree
+- write flow alternatives
+-- at the moment all links are assumed to be necessary
+-- need some kind of boolean to create alternatives
+-- use style file; don't include idle alternatives in sMainShort; all existing logic will continue to work
+- create style file
+-- everyone will make slightly different choices in a complex project
+-- need to save those choices, but keep them separate from platypus itself
+- enable non-text data
+- convert pointers to full URL
+- architect the graphicalNetwork the same as rTree
+-- pass it an array describing everything it's supposed to do in one formatted place
+-- at the moment it's being calculated piecemeal
+- allow user to change zoom level in graphicNetwork
+-- reset view to default x,y when opening/new
+-- reset scale
+-- save x,y & scale to style file(?)
+- allow intermediate points the link has to be drawn through
+- allow for direct changes rather than having to delete then create something new
+-- use right click popup context menu
+- provide more options for what to do when hiding a step
+-- allow user to hide more than one item at a time
+- modify userState/Change/Bond/Flow/Dive/Rise
+-- instead of just creating a new step, change an existing step to a different type
+-- if same type clicked again, reverse link direction
+-- this would mean giving the user a way to clear the current selection
+- allow for more than one open doc at a time
+-- userNew is empty
+-- sNowDoc always equals 1
+-- automatically calls for a new blank doc when active doc closes
+- allow drag of multiple nodes simultaneously
+-- maybe allow shift-select to hilite all intermediate nodes listed in topo sort
+-- drag moves all hilited nodes, not just the node dragged
+- enable area select; all steps inside box
+-- maybe allow a free form select; draw a polygon around or thru whatever you want
+
+GLOSSARY
+- step: a node or a link
+-- node
+--- state: a thing that is true at an instant in time
+--- change: an action, over a period of time, that converts from one state to another
+-- link
+--- bond: undirected link in the project dimension
+--- flow: directional link in the project dimension; sequence of steps
+---- next: forward
+---- prev: backwards
+--- dive: directional link in the scope dimension; from summary to detailed; from case node to start of encased flow nodes
+---- read: forwards
+---- skim: backwards
+--- rise: directional link in the scope dimension; from detailed to summary; from end of encased flow nodes to case node
+---- trim: forwards
+---- bulk: backwards
+- tag: a piece of information attached to a step
+- turn: an historical record of a function that altered the platypus file (basically a step along the time dimension instead of the sequence dimension)
+- types: state/change, bond/flow(next/prev), dive(read/skim)/rise(trim/bulk)
+- dimensions: sequence (next/prev state/change), time (turn/myTurn), scope (dive/rise, read/skim, trim/bulk)
+-- the pairs of key words are to identify either end of each kind of link
+- platypus
+-- file: a list of documents
+-- document: a list of records
+-- record: whole number keys from 1 to infinity, with data
+-- pointer: string identifying another record
+--- positive: #,# (target record),(record of turn that created this pointer)
+--- negative: -#,# (EX: if 1,2 and -1,3 are in the same list they cancel out)
+- material vs equipment: all states are material (used up during the action) unless they have both dive and rise links to the case node. In which case they're equipment (not used up during the action). all states are assumed to be material unless specified otherwise. Both states and their links into changes can be tagged as material/equipment. The tag in the link always overrides any tag in the state. in this way one state can be returned or consumed by each individual action
+- series: true/false, defaults to true; means calculations assume multiples of this change happen one after the other; false (parallel) means calculations assume multiples of this change happen at the same time. This affects the maximum amount of equipment necessary and can affect resource loading if project management information is included. The parallel calculation only works for one change node, not for  a series of nodes.
+- action: A change and all the states linked to it; the smallest unit of a platypus project. state > change > state. States can belong to more than one action.
+- weight: links are assumed to have a weight of 1. A higher weight can be assigned. State >5> change means the change demands 5 copies of that state. Change >5> state means the state supplies 5 copies of that state.
+- gravity: link weight can be modified by gravity, which is not assigned, it's calculated (therefor it is part of Platyvue, not Platypus). If an action supplies 1 state, but the following action demands 2 copies, then the preceeding action's gravity is increased from 1 (default) to 2, which modifies all of that action's link weights. The preceeding action would then be demanding twice as many copies of its supply states. 
+
+KEYWORDS
+- act
+- coord
+- myStep
+- myTurn
+- newItem
+- redo
+- state
+- step
+- title
+- turn
+- type
+- undo
+- userRedo
+- userUndo
+
+PLATYPUS DATA STRUCTURE
+- system > file > document > record > tag > data
+- any number of systems; any number of .plat files on system; unlimited number of documents in single .plat file (counting up from 1); unlmited number of records in single document (counting up from 1); any number of tags in record; any amount of text data in tags. additionally, a document can define any number of projects
+- nothing is recorded directly in platypus that can't be represented as a string. non-text like images are recorded with a link
+- working structure is a nested array; should be saved as human readable JSON or YAML string for openness, but it's not necessary for platypus to work
+- platypus uses a network of records and pointers to allow unlimited links to single record of information; platyvue uses the records/pointers to build a network of nodes and links that the user works with
+- full pointer: http://www.foobar.com/myproject.plat?doc=1&rec=17&tag=title (another server)
+--------------- c:/documents/myproject/foobar.plat?doc=4&rec=72 (another drive)
+--------------- doc=7&rec=67 (another document)
+--------------- 29 (another record in same document)
+- metadata
+-- record 0 used for data like lastKey (the highest record number used), file paths, version numbers, etc
+- system generated record tags
+-- step/turn: first keyword, like index.html; data is pointers
+-- myTurn/myStep: this record is attributed to that turn or step
+
+sGraphics is an array with important information for the graphicalNetwork
+[doc][rec][longID] (for node & link)
+[doc][rec][coord]=1,2(for node)
+[doc][rec][links]=1,2,3(for node)
+[doc][rec][type]=string (for link)
+[doc][rec][Xnode]=1(for link) (based on three nodes X-Y-Z or node-link-node)
+[doc][rec][Znode]=1(for link)
+all graphics (identified by longID) have these properties
+longID has cRecKey=# and points and loc(ation)
+
+sMainShort is an array that simplifies Platypus into a normal adjacency list
+[doc][rec][type]=string (state, change, etc)
+[doc][rec][read/bulk/skim/next/prev/etc]=return delimited list of recs
+[doc][rec][info]=string of all non-system tag:data pairs
+[doc][rec][weight]=user defined multiple on a link
+
+sResources is an array about resources (duh); calculated values
+[doc][rec][gravity]=number to multiply the weight by to get total supply/demand
+[doc][rec][excess]=number of supply not demanded
+[doc][rec][totSupply]=number total copies of state supplied
+[doc][rec][totDemand]=number total copies of state demanded
+[doc][rec][scopeRef]=list (comma & cr) one line for each role the node has in the scope
+case,role | #,solo/in/thru/out/top
+case=the node encasing this one (0 is a pseudo case node for non-encased stuff)
+role=what links the node has
+
+sScopeSketch summarizes hierarchy in scope dimension
+baseline is nodes that aren't encased, so "index" is 0
+[doc][0][in]=cr delimited list of recs (skim and next)
+[doc][0][thru]=list (next and prev)
+[doc][0][out]=list (prev and trim)
+[doc][0][idle]=list (no links)
+[doc][0][top]=5, (read and bulk
+entries in [top] are nodes that encase next scope level
+[doc][5][in]=list,12
+[doc][5][thru]=list,74
+[doc][5][out]=list
+[doc][5][idle]=list
+[doc][5][top]=12,74
+[doc][5][solo]=list
+[doc][12][etc]
+[doc][74][etc]
+etc...
+
+IMPORTANT NOTES ABOUT PLATY-PUS
+- it's a network (nodes/links) built out of another network (records/pointers)
+-- this allows information to be categorized more than once (project/history/scope...)
+-- but only be recorded once; data can be a child of a step and a turn simultaneously
+- by design, nothing is ever deleted
+-- every change (even undo/redo) creates a new turn
+-- the pointer to data can be negated in the future, a negated pointer is ignored
+-- steps with all negated pointers are ignored (effectively hidden)
+-- data will not be displayed if no step points to it (effectively hidden)
+-- the only way to actually delete something is to edit the raw .plat file outside of platypus
+- there shouldn't be more than one link between the same two nodes
+- dimensions can intersect and affect the same record
+-- the sequence dimension is states and changes linked by flow
+-- the time dimension is from record 1 in the past, thru turns, to the present status
+-- the scope dimension is dive into a node to find many nodes, rise up to the case node
+--- scope is higher (more abstract) to lower (more detailed)
+--- scoping requires a loop inside of a case node made out of dive, thru the sequence dimension, then rise back to the encasing node. encasing is just a property of a node when it encases other nodes, not a type of node. back to original node
+- all turns produce at least one new record (other than their own)
+-- usually the new record(s) is new information for the network
+-- if not, then it's a pointer to the pre-existing thing that the turn altered
+-- also, the turn's pointer(s) can be negated/posited when the turn is undone/redone
+-- the link tags are a bit redundant, but it keeps the "type" tag consistent for all steps
+- you can record that an action should be done more than once, but not on the output link(s) of the change. instead, record that the state(s) the change supplies is/are required for the next action in greater numbers than supplied. the action should be one indivisible activity, which can be done more than once.
+- there should be an un-ambiguous hierarchy of scope. a node shouldn't be an in for one top and an out for another simultaneously; use a sync link and two different nodes. don't scope part of the flow that is already scoped or overlap scopes. the whole point of scope is to be clear on something's limits
+
+IMPORTANT NOTES ABOUT PLATY-VUE
+- the select or drag in graphicNetwork relies on a "wait for 100" line; might not work everywhere
+- savedField is mostly controlled from the script attached to the File button
+- easyJSON is modified to treat all arrays like they have non-numeric keys; maintains array sort
+- easyJSON now has a couple short commands because dispatch doesn't work with functions, only commands
+- commented out pass preOpenStack message in rTreeEngine stack script. reasons.
+- using dive/rise to contain more detailed nodes only allows one set. If a node is a container, all nodes linked by dive/rise are assumed to be in one set; you can't have two different sets.
+- A container node shows up twice in the topological sort. First when the sort gets to it for the first time and again when all of its contained steps have been visited.
+- if flow is not of the pattern state > change > state then calculated results probably won't make sense
+- supplyDemand and gravity balancing assume infinite supply is available. that will have to change when the user can define finite resources
+- the links overlap and their bounding boxes can cover each other. if you double click on a link it gets pushed to the bottom, so just keep clicking on the spot you want and sooner or later everything in the way will shuffle to the bottom
+- state > state or change > change is interpreted as a pseudo "sync" link. the two nodes will, more or less, appear to be the same node. Whatever is available to one (links, tags, etc) will be available to the other. this is how you include projects that have been written elsewhere in time and space. the record for each node will be different, but the contents will be the same 
+- by default, if a pointer connects to another document, then all of the turns after the pointer was created will be ignored
+-- effectively, the document will be seen as it was when the pointer was created
