@@ -2,7 +2,6 @@
 Start with these terms:
 - [state](#state)
 - [change](#change)
-- [step](#step)
 
 ##action
 A [change](#change) and all of the [states](#state) linked to it.
@@ -18,7 +17,9 @@ Generally represented by a triangle (like a delta)
 Changes are an important part of the [sequence](##sequence) dimension. They are like verbs. Howstr assumes they represent something that happens over a span of time that converts the world from one state to another. It is possible for changes to only take an instant provided something is different at the beginning and end of that instant.
 The information attached to a change must not include the definition(s) of any states, since that information should be recorded in the states themselves.
 
-##demand 
+##demand
+[outputs](#output) demand [inputs](#input). 
+Any flow link coming into a step is an input and any flow link leaving a step is an output. The step(s) that don't have any flow links leaving them are the outputs for that [sequence](#sequence). Whatever they demand is rolled backwards. Any [supply](#supply) that isn't already [weighted](#weight) enough to meet the demand is modified by [gravity](#gravity) until total supply meets or exceeds total demand.
 
 ##dimension
 The dimensions Howstr uses are [history](#history), [scope](#scope), and [sequence](#sequence)
@@ -33,11 +34,18 @@ A dive link must be paired with at least one [rise](#rise) link to complete the 
 The [link](#link) in the [sequence](#sequence) [dimension](#dimension)
 This directional link specifies that one thing comes before/after another. Flow links do not technically create a timeline, but the sequence they describe can cover a period of time.
 
+##gravity
+When the quantity of [states](#state) an [action](#action) [supplies](#supply) isn't enough to meet total [demand](#demand) Howstr increases the supply by multiplying the entire action (and therefore all [weights](#weight)) by gravity.
+Gravity is recalculated every time something changes and is stored in a temporary variable that affects Howstr's calculations but doesn't modify the underlying file.
+
 ##history
 A type of [dimension](#dimension)
 This dimension comes from the [NotionAll](#NotionAll) specification. Howstr uses it in several important ways. It allows for an infinite undo/redo stack. It also allows authors to include each other's work without worrying about the thing they linked to changing in the future. This dimension also allows Howstr to find resources even if their location or filename changes.
 
 ##input
+[States](#state) that have outgoing [flow](#flow) links and no incoming flow links.
+An input defines the beginning of a [sequence](#sequence) and is where [scope](#scope) enters from the encasing state.
+Inputs are extremely important because they are required to finish the project. It's easy for people with enough knowledge to write instructions to take important little things for granted. For example, someone just starting out cooking might not have as many bowls as an experienced chef. 
 
 ##link
 A type of [step](#step)
@@ -54,6 +62,8 @@ The NotionAll standard can be used to build an augmented adjacency list. Any num
 Howstr uses the NotionAll standard to organize the information that humans need to understand how to do things.
 
 ##output
+Outputs are [states](#state) that have incoming [flow](#flow) links and no outgoing flow links. An output defines the end of a [sequence](#sequence) and is where [scope](#scope) is returned to the encasing state with a [rise](#rise) link.
+Howstr doesn't differentiate between outputs we want and outputs that are produced as a side-effect of our [actions](#action). They should all be recorded (eventually). For example, if actions call for cutting wood, the documentation isn't really finished until there is a sawdust output. On the other hand, in a situation like that heat and noise outputs might not be relevant enough to ever document.
 
 ##rise
 A type of [link](#link) in the [scope](#scope) [dimension](#dimension)
@@ -84,7 +94,17 @@ Steps are actually the same thing in the underlying [NotionAll](#NotionAll) arra
 It is possible to attach any kind of information to a step by creating a tag and putting data in it. Anything Howstr doesn't recognize will just be displayed and if it can't be displayed it will simply be stored.
 
 ##supply
+[Inputs](#input) supply [outputs](#output).
+After total [demand](#demand) is calculated, supply is increased by a [gravity](#gravity) multiplier until it meets or exceeds demand. If a [thruput](#thruput), the new supply becomes a demand on any steps that supply it.
+
+##tag
+A piece of information attached to a step. There are several default tags that Howstr uses in its algorithms. Additionally, anybody can define any tag that they find useful. 
+Howstr's algorithms ignore any non-default tags. If non-default tags have data in the Howstr will attempt to display the data.
 
 ##thruput
 A step in the [sequence](#sequence) dimension that is not an [input](#input) or an [output](#output).
 Howstr usually won't report anything about a thruput, but an important exception is when there's an imbalance between [supply](#supply) and [demand](#demand).
+
+##weight
+A default [tag](#tag) that Howstr expects to find attached to all [links](#link).
+If Howstr doesn't find a weight tag then a weight of 1 is assumed. ! implement the new #,#/supply,return logic for weights then update this
