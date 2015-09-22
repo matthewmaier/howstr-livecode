@@ -30,6 +30,10 @@ A type of [link](#link) in the [scope](#scope) [dimension](#dimension)
 Think of it as "diving" inside of a case to see the encased details. This directional link goes from the encasing node to an input node in the encased [flow](#flow). This link is how Howstr knows what is supposed to be encased and therefore affects calculations.
 A dive link must be paired with at least one [rise](#rise) link to complete the loop, and that rise link must appear later in the encased flow.
 
+##document
+Defined by [NotionAll](#NotionAll)
+A NotionAll document is an array with whole number integer keys starting at 0 and increasing to infinity. 0 is reserved for metadata. Each key is called a [record](#record) and is expected to contain an arry.
+
 ##flow
 The [link](#link) in the [sequence](#sequence) [dimension](#dimension)
 This directional link specifies that one thing comes before/after another. Flow links do not technically create a timeline, but the sequence they describe can cover a period of time.
@@ -64,6 +68,16 @@ Howstr uses the NotionAll standard to organize the information that humans need 
 ##output
 Outputs are [states](#state) that have incoming [flow](#flow) links and no outgoing flow links. An output defines the end of a [sequence](#sequence) and is where [scope](#scope) is returned to the encasing state with a [rise](#rise) link.
 Howstr doesn't differentiate between outputs we want and outputs that are produced as a side-effect of our [actions](#action). They should all be recorded (eventually). For example, if actions call for cutting wood, the documentation isn't really finished until there is a sawdust output. On the other hand, in a situation like that heat and noise outputs might not be relevant enough to ever document.
+
+##pointer
+Defined by [NotionAll](#NotionAll).
+Contains two [record](#record) keys; one for the target record and one for the [turn](#turn) that created the pointer.
+Pointers are always recorded in both the targeted and targeting records.
+Once recorded, pointers are never deleted. Instead, if an old pointer should be ignored, a new negative (-) pointer is added to negate the old one. The first thing Howstr does when processing a record is to remove all negated pairs of pointers from the list.
+
+##record
+Defined by [NotionAll](#NotionAll).
+A whole number integer key that contains a sub-array full of information. Records [point](#pointer) at each other using their record key.
 
 ##rise
 A type of [link](#link) in the [scope](#scope) [dimension](#dimension)
@@ -100,10 +114,33 @@ After total [demand](#demand) is calculated, supply is increased by a [gravity](
 ##tag
 A piece of information attached to a step. There are several default tags that Howstr uses in its algorithms. Additionally, anybody can define any tag that they find useful. 
 Howstr's algorithms ignore any non-default tags. If non-default tags have data in the Howstr will attempt to display the data.
+Default tags:
+- [bond](#bond)
+- bulk, [rise](#rise) backwards
+- [change](#change)
+- myStep, [pointer](#pointer) to the step that owns this
+- myTurn, [pointer](#pointer) to the turn that owns this
+- next, [flow](#flow) forwards
+- prev, [flow](#flow) backwards
+- read, [dive](#dive) forwards
+- redo, a [step](#step) that was undone has been redone
+- skim, [dive](#dive) backwards
+- [state](#state)
+- title, a short string used to identify the [node](#node)
+- trim, [rise](#rise) forwards
+- turn, a milestone on the [history](#history) [dimension](#dimension)
+- type, [step](#step) differentiator: state, change, bond, next, prev, read, skim, trim, bulk
+- undo, a [step](#step) has been undone
+- userRedo, a manual redo
+- userUndo, a manual undo
 
 ##thruput
 A step in the [sequence](#sequence) dimension that is not an [input](#input) or an [output](#output).
 Howstr usually won't report anything about a thruput, but an important exception is when there's an imbalance between [supply](#supply) and [demand](#demand).
+
+##turn
+Defined by [NotionAll](#NotionAll).
+Nothing is ever deleted from a NotionAll [document](#document) and every change to the document is tracked using turns. The turns are milestones on the [history](#history) [dimension](#dimension).
 
 ##weight
 A default [tag](#tag) that Howstr expects to find attached to all [links](#link).
