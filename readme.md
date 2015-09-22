@@ -1,14 +1,24 @@
 ## Synopsis
 
-Howstr manipulates the NotionAll documentation schema. This GUI makes it easy to understand and edit a network (nodes and links) of snippets of information. Ultimately you can manage all of the files relevant to a project (how to turn something into something else) using Howstr and collaborate with someone through the internet. 
+Howstr writes instructions for you.
 
-## Code Example
+Howstr will write and update complicated project documentation such as instructions and bills of material so that you can work with others more efficiently. You write what you know one time in one place and leave everything else to Howstr. 
 
-I'll come up with a good example later.
+The most important principle to grasp is that Howstr does not require you to write exactly what will be read later. Unlike our caveman ancestors we have computers to automate repetative tasks. Even with this advantage we still have to manually write everything exactly the way we want someone else to read it; the computer just makes it easier to provde copies of what we wrote. 
 
-## Motivation
+Ever tried to follow a recipe that silently assumed you knew what "bake until done" meant? Yeah, that's because the author only had time to write one script that all readers had to share. With Howstr, you write down your knowledge in a network and then each reader gets documentation tailored to fit their unique needs.
 
-I want to collaborate on hardware projects with other people wherever they happen to be. That's easier to do on software projects because computers follow instructions perfectly. In a hardware project the human is the compiler, so it's harder to write the instructions. If we can make it easy to discover and replicate tangible things we can extend the benefits of open source to everything outside of the computer.
+As the network of knowledge grows it becomes easier to add to it and more valuable to query it. 
+
+## The Problem and The Solution
+
+The phrase "reinvent the wheel" exists because usually we can't find out what other people already know about the thing we're working on. 
+
+The best option authors have right now is to painstakingly convert their knowledge into strings of text and maybe some illustrations. Writing takes a lot of effort and suffers from diminishing returns. Important information is locked up in people's heads because making the knowledge useful to others is a job in its own right.
+
+Howstr believes we can take a different approach that requires minimal effort and benefits from increasing returns. Instead of writing exactly what everyone will read, Howstr lets you link together small bits of knowledge and then cleverly renders that resource into whatever a reader needs at the moment. It's easy to make a lot of small notes in context and as the network grows it becomes more and more useful.
+
+You only have to write little, easy parts of the resource. Howstr takes care of making the whole resource useful to everyone else.
 
 ## Installation
 
