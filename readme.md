@@ -45,4 +45,8 @@ All participation welcome! I self-taught so that I could get this prototype buil
 
 ## License
 
-Apache 2.0 Using Howstr will make the world better. I don't see any reason to place restrictions on usage.
+Apache 2.0. Using Howstr will make the world better. I don't see any reason to place restrictions on usage.
+
+## Screen shots
+
+<img src="https://github.com/matthewmaier/howstr/blob/master/toast%20graph%20screencap.PNG" data-canonical-src="https://github.com/matthewmaier/howstr/blob/master/toast%20graph%20screencap.PNG" width="100" height="100" />
