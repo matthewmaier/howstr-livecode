@@ -50,3 +50,7 @@ Apache 2.0. Using Howstr will make the world better. I don't see any reason to p
 ## Screen shots
 
 <img src="https://github.com/matthewmaier/howstr/blob/master/toast%20graph%20screencap.PNG" data-canonical-src="https://github.com/matthewmaier/howstr/blob/master/toast%20graph%20screencap.PNG" width="100" height="100" />
+
+<img src="https://github.com/matthewmaier/howstr/blob/master/toast%20instructions%20screencap.PNG" data-canonical-src="https://github.com/matthewmaier/howstr/blob/master/toast%20instructions%20screencap.PNG" width="100" height="100" />
+
+<img src="https://github.com/matthewmaier/howstr/blob/master/toast%20resources%20screencap.PNG" data-canonical-src="https://github.com/matthewmaier/howstr/blob/master/toast%20resources%20screencap.PNG" width="100" height="100" />
