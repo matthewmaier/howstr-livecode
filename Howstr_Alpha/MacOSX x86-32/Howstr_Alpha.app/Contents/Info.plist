@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>BuildMachineOSBuild</key>
-	<string>14D136</string>
+	<string>14F27</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
 	<key>CFBundleDocumentTypes</key>
@@ -45,6 +45,10 @@
 <string>1.0.0.0</string>
 	<key>CFBundleSignature</key>
 <string>????</string>
+	<key>CFBundleSupportedPlatforms</key>
+	<array>
+		<string>MacOSX</string>
+	</array>
 	<key>CFBundleVersion</key>
 <string>1.0.0.0</string>
 	<key>CSResourcesFileMapped</key>
@@ -52,7 +56,7 @@
 	<key>DTCompiler</key>
 	<string>com.apple.compilers.llvm.clang.1_0</string>
 	<key>DTPlatformBuild</key>
-	<string>6E35b</string>
+	<string>7A218</string>
 	<key>DTPlatformVersion</key>
 	<string>GM</string>
 	<key>DTSDKBuild</key>
@@ -60,9 +64,9 @@
 	<key>DTSDKName</key>
 	<string>macosx10.8</string>
 	<key>DTXcode</key>
-	<string>0640</string>
+	<string>0700</string>
 	<key>DTXcodeBuild</key>
-	<string>6E35b</string>
+	<string>7A218</string>
 	<key>LFPrefersCarbon</key>
 	<true/>
 	<key>LSGetAppDiedEvents</key>

@@ -4,21 +4,12 @@ Howstr writes instructions for you.
 
 Howstr will write and update complicated project documentation such as instructions and bills of material so that you can work with others more efficiently. You write what you know one time in one place and leave everything else to Howstr. 
 
-## The Problem and The Solution
-
-The phrase "reinvent the wheel" exists because usually we can't find out what other people already know about the thing we're working on. 
-
-Writing instructions takes a lot of effort and suffers from diminishing returns. Important information is locked up in people's heads because making the knowledge useful to others is a job in its own right.
-
-You only have to write little, easy parts of the resource. Howstr takes care of making the whole resource useful to everyone else.
-
 ## Installation
 
 Ultimately Howstr is more of a solution than a product. The alpha prototype has verified the concept as a desktop application and that's what will be developed going forward. There will be a version optimized for web (no local access, but lots of processing power) and a version optimized for mobile (tiny screens, but lots of sensors).
 
 To run the Howstr Alpha prototype as a desktop application:
 - Get the appropriate version for your OS in the [Howstr_Alpha folder](https://github.com/matthewmaier/howstr/tree/master/Howstr_Alpha).
-- No installation is required; just run it
 
 To run Howstr from the Livecode IDE:
 - Download the community (open source) version of [Livecode (version 8, highest DP)](http://downloads.livecode.com/livecode/)
