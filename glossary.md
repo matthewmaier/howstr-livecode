@@ -32,7 +32,7 @@ A dive link must be paired with at least one [rise](#rise) link to complete the 
 
 ##document
 Defined by [NotionAll](#NotionAll)
-A NotionAll document is an array with whole number integer keys starting at 0 and increasing to infinity. 0 is reserved for metadata. Each key is called a [record](#record) and is expected to contain an arry.
+A NotionAll document is an array with whole number integer keys starting at 0 and increasing to infinity. 0 is reserved for metadata. Each key is called a [record](#record) and is expected to contain an array.
 
 ##flow
 The [link](#link) in the [sequence](#sequence) [dimension](#dimension)
