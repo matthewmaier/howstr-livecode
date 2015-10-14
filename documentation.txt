@@ -1,4 +1,6 @@
 ISSUES
+- disable node drag in rTree
+-- it seems to create a new text box that won't go away
 - overlapping scope
 -- a node could encase flow that is larger than another node encasing part of the same flow, or just encase overlapping parts of the same flow
 -- that's probably a problem
