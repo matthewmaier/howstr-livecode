@@ -1,0 +1,4 @@
+﻿script "just_a_script"
+on blergBlerg
+   answer "blerg blerg"
+end blergBlerg

@@ -1,0 +1,77 @@
+[1020/135341:WARNING:resource_bundle.cc(304)] locale_file_path.empty()
+[1020/135341:ERROR:main_delegate.cc(564)] Could not load locale pak for en-US
+[1020/135341:WARNING:resource_bundle.cc(497)] locale resources are not loaded
+[1020/135341:WARNING:dns_config_service_win.cc(654)] Failed to read DnsConfig.
+[1020/135341:WARNING:resource_bundle.cc(304)] locale_file_path.empty()
+[1020/135341:ERROR:main_delegate.cc(564)] Could not load locale pak for en-US
+[1020/135341:WARNING:resource_bundle.cc(304)] locale_file_path.empty()
+[1020/135341:ERROR:main_delegate.cc(564)] Could not load locale pak for en-US
+[1020/135341:ERROR:renderer_main.cc(207)] Running without renderer sandbox
+[1020/135341:INFO:CONSOLE(974)] "loading entry:1", source: file:///C:/Program%20Files%20(x86)/RunRev/LiveCode%20Community%208.0%20(dp%207)/Documentation/html_viewer/viewer.html (974)
+[1020/135341:INFO:CONSOLE(371)] "[object Object]", source: file:///C:/Program%20Files%20(x86)/RunRev/LiveCode%20Community%208.0%20(dp%207)/Documentation/html_viewer/viewer.html (371)
+[1020/135346:WARNING:dns_config_service_win.cc(654)] Failed to read DnsConfig.
+[1020/135347:INFO:CONSOLE(371)] "[object Object]", source: file:///C:/Program%20Files%20(x86)/RunRev/LiveCode%20Community%208.0%20(dp%207)/Documentation/html_viewer/viewer.html (371)
+[1020/135351:WARNING:dns_config_service_win.cc(654)] Failed to read DnsConfig.
+[1020/135356:WARNING:dns_config_service_win.cc(654)] Failed to read DnsConfig.
+[1020/135401:WARNING:dns_config_service_win.cc(654)] Failed to read DnsConfig.
+[1020/135406:WARNING:dns_config_service_win.cc(654)] Failed to read DnsConfig.
+[1020/135411:WARNING:dns_config_service_win.cc(654)] Failed to read DnsConfig.
+[1020/135416:WARNING:dns_config_service_win.cc(654)] Failed to read DnsConfig.
+[1020/135421:WARNING:dns_config_service_win.cc(654)] Failed to read DnsConfig.
+[1020/135426:WARNING:dns_config_service_win.cc(654)] Failed to read DnsConfig.
+[1020/135431:WARNING:dns_config_service_win.cc(654)] Failed to read DnsConfig.
+[1020/135436:WARNING:dns_config_service_win.cc(654)] Failed to read DnsConfig.
+[1020/135441:WARNING:dns_config_service_win.cc(654)] Failed to read DnsConfig.
+[1020/135446:WARNING:dns_config_service_win.cc(654)] Failed to read DnsConfig.
+[1020/135451:WARNING:dns_config_service_win.cc(654)] Failed to read DnsConfig.
+[1020/135456:WARNING:dns_config_service_win.cc(654)] Failed to read DnsConfig.
+[1020/135501:WARNING:dns_config_service_win.cc(654)] Failed to read DnsConfig.
+[1020/135506:WARNING:dns_config_service_win.cc(654)] Failed to read DnsConfig.
+[1020/135511:WARNING:dns_config_service_win.cc(654)] Failed to read DnsConfig.
+[1020/135516:WARNING:dns_config_service_win.cc(654)] Failed to read DnsConfig.
+[1020/135521:WARNING:dns_config_service_win.cc(654)] Failed to read DnsConfig.
+[1020/135526:WARNING:dns_config_service_win.cc(654)] Failed to read DnsConfig.
+[1020/135531:WARNING:dns_config_service_win.cc(654)] Failed to read DnsConfig.
+[1020/135536:WARNING:dns_config_service_win.cc(654)] Failed to read DnsConfig.
+[1020/135541:WARNING:dns_config_service_win.cc(654)] Failed to read DnsConfig.
+[1020/135546:WARNING:dns_config_service_win.cc(654)] Failed to read DnsConfig.
+[1020/135551:WARNING:dns_config_service_win.cc(654)] Failed to read DnsConfig.
+[1020/135556:WARNING:dns_config_service_win.cc(654)] Failed to read DnsConfig.
+[1020/135601:WARNING:dns_config_service_win.cc(654)] Failed to read DnsConfig.
+[1020/135606:WARNING:dns_config_service_win.cc(654)] Failed to read DnsConfig.
+[1020/135611:WARNING:dns_config_service_win.cc(654)] Failed to read DnsConfig.
+[1020/135616:WARNING:dns_config_service_win.cc(654)] Failed to read DnsConfig.
+[1020/135621:WARNING:dns_config_service_win.cc(654)] Failed to read DnsConfig.
+[1020/135626:WARNING:dns_config_service_win.cc(654)] Failed to read DnsConfig.
+[1020/135631:WARNING:dns_config_service_win.cc(654)] Failed to read DnsConfig.
+[1020/135636:WARNING:dns_config_service_win.cc(654)] Failed to read DnsConfig.
+[1020/135641:WARNING:dns_config_service_win.cc(654)] Failed to read DnsConfig.
+[1020/135643:INFO:CONSOLE(371)] "[object Object]", source: file:///C:/Program%20Files%20(x86)/RunRev/LiveCode%20Community%208.0%20(dp%207)/Documentation/html_viewer/viewer.html (371)
+[1020/135646:WARNING:dns_config_service_win.cc(654)] Failed to read DnsConfig.
+[1020/135651:WARNING:dns_config_service_win.cc(654)] Failed to read DnsConfig.
+[1020/135656:WARNING:dns_config_service_win.cc(654)] Failed to read DnsConfig.
+[1020/135701:WARNING:dns_config_service_win.cc(654)] Failed to read DnsConfig.
+[1020/135706:WARNING:dns_config_service_win.cc(654)] Failed to read DnsConfig.
+[1020/135711:WARNING:dns_config_service_win.cc(654)] Failed to read DnsConfig.
+[1020/135716:WARNING:dns_config_service_win.cc(654)] Failed to read DnsConfig.
+[1020/135721:WARNING:dns_config_service_win.cc(654)] Failed to read DnsConfig.
+[1020/135726:WARNING:dns_config_service_win.cc(654)] Failed to read DnsConfig.
+[1020/135731:WARNING:dns_config_service_win.cc(654)] Failed to read DnsConfig.
+[1020/135736:WARNING:dns_config_service_win.cc(654)] Failed to read DnsConfig.
+[1020/135741:WARNING:dns_config_service_win.cc(654)] Failed to read DnsConfig.
+[1020/135746:WARNING:dns_config_service_win.cc(654)] Failed to read DnsConfig.
+[1020/135751:WARNING:dns_config_service_win.cc(654)] Failed to read DnsConfig.
+[1020/135756:WARNING:dns_config_service_win.cc(654)] Failed to read DnsConfig.
+[1020/135801:WARNING:dns_config_service_win.cc(654)] Failed to read DnsConfig.
+[1020/135806:WARNING:dns_config_service_win.cc(654)] Failed to read DnsConfig.
+[1020/135811:WARNING:dns_config_service_win.cc(654)] Failed to read DnsConfig.
+[1020/135816:WARNING:dns_config_service_win.cc(654)] Failed to read DnsConfig.
+[1020/135821:WARNING:dns_config_service_win.cc(654)] Failed to read DnsConfig.
+[1020/135826:WARNING:dns_config_service_win.cc(654)] Failed to read DnsConfig.
+[1020/135831:WARNING:dns_config_service_win.cc(654)] Failed to read DnsConfig.
+[1020/135836:WARNING:dns_config_service_win.cc(654)] Failed to read DnsConfig.
+[1020/135840:WARNING:message_in_transit_queue.cc(18)] Destroying nonempty message queue
+[1020/135841:WARNING:dns_config_service_win.cc(654)] Failed to read DnsConfig.
+[1020/135846:WARNING:dns_config_service_win.cc(654)] Failed to read DnsConfig.
+[1020/135851:WARNING:dns_config_service_win.cc(654)] Failed to read DnsConfig.
+[1020/135856:WARNING:dns_config_service_win.cc(654)] Failed to read DnsConfig.
