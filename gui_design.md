@@ -106,7 +106,7 @@ Shift and Control can be used when selecting with either left- or right-click.
 
 You can also drag-and-drop from a background point to another background point to select all the nodes currently within the selected rectangular area. Only nodes completely within the area are selected.
 
-##### Left-mouse Operations
+##### Left-mouse Operations: Adding Nodes
 
 ![example graph B0](./gui_design_images/exampleB0.png "example B0")
 
@@ -126,3 +126,40 @@ You can also drag-and-drop from a background point to another background point t
 
 ![example graph B3](./gui_design_images/exampleB3.png "example B3")
 
+##### Left-mouse Operations: Combining Nodes
+
+![example graph C0](./gui_design_images/exampleC0.png "example C0")
+
+1) Select {4}, Ctrl-C to copy "4 Ddd" to clipboard, select {2}, Ctrl-V to **paste over** text
+
+![example graph C1](./gui_design_images/exampleC1.png "example C1")
+
+2) Select {4}, Ctrl-C to copy "4 Ddd" to clipboard, select {2}, Ctrl-A to **append** text (Ctrl-A is usually for Select All, but that operation does not sound very useful in this app)
+
+![example graph C2](./gui_design_images/exampleC2.png "example C2")
+
+##### Left-mouse Operations: Deleting Nodes
+
+In Quick Mode, you can only delete nodes such that a valid graph remains.
+
+![example graph D0](./gui_design_images/exampleD0.png "example D0")
+
+1) Select {4}, click Delete on keyboard -> invalid operation because {3} cannot point to {5}
+
+2) Select {4,5}, click Delete on keyboard
+
+![example graph D2](./gui_design_images/exampleD2.png "example D2")
+
+3) Select {3,4}, click Delete on keyboard
+
+![example graph D3](./gui_design_images/exampleD3.png "example D3")
+
+4) Select {6}, click Delete on keyboard
+
+![example graph D4](./gui_design_images/exampleD4.png "example D4")
+
+5) Select the {2-3} link, click Delete on keyboard -> invalid operation because {2} must point to a State Node
+
+6) Select the {4-7} link, click Delete keyboard
+
+![example graph D6](./gui_design_images/exampleD6.png "example D6")
