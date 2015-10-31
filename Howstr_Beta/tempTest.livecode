@@ -1,0 +1,10 @@
+﻿script "tempTest"
+on makeNewWin
+   create stack
+   set the mainStack of it to "HowstrBeta"
+   set the destroyStack of it to true
+   set the resizable of it to false
+   set the windowManagerPlace of it to true -- let Unix lay out the window(s)
+   set the backgroundColor of it to "40,40,40" -- RGB color, also backgroundPattern and backgroundPixel
+   put the long ID of it & cr after sStackMap
+end makeNewWin
