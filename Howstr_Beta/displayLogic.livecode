@@ -1,0 +1,533 @@
+﻿script "displayLogic"
+function stepString tDaDoc,tEyeDee 
+   if tDaDoc is empty or tEyeDee is empty then break
+   --takes in a step record and returns a string (type & id/title)
+   put isAnode(tDaDoc,tEyeDee) into tType
+   --   if tType is false then return "not a node"
+   if tType is false then 
+      -- it's a link
+      -- # type [x] to [z]
+      put isAlink(tDaDoc,tEyeDee) into tLinkFacts
+      put stepString(tDaDoc,tLinkFacts["X"]) into tX
+      put stepString(tDaDoc,tLinkFacts["Z"]) into tZ
+      put tEyeDee && tLinkFacts["type"] && "[" & tX & "]" && "to" && "[" & tZ & "]" into tTitle
+      if tTitle is empty then put "(link)" && tEyeDee into tTitle
+      return tTitle
+   else
+      -- it's a node
+      put getTagData(tEyeDee,"title",tDaDoc) into tTitle
+      if tTitle is empty then put tEyeDee && "blank" into tTitle
+      put symbolLookup(tType) && tTitle into tThisString
+      return tThisString
+   end if
+end stepString
+
+function symbolLookup tArg --a lookup table for display symbols
+   switch tArg
+      case "state"
+         return numtocodepoint(0x25A0) --box
+      case "change"
+         return numtocodepoint(0x25B2) --triangle
+   end switch
+   return "not found in symbolLookup function"
+end symbolLookup
+
+on graphManager pDo -- ! will be more complicated when not just a test
+   -- makes any changes, then calls draw functions, which call display functions
+   -- pDo empty OR #,# OR #,left OR #,right OR #
+   -- make changes if passed in parameter pDo
+   if pDo is empty then
+      -- whatevs
+   else if pDo is a number then
+      -- #
+      put pDo into sNowFocus
+   else if item 2 of pDo is a number then
+      -- #,#
+      -- check for existing link between these two nodes
+      -- if there is already a link, that will dictate which way to go
+      put item 1 of pDo into tAnchor
+      put item 2 of pDo into tTarget
+      put empty into tWas
+      repeat for each word tType in "next prev"
+         repeat for each item tPointer in sGraphData["nodes"][tAnchor][tType]
+            put item 1 of sGraphData["links"][tPointer][tType] into tTest
+            if tTest is tTarget then 
+               -- tAnchor has a pointer to a link with a pointer to tTarget
+               -- delete link
+               delete variable sGraphData["links"][tPointer]
+               -- delete pointer to link in tAnchor
+               delete item itemOffset(tPointer,sGraphData["nodes"][tAnchor][tType]) of sGraphData["nodes"][tAnchor][tType]
+               -- delete pointer to link in tTarget
+               if tType is "next" then delete item itemOffset(tPointer,sGraphData["nodes"][tTarget]["prev"]) of sGraphData["nodes"][tTarget]["prev"]
+               if tType is "prev" then delete item itemOffset(tPointer,sGraphData["nodes"][tTarget]["next"]) of sGraphData["nodes"][tTarget]["next"]
+               put tType into tWas
+            end if
+         end repeat
+      end repeat
+      -- link found and deleted means tWas has the direction for the new link(s) relative to tAnchor
+      -- link not found means that the correct direction has to be discovered
+      if tWas is empty then
+         -- assume anchor-to-target, unless their layer order prevents that 
+         -- ! layer order is a proxy for actually checking if the link creates a cycle
+         -- ! doing it this way will have undesirable edge cases
+         put sGraphDrawing["nodes"][tAnchor]["layer"] into tAnchorLay
+         put sGraphDrawing["nodes"][tTarget]["layer"] into tTargetLay
+         if tTargetLay < tAnchorLay then
+            put tTarget into tStart
+            put tAnchor into tEnd
+         else
+            put tTarget into tEnd
+            put tAnchor into tStart
+         end if
+      else -- tWas not empty
+         if tWas is "next" then
+            put tAnchor into tStart
+            put tTarget into tEnd
+         else
+            put tTarget into tStart
+            put tAnchor into tEnd
+         end if
+      end if
+      -- now we know that the link(s) should go from node tStart to node tEnd
+      -- and that there's no existing link in the way
+      -- need new link, new node, and new link
+      put sGraphData["lastRec"] into tRec      
+      put tStart & "," after sGraphData["links"][tRec+1]["prev"]
+      put tRec+2 & "," after sGraphData["links"][tRec+1]["next"]
+      
+      put tRec+1 & "," after sGraphData["nodes"][tRec+2]["prev"]
+      put tRec+3 & "," after sGraphData["nodes"][tRec+2]["next"]
+      
+      put tRec+2 & "," after sGraphData["links"][tRec+3]["prev"]
+      put tEnd & "," after sGraphData["links"][tRec+3]["next"]
+      
+      put tRec+3 & "," after sGraphData["nodes"][tEnd]["prev"]
+      put tRec+1 & "," after sGraphData["nodes"][tStart]["next"]      
+      put tRec+3 into sGraphData["lastRec"] 
+   else
+      -- #,left/right
+      put item 1 of pDo into tNode
+      put item 2 of pDo into tDir
+      if tDir is "left" then
+         put sGraphData["lastRec"] into tRec
+         put tRec+1 & "," after sGraphData["nodes"][tNode]["prev"]
+         put tNode & "," after sGraphData["links"][tRec+1]["next"]
+         put tRec+2 & "," after sGraphData["links"][tRec+1]["prev"]
+         put tRec+1 & "," after sGraphData["nodes"][tRec+2]["next"]
+         put tRec+2 into sGraphData["lastRec"]
+      else if tDir is "right" then
+         put sGraphData["lastRec"] into tRec
+         put tRec+1 & "," after sGraphData["nodes"][tNode]["next"]
+         put tNode & "," after sGraphData["links"][tRec+1]["prev"]
+         put tRec+2 & "," after sGraphData["links"][tRec+1]["next"]
+         put tRec+1 & "," after sGraphData["nodes"][tRec+2]["prev"]
+         put tRec+2 into sGraphData["lastRec"]
+      end if
+   end if
+   middleOut sGraphData
+end graphManager
+
+on middleOut pData-- ! a hacky way to draw the provided graph, calls assignLayers
+   -- pData ! just sGraphData at the moment, maybe this should be an adjacency list ?
+   -- setup variables --------------------------------------------------------------------------------
+   put empty into pData["layers"]
+   put empty into pData["visited"]
+   -- recursively assign layers ------------------------------------------------------------------------
+   -- pass pData by reference, and focus node, and initial layer
+   -- add layer and visited info to pData
+   assignLayers pData,sNowFocus,0
+   -- remove duplicates in layers ------------------------------------------------------------------
+   repeat for each key tLayer in pData["layers"]
+      put pData["layers"][tLayer]into tOneLayer
+      split tOneLayer by comma
+      combine tOneLayer using comma
+      if char -1 of tOneLayer is not "," then put "," after tOneLayer
+      put tOneLayer into pData["layers"][tLayer]
+   end repeat
+   -- shuffle nodes so links point left-to-right ----------------------------------------------------
+   -- when a pair of linked nodes are misaligned...
+   --- if on the pos side (layers >0), shift end more pos
+   --- if on the neg side (layers <0), shift start more neg
+   --- making a link vertical is okay, but not backwards
+   --- don't move the focused node out of layer 0
+   put empty into tShuffles -- cr delimited list; node and direction shuffled; kill infinite loop
+   put true into tAgain -- keep repeating until nothing changes
+   repeat while tAgain is true
+      put false into tAgain
+      repeat for each item tLink in pData["visited"]["links"]
+         put item 1 of pData["links"][tLink]["prev"] into tStart
+         put item 1 of pData["links"][tLink]["next"] into tEnd
+         put pData["nodes"][tStart]["layer"] into tStartLayer
+         put pData["nodes"][tEnd]["layer"] into tEndLayer
+         if not (tStartLayer < tEndLayer) then
+            if tEnd is sNowFocus then
+               -- shuffle start more negative
+               put true into tAgain
+               --               delete item itemOffset(tStart,pData["layers"][tStartLayer]) of pData["layers"][tStartLayer]
+               set the wholeMatches to true
+               put itemOffset(tStart,pData["layers"][tStartLayer]) into tNum
+               delete item tNum of pData["layers"][tStartLayer]
+               put tStart & "," after pData["layers"][tStartLayer -1]
+               put tStartLayer -1 into pData["nodes"][tStart]["layer"]
+               put cr & tStart & "-" after tShuffles
+               filter tShuffles without empty
+            else if tEnd & "-" is among the lines of tShuffles then
+               -- have to catch a situation where a node just shuffles back and forth
+               -- shuffle start more negative
+               put true into tAgain
+               delete item itemOffset(tStart,pData["layers"][tStartLayer]) of pData["layers"][tStartLayer]
+               put tStart & "," after pData["layers"][tStartLayer -1]
+               put tStartLayer -1 into pData["nodes"][tStart]["layer"]
+               put cr & tStart & "-" after tShuffles
+               filter tShuffles without empty
+            else
+               -- shuffle end more positive
+               put true into tAgain
+               delete item itemOffset(tEnd,pData["layers"][tEndLayer]) of pData["layers"][tEndLayer]
+               put tEnd & "," after pData["layers"][tEndLayer +1]
+               put tEndLayer +1 into pData["nodes"][tEnd]["layer"]
+               put cr & tEnd & "+" after tShuffles
+               filter tShuffles without empty
+            end if
+         end if -- is tStart < tEnd?
+      end repeat -- tLink in sLinksVisited
+   end repeat -- tAgain
+   -- order in layer by node #, ascending ----------------------------------------------------------
+   repeat for each key tLayer in pData["layers"]
+      sort items of pData["layers"][tLayer] ascending numeric
+      if char 1 of pData["layers"][tLayer] is "," then delete char 1 of pData["layers"][tLayer]
+   end repeat
+   put pData into sGraphDrawing
+   --   displayManager pData
+   displayManager
+end middleOut
+
+on assignLayers @pAll,pSeed,pTheLayer -- ! the recursive part of middleOut
+   -- pAll = pData (just a copy of sGraphData at the moment); this adds display info to it
+   -- pSeed = the node to find neighbors of
+   -- pTheLayer = the layer pSeed was assigned before this function was called
+   --- list all next & prev links
+   --- format as links
+   --- don't add if already on list of visited links
+   --- add node to layer; prev -1; next +1
+   --- call this function again on this node
+   --- terminal case is when this node has no unvisited links
+   if pSeed is not among the items of pAll["visited"]["nodes"] then
+      put pSeed & "," after pAll["visited"]["nodes"]
+      put pSeed & "," after pAll["layers"][pTheLayer]
+      put pTheLayer into pAll["nodes"][pSeed]["layer"]
+      repeat for each word tDir in "next prev"
+         repeat for each item tLink in pAll["nodes"][pSeed][tDir]
+            if tLink is not among the items of pAll["visited"]["links"] then
+               put tLink & "," after pAll["visited"]["links"]
+               filter pAll["visited"]["links"] without empty
+               put item 1 of pAll["links"][tLink][tDir] into tNode
+               switch tDir
+                  case "next"
+                     assignLayers pAll,tNode,(pTheLayer +1)
+                     break
+                  case "prev"
+                     assignLayers pAll,tNode,(pTheLayer - 1)
+                     break
+               end switch
+            end if
+         end repeat
+      end repeat 
+   end if
+end assignLayers
+
+on displayManager -- ! creates/changes/deletes controls
+   lock messages
+   put sGraphDrawing into pInfo
+   -- delete old node graphics; brute force but not much to draw at the moment   
+   if sGUIstuff is not empty then
+      repeat for each word tKind in "nodes links"
+         repeat for each key tNum in sGUIstuff[tKind]
+            put sGUIstuff[tKind][tNum]["graphic"] into tID
+            if exists(tID) then delete tID
+         end repeat
+      end repeat
+   end if
+   put the width of this stack into tWinWidth
+   put the height of this stack into tWinHeight
+   put tWinWidth/2 into tCenterH
+   lock screen
+   --   put empty into sDrawDetails
+   put empty into sGUIstuff
+   -- calculate node coordinates and draw graphic
+   repeat for each key tLayer in pInfo["layers"]
+      put ((sNodeSize + sLayerSize) * tLayer) + tCenterH into tNodeH
+      put the number of items of pInfo["layers"][tLayer] into tStack
+      put tWinHeight/(tStack + 1) into tStackV
+      put 1 into tCount
+      repeat for each item tNode in pInfo["layers"][tLayer]
+         -- start positioning from top of window
+         put tStackV * tCount into tNodeV
+         put tNodeH into sGUIstuff["nodes"][tNode]["horz"]
+         put tNodeV into sGUIstuff["nodes"][tNode]["vert"]
+         put tNode into tStuff["node"]
+         put tNodeH & "," & tNodeV into tStuff["coord"]
+         put sNodeSize into tStuff["size"]
+         put makeNode(tStuff) into sGUIstuff["nodes"][tNode]["graphic"]
+         put tCount + 1 into tCount
+      end repeat
+   end repeat
+   -- draw links...crudly
+   repeat for each key tLink in pInfo["links"]
+      put item 1 of pInfo["links"][tLink]["prev"] into tStart
+      put item 1 of pInfo["links"][tLink]["next"] into tEnd
+      put sNodeSize / 2 into tClean
+      put (sGUIstuff["nodes"][tStart]["horz"]+tClean) & "," & sGUIstuff["nodes"][tStart]["vert"] into tStartCoord
+      put (sGUIstuff["nodes"][tEnd]["horz"]-tClean) & "," & sGUIstuff["nodes"][tEnd]["vert"] into tEndCoord
+      put tLink into tBox["link"]
+      put tStartCoord & cr & tEndCoord into tBox["line"]
+      put makeLink(tBox) into sGUIstuff["links"][tLink]["graphic"]
+   end repeat
+   -- make sure the node graphics are on top
+   repeat for each key tNode in sGUIstuff["nodes"]
+      set the layer of sGUIstuff["nodes"][tNode]["graphic"] to top
+   end repeat
+   -- highlight focused node (since all nodes new, old highlighted one was deleted)
+   put sGUIstuff["nodes"][sNowFocus]["graphic"] into tBlerg
+   set the backgroundColor of tBlerg to orange
+   unlock screen
+   unlock messages
+end displayManager
+
+function makeNode pDetails
+   -- pDetails[node/coord/size]
+   set the locked of the templateField to true
+   --   set the disabled of the templateField to true
+   set the lockText of the templateField to true
+   set the height of the templateField to pDetails["size"]
+   set the width of the templateField to pDetails["size"]
+   set the name of the templateField to pDetails["node"] & "NodeGraphic"
+   set the location of the templateField to pDetails["coord"]
+   set the threeD of the templatefield to false
+   set the showborder of the templatefield to false
+   set the backgroundcolor of the templatefield to "0,220,220"
+   set the textSize of the templatefield to 18
+   --   set the behavior of the templatefield to the long id of button "graphBehave"
+   create field 
+   put it into tID
+   set the htmltext of (tID) to pDetails["node"]
+   set the cGraphKey of (tID) to pDetails["node"]
+   --   put pDetails["node"] into field tID
+   return tID
+end makeNode
+
+function makeLink pThis
+   -- pThis[link/line]
+   --   put pLinkStart & cr & pLinkEnd into tPts
+   set the style of the templateGraphic to "line"
+   set the endArrow of the templateGraphic to true
+   set the foregroundColor of the templategraphic to "0,220,220"
+   set the points of the templateGraphic to pThis["line"]
+   set the name of the templateGraphic to pThis["link"] & "LinkGraphic"
+   set the filled of the templateGraphic to false
+   --   set the behavior of the templateGraphic to the long id of button "graphBehave"
+   create graphic
+   set the cGraphKey of it to pThis["link"]
+   return it
+end makeLink
+
+on mouseTracker
+   -- get now
+   -- state of button 1
+   put "false" into tNow["1down"]
+   if mouse(1) is "down" then put "true" into tNow["1down"]
+   -- location of mouse
+   put empty into tNow["inside"]
+   repeat for each word tType in "nodes links"
+      repeat for each key tNum in sGUIstuff[tType]
+         -- within() doesn't depend on the rect, so how it treats negative space is more intuitive
+         --         if the mouseLoc is within (the rect of sGUIstuff[tType][tNum]["graphic"]) then
+         if within(sGUIstuff[tType][tNum]["graphic"],the mouseloc) then
+            put tNum into tNow["inside"]
+         end if
+      end repeat
+   end repeat
+   -- tNow[1down]=true/false
+   -- tNow[inside]=empty/#/background
+   
+   -- compare old to new
+   -- button 1 just transitioned from up to down
+   if sMouseHistory["1down"] is false and tNow["1down"] is true then 
+      put tNow["inside"] into s1Down
+   end if
+   
+   -- if there's an anchor node, track new areas entered
+   if s1Down is empty then
+      -- either not inside a node, or mouse not down, or both
+      put empty into s1Enter
+   else if (sMouseHistory["inside"] is not empty) and (tNow["inside"] is empty) then
+      -- just entered background
+      put "background" into s1Enter
+   else if sMouseHistory["inside"] is not tNow["inside"] then
+      -- just entered a graph element
+      put tNow["inside"] into s1Enter
+   end if
+   
+   -- preview logic
+   put "nothing" into tPreview
+   if s1Down is among the keys of sGUIstuff["nodes"] then
+      --      if s1Enter is among the keys of sGUIstuff["nodes"] and s1Enter is not s1Down then put "new L-N-L" && s1Enter into tPreview
+      if s1Enter is among the keys of sGUIstuff["nodes"] and s1Enter is not s1Down then put s1Down & "," & s1Enter into tPreview
+      if s1Enter is among the keys of sGUIstuff["links"] then put "nothing" into tPreview    
+      if s1Enter is empty then 
+         if s1Down is among the keys of sGUIstuff["nodes"] then
+            if s1Down is sNowFocus then
+               put "nothing" into tPreview
+            else
+               --               put "focus on" && s1Down into tPreview
+               put s1Down into tPreview
+            end if
+         else
+            put "nothing" into tPreview
+         end if
+      end if
+      if s1Enter is "background" and s1Down is among the keys of sGUIstuff["nodes"] then
+         put "nothing" into tPreview
+         --         if item 1 of the mouseLoc < item 1 of the rect of sGUIstuff["nodes"][s1Down]["graphic"] then put "new N-L-in" into tPreview
+         if item 1 of the mouseLoc < item 1 of the rect of sGUIstuff["nodes"][s1Down]["graphic"] then put s1Down & ",left" into tPreview
+         --         if item 1 of the mouseLoc > item 3 of the rect of sGUIstuff["nodes"][s1Down]["graphic"] then put "new out-L-N" into tPreview
+         if item 1 of the mouseLoc > item 3 of the rect of sGUIstuff["nodes"][s1Down]["graphic"] then put s1Down & ",right" into tPreview
+      end if
+   end if
+   
+   -- ! for development
+   repeat for each key tKey in tNow
+      put tKey & ":" && tNow[tKey] & cr after tBlerg
+   end repeat
+   put "s1Down:" && s1Down & cr after tBlerg
+   put "s1Enter:" && s1Enter & cr after tBlerg
+   put "preview:" && tPreview after tBlerg
+   put tBlerg into field "viewMouse"
+   
+   put empty into tCommit
+   -- button 1 just transitioned from down to up while there's an anchor
+   if s1Down is not empty and sMouseHIstory["1down"] is true and tNow["1down"] is false then 
+      -- if mouse(1) never returns "down" then all the above is skipped and s1Down&s1Enter stay empty
+      -- the first time mouse(1) is down, 'inside' is put into s1Down (# if in a graph part, empty otherwise)
+      -- as long as s1Down stays empty nothing happens, and s1Enter is emptied out just in case
+      -- when mouse(1) first shows down, and a # is in 'inside', then s1Down gets it
+      -- s1Enter starts checking if 'inside' changes, but stays empty
+      -- when 'inside' changes, while s1Down is not empty, then the new # goes in s1Enter
+      -- if the mouse never left the anchor place, then s1Enter stayed empty
+      -- if the mouse returned to the anchor place, then s1Enter has its #   
+      -- therefore
+      -- if s1Enter is empty, the user clicked, so change focus
+      -- if s1Enter is background or #, the mouse is previewing
+      -- background: above/below node = nothing
+      -- background: right = new out-link-node
+      -- background: left = new node-link-in
+      -- #: link = nothing
+      -- #: node = new link-node-link
+      put tPreview into tCommit
+      put tPreview & cr before field "viewCommitments"   
+      put empty into s1Down
+      put empty into s1Enter
+   end if
+   put tNow into sMouseHistory
+   -- preview is a message to the frontend to change the display
+   -- nothing = set visible to false
+   -- new L-N out = #,right
+   -- new N-L in = #,left
+   -- new L-N-L = #,#
+   -- commitment is a message to the backend to change the graph
+   -- new L-N out = #,right
+   -- new N-L in = #,left
+   -- new L-N-L = #,#
+   -- focus = #
+   if tCommit is empty then
+      if not (tPreview is a number) then 
+         previewProjector(tPreview)
+      end if
+   else
+      if tCommit is not "nothing" then graphManager(tCommit)
+   end if
+end mouseTracker
+
+on previewProjector pToDo
+   -- pToDo
+   -- nothing OR #,# OR #,left OR #,right
+   if pToDo is "nothing" then
+      set the visible of graphic "preLinkLeft" to false
+      set the visible of field "preNode" to false
+      set the visible of graphic "PreLinkRight" to false
+   else if item 2 of pToDo is a number then
+      -- two nodes
+      put item 1 of pToDo into tUno
+      put item 2 of pToDo into tDos
+      -- ! this is weak; it should query existing graph for what to allow before preview/commit
+      -- s1Down should be first, then s1Enter, so if possible point links from anchor to target
+      -- compare left side of start to right side of end
+      -- that will return true if start is in a lower layer AND if start is in the same layer
+      -- if already one link between uno and dos, replace it with link-node-link same direction
+      put the rect of sGUIstuff["nodes"][tUno]["graphic"] into tUnoRect
+      put the rect of sGUIstuff["nodes"][tDos]["graphic"] into tDosRect
+      put sNodeSize / 2 into tClean
+      if item 1 of tUnoRect < item 3 of tDosRect then
+         -- uno is start
+         put (item 3 of tUnoRect) & "," & (item 2 of tUnoRect+tClean) into tLeftStartCoord
+         put (item 1 of tDosRect) & "," & (item 2 of tDosRect+tClean) into tRightEndCoord
+      else
+         -- dos is start
+         put (item 3 of tDosRect) & "," & (item 2 of tDosRect+tClean) into tLeftStartCoord
+         put (item 1 of tUnoRect) & "," & (item 2 of tUnoRect+tClean) into tRightEndCoord
+      end if
+      put abs(item 1 of tLeftStartCoord - item 1 of tRightEndCoord) into tTotH
+      put abs(item 2 of tLeftStartCoord - item 2 of tRightEndCoord) into tTotV
+      -- add to whichever is smaller to get middle
+      -- horizontal
+      if item 1 of tLeftStartCoord < item 1 of tRightEndCoord then 
+         put (item 1 of tLeftStartCoord+(tTotH/2)+sNodeSize) into tNodeH
+      else
+         put (item 1 of tRightEndCoord+(tTotH/2)+sNodeSize) into tNodeH
+      end if
+      -- vertical
+      if item 2 of tLeftStartCoord <= item 2 of tRightEndCoord then 
+         put (item 2 of tLeftStartCoord+(tTotV/2)-sNodeSize) into tNodeV
+      else
+         put (item 2 of tRightEndCoord+(tTotV/2)-sNodeSize) into tNodeV
+      end if
+      put (tNodeH-tClean) & "," & tNodeV into tLeftEndCoord
+      put (tNodeH+tClean) & "," & tNodeV into tRightStartCoord
+      put tLeftStartCoord & cr & tLeftEndCoord into tLeftLine
+      put tRightStartCoord & cr & tRightEndCoord into tRightLine
+      -- graphics
+      set the location of field "preNode" to (tNodeH & "," & tNodeV)
+      set the points of graphic "preLinkLeft" to tLeftLine
+      set the points of graphic "preLinkRight" to tRightLine
+      set the visible of graphic "preLinkLeft" to true
+      set the visible of field "preNode" to true
+      set the visible of graphic "PreLinkRight" to true
+   else
+      -- one node
+      put item 1 of pToDo into tNode
+      put item 2 of pToDo into tDir
+      if tDir is "left" then
+         put (item 1 of the mouseLoc) & "," & (item 2 of the mouseLoc - sNodeSize) into tPlace
+         set the location of field "preNode" to tPlace
+         put sNodeSize / 2 into tClean
+         put (item 1 of tPlace+tClean) & "," & (item 2 of tPlace) into tStartCoord
+         put (sGUIstuff["nodes"][tNode]["horz"]-tClean) & "," & sGUIstuff["nodes"][tNode]["vert"] into tEndCoord
+         put tStartCoord & cr & tEndCoord into tLine
+         set the points of graphic "preLinkRight" to tLine
+         set the visible of graphic "preLinkLeft" to false
+         set the visible of field "preNode" to true
+         set the visible of graphic "PreLinkRight" to true
+      else -- right
+         put (item 1 of the mouseLoc) & "," & (item 2 of the mouseLoc - sNodeSize) into tPlace
+         set the location of field "preNode" to tPlace
+         put sNodeSize / 2 into tClean
+         put (item 1 of tPlace-tClean) & "," & (item 2 of tPlace) into tEndCoord
+         put (sGUIstuff["nodes"][tNode]["horz"]+tClean) & "," & sGUIstuff["nodes"][tNode]["vert"] into tStartCoord
+         put tStartCoord & cr & tEndCoord into tLine
+         set the points of graphic "preLinkLeft" to tLine
+         set the visible of graphic "preLinkLeft" to true
+         set the visible of field "preNode" to true
+         set the visible of graphic "PreLinkRight" to false
+      end if
+   end if
+end previewProjector

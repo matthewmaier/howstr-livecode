@@ -1,0 +1,52 @@
+﻿script "quickMode"
+on quickModeSetup @pMain,@pNowDoc,@pNowItem,@pPointerTags
+   -- pArray becomes initial data structure
+   -- return default focus node
+   -- configure simplest possible model array based on NotionAll schema
+   -- allow everything else to run
+   /*
+   create node 1, tag state
+   - rec 1, step
+   - rec 2, type:state
+   - rec 3, title:untitled
+   create node 2, tag state
+   - rec 4, step
+   - rec 5, type:state
+   create node 3, tag change
+   - rec 6, step
+   - rec 7, type:change
+   create node 4, tag state
+   - rec 8, step
+   - rec 9, type:state
+   create link 5, tag dive, from 1 to 2
+   - rec 10, step
+   - rec 11, 
+   create link 6, tag rise, from 4 to 1
+   create link 7, tag flow, from 2 to 3
+   create link 8, tag flow, from 3 to 4
+   */
+   ------------------------------ start from Alpha ----------------------------------------------
+   put "step myStep turn myTurn bond prev next skim read bulk trim" into sPointerTags
+   put empty into sMain
+   put 1 into sNowDoc
+   put true into sMain[sNowDoc][0]["hide"]
+   put 0 into sMain[sNowDoc][0][lastKey]
+   put empty into sNowItem
+   
+   put "2,1" & cr & "3,1" & cr & "4,1" into sMain[sNowDoc][1]["step"]
+   put "state" into sMain[sNowDoc][2]["type"]
+   put "1,1" into sMain[sNowDoc][2]["myStep"]
+   put "untitled project" into sMain[sNowDoc][3]["title"]
+   put "1,1" into sMain[sNowDoc][3]["myStep"]
+   put "500,10" into sMain[sNowDoc][4]["coord"]
+   put "1,1" into sMain[sNowDoc][4]["myStep"]
+   put 4 into sMain[sNowDoc][0][lastKey]
+   ------------------------------ end from Alpha ----------------------------------------------
+   put sMain into pMain
+   put sNowDoc into pNowDoc
+   put sNowItem into pNowItem
+   put sPointerTags into pPointerTags
+   
+   put 5 & cr & 6 into tRecs
+   userRise tRecs
+end quickModeSetup

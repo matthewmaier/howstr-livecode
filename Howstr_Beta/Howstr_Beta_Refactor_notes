@@ -1,0 +1,14 @@
+ISSUES
+- Howstr Alpha only handled one graph, Beta needs to handle many
+-- sNowDoc isn't flexible enough
+-- the display will send many queries to the backend, mapped to various windows
+- use groups to manage the display images
+- sMain[0][hide]=true
+-- probably don't need that; I think it was for rTree
+- sMain[4][coord]=500,10
+-- probably don't need this tag anymore since layout is handled automatically
+- sMain[doc][rec][tag]=data/pointer
+-- can record the path & file of origin in metadata
+-- but would be more straight forward to use those as keys
+-- sMain[path][file][doc][rec][tag]=data/pointer
+-- that would be the entire pointer; wouldn't require a lookup table or search

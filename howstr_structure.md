@@ -12,6 +12,7 @@
       * apply commands to in-memory graph data
       * convert between in-memory and on-disk as necessary
       * push most current version of latest data to presentation
+      * 
     * data
       * in-memory arrays stored as JSON-formatted text files
       * worth evaluating databases as an alternative

@@ -1,0 +1,16 @@
+﻿script "mathamagics"
+function ceilingNum pNumber
+   -- got this from the interwebs because apparently livecode doesn't have a ceilingNum function
+   ## Check we have been passed a number
+   if pNumber is not a number then
+      return "Error: not a number"
+   end if
+   ## Check if the number is already an integer or is negative
+   if pNumber < zero or pNumber is an integer then
+      ## truncating gives the ceilingNum
+      return trunc(pNumber)
+   else
+      ## truncate the number and add 1 to get the ceilingNum
+      return trunc(pNumber) + 1
+   end if
+end ceilingNum
