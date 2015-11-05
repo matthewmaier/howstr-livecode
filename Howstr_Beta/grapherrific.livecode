@@ -1,30 +1,30 @@
-﻿script "graphLogic"
-function isAnode pDocKey,pRecKey -- takes a rec (in sNowDoc); returns false or node facts
+﻿script "grapherrific"
+function isAnode @pMain,pDocKey,pRecKey -- takes a rec (in sNowDoc); returns false or node facts
    -- pRecKey: a single record number
    -- pDocKey: a single doc number
-   if "step" is not among the keys of sMain[pDocKey][pRecKey] then return false
+   if "step" is not among the keys of pMain[pDocKey][pRecKey] then return false
    put false into tNode
-   put clearNegPairs(sMain[pDocKey][pRecKey]["step"]) into tPointers
+   put clearNegPairs(pMain[pDocKey][pRecKey]["step"]) into tPointers
    repeat for each line tPtr in tPointers
       put item 1 of tPtr into tPtr
-      if sMain[pDocKey][tPtr]["type"] is "state" then put "state" into tNode
-      if sMain[pDocKey][tPtr]["type"] is "change" then put "change" into tNode
+      if pMain[pDocKey][tPtr]["type"] is "state" then put "state" into tNode
+      if pMain[pDocKey][tPtr]["type"] is "change" then put "change" into tNode
    end repeat
    return tNode
 end isAnode
 
-function isAlink pDocKey,pRecKey -- takes a rec, returns false or link facts
+function isAlink @pMain,pDocKey,pRecKey -- takes a rec, returns false or link facts
    -- pRecKey: a single record number
    -- pDocKey: a single doc number
-   if "step" is not among the keys of sMain[pDocKey][pRecKey] then return false
+   if "step" is not among the keys of pMain[pDocKey][pRecKey] then return false
    put "bond flow dive rise" into tLinkTypes
    put false into tNode
-   put clearNegPairs(sMain[pDocKey][pRecKey]["step"]) into tPointers
+   put clearNegPairs(pMain[pDocKey][pRecKey]["step"]) into tPointers
    -- find link type
    repeat for each line tPtr in tPointers
       put item 1 of tPtr into tPtr
-      if sMain[pDocKey][tPtr]["type"] is among the words of tLinkTypes then 
-         put sMain[pDocKey][tPtr]["type"] into tNode["type"]
+      if pMain[pDocKey][tPtr]["type"] is among the words of tLinkTypes then 
+         put pMain[pDocKey][tPtr]["type"] into tNode["type"]
          exit repeat
       end if
    end repeat
@@ -34,12 +34,12 @@ function isAlink pDocKey,pRecKey -- takes a rec, returns false or link facts
    if tNode["type"] is "bond" then
       repeat for each line tPtr in tPointers
          put item 1 of tPtr into tPtr
-         if tNode["type"] is among the keys of sMain[pDocKey][tPtr] then
+         if tNode["type"] is among the keys of pMain[pDocKey][tPtr] then
             put tPtr into tNode["Y"]
-            put item 1 of line 1 of sMain[pDocKey][tPtr][tNode["type"]] into tAlmost
-            put item 1 of sMain[pDocKey][tAlmost]["myStep"] into tNode["X"]
-            put item 1 of line 2 of sMain[pDocKey][tPtr][tNode["type"]] into tAlmost
-            put item 1 of sMain[pDocKey][tAlmost]["myStep"] into tNode["Z"]
+            put item 1 of line 1 of pMain[pDocKey][tPtr][tNode["type"]] into tAlmost
+            put item 1 of pMain[pDocKey][tAlmost]["myStep"] into tNode["X"]
+            put item 1 of line 2 of pMain[pDocKey][tPtr][tNode["type"]] into tAlmost
+            put item 1 of pMain[pDocKey][tAlmost]["myStep"] into tNode["Z"]
             -- Xcoord
             -- Zcoord       
          end if
@@ -50,39 +50,39 @@ function isAlink pDocKey,pRecKey -- takes a rec, returns false or link facts
       case "flow"
          repeat for each line tPtr in tPointers
             put item 1 of tPtr into tPtr
-            if "prev" is among the keys of sMain[pDocKey][tPtr] then 
-               put item 1 of sMain[pDocKey][tPtr]["prev"] into tAlmost
-               put item 1 of sMain[pDocKey][tAlmost]["myStep"] into tNode["X"]
+            if "prev" is among the keys of pMain[pDocKey][tPtr] then 
+               put item 1 of pMain[pDocKey][tPtr]["prev"] into tAlmost
+               put item 1 of pMain[pDocKey][tAlmost]["myStep"] into tNode["X"]
             end if
-            if "next" is among the keys of sMain[pDocKey][tPtr] then 
-               put item 1 of sMain[pDocKey][tPtr]["next"] into tAlmost
-               put item 1 of sMain[pDocKey][tAlmost]["myStep"] into tNode["Z"]
+            if "next" is among the keys of pMain[pDocKey][tPtr] then 
+               put item 1 of pMain[pDocKey][tPtr]["next"] into tAlmost
+               put item 1 of pMain[pDocKey][tAlmost]["myStep"] into tNode["Z"]
             end if
          end repeat
          break
       case "dive"
          repeat for each line tPtr in tPointers
             put item 1 of tPtr into tPtr
-            if "skim" is among the keys of sMain[pDocKey][tPtr] then 
-               put item 1 of sMain[pDocKey][tPtr]["skim"] into tAlmost
-               put item 1 of sMain[pDocKey][tAlmost]["myStep"] into tNode["X"]
+            if "skim" is among the keys of pMain[pDocKey][tPtr] then 
+               put item 1 of pMain[pDocKey][tPtr]["skim"] into tAlmost
+               put item 1 of pMain[pDocKey][tAlmost]["myStep"] into tNode["X"]
             end if
-            if "read" is among the keys of sMain[pDocKey][tPtr] then 
-               put item 1 of sMain[pDocKey][tPtr]["read"] into tAlmost
-               put item 1 of sMain[pDocKey][tAlmost]["myStep"] into tNode["Z"]
+            if "read" is among the keys of pMain[pDocKey][tPtr] then 
+               put item 1 of pMain[pDocKey][tPtr]["read"] into tAlmost
+               put item 1 of pMain[pDocKey][tAlmost]["myStep"] into tNode["Z"]
             end if
          end repeat
          break
       case "rise"
          repeat for each line tPtr in tPointers
             put item 1 of tPtr into tPtr
-            if "bulk" is among the keys of sMain[pDocKey][tPtr] then 
-               put item 1 of sMain[pDocKey][tPtr]["bulk"] into tAlmost
-               put item 1 of sMain[pDocKey][tAlmost]["myStep"] into tNode["X"]
+            if "bulk" is among the keys of pMain[pDocKey][tPtr] then 
+               put item 1 of pMain[pDocKey][tPtr]["bulk"] into tAlmost
+               put item 1 of pMain[pDocKey][tAlmost]["myStep"] into tNode["X"]
             end if
-            if "trim" is among the keys of sMain[pDocKey][tPtr] then 
-               put item 1 of sMain[pDocKey][tPtr]["trim"] into tAlmost
-               put item 1 of sMain[pDocKey][tAlmost]["myStep"] into tNode["Z"]
+            if "trim" is among the keys of pMain[pDocKey][tPtr] then 
+               put item 1 of pMain[pDocKey][tPtr]["trim"] into tAlmost
+               put item 1 of pMain[pDocKey][tAlmost]["myStep"] into tNode["Z"]
             end if
          end repeat
          break
@@ -141,31 +141,22 @@ command userChange pRec
    render
 end userChange
 
-command newItem pType
+command newItem @pMain,pDoc,pType
    -- pType: ! at the moment just state/change
-   -- the previous handler checked to be sure this request is appropriate
    -- since the item is brand new it's a simple process
    -- new turn
-   put sMain[sNowDoc][0][lastKey] into tRec
-   put tRec+2 & "," & tRec+1 & cr & tRec+3 & "," & tRec+1 & cr & tRec+4 & "," & tRec+1 into sMain[sNowDoc][tRec+1]["turn"]
-   put "newItem" into sMain[sNowDoc][tRec+1]["act"]
+   put pMain[pDoc][0][lastKey] into tRec
+   put tRec+2 & "," & tRec+1 & cr & tRec+3 & "," & tRec+1 into pMain[pDoc][tRec+1]["turn"]
+   put "newItem" into pMain[pDoc][tRec+1]["act"]
    -- new step
-   put tRec+3 & "," & tRec+1 & cr & tRec+4 & "," & tRec+1 into sMain[sNowDoc][tRec+2]["step"]
-   put tRec+1 & "," & tRec+1 into sMain[sNowDoc][tRec+2]["myTurn"]
+   put tRec+3 & "," & tRec+1 into pMain[pDoc][tRec+2]["step"]
+   put tRec+1 & "," & tRec+1 into pMain[pDoc][tRec+2]["myTurn"]
    -- new type tag
-   put pType into sMain[sNowDoc][tRec+3]["type"]
-   put tRec+1 & "," & tRec+1 into sMain[sNowDoc][tRec+3]["myTurn"]
-   put tRec+2 & "," & tRec+1 into sMain[sNowDoc][tRec+3]["myStep"]
-   -- new coord tag (with default coordinates)
-   --   put the loc of graphic "floorRect" of group "graphicNetwork" of stack "primary" into tDefaultXY
-   put the loc of group "graphicNetwork" of stack "primary" into tDefaultXY
-   put winToNetCoord(tDefaultXY) into sMain[sNowDoc][tRec+4]["coord"]
-   put tRec+1 & "," & tRec+1 into sMain[sNowDoc][tRec+4]["myTurn"]
-   put tRec+2 & "," & tRec+1 into sMain[sNowDoc][tRec+4]["myStep"]
+   put pType into pMain[pDoc][tRec+3]["type"]
+   put tRec+1 & "," & tRec+1 into pMain[pDoc][tRec+3]["myTurn"]
+   put tRec+2 & "," & tRec+1 into pMain[pDoc][tRec+3]["myStep"]
    -- update highest key
-   put tRec+4 into sMain[sNowDoc][0][lastKey]
-   
-   -- render happens in userChange/userState
+   put tRec+3 into pMain[pDoc][0][lastKey]
 end newItem
 
 command userBond pRecs
@@ -261,11 +252,11 @@ command userRise pRecs
    render
 end userRise
 
-command newDilink pXstep,pZstep,pAct,pType,pForward,pBackward
+command newDilink @pMain,pDoc,pXstep,pZstep,pAct,pType,pForward,pBackward
    -- for flow: x,z,newFlow,flow,next,prev
    -- for dive: x,z,newDive,dive,read,skim
    -- for rise: x,z,newRise,rise,trim,bulk
-   put sMain[sNowDoc][0][lastKey] into tRec
+   put pMain[pDoc][0][lastKey] into tRec
    -- as in step X is flowed to step Z thru step Y
    -- X forward <-> Y backward/Y forward <-> Z backward
    -- +1 turn
@@ -282,44 +273,42 @@ command newDilink pXstep,pZstep,pAct,pType,pForward,pBackward
    put tRec+6 into tXfor
    -- +7 Z pBackward to Y pForward
    put tRec+7 into tZback
-   put tRec+7 into sMain[sNowDoc][0][lastKey]
+   put tRec+7 into pMain[pDoc][0][lastKey]
    
    -- turn
    put tYstep & "," & tTurn & cr & tYtype & "," & tTurn & cr & tYback & "," & tTurn & cr \
-         & tYfor & "," & tTurn & cr & tXfor & "," & tTurn & cr & tZback & "," & tTurn into sMain[sNowDoc][tTurn]["turn"]
-   put pAct into sMain[sNowDoc][tTurn]["act"]
+   & tYfor & "," & tTurn & cr & tXfor & "," & tTurn & cr & tZback & "," & tTurn into pMain[pDoc][tTurn]["turn"]
+   put pAct into pMain[pDoc][tTurn]["act"]
    
    -- Y step
-   put tYtype & "," & tTurn & cr & tYback & "," & tTurn & cr & tYfor & "," & tTurn into sMain[sNowDoc][tYstep]["step"]
-   put tTurn & "," & tTurn into sMain[sNowDoc][tYstep]["myTurn"]
+   put tYtype & "," & tTurn & cr & tYback & "," & tTurn & cr & tYfor & "," & tTurn into pMain[pDoc][tYstep]["step"]
+   put tTurn & "," & tTurn into pMain[pDoc][tYstep]["myTurn"]
    
    -- Y type
-   put pType into sMain[sNowDoc][tYtype]["type"]
-   put tTurn & "," & tTurn into sMain[sNowDoc][tYtype]["myTurn"]
-   put tYstep & "," & tTurn into sMain[sNowDoc][tYtype]["myStep"]
+   put pType into pMain[pDoc][tYtype]["type"]
+   put tTurn & "," & tTurn into pMain[pDoc][tYtype]["myTurn"]
+   put tYstep & "," & tTurn into pMain[pDoc][tYtype]["myStep"]
    
    -- pointers
-   put tXfor & "," & tTurn into sMain[sNowDoc][tYback][pBackward]
-   put tTurn & "," & tTurn into sMain[sNowDoc][tYback]["myTurn"]
-   put tYstep & "," & tTurn into sMain[sNowDoc][tYback]["myStep"]
+   put tXfor & "," & tTurn into pMain[pDoc][tYback][pBackward]
+   put tTurn & "," & tTurn into pMain[pDoc][tYback]["myTurn"]
+   put tYstep & "," & tTurn into pMain[pDoc][tYback]["myStep"]
    -- this one was done when tYstep was created
    
-   put tZback & "," & tTurn into sMain[sNowDoc][tYfor][pForward]
-   put tTurn & "," & tTurn into sMain[sNowDoc][tYfor]["myTurn"]
-   put tYstep & "," & tTurn into sMain[sNowDoc][tYfor]["myStep"]
+   put tZback & "," & tTurn into pMain[pDoc][tYfor][pForward]
+   put tTurn & "," & tTurn into pMain[pDoc][tYfor]["myTurn"]
+   put tYstep & "," & tTurn into pMain[pDoc][tYfor]["myStep"]
    -- this one was done when tYstep was created
    
-   put tYback & "," & tTurn into sMain[sNowDoc][tXfor][pForward]
-   put tTurn & "," & tTurn into sMain[sNowDoc][tXfor]["myTurn"]
-   put pXstep & "," & tTurn into sMain[sNowDoc][tXfor]["myStep"]
-   put cr & tXfor & "," & tTurn after sMain[sNowDoc][pXstep]["step"]
+   put tYback & "," & tTurn into pMain[pDoc][tXfor][pForward]
+   put tTurn & "," & tTurn into pMain[pDoc][tXfor]["myTurn"]
+   put pXstep & "," & tTurn into pMain[pDoc][tXfor]["myStep"]
+   put cr & tXfor & "," & tTurn after pMain[pDoc][pXstep]["step"]
    
-   put tYfor & "," & tTurn into sMain[sNowDoc][tZback][pBackward]
-   put tTurn & "," & tTurn into sMain[sNowDoc][tZback]["myTurn"]
-   put pZstep & "," & tTurn into sMain[sNowDoc][tZback]["myStep"]
-   put cr & tZback & "," & tTurn after sMain[sNowDoc][pZstep]["step"]
-   
-   -- render happens in the calling handler
+   put tYfor & "," & tTurn into pMain[pDoc][tZback][pBackward]
+   put tTurn & "," & tTurn into pMain[pDoc][tZback]["myTurn"]
+   put pZstep & "," & tTurn into pMain[pDoc][tZback]["myStep"]
+   put cr & tZback & "," & tTurn after pMain[pDoc][pZstep]["step"]
 end newDilink
 
 command userInfo
@@ -660,54 +649,54 @@ function getTagKey pRec,pTag,pDoc
    return tKey
 end getTagKey
 
-command  adjList
+command  adjList @pMain,@pShort
    -- makes a simpler adjacency list
    -- takes in sMain[doc][rec][etc]
-   -- returns a simple array of only visible nodes and links for sMainShort
+   -- puts a simple array of only visible nodes and links into sMainShort
    -- doesn't sort anything
    -- if a node
    -- array[doc][rec][next/prev/read/skim/bulk/trim]=rec & cr
    -- array[doc][rec][type]=state/change/bond/flow/dive/rise
    -- array[doc][rec][info]=tag,data & cr
-   put empty into sMainShort
-   repeat for each key tDoc in sMain
-      repeat for each key tRec in sMain[tDoc]
+   put empty into pShort
+   repeat for each key tDoc in pMain
+      repeat for each key tRec in pMain[tDoc]
          if tRec is 0 then next repeat
          -- only visible steps
-         put isAnode(tDoc,tRec) into tNode
+         put isAnode(pMain,tDoc,tRec) into tNode
          if tNode is false then 
-            put isAlink(tDoc,tRec) into tLink
+            put isAlink(pMain,tDoc,tRec) into tLink
             if tLink is not false then
                ------------- link type -------------------
-               put tLink["type"] into sMainShort[tDoc][tRec]["type"]
+               put tLink["type"] into pShort[tDoc][tRec]["type"]
                put true into tStep
             end if
          else
             ------------- node type -------------------
-            put tNode into sMainShort[tDoc][tRec]["type"]
+            put tNode into pShort[tDoc][tRec]["type"]
             put true into tStep
          end if
          -------- this is the same for nodes and links --------------
          if tStep is true then             
             ---------------- links & info  ---------------------
-            put clearNegPairs(sMain[tDoc][tRec]["step"]) into tPointers
+            put clearNegPairs(pMain[tDoc][tRec]["step"]) into tPointers
             repeat for each line tPtr in tPointers
                put item 1 of tPtr into tPtr
-               repeat for each key tAkey in sMain[tDoc][tPtr]
+               repeat for each key tAkey in pMain[tDoc][tPtr]
                   if tAkey is among the words of "bond next prev read skim trim bulk" then
                      ------------------- links -------------------
-                     repeat for each line tOtherPtr in sMain[tDoc][tPtr][tAkey]
+                     repeat for each line tOtherPtr in pMain[tDoc][tPtr][tAkey]
                         put item 1 of tOtherPtr into tOtherPtr
-                        put item 1 of sMain[tDoc][tOtherPtr]["myStep"] & cr after sMainShort[tDoc][tRec][tAkey]
+                        put item 1 of pMain[tDoc][tOtherPtr]["myStep"] & cr after pShort[tDoc][tRec][tAkey]
                      end repeat
                   else
                      if tAkey is among the words of "weight material whole duration series" then
-                        put sMain[tDoc][tPtr][tAkey] into sMainShort[tDoc][tRec][tAkey]
+                        put pMain[tDoc][tPtr][tAkey] into pShort[tDoc][tRec][tAkey]
                      end if
                      -- ! info will still list all the previous tag:data pairs as part of the string
                      if tAkey is not among the words of "coord turn act myTurn myStep type" then
                         ----------------- info --------------------
-                        put tAkey & ":" & sMain[tDoc][tPtr][tAkey] & cr after sMainShort[tDoc][tRec]["info"]
+                        put tAkey & ":" & pMain[tDoc][tPtr][tAkey] & cr after pShort[tDoc][tRec]["info"]
                      end if
                   end if
                end repeat
@@ -715,20 +704,28 @@ command  adjList
          end if
       end repeat
    end repeat
+   -- clean up trailing cr
+   repeat for each key tDoc in pShort
+      repeat for each key tRec in pShort[tDoc]
+         repeat for each key tTag in pShort[tDoc][tRec]
+            filter pShort[tDoc][tRec][tTag] without empty
+         end repeat
+      end repeat
+   end repeat
 end adjList
 
-command topoSort
-   put empty into sTopoSort -- will contain the sorted nodes
+command topoSort @pShort,@pTopo,@pNoViz,@pNotes
+   put empty into pTopo -- will contain the sorted nodes
    put empty into tPlanA -- scope nodes outside of flow
    put empty into tPlanB -- unscoped nodes at beginning of flow
-   put empty into sNoteList
+   put empty into pNotes -- treats nodes linked in by bond as "footnotes"
    ---------------- list of seed nodes ----------------------
-   repeat for each key tDoc in sMainShort
-      put the keys of sMainShort[tDoc] into sNotVisited[tDoc]
-      replace cr with "," in sNotVisited[tDoc]
-      repeat for each key tRec in sMainShort[tDoc]
-         if sMainShort[tDoc][tRec]["type"] is "state" or sMainShort[tDoc][tRec]["type"] is "change" then
-            put the keys of sMainShort[tDoc][tRec] into tTheKeys
+   repeat for each key tDoc in pShort
+      put the keys of pShort[tDoc] into pNoViz[tDoc]
+      replace cr with "," in pNoViz[tDoc]
+      repeat for each key tRec in pShort[tDoc]
+         if pShort[tDoc][tRec]["type"] is "state" or pShort[tDoc][tRec]["type"] is "change" then
+            put the keys of pShort[tDoc][tRec] into tTheKeys
             put false into tPrev
             put false into tNext
             put false into tRead
@@ -745,20 +742,20 @@ command topoSort
       end repeat -- tRec
       put tPlanA after tNextList
       put tPlanB after tNextList
-      get kahnSort(tDoc,tNextList) 
+      get kahnSort(pShort,pTopo,pNoViz,pNotes,tDoc,tNextList) 
    end repeat -- tDoc
 end topoSort
 
-function kahnSort pDoc,pSeedList
+function kahnSort @pShort,@pTopo,@pNoViz,@pNotes,pDoc,pSeedList
    -- pDoc = document number
    -- pSeedList = ordered comma delimited list of records in pDoc
    -- doesn't return anything
-   -- just walks network, edits sTopoSort, and terminates
+   -- just walks network, edits sTopoSort (pTopo), and terminates
    put empty into tNextList
    replace cr with "" in pSeedList
    repeat for each item tStep in pSeedList
       delete item 1 of pSeedList
-      if tStep is among the items of sNotVisited[pDoc] then
+      if tStep is among the items of pNoViz[pDoc] then
          -- this node has not been visited
          -- in the order scope, then flow ( ! bond handled elsewhere at the moment)
          -- follow each link (Y) out of tStep (X)
@@ -767,24 +764,24 @@ function kahnSort pDoc,pSeedList
          -- then add node(Z) to nextList
          -- pass pDoc and nextList to kahnSort
          ------------ move node from notVisited to topoSort -------------------------------
-         put tStep & "," after sTopoSort[pDoc]
+         put tStep & "," after pTopo[pDoc]
          set the wholeMatches to true
-         delete item itemOffset(tStep,sNotVisited[pDoc]) in sNotVisited[pDoc]
+         delete item itemOffset(tStep,pNoViz[pDoc]) in pNoViz[pDoc]
          set the wholeMatches to false
          ------------ scope link(s) --------------------------------------------------------------
          -- both read and bulk links means this node contains other nodes --------------
-         if sMainShort[pDoc][tStep]["read"] is not empty and sMainShort[pDoc][tStep]["bulk"] is not empty then
-            repeat for each line tLink in sMainShort[pDoc][tStep]["read"]
+         if pShort[pDoc][tStep]["read"] is not empty and pShort[pDoc][tStep]["bulk"] is not empty then
+            repeat for each line tLink in pShort[pDoc][tStep]["read"]
                replace cr with "" in tLink
                set the wholeMatches to true
-               delete item itemOffset(tLink,sNotVisited[pDoc]) in sNotVisited[pDoc]
+               delete item itemOffset(tLink,pNoViz[pDoc]) in pNoViz[pDoc]
                set the wholeMatches to false
-               put sMainShort[pDoc][tLink]["read"] into tNodeZ
+               put pShort[pDoc][tLink]["read"] into tNodeZ
                replace cr with "" in tNodeZ
                put true into tLast
-               repeat for each line tSameType in sMainShort[pDoc][tNodeZ]["skim"]
+               repeat for each line tSameType in pShort[pDoc][tNodeZ]["skim"]
                   replace cr with "" in tSameType
-                  if tSameType is among the items of sNotVisited[pDoc] then 
+                  if tSameType is among the items of pNoViz[pDoc] then 
                      put false into tLast
                      exit repeat
                   end if
@@ -797,41 +794,41 @@ function kahnSort pDoc,pSeedList
          -- trim is forwards along a rise link, back towards the container node --------
          -- visit the returning rise links and, if the last rise link is visited add the container node again
          -- ! thus the container node will show up twice in the topolotical sort
-         repeat for each line tLink in sMainShort[pDoc][tStep]["trim"]
+         repeat for each line tLink in pShort[pDoc][tStep]["trim"]
             replace cr with "" in tLink
             set the wholeMatches to true
-            delete item itemOffset(tLink,sNotVisited[pDoc]) in sNotVisited[pDoc]
+            delete item itemOffset(tLink,pNoViz[pDoc]) in pNoViz[pDoc]
             set the wholeMatches to false
-            put sMainShort[pDoc][tLink]["trim"] into tNodeZ
+            put pShort[pDoc][tLink]["trim"] into tNodeZ
             replace cr with "" in tNodeZ
             put true into tLast
-            repeat for each line tSameType in sMainShort[pDoc][tNodeZ]["bulk"]
+            repeat for each line tSameType in pShort[pDoc][tNodeZ]["bulk"]
                replace cr with "" in tSameType
-               if tSameType is among the items of sNotVisited[pDoc] then
+               if tSameType is among the items of pNoViz[pDoc] then
                   put false into tLast
                   exit repeat
                end if
             end repeat -- tSameType in tNodeZ
             if tLast is true then
                put tNodeZ & "," after tNextList
-               -- ! the container node has already been visited, so it's not in sNotVisited
+               -- ! the container node has already been visited, so it's not in pNoViz
                -- ? maybe don't mark it visited until it's arrived at through the last rise link
-               put tNodeZ & "," after sTopoSort[pDoc]
+               put tNodeZ & "," after pTopo[pDoc]
             end if
          end repeat -- tLink in tStep, "trim"
          ------------- flow link(s) ----------------------------------------------------------------
          -- node only needs to have a next link to travel ------------------------------------
-         repeat for each line tLink in sMainShort[pDoc][tStep]["next"]
+         repeat for each line tLink in pShort[pDoc][tStep]["next"]
             replace cr with "" in tLink
             set the wholeMatches to true
-            delete item itemOffset(tLink,sNotVisited[pDoc]) in sNotVisited[pDoc]
+            delete item itemOffset(tLink,pNoViz[pDoc]) in pNoViz[pDoc]
             set the wholeMatches to false
-            put sMainShort[pDoc][tLink]["next"] into tNodeZ
+            put pShort[pDoc][tLink]["next"] into tNodeZ
             replace cr with "" in tNodeZ
             put true into tLast
-            repeat for each line tSameType in sMainShort[pDoc][tNodeZ]["prev"]
+            repeat for each line tSameType in pShort[pDoc][tNodeZ]["prev"]
                replace cr with "" in tSameType
-               if tSameType is among the items of sNotVisited[pDoc] then 
+               if tSameType is among the items of pNoViz[pDoc] then 
                   put false into tLast
                   exit repeat
                end if
@@ -844,19 +841,19 @@ function kahnSort pDoc,pSeedList
          -- bond links are weird; they're treated as notes at the moment -------------
          -- bond links aren't followed, just recorded --------------------------------------
          -- so each nodeZ is a "note" attached to a step (state or change) -------------
-         repeat for each line tLink in sMainShort[pDoc][tStep]["bond"]
+         repeat for each line tLink in pShort[pDoc][tStep]["bond"]
             replace cr with "" in tLink
             set the wholeMatches to true
-            delete item itemOffset(tLink,sNotVisited[pDoc]) in sNotVisited[pDoc]
-            put sMainShort[pDoc][tLink]["bond"] into tNodeZ
+            delete item itemOffset(tLink,pNoViz[pDoc]) in pNoViz[pDoc]
+            put pShort[pDoc][tLink]["bond"] into tNodeZ
             replace cr with "," in tNodeZ
             delete item itemOffset(tStep,tNodeZ) in tNodeZ
             replace "," with "" in tNodeZ
-            delete item itemOffset(tNodeZ,sNotVisited[pDoc]) in sNotVisited[pDoc]
+            delete item itemOffset(tNodeZ,pNoViz[pDoc]) in pNoViz[pDoc]
             set the wholeMatches to false
             -- tNodeZ is a note attached to tStep
-            put tStep & "," after sNoteList[pDoc][tNodeZ]
-            put tNodeZ & "," after sNoteList [pDoc][tStep]
+            put tStep & "," after pNotes[pDoc][tNodeZ]
+            put tNodeZ & "," after pNotes [pDoc][tStep]
             -- later, the only recs that will get called will be the scope/flow nodes
             -- they'll find the list of bonded nodes
          end repeat -- tLink in tStep, "bond"

@@ -1,4 +1,4 @@
-﻿script "fileLogic"
+﻿script "filephile"
 command userOpen pFile
    -- pFile is the filepath of the document to open
    put URL ("file:" & pFile) into tJason

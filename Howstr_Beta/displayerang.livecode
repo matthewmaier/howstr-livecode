@@ -1,4 +1,4 @@
-﻿script "displayLogic"
+﻿script "displayerang"
 function stepString tDaDoc,tEyeDee 
    if tDaDoc is empty or tEyeDee is empty then break
    --takes in a step record and returns a string (type & id/title)
@@ -127,7 +127,22 @@ on graphManager pDo -- ! will be more complicated when not just a test
    middleOut sGraphData
 end graphManager
 
-on middleOut pData-- ! a hacky way to draw the provided graph, calls assignLayers
+on tempConvertData pShort,@pData,pDoc
+   -- sMainShort to sGraphData
+   -- sGraphData[nodes/links][rec][next/prev]
+   -- sMainShort[doc][rec][next/prev]
+   repeat for each key tRec in pShort[pDoc]
+      if pShort[pDoc][tRec]["type"] is among the words of "state change" then
+         -- node...probably !
+         put pShort[pDoc][tRec] into pData["nodes"][tRec]
+      else
+         -- link...probably !
+         put pShort[pDoc][tRec] into pData["links"][tRec]
+      end if
+   end repeat
+end tempConvertData
+
+on middleOut pData,@pDraw,pFocus -- ! a hacky way to draw the provided graph, calls assignLayers
    -- pData ! just sGraphData at the moment, maybe this should be an adjacency list ?
    -- setup variables --------------------------------------------------------------------------------
    put empty into pData["layers"]
@@ -135,7 +150,7 @@ on middleOut pData-- ! a hacky way to draw the provided graph, calls assignLayer
    -- recursively assign layers ------------------------------------------------------------------------
    -- pass pData by reference, and focus node, and initial layer
    -- add layer and visited info to pData
-   assignLayers pData,sNowFocus,0
+   assignLayers pData,pFocus,0
    -- remove duplicates in layers ------------------------------------------------------------------
    repeat for each key tLayer in pData["layers"]
       put pData["layers"][tLayer]into tOneLayer
@@ -160,7 +175,7 @@ on middleOut pData-- ! a hacky way to draw the provided graph, calls assignLayer
          put pData["nodes"][tStart]["layer"] into tStartLayer
          put pData["nodes"][tEnd]["layer"] into tEndLayer
          if not (tStartLayer < tEndLayer) then
-            if tEnd is sNowFocus then
+            if tEnd is pFocus then
                -- shuffle start more negative
                put true into tAgain
                --               delete item itemOffset(tStart,pData["layers"][tStartLayer]) of pData["layers"][tStartLayer]
@@ -197,9 +212,9 @@ on middleOut pData-- ! a hacky way to draw the provided graph, calls assignLayer
       sort items of pData["layers"][tLayer] ascending numeric
       if char 1 of pData["layers"][tLayer] is "," then delete char 1 of pData["layers"][tLayer]
    end repeat
-   put pData into sGraphDrawing
+   put pData into pDraw
    --   displayManager pData
-   displayManager
+   --   displayManager
 end middleOut
 
 on assignLayers @pAll,pSeed,pTheLayer -- ! the recursive part of middleOut
@@ -236,39 +251,43 @@ on assignLayers @pAll,pSeed,pTheLayer -- ! the recursive part of middleOut
    end if
 end assignLayers
 
-on displayManager -- ! creates/changes/deletes controls
+on displayManager pInfo,@sGUI,pSizes,pNow -- ! creates/changes/deletes controls
+   -- sGraphDrawing,sGUIstuff,tSizes
+   --pSizes[width/height/layer/node]
    lock messages
-   put sGraphDrawing into pInfo
+   --   put sGraphDrawing into pInfo
    -- delete old node graphics; brute force but not much to draw at the moment   
-   if sGUIstuff is not empty then
+   if sGUI is not empty then
       repeat for each word tKind in "nodes links"
-         repeat for each key tNum in sGUIstuff[tKind]
-            put sGUIstuff[tKind][tNum]["graphic"] into tID
+         repeat for each key tNum in sGUI[tKind]
+            put sGUI[tKind][tNum]["graphic"] into tID
             if exists(tID) then delete tID
          end repeat
       end repeat
    end if
-   put the width of this stack into tWinWidth
-   put the height of this stack into tWinHeight
+   --   put the width of this stack into tWinWidth
+   --   put the height of this stack into tWinHeight
+   put pSizes["width"] into tWinWidth
+   put pSizes["height"] into tWinHeight
    put tWinWidth/2 into tCenterH
    lock screen
    --   put empty into sDrawDetails
-   put empty into sGUIstuff
+   put empty into sGUI
    -- calculate node coordinates and draw graphic
    repeat for each key tLayer in pInfo["layers"]
-      put ((sNodeSize + sLayerSize) * tLayer) + tCenterH into tNodeH
+      put ((pSizes["node"] + pSizes["layer"]) * tLayer) + tCenterH into tNodeH
       put the number of items of pInfo["layers"][tLayer] into tStack
       put tWinHeight/(tStack + 1) into tStackV
       put 1 into tCount
       repeat for each item tNode in pInfo["layers"][tLayer]
          -- start positioning from top of window
          put tStackV * tCount into tNodeV
-         put tNodeH into sGUIstuff["nodes"][tNode]["horz"]
-         put tNodeV into sGUIstuff["nodes"][tNode]["vert"]
+         put tNodeH into sGUI["nodes"][tNode]["horz"]
+         put tNodeV into sGUI["nodes"][tNode]["vert"]
          put tNode into tStuff["node"]
          put tNodeH & "," & tNodeV into tStuff["coord"]
-         put sNodeSize into tStuff["size"]
-         put makeNode(tStuff) into sGUIstuff["nodes"][tNode]["graphic"]
+         put pSizes["node"] into tStuff["size"]
+         put makeNode(tStuff) into sGUI["nodes"][tNode]["graphic"]
          put tCount + 1 into tCount
       end repeat
    end repeat
@@ -276,19 +295,19 @@ on displayManager -- ! creates/changes/deletes controls
    repeat for each key tLink in pInfo["links"]
       put item 1 of pInfo["links"][tLink]["prev"] into tStart
       put item 1 of pInfo["links"][tLink]["next"] into tEnd
-      put sNodeSize / 2 into tClean
-      put (sGUIstuff["nodes"][tStart]["horz"]+tClean) & "," & sGUIstuff["nodes"][tStart]["vert"] into tStartCoord
-      put (sGUIstuff["nodes"][tEnd]["horz"]-tClean) & "," & sGUIstuff["nodes"][tEnd]["vert"] into tEndCoord
+      put pSizes["node"] / 2 into tClean
+      put (sGUI["nodes"][tStart]["horz"]+tClean) & "," & sGUI["nodes"][tStart]["vert"] into tStartCoord
+      put (sGUI["nodes"][tEnd]["horz"]-tClean) & "," & sGUI["nodes"][tEnd]["vert"] into tEndCoord
       put tLink into tBox["link"]
       put tStartCoord & cr & tEndCoord into tBox["line"]
-      put makeLink(tBox) into sGUIstuff["links"][tLink]["graphic"]
+      put makeLink(tBox) into sGUI["links"][tLink]["graphic"]
    end repeat
    -- make sure the node graphics are on top
-   repeat for each key tNode in sGUIstuff["nodes"]
-      set the layer of sGUIstuff["nodes"][tNode]["graphic"] to top
+   repeat for each key tNode in sGUI["nodes"]
+      set the layer of sGUI["nodes"][tNode]["graphic"] to top
    end repeat
    -- highlight focused node (since all nodes new, old highlighted one was deleted)
-   put sGUIstuff["nodes"][sNowFocus]["graphic"] into tBlerg
+   put sGUI["nodes"][pNow]["graphic"] into tBlerg
    set the backgroundColor of tBlerg to orange
    unlock screen
    unlock messages
@@ -312,13 +331,11 @@ function makeNode pDetails
    put it into tID
    set the htmltext of (tID) to pDetails["node"]
    set the cGraphKey of (tID) to pDetails["node"]
-   --   put pDetails["node"] into field tID
    return tID
 end makeNode
 
 function makeLink pThis
    -- pThis[link/line]
-   --   put pLinkStart & cr & pLinkEnd into tPts
    set the style of the templateGraphic to "line"
    set the endArrow of the templateGraphic to true
    set the foregroundColor of the templategraphic to "0,220,220"

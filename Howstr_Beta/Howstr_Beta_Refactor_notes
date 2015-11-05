@@ -12,3 +12,20 @@ ISSUES
 -- but would be more straight forward to use those as keys
 -- sMain[path][file][doc][rec][tag]=data/pointer
 -- that would be the entire pointer; wouldn't require a lookup table or search
+- in grapherrific, topoSort calls "get kahnSort"
+-- kahnSort is a function, but doesn't return anything
+-- "get" is putting the function kahnSort into the "it" variable
+-- can kahnSort just be a command and not be called with "get"?
+- tracking data>logic>display
+-- consistent address is path/file/doc/rec/tag
+-- so there are windows, and possibly "areas" within each window
+-- map those to the data, affects queries and answers
+-- each area makes its own independent query
+-- logic answers each query and returns to area's address
+-- ? update to one area should push changes to other areas
+-- at the moment each query can be handled one at a time
+-- in the future they can go into a list and a service will respond
+- many documents, files, and paths
+-- when they crosspoint each other, a query will ask for info in more than one
+-- graph logic should have a thread for each query, bounded by its parameters/address
+-- should push # of changes to requesting area, so area can prompt user to refresh
