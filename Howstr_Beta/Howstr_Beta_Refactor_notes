@@ -29,3 +29,7 @@ ISSUES
 -- when they crosspoint each other, a query will ask for info in more than one
 -- graph logic should have a thread for each query, bounded by its parameters/address
 -- should push # of changes to requesting area, so area can prompt user to refresh
+- preview
+-- needs more graphics
+-- create and delete preview graphics?
+-- logic for Howstr action groups is more complicated
