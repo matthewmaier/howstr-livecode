@@ -348,7 +348,8 @@ function makeLink pThis
    return it
 end makeLink
 
-on mouseTracker
+on mouseTracker @pGUI,@pHist,@p1Down,@p1Enter,pFocus,pNode
+   -- sGUIstuff,sMouseHistory,s1Down,s1Enter,sNowFocus
    -- get now
    -- state of button 1
    put "false" into tNow["1down"]
@@ -356,10 +357,10 @@ on mouseTracker
    -- location of mouse
    put empty into tNow["inside"]
    repeat for each word tType in "nodes links"
-      repeat for each key tNum in sGUIstuff[tType]
+      repeat for each key tNum in pGUI[tType]
          -- within() doesn't depend on the rect, so how it treats negative space is more intuitive
          --         if the mouseLoc is within (the rect of sGUIstuff[tType][tNum]["graphic"]) then
-         if within(sGUIstuff[tType][tNum]["graphic"],the mouseloc) then
+         if within(pGUI[tType][tNum]["graphic"],the mouseloc) then
             put tNum into tNow["inside"]
          end if
       end repeat
@@ -369,46 +370,42 @@ on mouseTracker
    
    -- compare old to new
    -- button 1 just transitioned from up to down
-   if sMouseHistory["1down"] is false and tNow["1down"] is true then 
-      put tNow["inside"] into s1Down
+   if pHist["1down"] is false and tNow["1down"] is true then 
+      put tNow["inside"] into p1Down
    end if
    
    -- if there's an anchor node, track new areas entered
-   if s1Down is empty then
+   if p1Down is empty then
       -- either not inside a node, or mouse not down, or both
-      put empty into s1Enter
-   else if (sMouseHistory["inside"] is not empty) and (tNow["inside"] is empty) then
+      put empty into p1Enter
+   else if (pHist["inside"] is not empty) and (tNow["inside"] is empty) then
       -- just entered background
-      put "background" into s1Enter
-   else if sMouseHistory["inside"] is not tNow["inside"] then
+      put "background" into p1Enter
+   else if pHist["inside"] is not tNow["inside"] then
       -- just entered a graph element
-      put tNow["inside"] into s1Enter
+      put tNow["inside"] into p1Enter
    end if
    
    -- preview logic
    put "nothing" into tPreview
-   if s1Down is among the keys of sGUIstuff["nodes"] then
-      --      if s1Enter is among the keys of sGUIstuff["nodes"] and s1Enter is not s1Down then put "new L-N-L" && s1Enter into tPreview
-      if s1Enter is among the keys of sGUIstuff["nodes"] and s1Enter is not s1Down then put s1Down & "," & s1Enter into tPreview
-      if s1Enter is among the keys of sGUIstuff["links"] then put "nothing" into tPreview    
-      if s1Enter is empty then 
-         if s1Down is among the keys of sGUIstuff["nodes"] then
-            if s1Down is sNowFocus then
+   if p1Down is among the keys of pGUI["nodes"] then
+      if p1Enter is among the keys of pGUI["nodes"] and p1Enter is not p1Down then put p1Down & "," & p1Enter into tPreview
+      if p1Enter is among the keys of pGUI["links"] then put "nothing" into tPreview    
+      if p1Enter is empty then 
+         if p1Down is among the keys of pGUI["nodes"] then
+            if p1Down is pFocus then
                put "nothing" into tPreview
             else
-               --               put "focus on" && s1Down into tPreview
-               put s1Down into tPreview
+               put p1Down into tPreview
             end if
          else
             put "nothing" into tPreview
          end if
       end if
-      if s1Enter is "background" and s1Down is among the keys of sGUIstuff["nodes"] then
+      if p1Enter is "background" and p1Down is among the keys of pGUI["nodes"] then
          put "nothing" into tPreview
-         --         if item 1 of the mouseLoc < item 1 of the rect of sGUIstuff["nodes"][s1Down]["graphic"] then put "new N-L-in" into tPreview
-         if item 1 of the mouseLoc < item 1 of the rect of sGUIstuff["nodes"][s1Down]["graphic"] then put s1Down & ",left" into tPreview
-         --         if item 1 of the mouseLoc > item 3 of the rect of sGUIstuff["nodes"][s1Down]["graphic"] then put "new out-L-N" into tPreview
-         if item 1 of the mouseLoc > item 3 of the rect of sGUIstuff["nodes"][s1Down]["graphic"] then put s1Down & ",right" into tPreview
+         if item 1 of the mouseLoc < item 1 of the rect of pGUI["nodes"][p1Down]["graphic"] then put p1Down & ",left" into tPreview
+         if item 1 of the mouseLoc > item 3 of the rect of pGUI["nodes"][p1Down]["graphic"] then put p1Down & ",right" into tPreview
       end if
    end if
    
@@ -416,14 +413,14 @@ on mouseTracker
    repeat for each key tKey in tNow
       put tKey & ":" && tNow[tKey] & cr after tBlerg
    end repeat
-   put "s1Down:" && s1Down & cr after tBlerg
-   put "s1Enter:" && s1Enter & cr after tBlerg
+   put "p1Down:" && p1Down & cr after tBlerg
+   put "p1Enter:" && p1Enter & cr after tBlerg
    put "preview:" && tPreview after tBlerg
    put tBlerg into field "viewMouse"
    
    put empty into tCommit
    -- button 1 just transitioned from down to up while there's an anchor
-   if s1Down is not empty and sMouseHIstory["1down"] is true and tNow["1down"] is false then 
+   if p1Down is not empty and pHist["1down"] is true and tNow["1down"] is false then 
       -- if mouse(1) never returns "down" then all the above is skipped and s1Down&s1Enter stay empty
       -- the first time mouse(1) is down, 'inside' is put into s1Down (# if in a graph part, empty otherwise)
       -- as long as s1Down stays empty nothing happens, and s1Enter is emptied out just in case
@@ -442,10 +439,10 @@ on mouseTracker
       -- #: node = new link-node-link
       put tPreview into tCommit
       put tPreview & cr before field "viewCommitments"   
-      put empty into s1Down
-      put empty into s1Enter
+      put empty into p1Down
+      put empty into p1Enter
    end if
-   put tNow into sMouseHistory
+   put tNow into pHist
    -- preview is a message to the frontend to change the display
    -- nothing = set visible to false
    -- new L-N out = #,right
@@ -458,14 +455,14 @@ on mouseTracker
    -- focus = #
    if tCommit is empty then
       if not (tPreview is a number) then 
-         previewProjector(tPreview)
+         previewProjector tPreview,pGUI,pNode
       end if
    else
-      if tCommit is not "nothing" then graphManager(tCommit)
+      --      if tCommit is not "nothing" then graphManager(tCommit)
    end if
 end mouseTracker
 
-on previewProjector pToDo
+on previewProjector pToDo,pGUI,pNode
    -- pToDo
    -- nothing OR #,# OR #,left OR #,right
    if pToDo is "nothing" then
@@ -481,9 +478,9 @@ on previewProjector pToDo
       -- compare left side of start to right side of end
       -- that will return true if start is in a lower layer AND if start is in the same layer
       -- if already one link between uno and dos, replace it with link-node-link same direction
-      put the rect of sGUIstuff["nodes"][tUno]["graphic"] into tUnoRect
-      put the rect of sGUIstuff["nodes"][tDos]["graphic"] into tDosRect
-      put sNodeSize / 2 into tClean
+      put the rect of pGUI["nodes"][tUno]["graphic"] into tUnoRect
+      put the rect of pGUI["nodes"][tDos]["graphic"] into tDosRect
+      put pNode / 2 into tClean
       if item 1 of tUnoRect < item 3 of tDosRect then
          -- uno is start
          put (item 3 of tUnoRect) & "," & (item 2 of tUnoRect+tClean) into tLeftStartCoord
@@ -498,15 +495,15 @@ on previewProjector pToDo
       -- add to whichever is smaller to get middle
       -- horizontal
       if item 1 of tLeftStartCoord < item 1 of tRightEndCoord then 
-         put (item 1 of tLeftStartCoord+(tTotH/2)+sNodeSize) into tNodeH
+         put (item 1 of tLeftStartCoord+(tTotH/2)+pNode) into tNodeH
       else
-         put (item 1 of tRightEndCoord+(tTotH/2)+sNodeSize) into tNodeH
+         put (item 1 of tRightEndCoord+(tTotH/2)+pNode) into tNodeH
       end if
       -- vertical
       if item 2 of tLeftStartCoord <= item 2 of tRightEndCoord then 
-         put (item 2 of tLeftStartCoord+(tTotV/2)-sNodeSize) into tNodeV
+         put (item 2 of tLeftStartCoord+(tTotV/2)-pNode) into tNodeV
       else
-         put (item 2 of tRightEndCoord+(tTotV/2)-sNodeSize) into tNodeV
+         put (item 2 of tRightEndCoord+(tTotV/2)-pNode) into tNodeV
       end if
       put (tNodeH-tClean) & "," & tNodeV into tLeftEndCoord
       put (tNodeH+tClean) & "," & tNodeV into tRightStartCoord
@@ -524,22 +521,22 @@ on previewProjector pToDo
       put item 1 of pToDo into tNode
       put item 2 of pToDo into tDir
       if tDir is "left" then
-         put (item 1 of the mouseLoc) & "," & (item 2 of the mouseLoc - sNodeSize) into tPlace
+         put (item 1 of the mouseLoc) & "," & (item 2 of the mouseLoc - pNode) into tPlace
          set the location of field "preNode" to tPlace
-         put sNodeSize / 2 into tClean
+         put pNode / 2 into tClean
          put (item 1 of tPlace+tClean) & "," & (item 2 of tPlace) into tStartCoord
-         put (sGUIstuff["nodes"][tNode]["horz"]-tClean) & "," & sGUIstuff["nodes"][tNode]["vert"] into tEndCoord
+         put (pGUI["nodes"][tNode]["horz"]-tClean) & "," & pGUI["nodes"][tNode]["vert"] into tEndCoord
          put tStartCoord & cr & tEndCoord into tLine
          set the points of graphic "preLinkRight" to tLine
          set the visible of graphic "preLinkLeft" to false
          set the visible of field "preNode" to true
          set the visible of graphic "PreLinkRight" to true
       else -- right
-         put (item 1 of the mouseLoc) & "," & (item 2 of the mouseLoc - sNodeSize) into tPlace
+         put (item 1 of the mouseLoc) & "," & (item 2 of the mouseLoc - pNode) into tPlace
          set the location of field "preNode" to tPlace
-         put sNodeSize / 2 into tClean
+         put pNode / 2 into tClean
          put (item 1 of tPlace-tClean) & "," & (item 2 of tPlace) into tEndCoord
-         put (sGUIstuff["nodes"][tNode]["horz"]+tClean) & "," & sGUIstuff["nodes"][tNode]["vert"] into tStartCoord
+         put (pGUI["nodes"][tNode]["horz"]+tClean) & "," & pGUI["nodes"][tNode]["vert"] into tStartCoord
          put tStartCoord & cr & tEndCoord into tLine
          set the points of graphic "preLinkLeft" to tLine
          set the visible of graphic "preLinkLeft" to true
