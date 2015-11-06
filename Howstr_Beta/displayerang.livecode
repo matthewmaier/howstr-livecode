@@ -251,16 +251,16 @@ on assignLayers @pAll,pSeed,pTheLayer -- ! the recursive part of middleOut
    end if
 end assignLayers
 
-on displayManager pInfo,@sGUI,pSizes,pNow -- ! creates/changes/deletes controls
+on displayManager pInfo,@pGUI,pSizes,pNow -- ! creates/changes/deletes controls
    -- sGraphDrawing,sGUIstuff,tSizes
    --pSizes[width/height/layer/node]
    lock messages
    --   put sGraphDrawing into pInfo
    -- delete old node graphics; brute force but not much to draw at the moment   
-   if sGUI is not empty then
+   if pGUI is not empty then
       repeat for each word tKind in "nodes links"
-         repeat for each key tNum in sGUI[tKind]
-            put sGUI[tKind][tNum]["graphic"] into tID
+         repeat for each key tNum in pGUI[tKind]
+            put pGUI[tKind][tNum]["graphic"] into tID
             if exists(tID) then delete tID
          end repeat
       end repeat
@@ -272,7 +272,7 @@ on displayManager pInfo,@sGUI,pSizes,pNow -- ! creates/changes/deletes controls
    put tWinWidth/2 into tCenterH
    lock screen
    --   put empty into sDrawDetails
-   put empty into sGUI
+   put empty into pGUI
    -- calculate node coordinates and draw graphic
    repeat for each key tLayer in pInfo["layers"]
       put ((pSizes["node"] + pSizes["layer"]) * tLayer) + tCenterH into tNodeH
@@ -282,12 +282,13 @@ on displayManager pInfo,@sGUI,pSizes,pNow -- ! creates/changes/deletes controls
       repeat for each item tNode in pInfo["layers"][tLayer]
          -- start positioning from top of window
          put tStackV * tCount into tNodeV
-         put tNodeH into sGUI["nodes"][tNode]["horz"]
-         put tNodeV into sGUI["nodes"][tNode]["vert"]
+         put tNodeH into pGUI["nodes"][tNode]["horz"]
+         put tNodeV into pGUI["nodes"][tNode]["vert"]
          put tNode into tStuff["node"]
          put tNodeH & "," & tNodeV into tStuff["coord"]
          put pSizes["node"] into tStuff["size"]
-         put makeNode(tStuff) into sGUI["nodes"][tNode]["graphic"]
+         put pInfo["nodes"][tNode]["type"] into tStuff["type"]
+         put makeNode(tStuff) into pGUI["nodes"][tNode]["graphic"]
          put tCount + 1 into tCount
       end repeat
    end repeat
@@ -296,25 +297,30 @@ on displayManager pInfo,@sGUI,pSizes,pNow -- ! creates/changes/deletes controls
       put item 1 of pInfo["links"][tLink]["prev"] into tStart
       put item 1 of pInfo["links"][tLink]["next"] into tEnd
       put pSizes["node"] / 2 into tClean
-      put (sGUI["nodes"][tStart]["horz"]+tClean) & "," & sGUI["nodes"][tStart]["vert"] into tStartCoord
-      put (sGUI["nodes"][tEnd]["horz"]-tClean) & "," & sGUI["nodes"][tEnd]["vert"] into tEndCoord
+      put (pGUI["nodes"][tStart]["horz"]+tClean) & "," & pGUI["nodes"][tStart]["vert"] into tStartCoord
+      put (pGUI["nodes"][tEnd]["horz"]-tClean) & "," & pGUI["nodes"][tEnd]["vert"] into tEndCoord
       put tLink into tBox["link"]
       put tStartCoord & cr & tEndCoord into tBox["line"]
-      put makeLink(tBox) into sGUI["links"][tLink]["graphic"]
+      put pSizes["link"] into tBox["size"]
+      put makeLink(tBox) into pGUI["links"][tLink]["graphic"]
    end repeat
    -- make sure the node graphics are on top
-   repeat for each key tNode in sGUI["nodes"]
-      set the layer of sGUI["nodes"][tNode]["graphic"] to top
+   repeat for each key tNode in pGUI["nodes"]
+      set the layer of pGUI["nodes"][tNode]["graphic"] to top
    end repeat
+   -- then make sure the preview graphics are on top of that
+   set the layer of graphic "preLinkRight" to top
+   set the layer of graphic "preLinkLeft" to top
+   set the layer of field "preNode" to top
    -- highlight focused node (since all nodes new, old highlighted one was deleted)
-   put sGUI["nodes"][pNow]["graphic"] into tBlerg
+   put pGUI["nodes"][pNow]["graphic"] into tBlerg
    set the backgroundColor of tBlerg to orange
    unlock screen
    unlock messages
 end displayManager
 
 function makeNode pDetails
-   -- pDetails[node/coord/size]
+   -- pDetails[node/coord/size/type]
    set the locked of the templateField to true
    --   set the disabled of the templateField to true
    set the lockText of the templateField to true
@@ -329,7 +335,8 @@ function makeNode pDetails
    --   set the behavior of the templatefield to the long id of button "graphBehave"
    create field 
    put it into tID
-   set the htmltext of (tID) to pDetails["node"]
+   --   set the htmltext of (tID) to pDetails["node"]
+   set the htmltext of (tID) to (symbolLookup(pDetails["type"]) && pDetails["node"])
    set the cGraphKey of (tID) to pDetails["node"]
    return tID
 end makeNode
@@ -342,6 +349,7 @@ function makeLink pThis
    set the points of the templateGraphic to pThis["line"]
    set the name of the templateGraphic to pThis["link"] & "LinkGraphic"
    set the filled of the templateGraphic to false
+   set the linesize of the templateGraphic to pThis["size"]
    --   set the behavior of the templateGraphic to the long id of button "graphBehave"
    create graphic
    set the cGraphKey of it to pThis["link"]
