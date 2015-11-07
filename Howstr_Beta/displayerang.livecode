@@ -288,6 +288,7 @@ on displayManager pInfo,@pGUI,pSizes,pNow -- ! creates/changes/deletes controls
          put tNodeH & "," & tNodeV into tStuff["coord"]
          put pSizes["node"] into tStuff["size"]
          put pInfo["nodes"][tNode]["type"] into tStuff["type"]
+         put tStuff["type"] into pGUI["nodes"][tNode]["type"]
          put makeNode(tStuff) into pGUI["nodes"][tNode]["graphic"]
          put tCount + 1 into tCount
       end repeat
@@ -302,6 +303,8 @@ on displayManager pInfo,@pGUI,pSizes,pNow -- ! creates/changes/deletes controls
       put tLink into tBox["link"]
       put tStartCoord & cr & tEndCoord into tBox["line"]
       put pSizes["link"] into tBox["size"]
+      put pInfo["links"][tLink]["type"] into tBox["type"]
+      put tBox["type"] into pGUI["links"][tLink]["type"]
       put makeLink(tBox) into pGUI["links"][tLink]["graphic"]
    end repeat
    -- make sure the node graphics are on top
@@ -309,10 +312,11 @@ on displayManager pInfo,@pGUI,pSizes,pNow -- ! creates/changes/deletes controls
       set the layer of pGUI["nodes"][tNode]["graphic"] to top
    end repeat
    -- then make sure the preview graphics are on top of that
-   set the layer of graphic "preLinkRight" to top
-   set the layer of graphic "preLinkLeft" to top
-   set the layer of field "preNode" to top
-   -- highlight focused node (since all nodes new, old highlighted one was deleted)
+   set the layer of graphic "preFlow1" to top
+   set the layer of graphic "preFlow2" to top
+   set the layer of field "preState" to top
+   set the layer of field "preChange" to top
+-- highlight focused node (since all nodes new, old highlighted one was deleted)
    put pGUI["nodes"][pNow]["graphic"] into tBlerg
    set the backgroundColor of tBlerg to orange
    unlock screen
@@ -342,7 +346,7 @@ function makeNode pDetails
 end makeNode
 
 function makeLink pThis
-   -- pThis[link/line]
+   -- pThis[link/line/type]
    set the style of the templateGraphic to "line"
    set the endArrow of the templateGraphic to true
    set the foregroundColor of the templategraphic to "0,220,220"
@@ -397,7 +401,9 @@ on mouseTracker @pGUI,@pHist,@p1Down,@p1Enter,pFocus,pNode
    -- preview logic
    put "nothing" into tPreview
    if p1Down is among the keys of pGUI["nodes"] then
+      -- anchor and target
       if p1Enter is among the keys of pGUI["nodes"] and p1Enter is not p1Down then put p1Down & "," & p1Enter into tPreview
+      -- link can't be target
       if p1Enter is among the keys of pGUI["links"] then put "nothing" into tPreview    
       if p1Enter is empty then 
          if p1Down is among the keys of pGUI["nodes"] then
@@ -460,13 +466,14 @@ on mouseTracker @pGUI,@pHist,@p1Down,@p1Enter,pFocus,pNode
    -- new L-N out = #,right
    -- new N-L in = #,left
    -- new L-N-L = #,#
-   -- focus = #
+   -- focus = #   
    if tCommit is empty then
       if not (tPreview is a number) then 
          previewProjector tPreview,pGUI,pNode
       end if
    else
       --      if tCommit is not "nothing" then graphManager(tCommit)
+      
    end if
 end mouseTracker
 
@@ -474,9 +481,10 @@ on previewProjector pToDo,pGUI,pNode
    -- pToDo
    -- nothing OR #,# OR #,left OR #,right
    if pToDo is "nothing" then
-      set the visible of graphic "preLinkLeft" to false
-      set the visible of field "preNode" to false
-      set the visible of graphic "PreLinkRight" to false
+      set the visible of graphic "preFlow1" to false
+      set the visible of field "preState" to false
+      set the visible of field "preChange" to false
+      set the visible of graphic "preFlow2" to false
    else if item 2 of pToDo is a number then
       -- two nodes
       put item 1 of pToDo into tUno
@@ -530,26 +538,46 @@ on previewProjector pToDo,pGUI,pNode
       put item 2 of pToDo into tDir
       if tDir is "left" then
          put (item 1 of the mouseLoc) & "," & (item 2 of the mouseLoc - pNode) into tPlace
-         set the location of field "preNode" to tPlace
          put pNode / 2 into tClean
          put (item 1 of tPlace+tClean) & "," & (item 2 of tPlace) into tStartCoord
          put (pGUI["nodes"][tNode]["horz"]-tClean) & "," & pGUI["nodes"][tNode]["vert"] into tEndCoord
          put tStartCoord & cr & tEndCoord into tLine
-         set the points of graphic "preLinkRight" to tLine
-         set the visible of graphic "preLinkLeft" to false
-         set the visible of field "preNode" to true
-         set the visible of graphic "PreLinkRight" to true
+         if pGUI["nodes"][tNode]["type"] is "state" then
+            set the location of field "preChange" to tPlace
+            set the points of graphic "preFlow1" to tLine
+            set the visible of field "preChange" to true
+            set the visible of graphic "preFlow1" to true
+            set the visible of graphic "preFlow2" to false
+            set the visible of field "preState" to false
+         else -- must be change
+            set the location of field "preState" to tPlace
+            set the points of graphic "preFlow1" to tLine
+            set the visible of field "preState" to true
+            set the visible of graphic "preFlow1" to true
+            set the visible of graphic "preFlow2" to false
+            set the visible of field "preChange" to false
+         end if
       else -- right
          put (item 1 of the mouseLoc) & "," & (item 2 of the mouseLoc - pNode) into tPlace
-         set the location of field "preNode" to tPlace
          put pNode / 2 into tClean
          put (item 1 of tPlace-tClean) & "," & (item 2 of tPlace) into tEndCoord
          put (pGUI["nodes"][tNode]["horz"]+tClean) & "," & pGUI["nodes"][tNode]["vert"] into tStartCoord
          put tStartCoord & cr & tEndCoord into tLine
-         set the points of graphic "preLinkLeft" to tLine
-         set the visible of graphic "preLinkLeft" to true
-         set the visible of field "preNode" to true
-         set the visible of graphic "PreLinkRight" to false
+         if pGUI["nodes"][tNode]["type"] is "state" then
+            set the location of field "preChange" to tPlace
+            set the points of graphic "preFlow1" to tLine
+            set the visible of field "preChange" to true
+            set the visible of graphic "preFlow1" to true
+            set the visible of graphic "preFlow2" to false
+            set the visible of field "preState" to false
+         else -- must be change
+            set the location of field "preState" to tPlace
+            set the points of graphic "preFlow1" to tLine
+            set the visible of field "preState" to true
+            set the visible of graphic "preFlow1" to true
+            set the visible of graphic "preFlow2" to false
+            set the visible of field "preChange" to false
+         end if
       end if
    end if
 end previewProjector

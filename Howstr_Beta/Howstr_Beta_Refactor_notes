@@ -33,3 +33,4 @@ ISSUES
 -- needs more graphics
 -- create and delete preview graphics?
 -- logic for Howstr action groups is more complicated
+- consolidate data into fewer variables
