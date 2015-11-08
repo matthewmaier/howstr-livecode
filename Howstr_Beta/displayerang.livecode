@@ -584,9 +584,9 @@ on previewProjector pToDo,pGUI,pNode
    put (item 1 of tOffCoord - pNode) & "," & (item 2 of tOffCoord) into tOffCoordLeft
    -- location when preview following the mouse
    put (item 1 of the mouseLoc) & "," & (item 2 of the mouseLoc - pNode) into tPlace
-   put (item 1 of tPlace + tHalfNode) & "," & (item 2 of tPlace) into tStartCoord
-   put (pGUI["nodes"][tNode]["horz"] - tHalfNode) & "," & pGUI["nodes"][tNode]["vert"] into tEndCoord
-   put tStartCoord & cr & tEndCoord into tLine
+   put (item 1 of tPlace + tHalfNode) & "," & (item 2 of tPlace) into tStart
+   put (pGUI["nodes"][tNode]["horz"] - tHalfNode) & "," & pGUI["nodes"][tNode]["vert"] into tEnd
+   put tStart & cr & tEnd into tLine
    ------------------------------ end geometry help ------------------------------
    -- show a single flow between the nodes
    if tUno is a number and tDos is a number and tSameType is false and tAdjacent is false then
@@ -635,14 +635,14 @@ on previewProjector pToDo,pGUI,pNode
          set the visible of field "preState" to true
       else if tStartAtDos is true and tDosType is "state" then
          set the points of graphic "preFlow1" to (tMidRight & cr & tEndCoord)
-         set the location of field "preChange" to tOffCoord
-         set the location of field "preState" to ((item 1 of tOffCoord + pNode) & "," & item 2 of tOffCoord)
+         set the location of field "preState" to tOffCoord
+         set the location of field "preChange" to ((item 1 of tOffCoord - pNode) & "," & item 2 of tOffCoord)
          set the visible of field "preChange" to true
          set the visible of field "preState" to true
-      else
+      else if tStartAtDos is true and tDosType is "change" then
          set the points of graphic "preFlow1" to (tMidRight & cr & tEndCoord)
-         set the location of field "preState" to tOffCoord
-         set the location of field "preChange" to ((item 1 of tOffCoord + pNode) & "," & item 2 of tOffCoord)
+         set the location of field "preChange" to tOffCoord
+         set the location of field "preState" to ((item 1 of tOffCoord - pNode) & "," & item 2 of tOffCoord)
          set the visible of field "preChange" to true
          set the visible of field "preState" to true
       end if
@@ -663,14 +663,14 @@ on previewProjector pToDo,pGUI,pNode
       set the visible of field "preState" to true
       set the visible of graphic "preFlow1" to true
       set the visible of graphic "preFlow2" to false
-   else if tUnoType is "change" then
+   else if tDos is "left" and tUnoType is "change" then
       set the points of graphic "preFlow1" to tLineCoord
       set the location of field "preState" to tMoving
       set the visible of field "preChange" to false
       set the visible of field "preState" to true
       set the visible of graphic "preFlow1" to true
       set the visible of graphic "preFlow2" to false
-   else
+   else if tDos is "left" and tUnoType is "state" then
       set the points of graphic "preFlow1" to tLineCoord
       set the location of field "preChange" to tMoving
       set the location of field "preState" to ((item 1 of tMoving - pNode) & "," & item 2 of tMoving)
