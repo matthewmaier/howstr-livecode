@@ -34,3 +34,13 @@ ISSUES
 -- create and delete preview graphics?
 -- logic for Howstr action groups is more complicated
 - consolidate data into fewer variables
+- spread out logic
+-- the logic related to different NotionAll relationships is important
+-- but it's importance is spread out in a lot of different places
+-- need to be able to draw on some central data/logic
+-- which makes the important distinctions
+- pre-process or process on-demand
+-- some aspects of display depend on graph details
+-- ex: preview logic depends on two nodes abutting or not
+-- calc that data ahead of time for all possible nodes?
+-- or allow preview logic to query graph logic?
