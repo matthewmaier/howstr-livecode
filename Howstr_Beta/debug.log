@@ -283,3 +283,18 @@
 [1107/212038:INFO:CONSOLE(974)] "loading entry:1", source: file:///C:/Program%20Files%20(x86)/RunRev/LiveCode%20Community%208.0%20(dp%207)/Documentation/html_viewer/viewer.html (974)
 [1107/212038:INFO:CONSOLE(371)] "[object Object]", source: file:///C:/Program%20Files%20(x86)/RunRev/LiveCode%20Community%208.0%20(dp%207)/Documentation/html_viewer/viewer.html (371)
 [1107/212045:INFO:CONSOLE(371)] "[object Object]", source: file:///C:/Program%20Files%20(x86)/RunRev/LiveCode%20Community%208.0%20(dp%207)/Documentation/html_viewer/viewer.html (371)
+[1110/184909:WARNING:resource_bundle.cc(304)] locale_file_path.empty()
+[1110/184909:ERROR:main_delegate.cc(564)] Could not load locale pak for en-US
+[1110/184909:WARNING:resource_bundle.cc(497)] locale resources are not loaded
+[1110/184909:WARNING:resource_bundle.cc(304)] locale_file_path.empty()
+[1110/184909:ERROR:main_delegate.cc(564)] Could not load locale pak for en-US
+[1110/184909:WARNING:resource_bundle.cc(304)] locale_file_path.empty()
+[1110/184909:ERROR:main_delegate.cc(564)] Could not load locale pak for en-US
+[1110/184909:ERROR:renderer_main.cc(207)] Running without renderer sandbox
+[1110/184910:INFO:CONSOLE(974)] "loading entry:1", source: file:///C:/Program%20Files%20(x86)/RunRev/LiveCode%20Community%208.0%20(dp%207)/Documentation/html_viewer/viewer.html (974)
+[1110/184910:INFO:CONSOLE(371)] "[object Object]", source: file:///C:/Program%20Files%20(x86)/RunRev/LiveCode%20Community%208.0%20(dp%207)/Documentation/html_viewer/viewer.html (371)
+[1110/184914:INFO:CONSOLE(371)] "[object Object]", source: file:///C:/Program%20Files%20(x86)/RunRev/LiveCode%20Community%208.0%20(dp%207)/Documentation/html_viewer/viewer.html (371)
+[1110/185956:INFO:CONSOLE(371)] "[object Object]", source: file:///C:/Program%20Files%20(x86)/RunRev/LiveCode%20Community%208.0%20(dp%207)/Documentation/html_viewer/viewer.html (371)
+[1110/190115:INFO:CONSOLE(371)] "[object Object]", source: file:///C:/Program%20Files%20(x86)/RunRev/LiveCode%20Community%208.0%20(dp%207)/Documentation/html_viewer/viewer.html (371)
+[1110/190116:INFO:CONSOLE(371)] "[object Object]", source: file:///C:/Program%20Files%20(x86)/RunRev/LiveCode%20Community%208.0%20(dp%207)/Documentation/html_viewer/viewer.html (371)
+[1110/190153:INFO:CONSOLE(371)] "[object Object]", source: file:///C:/Program%20Files%20(x86)/RunRev/LiveCode%20Community%208.0%20(dp%207)/Documentation/html_viewer/viewer.html (371)

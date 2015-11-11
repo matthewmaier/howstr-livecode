@@ -44,3 +44,14 @@ ISSUES
 -- ex: preview logic depends on two nodes abutting or not
 -- calc that data ahead of time for all possible nodes?
 -- or allow preview logic to query graph logic?
+- graph change request syntax
+-- need to be able to package many related requests
+-- also distinguish these pointers from existing pointers
+array[a][from]=user
+array[a][type]=flow
+array[a][backward]=#
+array[a][forward]=#
+array[#][something] (will replace step # details with new details)
+array[#][hide]=true (will wide step #)
+- basically there's no benefit to multiple different arrays
+-- display info needs almost full graph data for preview & change requests

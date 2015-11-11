@@ -32,101 +32,6 @@ function symbolLookup tArg --a lookup table for display symbols
    return "not found in symbolLookup function"
 end symbolLookup
 
-on graphManager pDo -- ! will be more complicated when not just a test
-   -- makes any changes, then calls draw functions, which call display functions
-   -- pDo empty OR #,# OR #,left OR #,right OR #
-   -- make changes if passed in parameter pDo
-   if pDo is empty then
-      -- whatevs
-   else if pDo is a number then
-      -- #
-      put pDo into sNowFocus
-   else if item 2 of pDo is a number then
-      -- #,#
-      -- check for existing link between these two nodes
-      -- if there is already a link, that will dictate which way to go
-      put item 1 of pDo into tAnchor
-      put item 2 of pDo into tTarget
-      put empty into tWas
-      repeat for each word tType in "next prev"
-         repeat for each item tPointer in sGraphData["nodes"][tAnchor][tType]
-            put item 1 of sGraphData["links"][tPointer][tType] into tTest
-            if tTest is tTarget then 
-               -- tAnchor has a pointer to a link with a pointer to tTarget
-               -- delete link
-               delete variable sGraphData["links"][tPointer]
-               -- delete pointer to link in tAnchor
-               delete item itemOffset(tPointer,sGraphData["nodes"][tAnchor][tType]) of sGraphData["nodes"][tAnchor][tType]
-               -- delete pointer to link in tTarget
-               if tType is "next" then delete item itemOffset(tPointer,sGraphData["nodes"][tTarget]["prev"]) of sGraphData["nodes"][tTarget]["prev"]
-               if tType is "prev" then delete item itemOffset(tPointer,sGraphData["nodes"][tTarget]["next"]) of sGraphData["nodes"][tTarget]["next"]
-               put tType into tWas
-            end if
-         end repeat
-      end repeat
-      -- link found and deleted means tWas has the direction for the new link(s) relative to tAnchor
-      -- link not found means that the correct direction has to be discovered
-      if tWas is empty then
-         -- assume anchor-to-target, unless their layer order prevents that 
-         -- ! layer order is a proxy for actually checking if the link creates a cycle
-         -- ! doing it this way will have undesirable edge cases
-         put sGraphDrawing["nodes"][tAnchor]["layer"] into tAnchorLay
-         put sGraphDrawing["nodes"][tTarget]["layer"] into tTargetLay
-         if tTargetLay < tAnchorLay then
-            put tTarget into tStart
-            put tAnchor into tEnd
-         else
-            put tTarget into tEnd
-            put tAnchor into tStart
-         end if
-      else -- tWas not empty
-         if tWas is "next" then
-            put tAnchor into tStart
-            put tTarget into tEnd
-         else
-            put tTarget into tStart
-            put tAnchor into tEnd
-         end if
-      end if
-      -- now we know that the link(s) should go from node tStart to node tEnd
-      -- and that there's no existing link in the way
-      -- need new link, new node, and new link
-      put sGraphData["lastRec"] into tRec      
-      put tStart & "," after sGraphData["links"][tRec+1]["prev"]
-      put tRec+2 & "," after sGraphData["links"][tRec+1]["next"]
-      
-      put tRec+1 & "," after sGraphData["nodes"][tRec+2]["prev"]
-      put tRec+3 & "," after sGraphData["nodes"][tRec+2]["next"]
-      
-      put tRec+2 & "," after sGraphData["links"][tRec+3]["prev"]
-      put tEnd & "," after sGraphData["links"][tRec+3]["next"]
-      
-      put tRec+3 & "," after sGraphData["nodes"][tEnd]["prev"]
-      put tRec+1 & "," after sGraphData["nodes"][tStart]["next"]      
-      put tRec+3 into sGraphData["lastRec"] 
-   else
-      -- #,left/right
-      put item 1 of pDo into tNode
-      put item 2 of pDo into tDir
-      if tDir is "left" then
-         put sGraphData["lastRec"] into tRec
-         put tRec+1 & "," after sGraphData["nodes"][tNode]["prev"]
-         put tNode & "," after sGraphData["links"][tRec+1]["next"]
-         put tRec+2 & "," after sGraphData["links"][tRec+1]["prev"]
-         put tRec+1 & "," after sGraphData["nodes"][tRec+2]["next"]
-         put tRec+2 into sGraphData["lastRec"]
-      else if tDir is "right" then
-         put sGraphData["lastRec"] into tRec
-         put tRec+1 & "," after sGraphData["nodes"][tNode]["next"]
-         put tNode & "," after sGraphData["links"][tRec+1]["prev"]
-         put tRec+2 & "," after sGraphData["links"][tRec+1]["next"]
-         put tRec+1 & "," after sGraphData["nodes"][tRec+2]["prev"]
-         put tRec+2 into sGraphData["lastRec"]
-      end if
-   end if
-   middleOut sGraphData
-end graphManager
-
 on tempConvertData pShort,@pData,pDoc
    -- sMainShort to sGraphData
    -- sGraphData[nodes/links][rec][next/prev]
@@ -141,13 +46,30 @@ on tempConvertData pShort,@pData,pDoc
       end if
    end repeat
    -- node neighbors
-   -- this is important for change preview and commit logic
+   -- this is important for preview and change logic
+   -- link,node
    repeat for each key tRec in pData["nodes"]
-      repeat for each word tDir in "next prev"
+      repeat for each word tDir in "next prev trim skim"
          repeat for each item tLink in pData["nodes"][tRec][tDir]
-            put pData["links"][tLink][tDir] & "," after pData["abutFlow"][tRec]
+            if tDir is "next" or tDir is "prev" then
+               put cr & tLink & "," & pData["links"][tLink][tDir] after pData["abutFlow"][tRec]
+               filter pData["abutFlow"][tRec] without empty
+            else if tDir is "trim" then
+               put cr & tLink & "," & pData["links"][tLink][tDir] after pData["abutRise"][tRec]
+               filter pData["abutRise"][tRec] without empty
+            else if tDir is "skim" then
+               put cr & tLink & "," & pData["links"][tLink][tDir] after pData["abutDive"][tRec]
+               filter pData["abutDive"][tRec] without empty
+            end if
          end repeat
       end repeat
+   end repeat
+   -- find the case node
+   -- needed to request certain changes
+   repeat for each key tRec in pData["nodes"]
+      if "bulk" is among the keys of pData["nodes"][tRec] and "read" is among the keys of pData["nodes"][tRec] then
+         put tRec into pData["case"]
+      end if
    end repeat
 end tempConvertData
 
@@ -282,6 +204,11 @@ on displayManager pInfo,@pGUI,pSizes,pNow -- ! creates/changes/deletes controls
    lock screen
    --   put empty into sDrawDetails
    put empty into pGUI
+   -- specify case node
+   put pInfo["case"] into pGUI["case"]
+   put pInfo["abutFlow"] into pGUI["abutFlow"]
+   put pInfo["abutDive"] into pGUI["abutDive"]
+   put pInfo["abutRise"] into pGUI["abutRise"]
    -- calculate node coordinates and draw graphic
    repeat for each key tLayer in pInfo["layers"]
       put ((pSizes["node"] + pSizes["layer"]) * tLayer) + tCenterH into tNodeH
@@ -304,6 +231,8 @@ on displayManager pInfo,@pGUI,pSizes,pNow -- ! creates/changes/deletes controls
          put makeNode(tStuff) into pGUI["nodes"][tNode]["graphic"]
          -- node's neighbors
          put pInfo["abutFlow"][tNode] into pGUI["nodes"][tNode]["abutFlow"]
+         if tNode is among the keys of pInfo["abutDive"] then put pInfo["abutDive"][tNode] into pGUI["nodes"][tNode]["abutDive"]
+         if tNode is among the keys of pInfo["abutRise"] then put pInfo["abutRise"][tNode] into pGUI["nodes"][tNode]["abutRise"]
          put tCount + 1 into tCount
       end repeat
    end repeat
@@ -330,7 +259,7 @@ on displayManager pInfo,@pGUI,pSizes,pNow -- ! creates/changes/deletes controls
    set the layer of graphic "preFlow2" to top
    set the layer of field "preState" to top
    set the layer of field "preChange" to top
--- highlight focused node (since all nodes new, old highlighted one was deleted)
+   -- highlight focused node (since all nodes new, old highlighted one was deleted)
    put pGUI["nodes"][pNow]["graphic"] into tBlerg
    set the backgroundColor of tBlerg to orange
    unlock screen
@@ -446,6 +375,9 @@ on mouseTracker @pGUI,@pHist,@p1Down,@p1Enter,pFocus,pNode
    put "preview:" && tPreview after tBlerg
    put tBlerg into field "viewMouse"
    
+   -- ! development
+   --   if tPreview is not "nothing" then breakpoint
+   
    put empty into tCommit
    -- button 1 just transitioned from down to up while there's an anchor
    if p1Down is not empty and pHist["1down"] is true and tNow["1down"] is false then 
@@ -472,40 +404,44 @@ on mouseTracker @pGUI,@pHist,@p1Down,@p1Enter,pFocus,pNode
    end if
    put tNow into pHist
    -- preview is a message to the frontend to change the display
-   -- nothing = set visible to false
-   -- new L-N out = #,right
-   -- new N-L in = #,left
-   -- new L-N-L = #,#
+   -- nothing OR #,# OR #,left OR #,right
    -- commitment is a message to the backend to change the graph
-   -- new L-N out = #,right
-   -- new N-L in = #,left
-   -- new L-N-L = #,#
-   -- focus = #   
+   -- # OR #,# OR #,left OR #,right
+   
    if tCommit is empty then
-      if not (tPreview is a number) then 
-         previewProjector tPreview,pGUI,pNode
-      end if
+      --      if not (tPreview is a number) then 
+      put previewAndChange(tPreview,pGUI,pNode) into tTest
+      --         if tTest is not "nothing" then breakpoint
+      --   end if
    else
-      --      if tCommit is not "nothing" then graphManager(tCommit)
-      
+      if tCommit is not "nothing" then changeRequest tCommit -- grapherrific.livecode
    end if
 end mouseTracker
 
-on previewProjector pToDo,pGUI,pNode
-   -- pToDo
-   -- nothing OR #,# OR #,left OR #,right
+function previewAndChange pToDo,pGUI,pNode -- returns "nothing" or array with change request
+   -- pToDo = nothing OR # OR #,# OR #,left OR #,right
+   -- pGUI = array of info necessary for display, preview and change
+   -- pNode = display size of nodes in pixels
    if pToDo is "nothing" then
       set the visible of graphic "preFlow1" to false
       set the visible of field "preState" to false
       set the visible of field "preChange" to false
       set the visible of graphic "preFlow2" to false
-      exit previewProjector
+      return "nothing"
+   end if
+   -- shift focus to another node
+   if pToDo is a number then
+      put pGUI["nodes"][pToDo]["horz"] & "," & pGUI["nodes"][pToDo]["vert"] into tSpot
+      set the location of graphic "preFocus" to tSpot
+      set the visible of graphic "preFocus" to true
+   else
+      set the visible of graphic "preFocus" to false
    end if
    ----------------------------------- research all conditions -------------------------
    -- tUno=# (always anchor)
    -- tDos=# left right (always target)
    -- tStartAtDos=true false
-   -- adjacent=true false
+   -- adjacent=false or # (of link)
    -- unoType=state change
    -- dosType=state change
    -- sameType=true false
@@ -530,11 +466,19 @@ on previewProjector pToDo,pGUI,pNode
       put false into tSameType
    end if
    -- adjacency
-   if tDos is among the items of pGUI["nodes"][tUno]["abutFlow"] then
-      put true into tAdjacent
-   else
-      put false into tAdjacent
-   end if
+   -- link,node
+   put false into tAdjacent
+   put false into tDownish
+   put false into tUpish
+   repeat for each line tLine in pGUI["nodes"][tUno]["abutFlow"]
+      if tDos is item 2 of tLine then put item 1 of tLine into tAdjacent
+   end repeat
+   repeat for each line tLine in pGUI["nodes"][tUno]["abutDive"]
+      if pGUI["case"] is item 2 of tLine then put item 1 of tLine into tDownish
+   end repeat
+   repeat for each line tLine in pGUI["nodes"][tUno]["abutRise"]
+      if pGUI["case"] is item 2 of tLine then put item 1 of tLine into tUpish
+   end repeat
    ------------------------------ end condition research -------------------------------
    ------------------------------ geometry help -----------------------------------
    put pNode / 2 into tHalfNode
@@ -595,7 +539,18 @@ on previewProjector pToDo,pGUI,pNode
       set the visible of graphic "preFlow2" to false
       set the visible of field "preState" to false
       set the visible of field "preChange" to false
-      exit previewProjector
+      -- format graph change request
+      put "user" into tTemp["a"]["from"]
+      -- ! don't have a return address for area yet, but will need that
+      put "flow" into tTemp["a"]["type"]
+      if tStartAtDos is false then
+         put tUno into tTemp["a"]["backward"]
+         put tDos into tTemp["a"]["forward"]
+      else
+         put tDos into tTemp["a"]["backward"]
+         put tUno into tTemp["a"]["forward"]
+      end if 
+      return tTemp
    end if
    -- show a single node, and two flows, between the nodes
    if tUno is a number and tDos is a number and tSameType is true then
@@ -612,242 +567,300 @@ on previewProjector pToDo,pGUI,pNode
          set the visible of field "preChange" to false
          set the visible of field "preState" to true
       end if
-      exit previewProjector
+      -- format graph change request
+      put "user" into tTemp["a"]["from"]
+      -- ! don't have a return address for area yet, but will need that
+      if tUnoType is "state" then
+         put "change" into tTemp["a"]["type"]
+      else
+         put "state" into tTemp["a"]["type"]
+      end if
+      put "user" into tTemp["b"]["from"]
+      put "flow" into tTemp["b"]["type"]
+      put tTemp["b"] into tTemp["c"]
+      if tStartAtDos is false then
+         put tUno into tTemp["b"]["backward"]
+         put "a" into tTemp["b"]["forward"]
+         put "a" into tTemp["c"]["backward"]
+         put tDos into tTemp["c"]["forward"]
+      else
+         put tDos into tTemp["b"]["backward"]
+         put "a" into tTemp["b"]["forward"]
+         put "a" into tTemp["c"]["backward"]
+         put tUno into tTemp["c"]["forward"]
+      end if 
+      return tTemp
    end if
    -- from one node to neighbor, so type is different
    -- must show state and change, in correct order
    -- must show flow, on correct side
-   if tUno is a number and tDos is a number and tAdjacent is true then
+   if tUno is a number and tDos is a number and not (tAdjacent is false) then ------------------------------------------------
       -- flow preview attached to uno (anchor)
       set the visible of graphic "preFlow1" to true
       set the visible of graphic "preFlow2" to false
+      -- format graph change request
+      -- state node [a], change node [b], two flows [c][d]
+      -- redirect existing flow [#]
+      put "user" into tTemp["a"]["from"]
+      put "state" into tTemp["a"]["type"]
+      put "user" into tTemp["b"]["from"]
+      put "change" into tTemp["b"]["type"]
+      put "user" into tTemp["c"]["from"]
+      put "flow" into tTemp["c"]["type"]
+      put tTemp["c"] into tTemp["d"]
+      put tTemp["c"] into tTemp[tAdjacent]
       if tStartAtDos is false and tUnoType is "state" then
          set the points of graphic "preFlow1" to (tStartCoord & cr & tMidLeft)
          set the location of field "preChange" to tOffCoord
          set the location of field "preState" to ((item 1 of tOffCoord + pNode) & "," & item 2 of tOffCoord)
          set the visible of field "preChange" to true
          set the visible of field "preState" to true
+         -- format graph change request
+         -- uno > flow c > change b > flow d > state a > flow # > dos
+         put tUno into tTemp["c"]["backward"]
+         put "b" into tTemp["c"]["forward"]
+         put "b" into tTemp["d"]["backward"]
+         put "a" into tTemp["d"]["forward"]
+         put "a" into tTemp[tAdjacent]["backward"]
+         put tDos into tTemp[tAdjacent]["forward"]
       else if tStartAtDos is false and tUnoType is "change" then
          set the points of graphic "preFlow1" to (tStartCoord & cr & tMidLeft)
          set the location of field "preState" to tOffCoord
          set the location of field "preChange" to ((item 1 of tOffCoord + pNode) & "," & item 2 of tOffCoord)
          set the visible of field "preChange" to true
          set the visible of field "preState" to true
+         -- format graph change request
+         -- uno > flow c > state a > flow d > change b > flow # > dos
+         put tUno into tTemp["c"]["backward"]
+         put "a" into tTemp["c"]["forward"]
+         put "a" into tTemp["d"]["backward"]
+         put "b" into tTemp["d"]["forward"]
+         put "b" into tTemp[tAdjacent]["backward"]
+         put tDos into tTemp[tAdjacent]["forward"]
       else if tStartAtDos is true and tDosType is "state" then
          set the points of graphic "preFlow1" to (tMidRight & cr & tEndCoord)
          set the location of field "preState" to tOffCoord
          set the location of field "preChange" to ((item 1 of tOffCoord - pNode) & "," & item 2 of tOffCoord)
          set the visible of field "preChange" to true
          set the visible of field "preState" to true
+         -- format graph change request
+         -- dos > flow # > change b > flow d > state a > flow c > uno
+         put tDos into tTemp[tAdjacent]["backward"]
+         put "b" into tTemp[tAdjacent]["forward"]
+         put "b" into tTemp["d"]["backward"]
+         put "a" into tTemp["d"]["forward"]
+         put "a" into tTemp["c"]["backward"]
+         put tUno into tTemp["c"]["forward"]       
       else if tStartAtDos is true and tDosType is "change" then
          set the points of graphic "preFlow1" to (tMidRight & cr & tEndCoord)
          set the location of field "preChange" to tOffCoord
          set the location of field "preState" to ((item 1 of tOffCoord - pNode) & "," & item 2 of tOffCoord)
          set the visible of field "preChange" to true
          set the visible of field "preState" to true
+         -- format graph change request
+         -- dos > flow # > state a > flow d > change b > flow c > uno
+         put tDos into tTemp[tAdjacent]["backward"]
+         put "a" into tTemp[tAdjacent]["forward"]
+         put "a" into tTemp["d"]["backward"]
+         put "b" into tTemp["d"]["forward"]
+         put "b" into tTemp["c"]["backward"]
+         put tUno into tTemp["c"]["forward"]
       end if
+      return tTemp
    end if
-   -- show "left" or "right" node(s), as appropriate, and flow on correct side
-   if tDos is "right" and tUnoType is "change" then -- can't be #,# if script got this far
-      set the points of graphic "preFlow1" to tLineCoord
-      set the location of field "preState" to tMoving
-      set the visible of field "preChange" to false
-      set the visible of field "preState" to true
-      set the visible of graphic "preFlow1" to true
-      set the visible of graphic "preFlow2" to false
-   else if tDos is "right" and tUnoType is "state" then
-      set the points of graphic "preFlow1" to tLineCoord
-      set the location of field "preChange" to tMoving
-      set the location of field "preState" to ((item 1 of tMoving + pNode) & "," & item 2 of tMoving)
-      set the visible of field "preChange" to true
-      set the visible of field "preState" to true
-      set the visible of graphic "preFlow1" to true
-      set the visible of graphic "preFlow2" to false
-   else if tDos is "left" and tUnoType is "change" then
-      set the points of graphic "preFlow1" to tLineCoord
-      set the location of field "preState" to tMoving
-      set the visible of field "preChange" to false
-      set the visible of field "preState" to true
-      set the visible of graphic "preFlow1" to true
-      set the visible of graphic "preFlow2" to false
-   else if tDos is "left" and tUnoType is "state" then
-      set the points of graphic "preFlow1" to tLineCoord
-      set the location of field "preChange" to tMoving
-      set the location of field "preState" to ((item 1 of tMoving - pNode) & "," & item 2 of tMoving)
-      set the visible of field "preChange" to true
-      set the visible of field "preState" to true
-      set the visible of graphic "preFlow1" to true
-      set the visible of graphic "preFlow2" to false
-   end if
-end previewProjector
-
-on previewProjectorOld pToDo,pGUI,pNode
-   -- pToDo
-   -- nothing OR #,# OR #,left OR #,right
-   if pToDo is "nothing" then
-      set the visible of graphic "preFlow1" to false
-      set the visible of field "preState" to false
-      set the visible of field "preChange" to false
-      set the visible of graphic "preFlow2" to false
-   else if item 2 of pToDo is a number then
-      -- two nodes
-      put item 1 of pToDo into tUno
-      put item 2 of pToDo into tDos      
-      -- ! this is weak; it should query existing graph for what to allow before preview/commit
-      -- s1Down should be first, then s1Enter, so if possible point links from anchor to target
-      -- compare left side of start to right side of end
-      -- that will return true if start is in a lower layer AND if start is in the same layer
-      -- if already one link between uno and dos, replace it with link-node-link same direction
-      put the rect of pGUI["nodes"][tUno]["graphic"] into tUnoRect
-      put the rect of pGUI["nodes"][tDos]["graphic"] into tDosRect
-      put pNode / 2 into tClean
-      put false into tStartAtDos
-      if item 1 of tUnoRect < item 3 of tDosRect then
-         -- uno is start
-         put (item 3 of tUnoRect) & "," & (item 2 of tUnoRect+tClean) into tLeftStartCoord
-         put (item 1 of tDosRect) & "," & (item 2 of tDosRect+tClean) into tRightEndCoord
-      else
-         -- dos is start
-         put true into tStartAtDos
-         put (item 3 of tDosRect) & "," & (item 2 of tDosRect+tClean) into tLeftStartCoord
-         put (item 1 of tUnoRect) & "," & (item 2 of tUnoRect+tClean) into tRightEndCoord
-      end if
-      put abs(item 1 of tLeftStartCoord - item 1 of tRightEndCoord) into tTotH
-      put abs(item 2 of tLeftStartCoord - item 2 of tRightEndCoord) into tTotV
-      -- add to whichever is smaller to get middle
-      -- horizontal
-      if item 1 of tLeftStartCoord < item 1 of tRightEndCoord then 
-         put (item 1 of tLeftStartCoord+(tTotH/2)+pNode) into tNodeH
-      else
-         put (item 1 of tRightEndCoord+(tTotH/2)+pNode) into tNodeH
-      end if
-      -- vertical
-      if item 2 of tLeftStartCoord <= item 2 of tRightEndCoord then 
-         put (item 2 of tLeftStartCoord+(tTotV/2)-pNode) into tNodeV
-      else
-         put (item 2 of tRightEndCoord+(tTotV/2)-pNode) into tNodeV
-      end if
-      -- if same type, then flow (other type) flow
-      -- else, different type
-      -- if adjacent, then node flow node (anchor gets new flow, target keeps existing flow)
-      -- else, flow node flow node flow
-      put pGUI["nodes"][tUno]["type"] into tUnoType
-      put pGUI["nodes"][tDos]["type"] into tDosType
-      if tUnoType is tDosType then
-         -- flow to (other type) to flow
-         put (tNodeH-tClean) & "," & tNodeV into tLeftEndCoord
-         put (tNodeH+tClean) & "," & tNodeV into tRightStartCoord
-         put tLeftStartCoord & cr & tLeftEndCoord into tLeftLine
-         put tRightStartCoord & cr & tRightEndCoord into tRightLine
-         -- graphics
-         if tUnoType is "change" then
-            set the location of field "preState" to (tNodeH & "," & tNodeV)
-            set the points of graphic "preFlow1" to tLeftLine
-            set the points of graphic "preFlow2" to tRightLine
-            set the visible of field "preChange" to false
-            set the visible of graphic "preFlow1" to true
-            set the visible of graphic "preFlow2" to true
-         else -- type is state
-            set the location of field "preChange" to (tNodeH & "," & tNodeV)
-            set the points of graphic "preFlow1" to tLeftLine
-            set the points of graphic "preFlow2" to tRightLine
-            set the visible of field "preState" to false
-            set the visible of graphic "preFlow1" to true
-            set the visible of graphic "preFlow2" to true
-         end if
-      else
-         -- different types
-         if tDos is among the items of pGUI["nodes"][tUno]["abutFlow"] then
-            -- adjacent
-            -- tUno is state & anchor
-            --- flow change state
-            -- tUno is state & target
-            --- change state flow
-            -- tUno is change & anchor
-            --- flow state change
-            -- tUno is change & target
-            --- state change flow
-            put tNodeH & "," & tNodeV into tPlace
-            if pGUI["nodes"][tUno]["type"] is "state" then
-               set the location of field "preChange" to tPlace
-               put item 1 of tPlace into tOtherH
-               put tOtherH + pNode + 5 into item 1 of tPlace
-               set the location of field "preState" to tPlace
-               set the points of graphic "preFlow1" to tLine
-               set the visible of field "preChange" to true
-               set the visible of graphic "preFlow1" to true
-               set the visible of graphic "preFlow2" to false
-               set the visible of field "preState" to true
-            else -- must be change
-               set the location of field "preState" to tPlace
-               put item 1 of tPlace into tOtherH
-               put tOtherH + pNode + 5 into item 1 of tPlace
-               set the location of field "preChange" to tPlace
-               set the points of graphic "preFlow1" to tLine
-               set the visible of field "preState" to true
-               set the visible of graphic "preFlow1" to true
-               set the visible of graphic "preFlow2" to false
-               set the visible of field "preChange" to false
-            end if -- type state/change
+   -- show "left" or "right" node(s), as appropriate, and flow on correct side --------------------------------
+   if tDos is not a number then
+      -- need a flow [a] and a state [b]
+      -- need a dive/rise [c]
+      -- maybe a change [d] and another flow [e]
+      put "user" into tTemp["a"]["from"]
+      put "flow" into tTemp["a"]["type"]
+      put "user" into tTemp["b"]["from"]
+      put "state" into tTemp["b"]["type"]
+      if tDos is "right" and tUnoType is "change" then -- can't be #,# if script got this far
+         set the points of graphic "preFlow1" to tLineCoord
+         set the location of field "preState" to tMoving
+         set the visible of field "preChange" to false
+         set the visible of field "preState" to true
+         set the visible of graphic "preFlow1" to true
+         set the visible of graphic "preFlow2" to false
+         -- format graph change request
+         -- uno > flow a > state b > rise c > case
+         put tUno into tTemp["a"]["backward"]
+         put "b" into tTemp["a"]["forward"]
+         put "user" into tTemp["c"]["from"]
+         put "rise" into tTemp["c"]["type"]
+         put "b" into tTemp["c"]["backward"]
+         put pGUI["case"] into tTemp["c"]["forward"]
+      else if tDos is "right" and tUnoType is "state" then
+         set the points of graphic "preFlow1" to tLineCoord
+         set the location of field "preChange" to tMoving
+         set the location of field "preState" to ((item 1 of tMoving + pNode) & "," & item 2 of tMoving)
+         set the visible of field "preChange" to true
+         set the visible of field "preState" to true
+         set the visible of graphic "preFlow1" to true
+         set the visible of graphic "preFlow2" to false
+         -- format graph change request
+         -- uno > flow a > change d > flow e > state b > rise c > case
+         -- since this is a state, going right, it might already have a rise link
+         put tUno into tTemp["a"]["backward"]
+         put "d" into tTemp["a"]["forward"]
+         put "user" into tTemp["d"]["from"]
+         put "change" into tTemp["d"]["type"]
+         put "user" into tTemp["e"]["from"]
+         put "flow" into tTemp["e"]["type"]
+         put "d" into tTemp["e"]["backward"]
+         put "b" into tTemp["e"]["forward"]
+         if tUpish is false then
+            put "user" into tTemp["c"]["from"]
+            put "rise" into tTemp["c"]["type"]
+            put "b" into tTemp["c"]["backward"]
+            put pGUI["case"] into tTemp["c"]["forward"]
          else
-            -- not adjacent
-            
+            put "user" into tTemp[tUpish]["from"]
+            put "b" into tTemp[tUpish]["backward"]
+            put pGUI["case"] into tTemp[tUpish]["forward"]
+         end if
+      else if tDos is "left" and tUnoType is "change" then
+         set the points of graphic "preFlow1" to tLineCoord
+         set the location of field "preState" to tMoving
+         set the visible of field "preChange" to false
+         set the visible of field "preState" to true
+         set the visible of graphic "preFlow1" to true
+         set the visible of graphic "preFlow2" to false
+         -- format graph change request
+         -- case > dive c > state b > flow a > uno
+         put "user" into tTemp["c"]["from"]
+         put "dive" into tTemp["c"]["type"]
+         put pGUI["case"] into tTemp["c"]["backward"]
+         put "b" into tTemp["c"]["forward"]
+         put "b" into tTemp["a"]["backward"]
+         put tUno into tTemp["a"]["forward"]
+      else if tDos is "left" and tUnoType is "state" then
+         set the points of graphic "preFlow1" to tLineCoord
+         set the location of field "preChange" to tMoving
+         set the location of field "preState" to ((item 1 of tMoving - pNode) & "," & item 2 of tMoving)
+         set the visible of field "preChange" to true
+         set the visible of field "preState" to true
+         set the visible of graphic "preFlow1" to true
+         set the visible of graphic "preFlow2" to false
+         -- format graph change request
+         -- case > c > b > e > d > a > uno
+         -- since this is a state, going left, it might already have a dive link
+         if tDownish is false then
+            put "user" into tTemp["c"]["from"]
+            put "dive" into tTemp["c"]["type"]
+            put pGUI["case"] into tTemp["c"]["backward"]
+            put "b" into tTemp["c"]["forward"]
+         else
+            put "user" into tTemp[tDownish]["from"]
+            put pGUI["case"] into tTemp[tDownish]["backward"]
+            put "b" into tTemp[tDownish]["forward"]
+         end if
+         put "user" into tTemp["e"]["from"]
+         put "flow" into tTemp["e"]["type"]
+         put "b" into tTemp["e"]["backward"]
+         put "d" into tTemp["e"]["forward"]
+         put "user" into tTemp["d"]["from"]
+         put "change" into tTemp["d"]["type"]
+         put "d" into tTemp["a"]["backward"]
+         put tUno into tTemp["a"]["forward"]
+      end if
+      return tTemp
+   end if
+end previewAndChange
+
+on graphManager pDo -- ! will be more complicated when not just a test
+   -- makes any changes, then calls draw functions, which call display functions
+   -- pDo empty OR #,# OR #,left OR #,right OR #
+   -- make changes if passed in parameter pDo
+   if pDo is empty then
+      -- whatevs
+   else if pDo is a number then
+      -- #
+      put pDo into sNowFocus
+   else if item 2 of pDo is a number then
+      -- #,#
+      -- check for existing link between these two nodes
+      -- if there is already a link, that will dictate which way to go
+      put item 1 of pDo into tAnchor
+      put item 2 of pDo into tTarget
+      put empty into tWas
+      repeat for each word tType in "next prev"
+         repeat for each item tPointer in sGraphData["nodes"][tAnchor][tType]
+            put item 1 of sGraphData["links"][tPointer][tType] into tTest
+            if tTest is tTarget then 
+               -- tAnchor has a pointer to a link with a pointer to tTarget
+               -- delete link
+               delete variable sGraphData["links"][tPointer]
+               -- delete pointer to link in tAnchor
+               delete item itemOffset(tPointer,sGraphData["nodes"][tAnchor][tType]) of sGraphData["nodes"][tAnchor][tType]
+               -- delete pointer to link in tTarget
+               if tType is "next" then delete item itemOffset(tPointer,sGraphData["nodes"][tTarget]["prev"]) of sGraphData["nodes"][tTarget]["prev"]
+               if tType is "prev" then delete item itemOffset(tPointer,sGraphData["nodes"][tTarget]["next"]) of sGraphData["nodes"][tTarget]["next"]
+               put tType into tWas
+            end if
+         end repeat
+      end repeat
+      -- link found and deleted means tWas has the direction for the new link(s) relative to tAnchor
+      -- link not found means that the correct direction has to be discovered
+      if tWas is empty then
+         -- assume anchor-to-target, unless their layer order prevents that 
+         -- ! layer order is a proxy for actually checking if the link creates a cycle
+         -- ! doing it this way will have undesirable edge cases
+         put sGraphDrawing["nodes"][tAnchor]["layer"] into tAnchorLay
+         put sGraphDrawing["nodes"][tTarget]["layer"] into tTargetLay
+         if tTargetLay < tAnchorLay then
+            put tTarget into tStart
+            put tAnchor into tEnd
+         else
+            put tTarget into tEnd
+            put tAnchor into tStart
+         end if
+      else -- tWas not empty
+         if tWas is "next" then
+            put tAnchor into tStart
+            put tTarget into tEnd
+         else
+            put tTarget into tStart
+            put tAnchor into tEnd
          end if
       end if
+      -- now we know that the link(s) should go from node tStart to node tEnd
+      -- and that there's no existing link in the way
+      -- need new link, new node, and new link
+      put sGraphData["lastRec"] into tRec      
+      put tStart & "," after sGraphData["links"][tRec+1]["prev"]
+      put tRec+2 & "," after sGraphData["links"][tRec+1]["next"]
       
+      put tRec+1 & "," after sGraphData["nodes"][tRec+2]["prev"]
+      put tRec+3 & "," after sGraphData["nodes"][tRec+2]["next"]
       
+      put tRec+2 & "," after sGraphData["links"][tRec+3]["prev"]
+      put tEnd & "," after sGraphData["links"][tRec+3]["next"]
+      
+      put tRec+3 & "," after sGraphData["nodes"][tEnd]["prev"]
+      put tRec+1 & "," after sGraphData["nodes"][tStart]["next"]      
+      put tRec+3 into sGraphData["lastRec"] 
    else
-      -- one node
-      put item 1 of pToDo into tNode
-      put item 2 of pToDo into tDir
+      -- #,left/right
+      put item 1 of pDo into tNode
+      put item 2 of pDo into tDir
       if tDir is "left" then
-         put (item 1 of the mouseLoc) & "," & (item 2 of the mouseLoc - pNode) into tPlace
-         put pNode / 2 into tClean
-         put (item 1 of tPlace+tClean) & "," & (item 2 of tPlace) into tStartCoord
-         put (pGUI["nodes"][tNode]["horz"]-tClean) & "," & pGUI["nodes"][tNode]["vert"] into tEndCoord
-         put tStartCoord & cr & tEndCoord into tLine
-         if pGUI["nodes"][tNode]["type"] is "state" then
-            set the location of field "preChange" to tPlace
-            put item 1 of tPlace into tOtherH
-            put tOtherH - pNode - 5 into item 1 of tPlace
-            set the location of field "preState" to tPlace
-            set the points of graphic "preFlow1" to tLine
-            set the visible of field "preChange" to true
-            set the visible of graphic "preFlow1" to true
-            set the visible of graphic "preFlow2" to false
-            set the visible of field "preState" to true
-         else -- must be change
-            set the location of field "preState" to tPlace
-            set the points of graphic "preFlow1" to tLine
-            set the visible of field "preState" to true
-            set the visible of graphic "preFlow1" to true
-            set the visible of graphic "preFlow2" to false
-            set the visible of field "preChange" to false
-         end if -- type state/change
-      else -- right
-         put (item 1 of the mouseLoc) & "," & (item 2 of the mouseLoc - pNode) into tPlace
-         put pNode / 2 into tClean
-         put (item 1 of tPlace-tClean) & "," & (item 2 of tPlace) into tEndCoord
-         put (pGUI["nodes"][tNode]["horz"]+tClean) & "," & pGUI["nodes"][tNode]["vert"] into tStartCoord
-         put tStartCoord & cr & tEndCoord into tLine
-         if pGUI["nodes"][tNode]["type"] is "state" then
-            set the location of field "preChange" to tPlace
-            put item 1 of tPlace into tOtherH
-            put tOtherH + pNode +5 into item 1 of tPlace
-            set the location of field "preState" to tPlace
-            set the points of graphic "preFlow1" to tLine
-            set the visible of field "preChange" to true
-            set the visible of graphic "preFlow1" to true
-            set the visible of graphic "preFlow2" to false
-            set the visible of field "preState" to true
-         else -- must be change
-            set the location of field "preState" to tPlace
-            set the points of graphic "preFlow1" to tLine
-            set the visible of field "preState" to true
-            set the visible of graphic "preFlow1" to true
-            set the visible of graphic "preFlow2" to false
-            set the visible of field "preChange" to false
-         end if -- type state/change
-      end if -- dir left/right
-   end if -- how many nodes
-end previewProjectorOld
+         put sGraphData["lastRec"] into tRec
+         put tRec+1 & "," after sGraphData["nodes"][tNode]["prev"]
+         put tNode & "," after sGraphData["links"][tRec+1]["next"]
+         put tRec+2 & "," after sGraphData["links"][tRec+1]["prev"]
+         put tRec+1 & "," after sGraphData["nodes"][tRec+2]["next"]
+         put tRec+2 into sGraphData["lastRec"]
+      else if tDir is "right" then
+         put sGraphData["lastRec"] into tRec
+         put tRec+1 & "," after sGraphData["nodes"][tNode]["next"]
+         put tNode & "," after sGraphData["links"][tRec+1]["prev"]
+         put tRec+2 & "," after sGraphData["links"][tRec+1]["next"]
+         put tRec+1 & "," after sGraphData["nodes"][tRec+2]["prev"]
+         put tRec+2 into sGraphData["lastRec"]
+      end if
+   end if
+   middleOut sGraphData
+end graphManager

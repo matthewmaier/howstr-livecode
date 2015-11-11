@@ -1345,3 +1345,10 @@ function gravitySort pDoc,pSeedList,pDirection
          --------- travel -----------------
       end repeat -- each tStep in pSeedList
 end gravitySort
+
+on changeRequest pAsk
+   -- # = focus on this node
+   -- #,# and #,left and #,right = new links/nodes as appropriate
+
+   
+end changeRequest
