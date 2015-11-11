@@ -53,5 +53,8 @@ array[a][backward]=#
 array[a][forward]=#
 array[#][something] (will replace step # details with new details)
 array[#][hide]=true (will wide step #)
+-- simple focus change request
+array[from]=user
+array[focus]=#
 - basically there's no benefit to multiple different arrays
 -- display info needs almost full graph data for preview & change requests

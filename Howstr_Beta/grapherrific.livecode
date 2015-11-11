@@ -1346,9 +1346,25 @@ function gravitySort pDoc,pSeedList,pDirection
       end repeat -- each tStep in pSeedList
 end gravitySort
 
-on changeRequest pAsk
-   -- # = focus on this node
-   -- #,# and #,left and #,right = new links/nodes as appropriate
-
+on changeRequest pAsk,@pMain,pDoc
+   -- pDoc=doc number
+   -- pMain[doc][rec][tag]=data/pointers
+   -- pAsk=array with change request
+   -- change the focus
+   -- x[focus]=# (this request shouldn't make it to this handler; should have already been handled)
+   -- change the graph
+   -- new elements are identified by letters (a, b, c, etc); existing elements id'd by their record #
+   -- x[letter][tag]
+   -- x[ltr][type]=flow/dive/rise/state/change
+   -- x[ltr][backward/forward]=ltr/#
+   
+   --   newItem pMain,1,"state"
+   --   newItem pMain,1,"state"
+   --   newItem pMain,1,"change"
+   --   newItem pMain,1,"state"
+   --   newDilink pMain,1,2,5,"newDive","dive","read","skim"
+   --   newDilink pMain,1,11,2,"newRise","rise","trim","bulk"
+   --   newDilink pMain,1,5,8,"newFlow","flow","next","prev"
+   --   newDilink pMain,1,8,11,"newFlow","flow","next","prev"
    
 end changeRequest

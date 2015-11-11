@@ -303,7 +303,7 @@ function makeLink pThis
    return it
 end makeLink
 
-on mouseTracker @pGUI,@pHist,@p1Down,@p1Enter,pFocus,pNode
+function mouseTracker @pGUI,@pHist,@p1Down,@p1Enter,pFocus,pNode
    -- sGUIstuff,sMouseHistory,s1Down,s1Enter,sNowFocus
    -- get now
    -- state of button 1
@@ -378,7 +378,7 @@ on mouseTracker @pGUI,@pHist,@p1Down,@p1Enter,pFocus,pNode
    -- ! development
    --   if tPreview is not "nothing" then breakpoint
    
-   put empty into tCommit
+   put false into tCommit
    -- button 1 just transitioned from down to up while there's an anchor
    if p1Down is not empty and pHist["1down"] is true and tNow["1down"] is false then 
       -- if mouse(1) never returns "down" then all the above is skipped and s1Down&s1Enter stay empty
@@ -397,24 +397,22 @@ on mouseTracker @pGUI,@pHist,@p1Down,@p1Enter,pFocus,pNode
       -- background: left = new node-link-in
       -- #: link = nothing
       -- #: node = new link-node-link
-      put tPreview into tCommit
+      --      put tPreview into tCommit
+      put true into tCommit
       put tPreview & cr before field "viewCommitments"   
       put empty into p1Down
       put empty into p1Enter
    end if
    put tNow into pHist
-   -- preview is a message to the frontend to change the display
-   -- nothing OR #,# OR #,left OR #,right
-   -- commitment is a message to the backend to change the graph
-   -- # OR #,# OR #,left OR #,right
-   
-   if tCommit is empty then
-      --      if not (tPreview is a number) then 
-      put previewAndChange(tPreview,pGUI,pNode) into tTest
-      --         if tTest is not "nothing" then breakpoint
-      --   end if
+   -- preview is a message to the frontend to preview a change, if appropriate
+   -- previewAndChange() will return whatever the outcome of that logic is
+   -- goes in: nothing OR # OR #,# OR #,left OR #,right
+   -- comes out: nothing OR a properly formatted change request array
+   put previewAndChange(tPreview,pGUI,pNode) into tRequest
+   if tRequest is not "nothing" and tCommit is true then 
+      return tRequest
    else
-      if tCommit is not "nothing" then changeRequest tCommit -- grapherrific.livecode
+      return "nothing"
    end if
 end mouseTracker
 
@@ -427,6 +425,7 @@ function previewAndChange pToDo,pGUI,pNode -- returns "nothing" or array with ch
       set the visible of field "preState" to false
       set the visible of field "preChange" to false
       set the visible of graphic "preFlow2" to false
+      set the visible of graphic "preFocus" to false
       return "nothing"
    end if
    -- shift focus to another node
@@ -434,6 +433,9 @@ function previewAndChange pToDo,pGUI,pNode -- returns "nothing" or array with ch
       put pGUI["nodes"][pToDo]["horz"] & "," & pGUI["nodes"][pToDo]["vert"] into tSpot
       set the location of graphic "preFocus" to tSpot
       set the visible of graphic "preFocus" to true
+      --      put "user" into tWhatever["from"]
+      put pToDo into tWhatever["focus"]
+      return tWhatever
    else
       set the visible of graphic "preFocus" to false
    end if
@@ -540,7 +542,7 @@ function previewAndChange pToDo,pGUI,pNode -- returns "nothing" or array with ch
       set the visible of field "preState" to false
       set the visible of field "preChange" to false
       -- format graph change request
-      put "user" into tTemp["a"]["from"]
+      --      put "user" into tTemp["a"]["from"]
       -- ! don't have a return address for area yet, but will need that
       put "flow" into tTemp["a"]["type"]
       if tStartAtDos is false then
@@ -568,14 +570,14 @@ function previewAndChange pToDo,pGUI,pNode -- returns "nothing" or array with ch
          set the visible of field "preState" to true
       end if
       -- format graph change request
-      put "user" into tTemp["a"]["from"]
+      --      put "user" into tTemp["a"]["from"]
       -- ! don't have a return address for area yet, but will need that
       if tUnoType is "state" then
          put "change" into tTemp["a"]["type"]
       else
          put "state" into tTemp["a"]["type"]
       end if
-      put "user" into tTemp["b"]["from"]
+      --      put "user" into tTemp["b"]["from"]
       put "flow" into tTemp["b"]["type"]
       put tTemp["b"] into tTemp["c"]
       if tStartAtDos is false then
@@ -601,11 +603,11 @@ function previewAndChange pToDo,pGUI,pNode -- returns "nothing" or array with ch
       -- format graph change request
       -- state node [a], change node [b], two flows [c][d]
       -- redirect existing flow [#]
-      put "user" into tTemp["a"]["from"]
+      --      put "user" into tTemp["a"]["from"]
       put "state" into tTemp["a"]["type"]
-      put "user" into tTemp["b"]["from"]
+      --      put "user" into tTemp["b"]["from"]
       put "change" into tTemp["b"]["type"]
-      put "user" into tTemp["c"]["from"]
+      --      put "user" into tTemp["c"]["from"]
       put "flow" into tTemp["c"]["type"]
       put tTemp["c"] into tTemp["d"]
       put tTemp["c"] into tTemp[tAdjacent]
@@ -673,9 +675,9 @@ function previewAndChange pToDo,pGUI,pNode -- returns "nothing" or array with ch
       -- need a flow [a] and a state [b]
       -- need a dive/rise [c]
       -- maybe a change [d] and another flow [e]
-      put "user" into tTemp["a"]["from"]
+      --      put "user" into tTemp["a"]["from"]
       put "flow" into tTemp["a"]["type"]
-      put "user" into tTemp["b"]["from"]
+      --      put "user" into tTemp["b"]["from"]
       put "state" into tTemp["b"]["type"]
       if tDos is "right" and tUnoType is "change" then -- can't be #,# if script got this far
          set the points of graphic "preFlow1" to tLineCoord
@@ -688,7 +690,7 @@ function previewAndChange pToDo,pGUI,pNode -- returns "nothing" or array with ch
          -- uno > flow a > state b > rise c > case
          put tUno into tTemp["a"]["backward"]
          put "b" into tTemp["a"]["forward"]
-         put "user" into tTemp["c"]["from"]
+         --         put "user" into tTemp["c"]["from"]
          put "rise" into tTemp["c"]["type"]
          put "b" into tTemp["c"]["backward"]
          put pGUI["case"] into tTemp["c"]["forward"]
@@ -705,19 +707,19 @@ function previewAndChange pToDo,pGUI,pNode -- returns "nothing" or array with ch
          -- since this is a state, going right, it might already have a rise link
          put tUno into tTemp["a"]["backward"]
          put "d" into tTemp["a"]["forward"]
-         put "user" into tTemp["d"]["from"]
+         --         put "user" into tTemp["d"]["from"]
          put "change" into tTemp["d"]["type"]
-         put "user" into tTemp["e"]["from"]
+         --         put "user" into tTemp["e"]["from"]
          put "flow" into tTemp["e"]["type"]
          put "d" into tTemp["e"]["backward"]
          put "b" into tTemp["e"]["forward"]
          if tUpish is false then
-            put "user" into tTemp["c"]["from"]
+            --            put "user" into tTemp["c"]["from"]
             put "rise" into tTemp["c"]["type"]
             put "b" into tTemp["c"]["backward"]
             put pGUI["case"] into tTemp["c"]["forward"]
          else
-            put "user" into tTemp[tUpish]["from"]
+            --            put "user" into tTemp[tUpish]["from"]
             put "b" into tTemp[tUpish]["backward"]
             put pGUI["case"] into tTemp[tUpish]["forward"]
          end if
@@ -730,7 +732,7 @@ function previewAndChange pToDo,pGUI,pNode -- returns "nothing" or array with ch
          set the visible of graphic "preFlow2" to false
          -- format graph change request
          -- case > dive c > state b > flow a > uno
-         put "user" into tTemp["c"]["from"]
+         --         put "user" into tTemp["c"]["from"]
          put "dive" into tTemp["c"]["type"]
          put pGUI["case"] into tTemp["c"]["backward"]
          put "b" into tTemp["c"]["forward"]
@@ -748,20 +750,20 @@ function previewAndChange pToDo,pGUI,pNode -- returns "nothing" or array with ch
          -- case > c > b > e > d > a > uno
          -- since this is a state, going left, it might already have a dive link
          if tDownish is false then
-            put "user" into tTemp["c"]["from"]
+            --            put "user" into tTemp["c"]["from"]
             put "dive" into tTemp["c"]["type"]
             put pGUI["case"] into tTemp["c"]["backward"]
             put "b" into tTemp["c"]["forward"]
          else
-            put "user" into tTemp[tDownish]["from"]
+            --            put "user" into tTemp[tDownish]["from"]
             put pGUI["case"] into tTemp[tDownish]["backward"]
             put "b" into tTemp[tDownish]["forward"]
          end if
-         put "user" into tTemp["e"]["from"]
+         --         put "user" into tTemp["e"]["from"]
          put "flow" into tTemp["e"]["type"]
          put "b" into tTemp["e"]["backward"]
          put "d" into tTemp["e"]["forward"]
-         put "user" into tTemp["d"]["from"]
+         --         put "user" into tTemp["d"]["from"]
          put "change" into tTemp["d"]["type"]
          put "d" into tTemp["a"]["backward"]
          put tUno into tTemp["a"]["forward"]
