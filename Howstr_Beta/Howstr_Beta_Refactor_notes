@@ -58,3 +58,24 @@ array[from]=user
 array[focus]=#
 - basically there's no benefit to multiple different arrays
 -- display info needs almost full graph data for preview & change requests
+- changeRequest in grapherrific.livecode
+-- must use [a] for first new element
+- had to change some handlers to functions
+-- now they return the rec of the step they created
+-- newItem, newDilink
+- delta & undo
+-- undo works by negating all pointers attributed to a particular turn
+-- so a turn, with a delta, can be undone/redone if pointers can be found
+-- for now, a delta will hide anything that's overcome by events
+-- then, the delta will create anything new it needs
+-- need to be able to attribute all changes to one delta turn
+-- that will require modifying newItem, newDilink, hideStep
+- parameters
+-- I used to pass all parameters in a long list, which does work
+-- but it's not as flexible as putting them into an array
+-- with an array, the handler can look for whatever it expects and ignore the rest
+-- that way I don't have to update old calls to the handler
+-- EX: newItem needs
+--- x[turn]=turn's pointer
+--- x[type]=state/change/etc
+--- x[doc]=document

@@ -35,12 +35,20 @@ on quickModeSetup @pMain,@pNowDoc,@pNowItem,@pPointerTags
    create link 7, tag flow, from 2 to 3 (5 to 8)
    create link 8, tag flow, from 3 to 4 (8 to 11)
    */
-   newItem pMain,1,"state"
-   newItem pMain,1,"state"
-   newItem pMain,1,"change"
-   newItem pMain,1,"state"
-   newDilink pMain,1,2,5,"newDive","dive","read","skim"
-   newDilink pMain,1,11,2,"newRise","rise","trim","bulk"
-   newDilink pMain,1,5,8,"newFlow","flow","next","prev"
-   newDilink pMain,1,8,11,"newFlow","flow","next","prev"
+   --   newItem pMain,1,"state"
+   --   newItem pMain,1,"state"
+   --   newItem pMain,1,"change"
+   --   newItem pMain,1,"state"
+   --   newDilink pMain,1,2,5,"newDive","dive","read","skim"
+   --   newDilink pMain,1,11,2,"newRise","rise","trim","bulk"
+   --   newDilink pMain,1,5,8,"newFlow","flow","next","prev"
+   --   newDilink pMain,1,8,11,"newFlow","flow","next","prev"
+   put newItem(pMain,1,"state") into tBlerg
+   put newItem(pMain,1,"state") into tBlerg
+   put newItem(pMain,1,"change") into tBlerg
+   put newItem(pMain,1,"state") into tBlerg
+   put newDilink(pMain,1,2,5,"newDive","dive","read","skim") into tBlerg
+   put newDilink (Main,1,11,2,"newRise","rise","trim","bulk") into tBlerg
+   put newDilink(pMain,1,5,8,"newFlow","flow","next","prev") into tBlerg
+   put newDilink(pMain,1,8,11,"newFlow","flow","next","prev") into tBlerg
 end quickModeSetup
