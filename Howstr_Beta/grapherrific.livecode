@@ -161,7 +161,9 @@ function newItem @pMain,pDoc,pType,pTurn
       put tRec+1 & "," & pTurn into pMain[pDoc][tRec+2]["myStep"]
       -- update highest key
       put tRec+2 into pMain[pDoc][0][lastKey]
-      return cr & tRec+1 & "," & pTurn & cr & tRec+2 & "," & pTurn
+      put cr & tRec+1 & "," & pTurn & cr & tRec+2 & "," & pTurn into tTemp["pointers"]
+      put tRec+1 into tTemp["step"]
+      return tTemp
    else
       -- new turn
       put pMain[pDoc][0][lastKey] into tRec
@@ -222,7 +224,131 @@ command userRise pRecs
    render
 end userRise
 
-function newDilink @pMain,pDoc,pXstep,pZstep,pAct,pType,pForward,pBackward
+function newDilink @pMain,pDoc,pXstep,pZstep,pAct,pType,pForward,pBackward,pTurn
+   -- for new flow: x,z,newFlow,flow,next,prev
+   -- for new dive: x,z,newDive,dive,read,skim
+   -- for new rise: x,z,newRise,rise,trim,bulk
+   -- pTurn = optional external turn; if not provided this function creates its own turn and returns step#
+   -- if provided, this function uses pTurn and returns a list of pointers to all recs for inclusion in the turn
+   -- ! yeah, yeah, I know I shouldn't do it by duplicating 90% of the logic. sue me.
+   -- ! also rewrite the parameters to be an array
+   if pTurn is empty then
+      -- this logic is unchanged
+      put pMain[pDoc][0][lastKey] into tRec
+      -- as in step X is flowed to step Z thru step Y
+      -- X forward <-> Y backward/Y forward <-> Z backward
+      -- +1 turn
+      put tRec+1 into tTurn
+      -- +2 Y step
+      put tRec+2 into tYstep
+      -- +3 Y type: pType
+      put tRec+3 into tYtype
+      -- +4 Y pBackward to X pForward
+      put tRec+4 into tYback
+      -- +5 Y pForward to Z pBackward
+      put tRec+5 into tYfor
+      -- +6 X pForward to Y pBackward
+      put tRec+6 into tXfor
+      -- +7 Z pBackward to Y pForward
+      put tRec+7 into tZback
+      put tRec+7 into pMain[pDoc][0][lastKey]
+      
+      -- turn
+      put tYstep & "," & tTurn & cr & tYtype & "," & tTurn & cr & tYback & "," & tTurn & cr \
+      & tYfor & "," & tTurn & cr & tXfor & "," & tTurn & cr & tZback & "," & tTurn into pMain[pDoc][tTurn]["turn"]
+      put pAct into pMain[pDoc][tTurn]["act"]
+      
+      -- Y step
+      put tYtype & "," & tTurn & cr & tYback & "," & tTurn & cr & tYfor & "," & tTurn into pMain[pDoc][tYstep]["step"]
+      put tTurn & "," & tTurn into pMain[pDoc][tYstep]["myTurn"]
+      
+      -- Y type
+      put pType into pMain[pDoc][tYtype]["type"]
+      put tTurn & "," & tTurn into pMain[pDoc][tYtype]["myTurn"]
+      put tYstep & "," & tTurn into pMain[pDoc][tYtype]["myStep"]
+      
+      -- pointers
+      put tXfor & "," & tTurn into pMain[pDoc][tYback][pBackward]
+      put tTurn & "," & tTurn into pMain[pDoc][tYback]["myTurn"]
+      put tYstep & "," & tTurn into pMain[pDoc][tYback]["myStep"]
+      -- this one was done when tYstep was created
+      
+      put tZback & "," & tTurn into pMain[pDoc][tYfor][pForward]
+      put tTurn & "," & tTurn into pMain[pDoc][tYfor]["myTurn"]
+      put tYstep & "," & tTurn into pMain[pDoc][tYfor]["myStep"]
+      -- this one was done when tYstep was created
+      
+      put tYback & "," & tTurn into pMain[pDoc][tXfor][pForward]
+      put tTurn & "," & tTurn into pMain[pDoc][tXfor]["myTurn"]
+      put pXstep & "," & tTurn into pMain[pDoc][tXfor]["myStep"]
+      put cr & tXfor & "," & tTurn after pMain[pDoc][pXstep]["step"]
+      
+      put tYfor & "," & tTurn into pMain[pDoc][tZback][pBackward]
+      put tTurn & "," & tTurn into pMain[pDoc][tZback]["myTurn"]
+      put pZstep & "," & tTurn into pMain[pDoc][tZback]["myStep"]
+      put cr & tZback & "," & tTurn after pMain[pDoc][pZstep]["step"]
+      
+      return tRec+2
+   else -- pTurn provided ------------------------------------------------
+      put pMain[pDoc][0][lastKey] into tRec
+      put pTurn into tTurn
+      -- as in step X is flowed to step Z thru step Y
+      -- X forward <-> Y backward/Y forward <-> Z backward
+      --      -- +1 turn
+      --      put tRec+1 into tTurn
+      -- +1 Y step
+      put tRec+1 into tYstep
+      -- +2 Y type: pType
+      put tRec+2 into tYtype
+      -- +3 Y pBackward to X pForward
+      put tRec+3 into tYback
+      -- +4 Y pForward to Z pBackward
+      put tRec+4 into tYfor
+      -- +5 X pForward to Y pBackward
+      put tRec+5 into tXfor
+      -- +6 Z pBackward to Y pForward
+      put tRec+6 into tZback
+      put tRec+6 into pMain[pDoc][0][lastKey]
+      
+      -- Y step
+      put tYtype & "," & tTurn & cr & tYback & "," & tTurn & cr & tYfor & "," & tTurn into pMain[pDoc][tYstep]["step"]
+      put tTurn & "," & tTurn into pMain[pDoc][tYstep]["myTurn"]
+      
+      -- Y type
+      put pType into pMain[pDoc][tYtype]["type"]
+      put tTurn & "," & tTurn into pMain[pDoc][tYtype]["myTurn"]
+      put tYstep & "," & tTurn into pMain[pDoc][tYtype]["myStep"]
+      
+      -- pointers
+      put tXfor & "," & tTurn into pMain[pDoc][tYback][pBackward]
+      put tTurn & "," & tTurn into pMain[pDoc][tYback]["myTurn"]
+      put tYstep & "," & tTurn into pMain[pDoc][tYback]["myStep"]
+      -- this one was done when tYstep was created
+      
+      put tZback & "," & tTurn into pMain[pDoc][tYfor][pForward]
+      put tTurn & "," & tTurn into pMain[pDoc][tYfor]["myTurn"]
+      put tYstep & "," & tTurn into pMain[pDoc][tYfor]["myStep"]
+      -- this one was done when tYstep was created
+      
+      put tYback & "," & tTurn into pMain[pDoc][tXfor][pForward]
+      put tTurn & "," & tTurn into pMain[pDoc][tXfor]["myTurn"]
+      put pXstep & "," & tTurn into pMain[pDoc][tXfor]["myStep"]
+      put cr & tXfor & "," & tTurn after pMain[pDoc][pXstep]["step"]
+      
+      put tYfor & "," & tTurn into pMain[pDoc][tZback][pBackward]
+      put tTurn & "," & tTurn into pMain[pDoc][tZback]["myTurn"]
+      put pZstep & "," & tTurn into pMain[pDoc][tZback]["myStep"]
+      put cr & tZback & "," & tTurn after pMain[pDoc][pZstep]["step"]
+      
+      -- turn
+      put cr & tYstep & "," & tTurn & cr & tYtype & "," & tTurn & cr & tYback & "," & tTurn & cr \
+      & tYfor & "," & tTurn & cr & tXfor & "," & tTurn & cr & tZback & "," & tTurn into tTemp["pointers"]
+      put tYstep into tTemp["step"]
+      return tTemp
+   end if
+end newDilink
+
+function newDilink_Old @pMain,pDoc,pXstep,pZstep,pAct,pType,pForward,pBackward
    -- for flow: x,z,newFlow,flow,next,prev
    -- for dive: x,z,newDive,dive,read,skim
    -- for rise: x,z,newRise,rise,trim,bulk
@@ -281,7 +407,7 @@ function newDilink @pMain,pDoc,pXstep,pZstep,pAct,pType,pForward,pBackward
    put cr & tZback & "," & tTurn after pMain[pDoc][pZstep]["step"]
    
    return tRec+2
-end newDilink
+end newDilink_Old
 
 command userInfo
    ask "info,data (EX: title,the quick brown fox)"
@@ -1330,191 +1456,70 @@ on changeRequest pAsk,@pMain,pDoc
    -- x[ltr][type]=flow/dive/rise/state/change
    -- x[ltr][backward/forward]=ltr/#
    
-   --   newItem pMain,1,"state"
-   --   newItem pMain,1,"state"
-   --   newItem pMain,1,"change"
-   --   newItem pMain,1,"state"
-   --   newDilink pMain,1,2,5,"newDive","dive","read","skim"
-   --   newDilink pMain,1,11,2,"newRise","rise","trim","bulk"
-   --   newDilink pMain,1,5,8,"newFlow","flow","next","prev"
-   --   newDilink pMain,1,8,11,"newFlow","flow","next","prev"
-   
-   -- check if any requests identified by a letter, if so then those elements need to be created and tracked
-   -- nodes first
-   -- then links
-   -- otherwise the existing elements just need to be updated
-   put "abcdefghijklmnopqrstuvwxyz" into tLetters
-   if "a" is not among the keys of pAsk then
-      -- has no elements that need to be created
-      -- just alterations to existing elements
-      -- I don't think any requests actually satisfy this condition yet
-   else
-      -- has at least one element (identified by a letter) that has to be created first
-      -- create and track nodes
-      repeat for each key tLtr in pAsk
-         if tLtr is among the chars of tLetters and pAsk[tLtr]["type"] is among the words of "state change" then
-            put newItem(pMain,pDoc,pAsk[tLtr]["type"]) into pAsk[tLtr]["rec"]
-         end if
-      end repeat
-      -- create and track links
-      repeat for each key tLtr in pAsk
-         if tLtr is among the chars of tLetters and pAsk[tLtr]["type"] is among the words of "flow dive rise" then
-            put pAsk[tLtr]["backward"] into tX
-            put pAsk[tLtr]["forward"] into tZ
-            put pAsk[tLtr]["type"] into tType
-            switch tType
-               case "flow"
-                  put "newFlow" into tAction
-                  put "next" into tFwd
-                  put "prev" into tBkwd
-                  break
-               case "dive"
-                  put "newDive" into tAction
-                  put "read" into tFwd
-                  put "skim" into tBkwd
-                  break
-               case "rise"
-                  put "newRise" into tAction
-                  put "trim" into tFwd
-                  put "bulk" into tBkwd
-                  break
-            end switch
-            put newDilink(pMain,pDoc,tX,tZ,tAction,tType,tFwd,tBkwd) into pAsk[tLtr]["rec"]
-         end if
-      end repeat
-      -- modify existing links
-      repeat for each key tRec in pAsk
-         if tRec is a number then
-            -- hide existing record
-            -- create new version
-         end if
-      end repeat
-   end if -- if [a] is/is not a key of pAsk
-end changeRequest
+   -- execution order:
+   -- hide links then nodes
+   -- create nodes then links (letters)
+   -- delta nodes then links (existing rec numbers)
 
-function deltaDilink @pMain,pDelta
-   -- pDoc,pXstep,pYstep,pZstep,pAct,pType,pForward,pBackward
-   -- 
-   
-   -- negate pointer logic ------------------------------------------------------
-   if item 2 of tPointer is tUndoThisRec then
-      -- this pointer is attributed to the rec that needs to be undone; reverse it
-      put item 1 of tPointer into tTarget
-      if char 1 of tTarget is "-" then
-         -- negative, then append positive
-         delete char 1 of tTarget
-         put cr & tTarget & "," & tTurn after sMain[sNowDoc][tRecord][tTag]
-      else
-         -- positive, then append negative
-         put cr & "-" & tTarget & "," & tTurn after sMain[sNowDoc][tRecord][tTag]
+   put empty into tHideLinks -- ! not using at the moment
+   put empty into tHideNodes -- ! not using at the moment
+   put empty into tNewNodes
+   put empty into tNewLinks
+   put empty into tDeltaNodes -- ! not using at the moment
+   put empty into tDeltaLinks -- ! not using at the moment
+   repeat for each key tKey in pAsk
+      if tKey is not a number and pAsk[tKey]["type"] is among the words of "state change" then
+         put tKey & "," after tNewNodes
+      else if tKey is not a number and pAsk[tKey]["type"] is among the words of "flow dive rise" then
+         put tKey & "," after tNewLinks
+      else if tKey is a number and tKey>0 and pAsk[tKey]["type"] is among the words of "state change" then
+         put tKey & "," after tDeltaNodes
+      else if tKey is a number and tKey>0 and pAsk[tKey]["type"] is among the words of "flow dive rise" then
+         put tKey & "," after tDeltaLinks
       end if
-   end if
-   -- from newDilink ------------------------------------------------------------
-   -- for flow: x,z,newFlow,flow,next,prev
-   -- for dive: x,z,newDive,dive,read,skim
-   -- for rise: x,z,newRise,rise,trim,bulk
-   put pMain[pDoc][0][lastKey] into tRec
-   -- as in step X is flowed to step Z thru step Y
-   -- X forward <-> Y backward/Y forward <-> Z backward
-   -- +1 turn
+   end repeat 
+   -- generate one master turn for all the following changes
+   -- turn's rec needs to go into all the pointers, but the pointers going into turn haven't been created yet
+   -- so pick turn's rec, and reserve it's place
+   -- fun with double-ended pointers
+   -- the newItem & newDilink functions should return a list of pointers with cr already at the front
+   put empty into tTurnPtrs
+   put pMain[pDoc][0]["lastKey"] into tRec
    put tRec+1 into tTurn
-   -- +2 Y step
-   put tRec+2 into tYstep
-   -- +3 Y type: pType
-   put tRec+3 into tYtype
-   -- +4 Y pBackward to X pForward
-   put tRec+4 into tYback
-   -- +5 Y pForward to Z pBackward
-   put tRec+5 into tYfor
-   -- +6 X pForward to Y pBackward
-   put tRec+6 into tXfor
-   -- +7 Z pBackward to Y pForward
-   put tRec+7 into tZback
-   put tRec+7 into pMain[pDoc][0][lastKey]
-   
-   -- turn
-   put tYstep & "," & tTurn & cr & tYtype & "," & tTurn & cr & tYback & "," & tTurn & cr \
-   & tYfor & "," & tTurn & cr & tXfor & "," & tTurn & cr & tZback & "," & tTurn into pMain[pDoc][tTurn]["turn"]
-   put pAct into pMain[pDoc][tTurn]["act"]
-   
-   -- Y step
-   put tYtype & "," & tTurn & cr & tYback & "," & tTurn & cr & tYfor & "," & tTurn into pMain[pDoc][tYstep]["step"]
-   put tTurn & "," & tTurn into pMain[pDoc][tYstep]["myTurn"]
-   
-   -- Y type
-   put pType into pMain[pDoc][tYtype]["type"]
-   put tTurn & "," & tTurn into pMain[pDoc][tYtype]["myTurn"]
-   put tYstep & "," & tTurn into pMain[pDoc][tYtype]["myStep"]
-   
-   -- pointers
-   put tXfor & "," & tTurn into pMain[pDoc][tYback][pBackward]
-   put tTurn & "," & tTurn into pMain[pDoc][tYback]["myTurn"]
-   put tYstep & "," & tTurn into pMain[pDoc][tYback]["myStep"]
-   -- this one was done when tYstep was created
-   
-   put tZback & "," & tTurn into pMain[pDoc][tYfor][pForward]
-   put tTurn & "," & tTurn into pMain[pDoc][tYfor]["myTurn"]
-   put tYstep & "," & tTurn into pMain[pDoc][tYfor]["myStep"]
-   -- this one was done when tYstep was created
-   
-   put tYback & "," & tTurn into pMain[pDoc][tXfor][pForward]
-   put tTurn & "," & tTurn into pMain[pDoc][tXfor]["myTurn"]
-   put pXstep & "," & tTurn into pMain[pDoc][tXfor]["myStep"]
-   put cr & tXfor & "," & tTurn after pMain[pDoc][pXstep]["step"]
-   
-   put tYfor & "," & tTurn into pMain[pDoc][tZback][pBackward]
-   put tTurn & "," & tTurn into pMain[pDoc][tZback]["myTurn"]
-   put pZstep & "," & tTurn into pMain[pDoc][tZback]["myStep"]
-   put cr & tZback & "," & tTurn after pMain[pDoc][pZstep]["step"]
-   
-   return tRec+2
-   -- userHide logic -------------------------------------------------------
-   -- ! assumes the current selection (sNowItem) is the target
-   -- to hide a tag, follow myStep and negate the pointer to the tag
-   -- to hide a step, negate all of its active pointers
-   -- a tag will not be displayed if no step points to it
-   -- a step will not be displayed if it has no active pointers
-   
-   -- turn
-   -- negate pointers
-   put sMain[sNowDoc][0][lastKey] into tRec
-   
-   put tRec+2 & "," & tRec+1 into sMain[sNowDoc][tRec+1]["turn"]
-   put "userHide" & "," & sNowItem into sMain[sNowDoc][tRec+1]["act"]
-   
-   put sNowItem & "," & tRec+1 into sMain[sNowDoc][tRec+2]["hide"]
-   put tRec+1 & "," & tRec+1 into sMain[sNowDoc][tRec+2]["myTurn"]
-   
-   put tRec+2 into sMain[sNowDoc][0][lastKey]
-   
-   -- if thing being hidden is a tag
-   if "myStep" is among the keys of sMain[sNowDoc][sNowItem] then
-      -- negate step pointer in myStep
-      repeat for each line tPtr in sMain[sNowDoc][sNowItem]["myStep"]
-         put item 1 of tPtr into tTarget
-         if char 1 of tTarget is not "-" then
-            put cr & "-" & tTarget & "," & tRec+1 after sMain[sNowDoc][sNowItem]["myStep"]
-            -- negate tag pointer in step
-            put cr & "-" & sNowItem & "," & tRec+1 after sMain[sNowDoc][tTarget]["step"]
-         end if
+   put tTurn into pMain[pDoc][0]["lastKey"]
+   if tNewNodes is not empty then
+      repeat for each item tNode in tNewNodes
+         put newItem(pMain,pDoc,pAsk[tNode]["type"],tTurn) into tStuff
+         put tStuff["step"] into pAsk[tNode]["step"]
+         put tStuff["pointers"] after tTurnPtrs
       end repeat
    end if
-   
-   -- if thing being hidden isn't a tag, it must be a step
-   if isAnode(sNowDoc,sNowItem) is false then
-      -- if thing being hidden is a link
-      hideStep(sNowItem,tRec+1)
-   else
-      -- if thing being hidden is a node (will take its links with it)
-      -- links first
-      put listOfLinks(sNowItem) into tLinks
-      repeat for each item tLink in tLinks
-         hideStep(tLink,tRec+1)
+   if tNewLinks is not empty then
+      repeat for each item tLink in tNewLinks
+         -- look up the step rec num to replace the letter
+         put pAsk[tLink]["backward"] into tBack
+         put pAsk[tLink]["forward"] into tFwd
+         if tBack is not a number then put pAsk[tBack]["step"] into tBack
+         if tFwd is not a number then put pAsk[tFwd]["step"] into tFwd
+         switch pAsk[tLink]["type"]
+            case "flow"
+               put newDilink(pMain,pDoc,tBack,tFwd,"notused","flow","next","prev",tTurn) into tStuff
+               break
+            case "dive"
+               put newDilink(pMain,pDoc,tBack,tFwd,"notused","dive","read","skim",tTurn) into tStuff
+               break
+            case "rise"
+               put newDilink(pMain,pDoc,tBack,tFwd,"notused","rise","trim","bulk",tTurn) into tStuff
+               break
+         end switch
+         put tStuff["step"] into pAsk[tLink]["step"]
+         put tStuff["pointers"] after tTurnPtrs
       end repeat
-      -- then the node itself
-      hideStep(sNowItem,tRec+1)
    end if
-end deltaDilink
+   filter tTurnPtrs without empty
+   put tTurnPtrs into pMain[pDoc][tTurn]["turn"]
+   put pAsk[0]["act"] into pMain[pDoc][tTurn]["act"]
+end changeRequest
 
 -- commented out 12NOV2015 cuz not planning to use bond links anymore
 --command userBond pRecs

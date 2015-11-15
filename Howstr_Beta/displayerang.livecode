@@ -50,7 +50,8 @@ on tempConvertData pShort,@pData,pDoc
    -- link,node
    repeat for each key tRec in pData["nodes"]
       repeat for each word tDir in "next prev trim skim"
-         repeat for each item tLink in pData["nodes"][tRec][tDir]
+         --         repeat for each item tLink in pData["nodes"][tRec][tDir]
+         repeat for each line tLink in pData["nodes"][tRec][tDir]
             if tDir is "next" or tDir is "prev" then
                put cr & tLink & "," & pData["links"][tLink][tDir] after pData["abutFlow"][tRec]
                filter pData["abutFlow"][tRec] without empty
@@ -544,6 +545,7 @@ function previewAndChange pToDo,pGUI,pNode -- returns "nothing" or array with ch
       -- format graph change request
       --      put "user" into tTemp["a"]["from"]
       -- ! don't have a return address for area yet, but will need that
+      put"flow_btwn_diffType" into tTemp[0]["act"]
       put "flow" into tTemp["a"]["type"]
       if tStartAtDos is false then
          put tUno into tTemp["a"]["backward"]
@@ -572,6 +574,16 @@ function previewAndChange pToDo,pGUI,pNode -- returns "nothing" or array with ch
       -- format graph change request
       --      put "user" into tTemp["a"]["from"]
       -- ! don't have a return address for area yet, but will need that
+      /*
+      x[a][type]=state/change
+      x[b][type]=flow
+      x[b][backward]=#/ltr
+      x[b][forward]=#/ltr
+      x[c][type]=flow
+      x[c][backward]=#/ltr
+      x[c][forward]=#/ltr
+      */
+      put "span_detached_sameType" into tTemp[0]["act"]
       if tUnoType is "state" then
          put "change" into tTemp["a"]["type"]
       else
@@ -579,7 +591,7 @@ function previewAndChange pToDo,pGUI,pNode -- returns "nothing" or array with ch
       end if
       --      put "user" into tTemp["b"]["from"]
       put "flow" into tTemp["b"]["type"]
-      put tTemp["b"] into tTemp["c"]
+      put "flow" into tTemp["c"]["type"]
       if tStartAtDos is false then
          put tUno into tTemp["b"]["backward"]
          put "a" into tTemp["b"]["forward"]
@@ -603,6 +615,7 @@ function previewAndChange pToDo,pGUI,pNode -- returns "nothing" or array with ch
       -- format graph change request
       -- state node [a], change node [b], two flows [c][d]
       -- redirect existing flow [#]
+      put "inject_btwn_diffType" into tTemp[0]["act"]
       --      put "user" into tTemp["a"]["from"]
       put "state" into tTemp["a"]["type"]
       --      put "user" into tTemp["b"]["from"]
@@ -675,6 +688,7 @@ function previewAndChange pToDo,pGUI,pNode -- returns "nothing" or array with ch
       -- need a flow [a] and a state [b]
       -- need a dive/rise [c]
       -- maybe a change [d] and another flow [e]
+      put "flow_branch" into tTemp[0]["act"]
       --      put "user" into tTemp["a"]["from"]
       put "flow" into tTemp["a"]["type"]
       --      put "user" into tTemp["b"]["from"]

@@ -47,7 +47,7 @@ ISSUES
 - graph change request syntax
 -- need to be able to package many related requests
 -- also distinguish these pointers from existing pointers
-array[a][from]=user
+array[0][act]=flow_btwn_diffType/span_detached_sameType/inject_btwn_diffType/flow_branch
 array[a][type]=flow
 array[a][backward]=#
 array[a][forward]=#
@@ -75,7 +75,21 @@ array[focus]=#
 -- but it's not as flexible as putting them into an array
 -- with an array, the handler can look for whatever it expects and ignore the rest
 -- that way I don't have to update old calls to the handler
+-- just use arrays (key:value pairs) whenever passing data
+-- it is a bit longer syntax but is much more extensible
 -- EX: newItem needs
 --- x[turn]=turn's pointer
 --- x[type]=state/change/etc
 --- x[doc]=document
+- need a set of variables that answer pre-selected NotionAll queries
+-- EX: [nodeTypes]="state change" and [linkTypes]="flow dive rise"
+-- so that instead of hard coding those keywords I can globally set them
+- NOTE: it's appropriate to move the turn to the end of the list of rec+n
+- if one or more ends of a link already exist, then add pointer to list
+-- like if a node already has a [next] tag, an additional next goes there
+-- don't create additional [next] tags
+-- it would be helpful if the handler knew that instead of having to check
+- ! nodes will have a different tag for each link
+-- so when a link is created you get the link's step, it's 2 tags
+-- and then a new tag for the node's step at either end
+-- therefore if a node has 5 flow links, it will have 5 [next] tags
