@@ -614,17 +614,15 @@ function previewAndChange pToDo,pGUI,pNode -- returns "nothing" or array with ch
       set the visible of graphic "preFlow1" to true
       set the visible of graphic "preFlow2" to false
       -- format graph change request
-      -- state node [a], change node [b], two flows [c][d]
-      -- redirect existing flow [#]
+      -- state node [a], change node [b], three flows [c][d][e]
+      -- hide existing flow [#]
       put "inject_btwn_diffType" into tTemp[0]["act"]
-      --      put "user" into tTemp["a"]["from"]
       put "state" into tTemp["a"]["type"]
-      --      put "user" into tTemp["b"]["from"]
       put "change" into tTemp["b"]["type"]
-      --      put "user" into tTemp["c"]["from"]
       put "flow" into tTemp["c"]["type"]
-      put tTemp["c"] into tTemp["d"]
-      put tTemp["c"] into tTemp[tAdjacent]
+      put "flow" into tTemp["d"]["type"]
+      put "flow" into tTemp["e"]["type"]
+      put tAdjacent into tTemp["hide"]
       if tStartAtDos is false and tUnoType is "state" then
          set the points of graphic "preFlow1" to (tStartCoord & cr & tMidLeft)
          set the location of field "preChange" to tOffCoord
@@ -632,13 +630,13 @@ function previewAndChange pToDo,pGUI,pNode -- returns "nothing" or array with ch
          set the visible of field "preChange" to true
          set the visible of field "preState" to true
          -- format graph change request
-         -- uno > flow c > change b > flow d > state a > flow # > dos
+         -- uno > flow c > change b > flow d > state a > flow e > dos
          put tUno into tTemp["c"]["backward"]
          put "b" into tTemp["c"]["forward"]
          put "b" into tTemp["d"]["backward"]
          put "a" into tTemp["d"]["forward"]
-         put "a" into tTemp[tAdjacent]["backward"]
-         put tDos into tTemp[tAdjacent]["forward"]
+         put "a" into tTemp["e"]["backward"]
+         put tDos into tTemp["e"]["forward"]
       else if tStartAtDos is false and tUnoType is "change" then
          set the points of graphic "preFlow1" to (tStartCoord & cr & tMidLeft)
          set the location of field "preState" to tOffCoord
@@ -646,13 +644,13 @@ function previewAndChange pToDo,pGUI,pNode -- returns "nothing" or array with ch
          set the visible of field "preChange" to true
          set the visible of field "preState" to true
          -- format graph change request
-         -- uno > flow c > state a > flow d > change b > flow # > dos
+         -- uno > flow c > state a > flow d > change b > flow e > dos
          put tUno into tTemp["c"]["backward"]
          put "a" into tTemp["c"]["forward"]
          put "a" into tTemp["d"]["backward"]
          put "b" into tTemp["d"]["forward"]
-         put "b" into tTemp[tAdjacent]["backward"]
-         put tDos into tTemp[tAdjacent]["forward"]
+         put "b" into tTemp["e"]["backward"]
+         put tDos into tTemp["e"]["forward"]
       else if tStartAtDos is true and tDosType is "state" then
          set the points of graphic "preFlow1" to (tMidRight & cr & tEndCoord)
          set the location of field "preState" to tOffCoord
@@ -660,9 +658,9 @@ function previewAndChange pToDo,pGUI,pNode -- returns "nothing" or array with ch
          set the visible of field "preChange" to true
          set the visible of field "preState" to true
          -- format graph change request
-         -- dos > flow # > change b > flow d > state a > flow c > uno
-         put tDos into tTemp[tAdjacent]["backward"]
-         put "b" into tTemp[tAdjacent]["forward"]
+         -- dos > flow e > change b > flow d > state a > flow c > uno
+         put tDos into tTemp["e"]["backward"]
+         put "b" into tTemp["e"]["forward"]
          put "b" into tTemp["d"]["backward"]
          put "a" into tTemp["d"]["forward"]
          put "a" into tTemp["c"]["backward"]
@@ -674,9 +672,9 @@ function previewAndChange pToDo,pGUI,pNode -- returns "nothing" or array with ch
          set the visible of field "preChange" to true
          set the visible of field "preState" to true
          -- format graph change request
-         -- dos > flow # > state a > flow d > change b > flow c > uno
-         put tDos into tTemp[tAdjacent]["backward"]
-         put "a" into tTemp[tAdjacent]["forward"]
+         -- dos > flow e > state a > flow d > change b > flow c > uno
+         put tDos into tTemp["e"]["backward"]
+         put "a" into tTemp["e"]["forward"]
          put "a" into tTemp["d"]["backward"]
          put "b" into tTemp["d"]["forward"]
          put "b" into tTemp["c"]["backward"]
@@ -689,10 +687,11 @@ function previewAndChange pToDo,pGUI,pNode -- returns "nothing" or array with ch
       -- need a flow [a] and a state [b]
       -- need a dive/rise [c]
       -- maybe a change [d] and another flow [e]
+      -- maybe hide existing dive/rise [#]
+      -- tUpish will have rise if "right"
+      -- tDownish will have dive if "left"
       put "flow_branch" into tTemp[0]["act"]
-      --      put "user" into tTemp["a"]["from"]
       put "flow" into tTemp["a"]["type"]
-      --      put "user" into tTemp["b"]["from"]
       put "state" into tTemp["b"]["type"]
       if tDos is "right" and tUnoType is "change" then -- can't be #,# if script got this far
          set the points of graphic "preFlow1" to tLineCoord
@@ -705,7 +704,6 @@ function previewAndChange pToDo,pGUI,pNode -- returns "nothing" or array with ch
          -- uno > flow a > state b > rise c > case
          put tUno into tTemp["a"]["backward"]
          put "b" into tTemp["a"]["forward"]
-         --         put "user" into tTemp["c"]["from"]
          put "rise" into tTemp["c"]["type"]
          put "b" into tTemp["c"]["backward"]
          put pGUI["case"] into tTemp["c"]["forward"]
@@ -722,22 +720,25 @@ function previewAndChange pToDo,pGUI,pNode -- returns "nothing" or array with ch
          -- since this is a state, going right, it might already have a rise link
          put tUno into tTemp["a"]["backward"]
          put "d" into tTemp["a"]["forward"]
-         --         put "user" into tTemp["d"]["from"]
          put "change" into tTemp["d"]["type"]
-         --         put "user" into tTemp["e"]["from"]
          put "flow" into tTemp["e"]["type"]
          put "d" into tTemp["e"]["backward"]
          put "b" into tTemp["e"]["forward"]
-         if tUpish is false then
-            --            put "user" into tTemp["c"]["from"]
-            put "rise" into tTemp["c"]["type"]
-            put "b" into tTemp["c"]["backward"]
-            put pGUI["case"] into tTemp["c"]["forward"]
-         else
-            --            put "user" into tTemp[tUpish]["from"]
-            put "b" into tTemp[tUpish]["backward"]
-            put pGUI["case"] into tTemp[tUpish]["forward"]
+         put "rise" into tTemp["c"]["type"]
+         put "b" into tTemp["c"]["backward"]
+         put pGUI["case"] into tTemp["c"]["forward"]
+         if not (tUpish is false) then 
+            put tUpish into tTemp["hide"]
          end if
+         --         if tUpish is false then
+         --            put "rise" into tTemp["c"]["type"]
+         --            put "b" into tTemp["c"]["backward"]
+         --            put pGUI["case"] into tTemp["c"]["forward"]
+         --         else
+         --            put "b" into tTemp[tUpish]["backward"]
+         --            put pGUI["case"] into tTemp[tUpish]["forward"]
+         --         end if
+         
       else if tDos is "left" and tUnoType is "change" then
          set the points of graphic "preFlow1" to tLineCoord
          set the location of field "preState" to tMoving
@@ -747,7 +748,6 @@ function previewAndChange pToDo,pGUI,pNode -- returns "nothing" or array with ch
          set the visible of graphic "preFlow2" to false
          -- format graph change request
          -- case > dive c > state b > flow a > uno
-         --         put "user" into tTemp["c"]["from"]
          put "dive" into tTemp["c"]["type"]
          put pGUI["case"] into tTemp["c"]["backward"]
          put "b" into tTemp["c"]["forward"]
@@ -764,21 +764,23 @@ function previewAndChange pToDo,pGUI,pNode -- returns "nothing" or array with ch
          -- format graph change request
          -- case > c > b > e > d > a > uno
          -- since this is a state, going left, it might already have a dive link
-         if tDownish is false then
-            --            put "user" into tTemp["c"]["from"]
-            put "dive" into tTemp["c"]["type"]
-            put pGUI["case"] into tTemp["c"]["backward"]
-            put "b" into tTemp["c"]["forward"]
-         else
-            --            put "user" into tTemp[tDownish]["from"]
-            put pGUI["case"] into tTemp[tDownish]["backward"]
-            put "b" into tTemp[tDownish]["forward"]
+         --         if tDownish is false then
+         --            put "dive" into tTemp["c"]["type"]
+         --            put pGUI["case"] into tTemp["c"]["backward"]
+         --            put "b" into tTemp["c"]["forward"]
+         --         else
+         --            put pGUI["case"] into tTemp[tDownish]["backward"]
+         --            put "b" into tTemp[tDownish]["forward"]
+         --         end if
+         if not (tDownish is false) then 
+            put tDownish into tTemp["hide"]
          end if
-         --         put "user" into tTemp["e"]["from"]
+         put "dive" into tTemp["c"]["type"]
+         put pGUI["case"] into tTemp["c"]["backward"]
+         put "b" into tTemp["c"]["forward"]
          put "flow" into tTemp["e"]["type"]
          put "b" into tTemp["e"]["backward"]
          put "d" into tTemp["e"]["forward"]
-         --         put "user" into tTemp["d"]["from"]
          put "change" into tTemp["d"]["type"]
          put "d" into tTemp["a"]["backward"]
          put tUno into tTemp["a"]["forward"]

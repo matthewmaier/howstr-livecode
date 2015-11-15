@@ -51,8 +51,7 @@ array[0][act]=flow_btwn_diffType/span_detached_sameType/inject_btwn_diffType/flo
 array[a][type]=flow
 array[a][backward]=#
 array[a][forward]=#
-array[#][something] (will replace step # details with new details)
-array[#][hide]=true (will wide step #)
+array[hide]=# (will hide existing step #)
 -- simple focus change request
 array[from]=user
 array[focus]=#
@@ -93,3 +92,7 @@ array[focus]=#
 -- so when a link is created you get the link's step, it's 2 tags
 -- and then a new tag for the node's step at either end
 -- therefore if a node has 5 flow links, it will have 5 [next] tags
+- delimiters
+-- Looney used tabs and tildes to delimit massive amounts of data in his database
+-- so maybe do the same thing here instead of commas and carriage returns
+-- shouldn't be any danger of someone trying to use a tab in an address

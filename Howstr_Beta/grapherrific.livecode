@@ -667,13 +667,13 @@ function listOfLinks pNode
    return tY
 end listOfLinks
 
-command hideStep pHideRec,pTurnRec
-   -- pHideRec = the key of the rec to hide; negate it and pointers to it
-   -- pTurnRec = the key of the rec responsible for hiding pHideRec
-   if the number of items of pHideRec is 2 then 
-      put item 2 of pHideRec into pTurnRec
-      put item 1 of pHideRec into pHideRec
-   end if
+command hideStep @pMain,pNums
+   put pNums["target"] into tHide
+   put pNums["turn"] into tTurn
+   put pNums["doc"] into tDoc
+
+   -- need clearNegPairs to work
+   
    -- this works on nodes and links
    -- but, call it on the links first, then on the node
    -- negate these groups of pointers
@@ -681,36 +681,36 @@ command hideStep pHideRec,pTurnRec
    --                        linkA<tPtrAB>linkB
    --                                               myStepB<tPtrB>stepB
    put "prev next skim read bulk trim" into tLinkTags
-   put clearNegPairs(sMain[sNowDoc][pHideRec]["step"]) into tStepA
+   put clearNegPairs(pMain[tDoc][tHide]["step"]) into tStepA
    repeat for each line tPtrA in tStepA
       put item 1 of tPtrA into tPtrA
-      put cr & "-" & tPtrA & "," & pTurnRec after sMain[sNowDoc][pHideRec]["step"]
-      put cr & "-" & pHideRec & "," & pTurnRec after sMain[sNowDoc][tPtrA]["myStep"]
-      repeat for each key tLinkA in sMain[sNowDoc][tPtrA]
+      put cr & "-" & tPtrA & "," & tTurn after pMain[tDoc][tHide]["step"]
+      put cr & "-" & tHide & "," & tTurn after pMain[tDoc][tPtrA]["myStep"]
+      repeat for each key tLinkA in pMain[tDoc][tPtrA]
          if tLinkA is among the words of tLinkTags then
-            put clearNegPairs(sMain[sNowDoc][tPtrA][tLinkA]) into tLink
+            put clearNegPairs(pMain[tDoc][tPtrA][tLinkA]) into tLink
             repeat for each line tPtrAB in tLink
                put item 1 of tPtrAB into tPtrAB
-               put cr & "-" & tPtrAB & "," & pTurnRec after sMain[sNowDoc][tPtrA][tLinkA]
-               if tLinkA is "bond" then put "bond" into tLinkAmirror
+               put cr & "-" & tPtrAB & "," & tTurn after pMain[tDoc][tPtrA][tLinkA]
+               --               if tLinkA is "bond" then put "bond" into tLinkAmirror
                if tLinkA is "next" then put "prev" into tLinkAmirror
                if tLinkA is "prev" then put "next" into tLinkAmirror
                if tLinkA is "read" then put "skim" into tLinkAmirror
                if tLinkA is "skim" then put "read" into tLinkAmirror
                if tLinkA is "trim" then put "bulk" into tLinkAmirror
                if tLinkA is "bulk" then put "trim" into tLinkAmirror
-               put cr & "-" & tPtrA & "," & pTurnRec after sMain[sNowDoc][tPtrAB][tLinkAmirror]
-               put clearNegPairs(sMain[sNowDoc][tPtrAB]["myStep"]) into tPtrB
+               put cr & "-" & tPtrA & "," & tTurn after pMain[tDoc][tPtrAB][tLinkAmirror]
+               put clearNegPairs(pMain[tDoc][tPtrAB]["myStep"]) into tPtrB
                repeat for each line tStepB in tPtrB
                   put item 1 of tStepB into tStepB
-                  put cr & "-" & tPtrAB & "," & pTurnRec after sMain[sNowDoc][tStepB]["step"]
-                  put cr & "-" & tStepB & "," & pTurnRec after sMain[sNowDoc][tPtrAB]["myStep"] 
+                  put cr & "-" & tPtrAB & "," & tTurn after pMain[tDoc][tStepB]["step"]
+                  put cr & "-" & tStepB & "," & tTurn after pMain[tDoc][tPtrAB]["myStep"] 
                end repeat
             end repeat
          end if
       end repeat
    end repeat
-   put "Unsaved" into field "savedField" stack "primary"
+   --   put "Unsaved" into field "savedField" stack "primary"
 end hideStep
 
 function getTagData pRec,pTag,pDoc
@@ -1450,6 +1450,8 @@ on changeRequest pAsk,@pMain,pDoc
    -- pAsk=array with change request
    -- change the focus
    -- x[focus]=# (this request shouldn't make it to this handler; should have already been handled)
+   -- hide a step (and any associated steps) assumes hide list is in correct order
+   -- x[hide]=#
    -- change the graph
    -- new elements are identified by letters (a, b, c, etc); existing elements id'd by their record #
    -- x[letter][tag]
@@ -1459,10 +1461,9 @@ on changeRequest pAsk,@pMain,pDoc
    -- execution order:
    -- hide links then nodes
    -- create nodes then links (letters)
-   -- delta nodes then links (existing rec numbers)
-
-   put empty into tHideLinks -- ! not using at the moment
-   put empty into tHideNodes -- ! not using at the moment
+   -- delta nodes then links (existing rec numbers) (not using this at the moment; just hide and create)
+   
+   -------------------------------------- start research -----------------------------------------------------------
    put empty into tNewNodes
    put empty into tNewLinks
    put empty into tDeltaNodes -- ! not using at the moment
@@ -1478,6 +1479,7 @@ on changeRequest pAsk,@pMain,pDoc
          put tKey & "," after tDeltaLinks
       end if
    end repeat 
+   ------------------------------------ end research -----------------------------------------------------
    -- generate one master turn for all the following changes
    -- turn's rec needs to go into all the pointers, but the pointers going into turn haven't been created yet
    -- so pick turn's rec, and reserve it's place
@@ -1486,7 +1488,31 @@ on changeRequest pAsk,@pMain,pDoc
    put empty into tTurnPtrs
    put pMain[pDoc][0]["lastKey"] into tRec
    put tRec+1 into tTurn
-   put tTurn into pMain[pDoc][0]["lastKey"]
+   put tRec+1 into pMain[pDoc][0]["lastKey"]
+   ----------------------- hide existing steps ------------------------------
+   -- assumes steps to hide are listed in correct order, comma delimited
+   -- all hides (if multiple) are lumped in under same turn, so shouldn't need to list in a single hide tag
+   put empty into tHide
+   put pAsk["hide"] into tHide
+   if tHide is not empty then
+      repeat for each item tThis in tHide
+         -- use next available rec key and increment lastKey
+         put pMain[pDoc][0]["lastKey"] into tRec
+         put tRec+1 into tHideRec
+         put tRec+1 into pMain[pDoc][0]["lastKey"]
+         put tThis & "," & tTurn into pMain[pDoc][tHideRec]["hide"]
+         put tTurn & "," & tTurn into pMain[pDoc][tHideRec]["myTurn"]
+         -- call hideStep on target
+         put tThis into tNums["target"]
+         put tTurn into tNums["turn"]
+         put pDoc into tNums["doc"]
+         hideStep pMain,tNums
+         -- add this hide tag to the master turn for this whole change request
+         put cr & tHideRec & "," & tTurn after tTurnPtrs
+      end repeat 
+   end if
+   ---------------------- end hide existing steps ----------------------------------
+   -- create new nodes, then new links -------------------------------------------------
    if tNewNodes is not empty then
       repeat for each item tNode in tNewNodes
          put newItem(pMain,pDoc,pAsk[tNode]["type"],tTurn) into tStuff
@@ -1516,6 +1542,7 @@ on changeRequest pAsk,@pMain,pDoc
          put tStuff["pointers"] after tTurnPtrs
       end repeat
    end if
+   ------------------------------- end new nodes then links -----------------------------
    filter tTurnPtrs without empty
    put tTurnPtrs into pMain[pDoc][tTurn]["turn"]
    put pAsk[0]["act"] into pMain[pDoc][tTurn]["act"]
