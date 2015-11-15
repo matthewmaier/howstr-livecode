@@ -96,3 +96,15 @@ array[focus]=#
 -- Looney used tabs and tildes to delimit massive amounts of data in his database
 -- so maybe do the same thing here instead of commas and carriage returns
 -- shouldn't be any danger of someone trying to use a tab in an address
+- undo/redo front/back
+-- figuring out if undo/redo is available is more of a backend action
+-- so figure that, then pass it forwards
+-- adjlist[doc][0][undo/redo]=true/false
+-- so the frontend knows whether or not to disable those options
+-- a frontend undo/redo request would then be handled by backend logic
+-- also, undo/redo search whole array for pointers attributed to a turn
+-- maybe there's a less brute force way to do that
+- sPointerTags
+-- this seems like the kind of thing that should be in x[doc][0]
+-- it's basically metadata about how to interpret the recs in the doc
+-- x[doc][0][pointerTags]
