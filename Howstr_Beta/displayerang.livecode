@@ -164,7 +164,8 @@ on assignLayers @pAll,pSeed,pTheLayer -- ! the recursive part of middleOut
       put pSeed & "," after pAll["layers"][pTheLayer]
       put pTheLayer into pAll["nodes"][pSeed]["layer"]
       repeat for each word tDir in "next prev"
-         repeat for each item tLink in pAll["nodes"][pSeed][tDir]
+         --         repeat for each item tLink in pAll["nodes"][pSeed][tDir]
+         repeat for each line tLink in pAll["nodes"][pSeed][tDir]
             if tLink is not among the items of pAll["visited"]["links"] then
                put tLink & "," after pAll["visited"]["links"]
                filter pAll["visited"]["links"] without empty
