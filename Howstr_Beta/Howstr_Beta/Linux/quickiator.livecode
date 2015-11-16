@@ -24,7 +24,8 @@ on quickModeSetup @pMain,@pNowDoc,@pNowItem,@pPointerTags
    put sMain into pMain
    put sNowDoc into pNowDoc
    put sNowItem into pNowItem
-   put sPointerTags into pPointerTags
+   --   put sPointerTags into pPointerTags
+   put sPointerTags into pMain[pNowDoc][0]["pointerTags"]
    /*
    create node 1, tag state
    create node 2, tag state

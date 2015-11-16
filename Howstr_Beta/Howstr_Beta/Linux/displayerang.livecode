@@ -72,6 +72,11 @@ on tempConvertData pShort,@pData,pDoc
          put tRec into pData["case"]
       end if
    end repeat
+   -- undo/redo
+   put pShort[pDoc][0]["undo"] into pData["undo"]
+   put pShort[pDoc][0]["redo"] into pData["redo"]
+   -- metatdata
+   put pShort[pDoc][0]["pointerTags"] into pData["pointerTags"]
 end tempConvertData
 
 on middleOut pData,@pDraw,pFocus -- ! a hacky way to draw the provided graph, calls assignLayers
@@ -188,7 +193,6 @@ on displayManager pInfo,@pGUI,pSizes,pNow -- ! creates/changes/deletes controls
    -- sGraphDrawing,sGUIstuff,tSizes
    --pSizes[width/height/layer/node]
    lock messages
-   --   put sGraphDrawing into pInfo
    -- delete old node graphics; brute force but not much to draw at the moment   
    if pGUI is not empty then
       repeat for each word tKind in "nodes links"
@@ -264,6 +268,9 @@ on displayManager pInfo,@pGUI,pSizes,pNow -- ! creates/changes/deletes controls
    -- highlight focused node (since all nodes new, old highlighted one was deleted)
    put pGUI["nodes"][pNow]["graphic"] into tBlerg
    set the backgroundColor of tBlerg to orange
+   -- undo/redo icons
+   set the visible of widget "iconUndo" to pInfo["undo"]
+   set the visible of widget "iconRedo" to pInfo["redo"]
    unlock screen
    unlock messages
 end displayManager
@@ -281,6 +288,7 @@ function makeNode pDetails
    set the showborder of the templatefield to false
    set the backgroundcolor of the templatefield to "0,220,220"
    set the textSize of the templatefield to 18
+   set the outerglow["color"] of the templatefield to "40,40,40"
    --   set the behavior of the templatefield to the long id of button "graphBehave"
    create field 
    put it into tID
@@ -299,6 +307,7 @@ function makeLink pThis
    set the name of the templateGraphic to pThis["link"] & "LinkGraphic"
    set the filled of the templateGraphic to false
    set the linesize of the templateGraphic to pThis["size"]
+   set the outerglow["color"] of the templateGraphic to "40,40,40"
    --   set the behavior of the templateGraphic to the long id of button "graphBehave"
    create graphic
    set the cGraphKey of it to pThis["link"]

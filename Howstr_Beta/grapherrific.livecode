@@ -785,9 +785,10 @@ command  adjList @pMain,@pShort
             repeat for each line tPtr in tPointers
                put item 1 of tPtr into tPtr
                repeat for each key tAkey in pMain[tDoc][tPtr]
-                  if tAkey is among the words of "bond next prev read skim trim bulk" then
+                  if tAkey is among the words of "next prev read skim trim bulk" then
                      ------------------- links -------------------
-                     repeat for each line tOtherPtr in pMain[tDoc][tPtr][tAkey]
+                     put clearNegPairs(pMain[tDoc][tPtr][tAkey]) into tPointersAgain
+                     repeat for each line tOtherPtr in tPointersAgain
                         put item 1 of tOtherPtr into tOtherPtr
                         put item 1 of pMain[tDoc][tOtherPtr]["myStep"] & cr after pShort[tDoc][tRec][tAkey]
                      end repeat

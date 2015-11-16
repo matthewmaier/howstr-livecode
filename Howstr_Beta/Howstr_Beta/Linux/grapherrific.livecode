@@ -491,16 +491,20 @@ command userFile
    
 end userFile
 
-command userUndo
+function undoTurn @pMain,pTemp
+   put pTemp["doc"] into tDoc
+   put pTemp["turn"] into tTurn
+   put pMain[tDoc][0]["pointerTags"] into tPointerTags
    -- count backwards from highest record
    -- locate first positive turn
    -- search entire array and negate any pointer attributed to that turn
-   put the keys of sMain[sNowDoc] into tDocument
+   put the keys of pMain[tDoc] into tDocument
    sort tDocument numeric descending
+   put empty into tUndoThisRec
    repeat for each line tToUndo in tDocument
       -- lack of a turn tag looks the same as a negated turn tag
-      if clearNegPairs(sMain[sNowDoc][tToUndo]["turn"]) is not empty then
-         if sMain[sNowDoc][tToUndo]["act"] is not "userUndo" then
+      if clearNegPairs(pMain[tDoc][tToUndo]["turn"]) is not empty then
+         if pMain[tDoc][tToUndo]["act"] is not "undoTurn" then
             -- this is the youngest positive turn
             put tToUndo into tUndoThisRec
             exit repeat
@@ -508,53 +512,55 @@ command userUndo
       end if
    end repeat
    
-   -- create the turn & undo tag records
-   put sMain[sNowDoc][0][lastKey] into tRec
-   
-   put tRec+2 & "," & tRec+1 into sMain[sNowDoc][tRec+1]["turn"]
-   put "userUndo" into sMain[sNowDoc][tRec+1]["act"]
-   
-   put tUndoThisRec & "," & tRec+1 into sMain[sNowDoc][tRec+2]["undo"]
-   put tRec+1 & "," & tRec+1 into sMain[sNowDoc][tRec+2]["myTurn"]
-   
-   put tRec+1 into tTurn
-   put tRec+2 into sMain[sNowDoc][0][lastKey] 
-   
-   -- search everything, reverse appropriate pointers
-   repeat for each key tRecord in sMain[sNowDoc]
-      repeat for each key tTag in sMain[sNowDoc][tRecord]
-         if tTag is among the words of sPointerTags then
-            repeat for each line tPointer in sMain[sNowDoc][tRecord][tTag]
-               if item 2 of tPointer is tUndoThisRec then
-                  -- this pointer is attributed to the rec that needs to be undone; reverse it
-                  put item 1 of tPointer into tTarget
-                  if char 1 of tTarget is "-" then
-                     -- negative, then append positive
-                     delete char 1 of tTarget
-                     put cr & tTarget & "," & tTurn after sMain[sNowDoc][tRecord][tTag]
-                  else
-                     -- positive, then append negative
-                     put cr & "-" & tTarget & "," & tTurn after sMain[sNowDoc][tRecord][tTag]
+   if tUndoThisRec is not empty then
+      -- create the  undo tag records
+      put pMain[tDoc][0][lastKey] into tRec
+      put tUndoThisRec & "," & tTurn into pMain[tDoc][tRec+1]["undo"]
+      put tTurn & "," & tTurn into pMain[tDoc][tRec+1]["myTurn"]
+      put tRec+1 into pMain[tDoc][0][lastKey] 
+      put cr & tRec+1 & "," & tTurn into tTemp["pointers"]
+      
+      -- search everything, reverse appropriate pointers
+      repeat for each key tRecord in pMain[tDoc]
+         repeat for each key tTag in pMain[tDoc][tRecord]
+            if tTag is among the words of tPointerTags then
+               repeat for each line tPointer in pMain[tDoc][tRecord][tTag]
+                  if item 2 of tPointer is tUndoThisRec then
+                     -- this pointer is attributed to the rec that needs to be undone; reverse it
+                     put item 1 of tPointer into tTarget
+                     if char 1 of tTarget is "-" then
+                        -- negative, then append positive
+                        delete char 1 of tTarget
+                        put cr & tTarget & "," & tTurn after pMain[tDoc][tRecord][tTag]
+                     else
+                        -- positive, then append negative
+                        put cr & "-" & tTarget & "," & tTurn after pMain[tDoc][tRecord][tTag]
+                     end if
                   end if
-               end if
-            end repeat
-         end if
+               end repeat
+            end if
+         end repeat
       end repeat
-   end repeat
-   put "Unsaved" into field "savedField" stack "primary"
-   render
-end userUndo
+      return tTemp["pointers"]
+   else
+      return "nothing to undo"
+   end if -- tUndoThisRec is not empty
+end undoTurn
 
-command userRedo
+function redoTurn @pMain,pTemp
+   put pTemp["doc"] into tDoc
+   put pTemp["turn"] into tTurn
+   put pMain[tDoc][0]["pointerTags"] into tPointerTags
    -- count backwards from highest record
    -- locate first positive undo turn
    -- search entire array and negate any pointer attributed to that turn
-   put the keys of sMain[sNowDoc] into tDocument
+   put the keys of pMain[tDoc] into tDocument
    sort tDocument numeric descending
+   put empty into tRedoThisRec
    repeat for each line tToRedo in tDocument
       -- lack of a turn tag looks the same as a negated turn tag
-      if clearNegPairs(sMain[sNowDoc][tToRedo]["turn"]) is not empty then
-         if sMain[sNowDoc][tToRedo]["act"] is "userUndo" then
+      if clearNegPairs(pMain[tDoc][tToRedo]["turn"]) is not empty then
+         if pMain[tDoc][tToRedo]["act"] is "undoTurn" then
             -- this is the youngest positive undo turn
             put tToRedo into tRedoThisRec
             exit repeat
@@ -562,42 +568,40 @@ command userRedo
       end if
    end repeat
    
-   -- create the turn & redo tag records
-   put sMain[sNowDoc][0][lastKey] into tRec
-   
-   put tRec+2 & "," & tRec+1 into sMain[sNowDoc][tRec+1]["turn"]
-   put "userRedo" into sMain[sNowDoc][tRec+1]["act"]
-   
-   put tRedoThisRec & "," & tRec+1 into sMain[sNowDoc][tRec+2]["redo"]
-   put tRec+1 & "," & tRec+1 into sMain[sNowDoc][tRec+2]["myTurn"]
-   
-   put tRec+1 into tTurn
-   put tRec+2 into sMain[sNowDoc][0][lastKey] 
-   
-   -- search everything, reverse appropriate pointers
-   repeat for each key tRecord in sMain[sNowDoc]
-      repeat for each key tTag in sMain[sNowDoc][tRecord]
-         if tTag is among the words of sPointerTags then
-            repeat for each line tPointer in sMain[sNowDoc][tRecord][tTag]
-               if item 2 of tPointer is tRedoThisRec then
-                  -- this pointer is attributed to the rec that needs to be redone; reverse it
-                  put item 1 of tPointer into tTarget
-                  if char 1 of tTarget is "-" then
-                     -- negative, then append positive
-                     delete char 1 of tTarget
-                     put cr & tTarget & "," & tTurn after sMain[sNowDoc][tRecord][tTag]
-                  else
-                     -- positive, then append negative
-                     put cr & "-" & tTarget & "," & tTurn after sMain[sNowDoc][tRecord][tTag]
+   if tRedoThisRec is not empty then
+      -- create the turn & redo tag records
+      put pMain[tDoc][0][lastKey] into tRec   
+      put tRedoThisRec & "," & tTurn into pMain[tDoc][tRec+1]["redo"]
+      put tTurn & "," & tTurn into pMain[tDoc][tRec+1]["myTurn"]
+      put tRec+1 into pMain[tDoc][0][lastKey] 
+      put cr & tRec+1 & "," & tTurn into tTemp["pointers"]
+      
+      -- search everything, reverse appropriate pointers
+      repeat for each key tRecord in pMain[tDoc]
+         repeat for each key tTag in pMain[tDoc][tRecord]
+            if tTag is among the words of tPointerTags then
+               repeat for each line tPointer in pMain[tDoc][tRecord][tTag]
+                  if item 2 of tPointer is tRedoThisRec then
+                     -- this pointer is attributed to the rec that needs to be redone; reverse it
+                     put item 1 of tPointer into tTarget
+                     if char 1 of tTarget is "-" then
+                        -- negative, then append positive
+                        delete char 1 of tTarget
+                        put cr & tTarget & "," & tTurn after pMain[tDoc][tRecord][tTag]
+                     else
+                        -- positive, then append negative
+                        put cr & "-" & tTarget & "," & tTurn after pMain[tDoc][tRecord][tTag]
+                     end if
                   end if
-               end if
-            end repeat
-         end if
+               end repeat
+            end if
+         end repeat
       end repeat
-   end repeat
-   put "Unsaved" into field "savedField" stack "primary"
-   render
-end userRedo
+      return tTemp["pointers"]
+   else
+      return "nothing to redo"
+   end if -- tRedoThisRec is not empy
+end redoTurn
 
 command userHide
    -- ! assumes the current selection (sNowItem) is the target
@@ -781,9 +785,10 @@ command  adjList @pMain,@pShort
             repeat for each line tPtr in tPointers
                put item 1 of tPtr into tPtr
                repeat for each key tAkey in pMain[tDoc][tPtr]
-                  if tAkey is among the words of "bond next prev read skim trim bulk" then
+                  if tAkey is among the words of "next prev read skim trim bulk" then
                      ------------------- links -------------------
-                     repeat for each line tOtherPtr in pMain[tDoc][tPtr][tAkey]
+                     put clearNegPairs(pMain[tDoc][tPtr][tAkey]) into tPointersAgain
+                     repeat for each line tOtherPtr in tPointersAgain
                         put item 1 of tOtherPtr into tOtherPtr
                         put item 1 of pMain[tDoc][tOtherPtr]["myStep"] & cr after pShort[tDoc][tRec][tAkey]
                      end repeat
@@ -809,6 +814,42 @@ command  adjList @pMain,@pShort
             filter pShort[tDoc][tRec][tTag] without empty
          end repeat
       end repeat
+   end repeat
+   -- answer important questions about the state of the graph ------------------------------------------
+   -- undo/redo
+   -- undo is available if a single turn has a single positive pointer
+   -- redo is available if the youngest turn has no positive pointers
+   -- the following counts backwards through the records
+   -- it ignores any record that's not a turn (also ignores undo turns)
+   -- when it gets to the youngest turn it checks for positive pointers
+   -- if no positive pointers in the youngest turn, enable redo & repeat again
+   -- if youngest turn has positive pointers, enable undo & exit (can't redo)
+   -- if redo was enabled, continues counting back to next turn
+   -- continues to record 1
+   -- if no turns have a positive pointer undo stays disabled
+   -- exits repeat as soon as undo enabled
+   repeat for each key tDoc in pMain
+      put "false" into pShort[tDoc][0]["undo"]
+      put "false" into pShort[tDoc][0]["redo"]
+      put the keys of pMain[tDoc] into tRecords
+      sort tRecords numeric descending
+      repeat for each line tRec in tRecords
+         if "turn" is among the keys of pMain[tDoc][tRec] then
+            if pMain[tDoc][tRec]["act"] contains "do" then next repeat
+            if clearNegPairs(pMain[tDoc][tRec]["turn"]) is empty then 
+               --               set the disabled of button "redoButt" stack "primary" to false
+               put "true" into pShort[tDoc][0]["redo"]
+            else
+               --               set the disabled of button "undoButt" stack "primary" to false
+               put "true" into pShort[tDoc][0]["undo"]
+               exit repeat
+            end if
+         end if
+      end repeat
+   end repeat 
+   -- metadata
+   repeat for each key tDoc in pMain
+      put pMain[tDoc][0]["pointerTags"] into pShort[0]["pointerTags"]
    end repeat
 end adjList
 
@@ -1452,6 +1493,8 @@ on changeRequest pAsk,@pMain,pDoc
    -- x[focus]=# (this request shouldn't make it to this handler; should have already been handled)
    -- hide a step (and any associated steps) assumes hide list is in correct order
    -- x[hide]=#
+   -- undo/redo
+   -- x[undo/redo]=true
    -- change the graph
    -- new elements are identified by letters (a, b, c, etc); existing elements id'd by their record #
    -- x[letter][tag]
@@ -1489,6 +1532,25 @@ on changeRequest pAsk,@pMain,pDoc
    put pMain[pDoc][0]["lastKey"] into tRec
    put tRec+1 into tTurn
    put tRec+1 into pMain[pDoc][0]["lastKey"]
+   ------------------------ undo/redo -------------------------------------
+   put empty into tStuff
+   put pDoc into tTemp["doc"]
+   put tTurn into tTemp["turn"]
+   if pAsk["undo"] is true then 
+      put undoTurn(pMain,tTemp) into tTurnPtrs
+      filter tTurnPtrs without empty
+      put tTurnPtrs into pMain[pDoc][tTurn]["turn"]
+      put "undoTurn" into pMain[pDoc][tTurn]["act"]
+      return "whatever"
+   end if
+   if pAsk["redo"] is true then 
+      put redoTurn(pMain,tTemp) into tTurnPtrs
+      filter tTurnPtrs without empty
+      put tTurnPtrs into pMain[pDoc][tTurn]["turn"]
+      put "redoTurn" into pMain[pDoc][tTurn]["act"]
+      return "whatever"
+   end if
+   ------------------------ end undo/redo ----------------------------------
    ----------------------- hide existing steps ------------------------------
    -- assumes steps to hide are listed in correct order, comma delimited
    -- all hides (if multiple) are lumped in under same turn, so shouldn't need to list in a single hide tag
@@ -1543,6 +1605,7 @@ on changeRequest pAsk,@pMain,pDoc
       end repeat
    end if
    ------------------------------- end new nodes then links -----------------------------
+   ------------- return results ------------------------------
    filter tTurnPtrs without empty
    put tTurnPtrs into pMain[pDoc][tTurn]["turn"]
    put pAsk[0]["act"] into pMain[pDoc][tTurn]["act"]
