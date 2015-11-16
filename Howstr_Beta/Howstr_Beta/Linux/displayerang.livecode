@@ -269,7 +269,12 @@ on displayManager pInfo,@pGUI,pSizes,pNow -- ! creates/changes/deletes controls
    put pGUI["nodes"][pNow]["graphic"] into tBlerg
    set the backgroundColor of tBlerg to orange
    -- undo/redo icons
-   set the visible of widget "iconUndo" to pInfo["undo"]
+   -- for quick mode, don't allow user to undo the graph smaller than the minimum action group
+   if the number of lines of the keys of pInfo["nodes"] is 4 then
+      set the visible of widget "iconUndo" to false
+   else
+      set the visible of widget "iconUndo" to pInfo["undo"]
+   end if
    set the visible of widget "iconRedo" to pInfo["redo"]
    unlock screen
    unlock messages
