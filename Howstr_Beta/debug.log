@@ -326,3 +326,72 @@
 [1115/162337:INFO:CONSOLE(974)] "loading entry:1", source: file:///C:/Program%20Files%20(x86)/RunRev/LiveCode%20Community%208.0%20(dp%207)/Documentation/html_viewer/viewer.html (974)
 [1115/162337:INFO:CONSOLE(371)] "[object Object]", source: file:///C:/Program%20Files%20(x86)/RunRev/LiveCode%20Community%208.0%20(dp%207)/Documentation/html_viewer/viewer.html (371)
 [1115/162348:INFO:CONSOLE(371)] "[object Object]", source: file:///C:/Program%20Files%20(x86)/RunRev/LiveCode%20Community%208.0%20(dp%207)/Documentation/html_viewer/viewer.html (371)
+[1115/205450:WARNING:resource_bundle.cc(304)] locale_file_path.empty()
+[1115/205450:ERROR:main_delegate.cc(564)] Could not load locale pak for en-US
+[1115/205450:WARNING:resource_bundle.cc(497)] locale resources are not loaded
+[1115/205450:WARNING:resource_bundle.cc(304)] locale_file_path.empty()
+[1115/205450:ERROR:main_delegate.cc(564)] Could not load locale pak for en-US
+[1115/205450:WARNING:resource_bundle.cc(304)] locale_file_path.empty()
+[1115/205450:ERROR:main_delegate.cc(564)] Could not load locale pak for en-US
+[1115/205450:ERROR:renderer_main.cc(207)] Running without renderer sandbox
+[1115/205451:INFO:CONSOLE(974)] "loading entry:1", source: file:///C:/Program%20Files%20(x86)/RunRev/LiveCode%20Community%208.0%20(dp%207)/Documentation/html_viewer/viewer.html (974)
+[1115/205451:INFO:CONSOLE(371)] "[object Object]", source: file:///C:/Program%20Files%20(x86)/RunRev/LiveCode%20Community%208.0%20(dp%207)/Documentation/html_viewer/viewer.html (371)
+[1115/205508:INFO:CONSOLE(371)] "[object Object]", source: file:///C:/Program%20Files%20(x86)/RunRev/LiveCode%20Community%208.0%20(dp%207)/Documentation/html_viewer/viewer.html (371)
+[1115/211809:WARNING:message_in_transit_queue.cc(18)] Destroying nonempty message queue
+[1115/211809:WARNING:resource_bundle.cc(304)] locale_file_path.empty()
+[1115/211809:ERROR:main_delegate.cc(564)] Could not load locale pak for en-US
+[1115/211809:ERROR:renderer_main.cc(207)] Running without renderer sandbox
+[1115/211809:INFO:CONSOLE(974)] "loading entry:1", source: file:///C:/Program%20Files%20(x86)/RunRev/LiveCode%20Community%208.0%20(dp%207)/Documentation/html_viewer/viewer.html (974)
+[1115/211809:INFO:CONSOLE(371)] "[object Object]", source: file:///C:/Program%20Files%20(x86)/RunRev/LiveCode%20Community%208.0%20(dp%207)/Documentation/html_viewer/viewer.html (371)
+[1115/211816:INFO:CONSOLE(371)] "[object Object]", source: file:///C:/Program%20Files%20(x86)/RunRev/LiveCode%20Community%208.0%20(dp%207)/Documentation/html_viewer/viewer.html (371)
+[1115/211819:INFO:CONSOLE(371)] "[object Object]", source: file:///C:/Program%20Files%20(x86)/RunRev/LiveCode%20Community%208.0%20(dp%207)/Documentation/html_viewer/viewer.html (371)
+[1115/211824:INFO:CONSOLE(371)] "[object Object]", source: file:///C:/Program%20Files%20(x86)/RunRev/LiveCode%20Community%208.0%20(dp%207)/Documentation/html_viewer/viewer.html (371)
+[1115/211825:INFO:CONSOLE(371)] "[object Object]", source: file:///C:/Program%20Files%20(x86)/RunRev/LiveCode%20Community%208.0%20(dp%207)/Documentation/html_viewer/viewer.html (371)
+[1115/211830:INFO:CONSOLE(371)] "[object Object]", source: file:///C:/Program%20Files%20(x86)/RunRev/LiveCode%20Community%208.0%20(dp%207)/Documentation/html_viewer/viewer.html (371)
+[1116/203805:WARNING:resource_bundle.cc(304)] locale_file_path.empty()
+[1116/203805:ERROR:main_delegate.cc(564)] Could not load locale pak for en-US
+[1116/203805:WARNING:resource_bundle.cc(497)] locale resources are not loaded
+[1116/203806:WARNING:resource_bundle.cc(304)] locale_file_path.empty()
+[1116/203806:ERROR:main_delegate.cc(564)] Could not load locale pak for en-US
+[1116/203806:WARNING:resource_bundle.cc(304)] locale_file_path.empty()
+[1116/203806:ERROR:main_delegate.cc(564)] Could not load locale pak for en-US
+[1116/203806:ERROR:renderer_main.cc(207)] Running without renderer sandbox
+[1116/203806:INFO:CONSOLE(974)] "loading entry:1", source: file:///C:/Program%20Files%20(x86)/RunRev/LiveCode%20Community%208.0%20(dp%207)/Documentation/html_viewer/viewer.html (974)
+[1116/203806:INFO:CONSOLE(371)] "[object Object]", source: file:///C:/Program%20Files%20(x86)/RunRev/LiveCode%20Community%208.0%20(dp%207)/Documentation/html_viewer/viewer.html (371)
+[1116/203811:INFO:CONSOLE(371)] "[object Object]", source: file:///C:/Program%20Files%20(x86)/RunRev/LiveCode%20Community%208.0%20(dp%207)/Documentation/html_viewer/viewer.html (371)
+[1116/204455:WARNING:message_in_transit_queue.cc(18)] Destroying nonempty message queue
+[1116/204455:WARNING:resource_bundle.cc(304)] locale_file_path.empty()
+[1116/204455:ERROR:main_delegate.cc(564)] Could not load locale pak for en-US
+[1116/204455:ERROR:renderer_main.cc(207)] Running without renderer sandbox
+[1116/204456:INFO:CONSOLE(974)] "loading entry:1", source: file:///C:/Program%20Files%20(x86)/RunRev/LiveCode%20Community%208.0%20(dp%207)/Documentation/html_viewer/viewer.html (974)
+[1116/204456:INFO:CONSOLE(371)] "[object Object]", source: file:///C:/Program%20Files%20(x86)/RunRev/LiveCode%20Community%208.0%20(dp%207)/Documentation/html_viewer/viewer.html (371)
+[1116/204522:INFO:CONSOLE(371)] "[object Object]", source: file:///C:/Program%20Files%20(x86)/RunRev/LiveCode%20Community%208.0%20(dp%207)/Documentation/html_viewer/viewer.html (371)
+[1116/204549:INFO:CONSOLE(371)] "[object Object]", source: file:///C:/Program%20Files%20(x86)/RunRev/LiveCode%20Community%208.0%20(dp%207)/Documentation/html_viewer/viewer.html (371)
+[1116/204816:WARNING:message_in_transit_queue.cc(18)] Destroying nonempty message queue
+[1116/204816:WARNING:resource_bundle.cc(304)] locale_file_path.empty()
+[1116/204816:ERROR:main_delegate.cc(564)] Could not load locale pak for en-US
+[1116/204816:ERROR:renderer_main.cc(207)] Running without renderer sandbox
+[1116/204817:INFO:CONSOLE(974)] "loading entry:1", source: file:///C:/Program%20Files%20(x86)/RunRev/LiveCode%20Community%208.0%20(dp%207)/Documentation/html_viewer/viewer.html (974)
+[1116/204817:INFO:CONSOLE(371)] "[object Object]", source: file:///C:/Program%20Files%20(x86)/RunRev/LiveCode%20Community%208.0%20(dp%207)/Documentation/html_viewer/viewer.html (371)
+[1116/205202:WARNING:message_in_transit_queue.cc(18)] Destroying nonempty message queue
+[1116/205202:WARNING:resource_bundle.cc(304)] locale_file_path.empty()
+[1116/205202:ERROR:main_delegate.cc(564)] Could not load locale pak for en-US
+[1116/205202:ERROR:renderer_main.cc(207)] Running without renderer sandbox
+[1116/205203:INFO:CONSOLE(974)] "loading entry:1", source: file:///C:/Program%20Files%20(x86)/RunRev/LiveCode%20Community%208.0%20(dp%207)/Documentation/html_viewer/viewer.html (974)
+[1116/205203:INFO:CONSOLE(371)] "[object Object]", source: file:///C:/Program%20Files%20(x86)/RunRev/LiveCode%20Community%208.0%20(dp%207)/Documentation/html_viewer/viewer.html (371)
+[1116/205211:INFO:CONSOLE(371)] "[object Object]", source: file:///C:/Program%20Files%20(x86)/RunRev/LiveCode%20Community%208.0%20(dp%207)/Documentation/html_viewer/viewer.html (371)
+[1116/205223:INFO:CONSOLE(371)] "[object Object]", source: file:///C:/Program%20Files%20(x86)/RunRev/LiveCode%20Community%208.0%20(dp%207)/Documentation/html_viewer/viewer.html (371)
+[1116/205254:INFO:CONSOLE(371)] "[object Object]", source: file:///C:/Program%20Files%20(x86)/RunRev/LiveCode%20Community%208.0%20(dp%207)/Documentation/html_viewer/viewer.html (371)
+[1116/205316:INFO:CONSOLE(371)] "[object Object]", source: file:///C:/Program%20Files%20(x86)/RunRev/LiveCode%20Community%208.0%20(dp%207)/Documentation/html_viewer/viewer.html (371)
+[1116/205337:INFO:CONSOLE(371)] "[object Object]", source: file:///C:/Program%20Files%20(x86)/RunRev/LiveCode%20Community%208.0%20(dp%207)/Documentation/html_viewer/viewer.html (371)
+[1116/205342:INFO:CONSOLE(371)] "[object Object]", source: file:///C:/Program%20Files%20(x86)/RunRev/LiveCode%20Community%208.0%20(dp%207)/Documentation/html_viewer/viewer.html (371)
+[1116/205410:INFO:CONSOLE(371)] "[object Object]", source: file:///C:/Program%20Files%20(x86)/RunRev/LiveCode%20Community%208.0%20(dp%207)/Documentation/html_viewer/viewer.html (371)
+[1116/205415:INFO:CONSOLE(371)] "[object Object]", source: file:///C:/Program%20Files%20(x86)/RunRev/LiveCode%20Community%208.0%20(dp%207)/Documentation/html_viewer/viewer.html (371)
+[1116/205450:INFO:CONSOLE(371)] "[object Object]", source: file:///C:/Program%20Files%20(x86)/RunRev/LiveCode%20Community%208.0%20(dp%207)/Documentation/html_viewer/viewer.html (371)
+[1116/205501:INFO:CONSOLE(371)] "[object Object]", source: file:///C:/Program%20Files%20(x86)/RunRev/LiveCode%20Community%208.0%20(dp%207)/Documentation/html_viewer/viewer.html (371)
+[1116/205522:INFO:CONSOLE(371)] "[object Object]", source: file:///C:/Program%20Files%20(x86)/RunRev/LiveCode%20Community%208.0%20(dp%207)/Documentation/html_viewer/viewer.html (371)
+[1116/205537:INFO:CONSOLE(371)] "[object Object]", source: file:///C:/Program%20Files%20(x86)/RunRev/LiveCode%20Community%208.0%20(dp%207)/Documentation/html_viewer/viewer.html (371)
+[1116/205540:INFO:CONSOLE(371)] "[object Object]", source: file:///C:/Program%20Files%20(x86)/RunRev/LiveCode%20Community%208.0%20(dp%207)/Documentation/html_viewer/viewer.html (371)
+[1116/205549:INFO:CONSOLE(371)] "[object Object]", source: file:///C:/Program%20Files%20(x86)/RunRev/LiveCode%20Community%208.0%20(dp%207)/Documentation/html_viewer/viewer.html (371)
+[1116/205603:INFO:CONSOLE(371)] "[object Object]", source: file:///C:/Program%20Files%20(x86)/RunRev/LiveCode%20Community%208.0%20(dp%207)/Documentation/html_viewer/viewer.html (371)
+[1116/205635:INFO:CONSOLE(371)] "[object Object]", source: file:///C:/Program%20Files%20(x86)/RunRev/LiveCode%20Community%208.0%20(dp%207)/Documentation/html_viewer/viewer.html (371)

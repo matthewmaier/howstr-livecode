@@ -321,7 +321,6 @@ end makeLink
 
 function mouseTracker @pGUI,@pHist,@p1Down,@p1Enter,pFocus,pNode
    -- sGUIstuff,sMouseHistory,s1Down,s1Enter,sNowFocus
-   -- get now
    -- state of button 1
    put "false" into tNow["1down"]
    if mouse(1) is "down" then put "true" into tNow["1down"]
@@ -337,12 +336,12 @@ function mouseTracker @pGUI,@pHist,@p1Down,@p1Enter,pFocus,pNode
       end repeat
    end repeat
    -- tNow[1down]=true/false
-   -- tNow[inside]=empty/#/background
+   -- tNow[inside]=empty/#
    
    -- compare old to new
    -- button 1 just transitioned from up to down
    if pHist["1down"] is false and tNow["1down"] is true then 
-      put tNow["inside"] into p1Down
+      put tNow["inside"] into p1Down -- becomes "anchor"
    end if
    
    -- if there's an anchor node, track new areas entered
@@ -357,11 +356,16 @@ function mouseTracker @pGUI,@pHist,@p1Down,@p1Enter,pFocus,pNode
       put tNow["inside"] into p1Enter
    end if
    
-   -- preview logic
+   -- build preview request
+   -- defaults to "nothing"
    put "nothing" into tPreview
    if p1Down is among the keys of pGUI["nodes"] then
       -- anchor and target
-      if p1Enter is among the keys of pGUI["nodes"] and p1Enter is not p1Down then put p1Down & "," & p1Enter into tPreview
+      if p1Enter is among the keys of pGUI["nodes"] and p1Enter is not p1Down then 
+         put p1Down & "," & p1Enter into tPreview
+      else if p1Enter is p1Down then
+         put p1Down & "," & "info" into tPreview
+      end if
       -- link can't be target
       if p1Enter is among the keys of pGUI["links"] then put "nothing" into tPreview    
       if p1Enter is empty then 
@@ -391,9 +395,6 @@ function mouseTracker @pGUI,@pHist,@p1Down,@p1Enter,pFocus,pNode
    put "preview:" && tPreview after tBlerg
    put tBlerg into field "viewMouse"
    
-   -- ! development
-   --   if tPreview is not "nothing" then breakpoint
-   
    put false into tCommit
    -- button 1 just transitioned from down to up while there's an anchor
    if p1Down is not empty and pHist["1down"] is true and tNow["1down"] is false then 
@@ -412,17 +413,17 @@ function mouseTracker @pGUI,@pHist,@p1Down,@p1Enter,pFocus,pNode
       -- background: right = new out-link-node
       -- background: left = new node-link-in
       -- #: link = nothing
-      -- #: node = new link-node-link
-      --      put tPreview into tCommit
+      -- #: node = new series of nodes & links
+      -- info: = open node info
       put true into tCommit
-      put tPreview & cr before field "viewCommitments"   
+      put tPreview & cr before field "viewCommitments"   -- ! for development
       put empty into p1Down
       put empty into p1Enter
    end if
    put tNow into pHist
    -- preview is a message to the frontend to preview a change, if appropriate
    -- previewAndChange() will return whatever the outcome of that logic is
-   -- goes in: nothing OR # OR #,# OR #,left OR #,right
+   -- goes in: nothing OR # OR #,# OR #,left OR #,right OR #,info
    -- comes out: nothing OR a properly formatted change request array
    put previewAndChange(tPreview,pGUI,pNode) into tRequest
    if tRequest is not "nothing" and tCommit is true then 
@@ -433,23 +434,41 @@ function mouseTracker @pGUI,@pHist,@p1Down,@p1Enter,pFocus,pNode
 end mouseTracker
 
 function previewAndChange pToDo,pGUI,pNode -- returns "nothing" or array with change request
-   -- pToDo = nothing OR # OR #,# OR #,left OR #,right
+   -- pToDo = nothing OR # OR #,# OR #,left OR #,right OR #,info
    -- pGUI = array of info necessary for display, preview and change
-   -- pNode = display size of nodes in pixels
+   -- pNode = display size of nodes in pixels   
+   
    if pToDo is "nothing" then
       set the visible of graphic "preFlow1" to false
       set the visible of field "preState" to false
       set the visible of field "preChange" to false
       set the visible of graphic "preFlow2" to false
       set the visible of graphic "preFocus" to false
+      set the visible of widget "preInfo" to false
       return "nothing"
+   end if
+   -- expand node to view/edit info
+   if item 2 of pToDo is "info" then
+      put pGUI["nodes"][item 1 of pToDo]["horz"] & "," & pGUI["nodes"][item 1 of pToDo]["vert"] into tSpot
+      set the location of widget "preInfo" to tSpot
+      --      set the layer of widget "preInfo" to bottom
+      set the visible of widget "preInfo" to true
+      put item 1 of pToDo into tWhatever["info"]
+      
+      set the visible of graphic "preFlow1" to false
+      set the visible of field "preState" to false
+      set the visible of field "preChange" to false
+      set the visible of graphic "preFlow2" to false
+      set the visible of graphic "preFocus" to false
+      return tWhatever
+   else
+      set the visible of widget "preInfo" to false
    end if
    -- shift focus to another node
    if pToDo is a number then
       put pGUI["nodes"][pToDo]["horz"] & "," & pGUI["nodes"][pToDo]["vert"] into tSpot
       set the location of graphic "preFocus" to tSpot
       set the visible of graphic "preFocus" to true
-      --      put "user" into tWhatever["from"]
       put pToDo into tWhatever["focus"]
       return tWhatever
    else
@@ -697,7 +716,7 @@ function previewAndChange pToDo,pGUI,pNode -- returns "nothing" or array with ch
       return tTemp
    end if
    -- show "left" or "right" node(s), as appropriate, and flow on correct side --------------------------------
-   if tDos is not a number then
+   if tDos is "left" or tDos is "right" then
       -- need a flow [a] and a state [b]
       -- need a dive/rise [c]
       -- maybe a change [d] and another flow [e]
