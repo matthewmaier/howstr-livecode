@@ -1509,8 +1509,11 @@ on changeRequest pAsk,@pMain,pDoc
    -------------------------------------- start research -----------------------------------------------------------
    put empty into tNewNodes
    put empty into tNewLinks
-   put empty into tDeltaNodes -- ! not using at the moment
-   put empty into tDeltaLinks -- ! not using at the moment
+   -- ! it could be nice to modify existing elements, rather than just hide them
+   -- that way if they've already got weights, or whatever, that data can be kept
+   -- but it was complicated so I haven't bothered yet
+   --   put empty into tDeltaNodes
+   --   put empty into tDeltaLinks
    repeat for each key tKey in pAsk
       if tKey is not a number and pAsk[tKey]["type"] is among the words of "state change" then
          put tKey & "," after tNewNodes
