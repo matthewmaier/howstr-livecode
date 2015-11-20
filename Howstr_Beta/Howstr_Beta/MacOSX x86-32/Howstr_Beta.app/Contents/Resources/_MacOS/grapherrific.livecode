@@ -409,61 +409,66 @@ function newDilink_Old @pMain,pDoc,pXstep,pZstep,pAct,pType,pForward,pBackward
    return tRec+2
 end newDilink_Old
 
-command userInfo
-   ask "info,data (EX: title,the quick brown fox)"
-   if it is empty then exit userInfo
-   put item 1 of it into tTag
-   put item 2 to -1 of it into tData
-   put getTagKey(sNowItem,tTag,sNowDoc) into tNowRec
-   put getTagData(sNowItem,tTag,sNowDoc) into tNowData
-   -- create new record for turn and tag
-   put sMain[sNowDoc][0][lastKey] into tRec
-   
-   put tRec+2 & "," & tRec+1 into sMain[sNowDoc][tRec+1]["turn"]
-   put "newInfo" into sMain[sNowDoc][tRec+1]["act"]
-   
-   put tData into sMain[sNowDoc][tRec+2][tTag]
-   put tRec+1 & "," & tRec+1 into sMain[sNowDoc][tRec+2]["myTurn"]
-   put sNowItem & "," & tRec+1 into sMain[sNowDoc][tRec+2]["myStep"]
-   put cr & tRec+2 & "," & tRec+1 after sMain[sNowDoc][sNowItem]["step"]
-   
-   put tRec+2 into sMain[sNowDoc][0][lastKey]
-   -- negate old tag if it existed
-   if tNowData is not empty then
-      -- tag exists already
-      -- negate pointer for old tag record
-      put cr & "-" & sNowItem & "," & tRec+1 after sMain[sNowDoc][tNowRec]["myStep"]
-      put cr & "-" & tNowRec & "," & tRec+1 after sMain[sNowDoc][sNowItem]["step"]
-   end if
-   put "Unsaved" into field "savedField" stack "primary"
-   render
-end userInfo
+--command userInfo
+--   ask "info,data (EX: title,the quick brown fox)"
+--   if it is empty then exit userInfo
+--   put item 1 of it into tTag
+--   put item 2 to -1 of it into tData
+--   put getTagKey(sNowItem,tTag,sNowDoc) into tNowRec
+--   put getTagData(sNowItem,tTag,sNowDoc) into tNowData
+--   -- create new record for turn and tag
+--   put sMain[sNowDoc][0][lastKey] into tRec
 
-command changeInfo pBlerg
-   -- pBlerg is an array
+--   put tRec+2 & "," & tRec+1 into sMain[sNowDoc][tRec+1]["turn"]
+--   put "newInfo" into sMain[sNowDoc][tRec+1]["act"]
+
+--   put tData into sMain[sNowDoc][tRec+2][tTag]
+--   put tRec+1 & "," & tRec+1 into sMain[sNowDoc][tRec+2]["myTurn"]
+--   put sNowItem & "," & tRec+1 into sMain[sNowDoc][tRec+2]["myStep"]
+--   put cr & tRec+2 & "," & tRec+1 after sMain[sNowDoc][sNowItem]["step"]
+
+--   put tRec+2 into sMain[sNowDoc][0][lastKey]
+--   -- negate old tag if it existed
+--   if tNowData is not empty then
+--      -- tag exists already
+--      -- negate pointer for old tag record
+--      put cr & "-" & sNowItem & "," & tRec+1 after sMain[sNowDoc][tNowRec]["myStep"]
+--      put cr & "-" & tNowRec & "," & tRec+1 after sMain[sNowDoc][sNowItem]["step"]
+--   end if
+--   put "Unsaved" into field "savedField" stack "primary"
+--   render
+--end userInfo
+
+command changeInfo @pMain,pBlerg
+   -- pBlerg["doc"] = doc in address
    -- pBlerg["rec"] = step's record key
    -- pBlerg["tag"] = tag string (this will be in a rec different from the step's rec)
    -- pBlerg["data"] = new data
-   
+   put pBlerg["rec"] into pRec
+   put pBlerg["tag"] into pTag
+   put pBlerg["doc"] into pDoc   
+   put pBlerg["data"] into pData
    -- if the change is identical to existing data, don't do anything
-   if getTagData(pBlerg["rec"],pBlerg["tag"],sNowDoc) = pBlerg["data"] then exit changeInfo
-   
-   put sMain[sNowDoc][0][lastKey] into tRec
+   --   if getTagData(pBlerg["rec"],pBlerg["tag"],sNowDoc) = pBlerg["data"] then exit changeInfo
+   put pMain[pDoc][0][lastKey] into tRec -- this order makes it work better
+   put getTagData(pMain,pBlerg) into tOld
+   if tOld = pData then 
+      exit changeInfo -- they're the same, so don't bother changing anything
+   else if tOld is not empty then
+      -- negate node's old tag
+      put getTagKey(pMain,pBlerg) into tOldTag
+      put cr & "-" & tOldTag & "," & tRec+1 after pMain[pDoc][pRec]["step"]
+   end if
    -- create turn
-   put tRec+2 & "," & tRec+1 into sMain[sNowDoc][tRec+1]["turn"]
-   put "changeInfo" into sMain[sNowDoc][tRec+1]["act"]
+   put tRec+2 & "," & tRec+1 into pMain[pDoc][tRec+1]["turn"]
+   put "changeInfo" into pMain[pDoc][tRec+1]["act"]
    -- create new tag with new data
-   put pBlerg["data"] into sMain[sNowDoc][tRec+2][pBlerg["tag"]]
-   put tRec+1 & "," & tRec+1 into sMain[sNowDoc][tRec+2]["myTurn"]
-   put pBlerg["rec"] & "," & tRec+1 into sMain[sNowDoc][tRec+2]["myStep"]
-   put tRec+2 into sMain[sNowDoc][0][lastKey]
-   -- negate node's old tag
-   put getTagKey(pBlerg["rec"],pBlerg["tag"],sNowDoc) into tOldTag
-   put cr & "-" & tOldTag & "," & tRec+1 after sMain[sNowDoc][pBlerg["rec"]]["step"]
+   put pData into pMain[pDoc][tRec+2][pTag]
+   put tRec+1 & "," & tRec+1 into pMain[pDoc][tRec+2]["myTurn"]
+   put pRec & "," & tRec+1 into pMain[pDoc][tRec+2]["myStep"]
+   put tRec+2 into pMain[pDoc][0][lastKey]
    -- point to new tag
-   put cr & tRec+2 & "," & tRec+1 after sMain[sNowDoc][pBlerg["rec"]]["step"]
-   
-   put "Unsaved" into field "savedField" stack "primary"
+   put cr & tRec+2 & "," & tRec+1 after pMain[pDoc][pRec]["step"]
 end changeInfo
 
 command userFile
@@ -717,34 +722,40 @@ command hideStep @pMain,pNums
    --   put "Unsaved" into field "savedField" stack "primary"
 end hideStep
 
-function getTagData pRec,pTag,pDoc
+function getTagData @pMain,pStuff -- pRec,pTag,pDoc
+   put pStuff["rec"] into pRec
+   put pStuff["tag"] into pTag
+   put pStuff["doc"] into pDoc
    -- ! only works for steps at the moment
    -- assumes active doc
    -- pRec is a key
    -- pTag is a string
-   -- will return whatever is in that tag, if it's pointed with that rec
+   -- will return whatever is in that tag, if it's pointed to with that rec
    put empty into tData
-   put clearNegPairs(sMain[pDoc][pRec]["step"]) into tPointers
+   put clearNegPairs(pMain[pDoc][pRec]["step"]) into tPointers
    repeat for each line tPtr in tPointers
       put item 1 of tPtr into tPtr -- throw out the turn's key
-      if pTag is among the keys of sMain[pDoc][tPtr] then
-         put sMain[pDoc][tPtr][pTag] into tData
+      if pTag is among the keys of pMain[pDoc][tPtr] then
+         put pMain[pDoc][tPtr][pTag] into tData
       end if
    end repeat
    return tData
 end getTagData
 
-function getTagKey pRec,pTag,pDoc
+function getTagKey @pMain,pStuff -- pRec,pTag,pDoc
+   put pStuff["rec"] into pRec
+   put pStuff["tag"] into pTag
+   put pStuff["doc"] into pDoc
    -- ! only works for steps at the moment
    -- assumes active doc
    -- pRec is a key
    -- pTag is a string
    -- will return the tag's record key, if it exists
    put empty into tKey
-   put clearNegPairs(sMain[pDoc][pRec]["step"]) into tPointers
+   put clearNegPairs(pMain[pDoc][pRec]["step"]) into tPointers
    repeat for each line tPtr in tPointers
       put item 1 of tPtr into tPtr -- throw out the turn's key
-      if pTag is among the keys of sMain[pDoc][tPtr] then
+      if pTag is among the keys of pMain[pDoc][tPtr] then
          put tPtr into tKey
       end if
    end repeat
@@ -793,7 +804,7 @@ command  adjList @pMain,@pShort
                         put item 1 of pMain[tDoc][tOtherPtr]["myStep"] & cr after pShort[tDoc][tRec][tAkey]
                      end repeat
                   else
-                     if tAkey is among the words of "weight material whole duration series" then
+                     if tAkey is among the words of "title weight material whole duration series" then
                         put pMain[tDoc][tPtr][tAkey] into pShort[tDoc][tRec][tAkey]
                      end if
                      -- ! info will still list all the previous tag:data pairs as part of the string

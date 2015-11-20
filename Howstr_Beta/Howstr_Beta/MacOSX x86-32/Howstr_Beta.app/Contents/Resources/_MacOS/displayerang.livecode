@@ -1,4 +1,61 @@
 ﻿script "displayerang"
+function tempNodeDetails @pShort,tDo
+   -- pShort = sMainShort
+   put tDo["info"] into tNodeRec
+   put tDo["doc"] into tDoc
+   -- build a cr separated string to put into a list field
+   -- in links&node, then this node's title, then out links&node
+   put pShort[tDoc][tNodeRec]["title"] into tTitle -- may or may not actually have a title
+   put "prev skim" into tInTags
+   put "next trim" into tOutTags
+   put 0 into tLineCount
+   -- in links&node
+   repeat for each word tTag in tInTags
+      put pShort[tDoc][tNodeRec][tTag] into tLinks
+      repeat for each line tLinkRec in tLinks
+         put tLineCount + 1 into tLineCount
+         put pShort[tDoc][tLinkRec]["weight"] into tLinkWeight
+         if tLinkWeight is empty then put "1" into tLinkWeight
+         put pShort[tDoc][tLinkRec][tTag] into tOtherNode
+         put pShort[tDoc][tOtherNode]["title"] into tOtherTitle
+         if tOtherTitle is empty then put tOtherNode into tOtherTitle
+         put pShort[tDoc][tOtherNode]["type"] into tOtherType
+         put tOtherNode into tList[tLineCount]["node"]
+         put tLinkRec into tList[tLineCount]["link"]
+         put tLinkWeight into tList[tLineCount]["weight"]
+         put cr & symbolLookup(tOtherType) && tOtherTitle && "[" & tTag & "]" &&  tLinkWeight && "IN>" after tList["string"]
+      end repeat
+   end repeat
+   -- this node's title
+   put pShort[tDoc][tNodeRec]["title"] into tTitle -- may or may not actually have a title
+   if tTitle is empty then put tNodeRec into tTitle
+   put pShort[tDoc][tNodeRec]["type"] into tThisNodeType
+   put tLineCount + 1 into tLineCount
+   put tLineCount into tList["master"]
+   put tNodeRec into tList[tLineCount]["rec"]
+   put tTitle into tList[tLineCount]["title"]
+   put cr & "[this node]" && symbolLookup(tThisNodeType) && tTitle after tList["string"]
+   -- out links&node
+   repeat for each word tTag in tOutTags
+      put pShort[tDoc][tNodeRec][tTag] into tLinks
+      repeat for each line tLinkRec in tLinks
+         put tLineCount + 1 into tLineCount
+         put pShort[tDoc][tLinkRec]["weight"] into tLinkWeight
+         if tLinkWeight is empty then put "1" into tLinkWeight
+         put pShort[tDoc][tLinkRec][tTag] into tOtherNode
+         put pShort[tDoc][tOtherNode]["title"] into tOtherTitle
+         if tOtherTitle is empty then put tOtherNode into tOtherTitle
+         put pShort[tDoc][tOtherNode]["type"] into tOtherType
+         put tOtherNode into tList[tLineCount]["node"]
+         put tLinkRec into tList[tLineCount]["link"]
+         put tLinkWeight into tList[tLineCount]["weight"]
+         put cr & ">OUT" && tLinkWeight && "[" & tTag & "]" && symbolLookup(tOtherType) && tOtherTitle after tList["string"]
+      end repeat
+   end repeat
+   filter tList["string"] without empty
+   return tList
+end tempNodeDetails
+
 function stepString tDaDoc,tEyeDee 
    if tDaDoc is empty or tEyeDee is empty then break
    --takes in a step record and returns a string (type & id/title)
@@ -34,8 +91,9 @@ end symbolLookup
 
 on tempConvertData pShort,@pData,pDoc
    -- sMainShort to sGraphData
-   -- sGraphData[nodes/links][rec][next/prev]
    -- sMainShort[doc][rec][next/prev]
+   -- sGraphData[nodes/links][rec][next/prev/displayString]
+   
    repeat for each key tRec in pShort[pDoc]
       if pShort[pDoc][tRec]["type"] is among the words of "state change" then
          -- node...probably !
@@ -77,6 +135,16 @@ on tempConvertData pShort,@pData,pDoc
    put pShort[pDoc][0]["redo"] into pData["redo"]
    -- metatdata
    put pShort[pDoc][0]["pointerTags"] into pData["pointerTags"]
+   -- node display label
+   repeat for each key tRec in pData["nodes"]
+      put pShort[pDoc][tRec]["title"] into tForShow
+      if tForShow is empty then
+         put symbolLookup(pShort[pDoc][tRec]["type"]) && tRec into tForShow
+      else
+         put symbolLookup(pShort[pDoc][tRec]["type"]) & " " before tForShow
+      end if
+      put tForShow into pData["nodes"][tRec]["displayString"]
+   end repeat
 end tempConvertData
 
 on middleOut pData,@pDraw,pFocus -- ! a hacky way to draw the provided graph, calls assignLayers
@@ -233,6 +301,9 @@ on displayManager pInfo,@pGUI,pSizes,pNow -- ! creates/changes/deletes controls
          put pInfo["nodes"][tNode]["type"] into tStuff["type"]
          -- node type
          put tStuff["type"] into pGUI["nodes"][tNode]["type"]
+         -- node's display string
+         put pInfo["nodes"][tNode]["displayString"] into pGUI["nodes"][tNode]["displayString"]
+         put pInfo["nodes"][tNode]["displayString"] into tStuff["displayString"]
          -- node's graphic ID
          put makeNode(tStuff) into pGUI["nodes"][tNode]["graphic"]
          -- node's neighbors
@@ -281,7 +352,10 @@ on displayManager pInfo,@pGUI,pSizes,pNow -- ! creates/changes/deletes controls
 end displayManager
 
 function makeNode pDetails
-   -- pDetails[node/coord/size/type]
+   --   breakpoint
+   -- pDetails[node/coord/size/type/displayString]
+   -- ! assume doc is 1
+   put 1 into tDoc
    set the locked of the templateField to true
    --   set the disabled of the templateField to true
    set the lockText of the templateField to true
@@ -292,13 +366,14 @@ function makeNode pDetails
    set the threeD of the templatefield to false
    set the showborder of the templatefield to false
    set the backgroundcolor of the templatefield to "0,220,220"
-   set the textSize of the templatefield to 18
+   set the textSize of the templatefield to 14
    set the outerglow["color"] of the templatefield to "40,40,40"
    --   set the behavior of the templatefield to the long id of button "graphBehave"
-   create field 
+   create field
    put it into tID
    --   set the htmltext of (tID) to pDetails["node"]
-   set the htmltext of (tID) to (symbolLookup(pDetails["type"]) && pDetails["node"])
+   --   set the htmltext of (tID) to (symbolLookup(pDetails["type"]) && pDetails["node"])
+   set the htmltext of (tID) to pDetails["displayString"]
    set the cGraphKey of (tID) to pDetails["node"]
    return tID
 end makeNode
