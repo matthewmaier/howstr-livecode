@@ -1008,7 +1008,7 @@ function kahnSort @pShort,@pTopo,@pNoViz,@pNotes,pDoc,pSeedList
             -- they'll find the list of bonded nodes
          end repeat -- tLink in tStep, "bond"
       end if -- tStep is in sNotVisited[pDoc]
-      if tNextList is not empty then get kahnSort(pDoc,tNextList)
+      if tNextList is not empty then get kahnSort(pShort,pTopo,pNoViz,pNotes,pDoc,tNextList) 
    end repeat -- each tStep in pSeedList
 end kahnSort
 

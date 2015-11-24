@@ -108,3 +108,7 @@ array[focus]=#
 -- this seems like the kind of thing that should be in x[doc][0]
 -- it's basically metadata about how to interpret the recs in the doc
 -- x[doc][0][pointerTags]
+- the window and functions that gather title & weight are temporary
+- sNoteList isn't used anymore because bond links aren't used anymore
+-- bond links were creating "footnotes" in the instructions
+-- but I think a better way to do that is an extensible link schema
