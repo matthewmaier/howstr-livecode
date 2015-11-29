@@ -56,23 +56,31 @@ function tempNodeDetails @pShort,tDo
    return tList
 end tempNodeDetails
 
-function stepString tDaDoc,tEyeDee 
+function stepString @pMain,pStuff
+   put pStuff["rec"] into tEyeDee
+   put pStuff["doc"] into tDaDoc
    if tDaDoc is empty or tEyeDee is empty then break
    --takes in a step record and returns a string (type & id/title)
-   put isAnode(tDaDoc,tEyeDee) into tType
+   put isAnode(pMain,tDaDoc,tEyeDee) into tType
    --   if tType is false then return "not a node"
    if tType is false then 
       -- it's a link
       -- # type [x] to [z]
-      put isAlink(tDaDoc,tEyeDee) into tLinkFacts
-      put stepString(tDaDoc,tLinkFacts["X"]) into tX
-      put stepString(tDaDoc,tLinkFacts["Z"]) into tZ
+      put isAlink(pMain,tDaDoc,tEyeDee) into tLinkFacts
+      put tDaDoc into tStuff["doc"]
+      put tLinkFacts["X"] into tStuff["rec"]
+      put stepString(pMain,tStuff) into tX
+      put tLinkFacts["Z"] into tStuff["rec"]
+      put stepString(pMain,tStuff) into tZ
       put tEyeDee && tLinkFacts["type"] && "[" & tX & "]" && "to" && "[" & tZ & "]" into tTitle
       if tTitle is empty then put "(link)" && tEyeDee into tTitle
       return tTitle
    else
       -- it's a node
-      put getTagData(tEyeDee,"title",tDaDoc) into tTitle
+      put tEyeDee into tStuff["rec"]
+      put "title" into tStuff["tag"]
+      put tDaDoc into tStuff["doc"]
+      put getTagData(pMain,tStuff) into tTitle
       if tTitle is empty then put tEyeDee && "blank" into tTitle
       put symbolLookup(tType) && tTitle into tThisString
       return tThisString
@@ -991,3 +999,205 @@ on graphManager pDo -- ! will be more complicated when not just a test
    end if
    middleOut sGraphData
 end graphManager
+
+function writeInstructions @pMain,@pShort,pTopo,pNoVisit
+   repeat for each key tDoc in pTopo
+      put empty into tInstructions
+      put empty into tFootnotes -- array[tDoc]=1,2,3,n note rec in footnote order
+      put empty into tIndent
+      put empty into tScope
+      repeat for each item tRec in pTopo[tDoc]
+         put empty into tTheNotes
+         -- use OPEN label if this is the first reference to a particular container node, and increase indent
+         -- use CLOSE label if this is the second reference, and decrease indent
+         if pShort[tDoc][tRec]["read"] is not empty and pShort[tDoc][tRec]["bulk"] is not empty then
+            if tRec is among the items of tScope then
+               -- container node, and second time listed
+               put tDoc into tStuff["doc"]
+               put tRec into tStuff["rec"]
+               put cr & tIndent && "CLOSE" && stepString(pMain,tStuff) after tInstructions
+               delete char -1 of tIndent
+            else -- container node, first time listed
+               put tDoc into tStuff["doc"]
+               put tRec into tStuff["rec"]
+               put cr & tIndent && itemOffset(tRec,pTopo[tDoc]) && "OPEN" && stepString(pMain,tStuff) after tInstructions
+               put tRec & "," after tScope
+               put "-" after tIndent
+            end if -- tRec among tScope
+         else -- not a container node
+            put tDoc into tStuff["doc"]
+            put tRec into tStuff["rec"]
+            put cr & tIndent && itemOffset(tRec,pTopo[tDoc]) && stepString(pMain,tStuff) after tInstructions
+         end if -- read and bulk not empty
+         -- ! this logic isn't applicable since bond links arnen't used anymore
+         -- build the footnote list
+         --         if tRec is among the keys of sNoteList[tDoc] then
+         --            -- this step has one or more notes
+         --            repeat for each item tNote in sNoteList[tDoc][tRec]
+         --               if tNote is among the items of tFootnotes[tDoc] then
+         --                  -- this note, bonded to tRec, already has a footnote position
+         --                  put itemOffset(tNote,tFootnotes[tDoc]) & "," after tTheNotes
+         --               else
+         --                  -- this note, bonded to tRec, does not yet have a footnote position
+         --                  put tNote & "," after tFootnotes[tDoc]
+         --                  put itemOffset(tNote,tFootnotes[tDoc]) & "," after tTheNotes
+         --               end if
+         --            end repeat
+         --            if char -1 of tTheNotes is "," then delete char -1 in tTheNotes
+         --            put " *" & tTheNotes & cr after tInstructions
+         --         end if
+      end repeat -- tRec in pTopo[tDoc]
+      -- ! also not applicable anymore, since no more bond links
+      --      put cr & "NOTES" after tInstructions
+      --      repeat for each item tFoot in tFootnotes[tDoc]
+      --         put cr & itemOffset(tFoot,tFootnotes[tDoc]) && stepString(tDoc,tFoot) after tInstructions
+      --      end repeat -- tFoot in tFootnotes
+      -------- orphans ------------------
+      if pNoVisit[tDoc] is not empty then
+         put empty into tRollCall
+         repeat for each item tOrphan in pNoVisit[tDoc]
+            if pShort[tDoc][tOrphan]["type"] is among the words of "state change" then
+               put tDoc into tStuff["doc"]
+               put tOrphan into tStuff["rec"]
+               put cr & stepString(pMain,tStuff) after tRollCall
+            end if
+         end repeat
+         if tRollCall is not empty then
+            put cr & "ORPHANS" after tInstructions
+            put tRollCall after tInstructions
+         end if
+      end if
+   end repeat -- tDoc in pTopo
+   filter tInstructions without empty
+   --   put tInstructions into field "textInstr" stack "primary"
+   --   if tInstructions is empty then put \
+         --         "Network unclear. At least one node must have both dive and rise links." into field "textInstr" stack "primary"
+   return tInstructions
+end writeInstructions
+
+function summarizeResources @pMain,@pSketch,@pResources,pDoc
+   -- sMain,sScopeSketch,sResources,sNowDoc
+   -- for each key in sScopeSketch[sNowDoc]
+   -- build summary string, put in tArray[blerg]
+   -- for each key in sScopeSketch[sNowDoc]
+   -- replace top with relevant summary string
+   -- string
+   -- OPEN whatever
+   -- IN
+   -- THRU
+   -- OUT
+   -- MISC
+   -- second time
+   -- repeat until all recs in tStrings visited
+   -- start with "rec" 0
+   -- replace a number alone on a line with it's string and some dashes based on counter
+   -- next cycle will have new text from the string added, so replace numbers alone on lines
+   
+   --   build a string to summarize each case node
+   put empty into tStrings
+   repeat for each key tCase in pSketch[pDoc]
+      if tCase = 0 then
+         -- maybe just don't print anything
+      else
+         put pDoc into tStuff["doc"]
+         put tCase into tStuff["rec"]
+         put "OPEN" && stepString(pMain,tStuff) & cr into tStrings[tCase]
+      end if
+      put "IN-PUT" & cr after tStrings[tCase]
+      repeat for each item tN in pSketch[pDoc][tCase]["in"]
+         -- if this also has role top, just put its rec alone on a line
+         if tN is among the keys of pSketch[pDoc] then
+            put tN & cr after tStrings[tCase]
+         else
+            put pDoc into tStuff["doc"]
+            put tN into tStuff["rec"]
+            put pResources[pDoc][tN]["totDemand"] && "x" && stepString(pMain,tStuff) & cr after tStrings[tCase]
+         end if
+      end repeat
+      put "THRU-PUT" & cr after tStrings[tCase]
+      put empty into tData
+      repeat for each item tH in pSketch[pDoc][tCase]["thru"]
+         put pResources[pDoc][tH]["excess"] into tMuch
+         if tMuch is not 0 and tMuch is not empty then 
+            if tH is among the keys of pSketch[pDoc] then
+               put tH & cr after tData
+            else
+               put pDoc into tStuff["doc"]
+               put tH into tStuff["rec"]
+               put tMuch && "x" && stepString(pMain,tStuff) & cr after tData
+            end if
+         end if
+      end repeat
+      if tData is empty then 
+         put "supply=demand" & cr after tStrings[tCase]
+      else
+         put tData after tStrings[tCase]
+      end if
+      put "OUT-PUT" & cr after tStrings[tCase]
+      repeat for each item tU in pSketch[pDoc][tCase]["out"]
+         if tU is among the keys of pSketch[pDoc] then
+            put tU & cr after tStrings[tCase]
+         else
+            put pDoc into tStuff["doc"]
+            put tU into tStuff["rec"]
+            put pResources[pDoc][tU]["totSupply"] && "x" && stepString(pMain,tStuff) & cr after tStrings[tCase]
+         end if
+      end repeat
+      put "NOT-PUT" & cr after tStrings[tCase]
+      repeat for each item tS in pSketch[pDoc][tCase]["solo"]
+         if tS is among the keys of pSketch[pDoc] then
+            put tS & cr after tStrings[tCase]
+         else
+            put pDoc into tStuff["doc"]
+            put tS into tStuff["rec"]
+            put pResources[pDoc][tS]["totSupply"] && "x" && stepString(pMain,tStuff) & cr after tStrings[tCase]
+         end if
+      end repeat
+   end repeat -- tCase in pSketch[pDoc]
+   -- build a bigger string with the case node summaries nested appropriately
+   --   repeat for each key tKey in tStrings
+   --      filter tStrings[tKey] without empty
+   --   end repeat
+   --   put tStrings[0] into tSummary -- 0 is a pseudo case to encase absolutely everything
+   -- embed one string in another
+   put " " into tIndent
+   put the keys of pSketch[pDoc] into tAll
+   replace cr with "," in tAll -- items instead of lines
+   put tStrings[0] into tDisplay
+   filter tDisplay without empty -- remove any trailing cr
+   put tDisplay into tWorking
+   put true into tAgain
+   repeat while tAgain is true
+      put false into tAgain
+      put empty into tInserts
+      put "-" before tIndent
+      repeat with tJ = 1 to the number of lines of tWorking
+         put line tJ of tWorking into tWorkIt
+         replace " " with "" in tWorkIt
+         replace "-" with "" in tWorkIt
+         replace cr with "" in tWorkIt
+         -- if tWorkIt has a rec then it should be just the clean rec now
+         if tWorkIt is among the items of tAll then
+            put tStrings[tWorkIt] into tInserts[tJ]["string"] -- so now array[line offset][string]=new string
+            repeat with tJJ = 1 to the number of lines of tInserts[tJ]["string"]
+               put tIndent before line tJJ of tInserts[tJ]["string"]
+            end repeat
+            put tWorkIt into tInserts[tJ]["rec"] -- so now array[line offset][rec]=num to replace
+         end if
+         if tJ = the number of lines of tWorking then
+            -- the last line was just checked to see if it needed replacing
+            put the keys of tInserts into tOrder
+            sort tOrder numeric descending -- highest line offset to lowest
+            repeat for each line tNext in tOrder
+               put true into tAgain
+               -- delete line
+               -- insert new string before line
+               delete line tNext of tWorking
+               put tInserts[tNext]["string"] before line tNext of tWorking
+            end repeat
+         end if
+      end repeat -- tJ
+      put tWorking into tDisplay
+   end repeat -- tAgain
+   return tDisplay
+end summarizeResources

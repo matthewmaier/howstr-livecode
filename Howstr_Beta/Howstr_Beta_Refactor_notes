@@ -112,3 +112,8 @@ array[focus]=#
 - sNoteList isn't used anymore because bond links aren't used anymore
 -- bond links were creating "footnotes" in the instructions
 -- but I think a better way to do that is an extensible link schema
+- gravitySort in supplyDemand
+-- I commented out a part that happens if supply > demand
+-- it was pushing the gravity right to balance the excess supply
+-- but that caused an infinite loop because it should be optional, not required
+-- readdress it when there's a user setting for number of times to repeat actions
