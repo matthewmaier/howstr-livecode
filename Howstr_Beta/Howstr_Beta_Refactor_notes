@@ -117,3 +117,10 @@ array[focus]=#
 -- it was pushing the gravity right to balance the excess supply
 -- but that caused an infinite loop because it should be optional, not required
 -- readdress it when there's a user setting for number of times to repeat actions
+- at the moment there can only be 1 document in memory
+- store saved/unsaved in sMain[doc][0]["saveStatus"]
+- in theory, there's no reason you can't have more than one doc per file
+-- but in practice I'm not sure how to keep track of the difference
+-- and there's no particular benefit; probably switch to a database anyway
+-- so just one doc per file at the moment
+- chose .how as the file extension; probably temporary anyway

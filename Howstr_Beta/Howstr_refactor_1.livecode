@@ -1,3 +1,109 @@
+on menuPick pItemName
+   -- ! at the moment, since only one doc can be in memory new is the same as close
+   if pItemName is "New" then put "Close" into pItemName
+   switch pItemName
+      case "New"
+         break
+      case "Close"
+         if field "savedField" stack "primary" is "unsaved" then
+            answer "Close without saving?" with "Close" or "Cancel"
+            switch it
+               case "Close"
+                  userClose
+                  break
+               case "Cancel"
+                  exit menuPick
+                  break
+            end switch
+         else
+            userClose
+         end if
+         break
+      case "Save"
+         -- pass through to Save As if no filename
+         if field "filepathField" stack "primary" is not empty then
+            put field "filepathField" stack "primary" into tTheFile
+            userSave tTheFile
+            -- saved flag
+            put "saved" into field "savedField" stack "primary"
+            break
+         end if
+      case "Save As"
+         -- get the file path for this stack
+         put the effective filename of this stack into tPath
+         set the itemDelimiter to slash
+         -- if this is a standalone application running on a Mac, find the path to the .app file
+         if the platform = "MacOS" and the environment = "standalone application" then
+            repeat until last item of tPath contains ".app"
+               delete last item of tPath
+            end repeat
+         end if
+         -- if not on a Mac, remove the last item to get the path to the containing folder
+         delete last item of tPath
+         --Ask the user to choose a file
+         ask file "Save As" with tPath
+         --If the dialog is not cancelled put the path to the selected file into a variable
+         if the result is not "cancel" then
+            -- make sure it's the right kind of file
+            -- ! this won't work if the user selects a file with a different extension
+            if it ends with ".plat" then
+               put it into tTheFile
+            else if it contains "." then
+               answer "filename contains a period"
+               break
+            else
+               put it & ".plat" into tTheFile
+            end if
+            userSave tTheFile
+         end if
+         -- saved flag
+         put "saved" into field "savedField" stack "primary"
+         put tTheFile into field "filepathField" stack "primary"
+         break
+      case "Open"
+         if field "savedField" stack "primary" is "unsaved" then
+            answer "Close without saving?" with "Close" or "Cancel"
+            switch it
+               case "Close"
+                  userClose
+                  break
+               case "Cancel"
+                  exit menuPick
+                  break
+            end switch
+         else
+            userClose
+         end if
+         -- get the file path for this stack
+         put the effective filename of this stack into tPath
+         set the itemDelimiter to slash
+         -- if this is a standalone application running on a Mac, find the path to the .app file
+         if the platform = "MacOS" and the environment = "standalone application" then
+            repeat until last item of tPath contains ".app"
+               delete last item of tPath
+            end repeat
+         end if
+         -- if not on a Mac, remove the last item to get the path to the containing folder
+         delete last item of tPath
+         --Ask the user to choose a file
+         answer file "Select a file to open" with tPath
+         if the result is not "Cancel" then
+            if it ends with ".plat" or ".txt" then
+               put it into tChosenFile
+               userOpen tChosenFile
+               -- filepath
+               put tChosenFile into field "filepathField" stack "primary"
+            else
+               break
+            end if
+         end if
+         -- this will overwrite the "unsaved" that the build handler flags
+         -- since in this case there aren't any unsaved changes yet
+         put "opened" into field "savedField" stack "primary"
+         break
+   end switch
+end menuPick
+
 ﻿script "Howstr_refactor_1"
 local sMain -- main[doc num][rec num][tag]data/pointers
 local sMainShort -- mainShort[doc][visible rec][link or tag]link type & rec or tag:data (build in adjList)
@@ -22,14 +128,14 @@ on preOpenStack
    -- controlling the defaultFolder; someone said to do this...so...
    set itemDelimiter to "/"
    set the defaultFolder to item 1 to -2 of (the effective filename of this stack)
-   
+
    put "step myStep turn myTurn bond prev next skim read bulk trim" into sPointerTags
    put empty into sMain
    put 1 into sNowDoc
    put true into sMain[sNowDoc][0]["hide"]
    put 0 into sMain[sNowDoc][0][lastKey]
    put empty into sNowItem
-   
+
    put "2,1" & cr & "3,1" & cr & "4,1" into sMain[sNowDoc][1]["step"]
    put "state" into sMain[sNowDoc][2]["type"]
    put "1,1" into sMain[sNowDoc][2]["myStep"]
@@ -38,12 +144,12 @@ on preOpenStack
    put "500,10" into sMain[sNowDoc][4]["coord"]
    put "1,1" into sMain[sNowDoc][4]["myStep"]
    put 4 into sMain[sNowDoc][0][lastKey]
-   
+
    -- setup the window -----------------------------------------------------
    --   set the minWidth of stack "primary" to 500
    --   set the minheight of stack "primary" to 500
    -- klaus said to set this once in the stack inspector
-   
+
    -- initialize controls
    set the disabled of button "stateButt" stack "primary" to false
    set the disabled of button "changeButt" stack "primary" to false
@@ -62,7 +168,7 @@ on preOpenStack
    put "search" into field "searchField" stack "primary"
    set the foregroundColor of field "searchField" stack "primary" to 200,200,200
    put the hilite of button "devRadio" stack "primary" into sDevEyes
-   
+
    -- erase any leftover graphics ------------------------------------------
    -- this will erase everything in the group except floorRect
    put 0 into tControl
@@ -73,10 +179,10 @@ on preOpenStack
    repeat for each line tLine in tList
       if "id" is among the words of tLine then delete tLine
    end repeat
-   
+
    -- make sure the text instructions are empty ------------------------
    put empty into field "textInstr" stack "primary"
-   
+
    -- setup the display controls -------------------
    -- floorRect is like a canvas
    -- the graphicNetwork group rect is like a window onto the canvas
@@ -90,13 +196,13 @@ on preOpenStack
    set the rect of group "graphicNetwork" stack "primary" to tLeft,tTop,tRight,tBottom
    set the rect of field "textInstr" stack "primary" to tLeft,tTop,tRight,tBottom
    set the rect of field "resourceField" stack "primary" to tLeft,tTop,tRight,tBottom
-   
+
    -- rTree ----------------------------------------------------------------------
    set the editNodeOnDoubleClick of group "treeList" stack "primary" to false
    set the expandOnHilite of group "treeList" stack "primary" to false
    set the newNodeOnReturn of group "treeList" stack "primary" to false
    set the useContextMenu of group "treeList" stack "primary" to false
-   
+
    render
 end preOpenStack
 
@@ -119,7 +225,7 @@ function relativePath fStartFolder,fDestinationFolder
    -- ! I grabbed this whole function off the internet after seeing it referred to like a built-in function
    -- ! startFolder is most likely the defaultFolder, or the folder where the app is running
    -- ! destinationFolder is the user's choice
-   
+
    -- Computes the path difference from position fStartFolder to fDestinationFolder in the file tree
    -- We are at fStartFolder, how to get to fDestinationFolder?  This relative path can be of the
    -- form "../../folder/folder" if we have to go up to a common parent first.
@@ -146,15 +252,15 @@ function relativePath fStartFolder,fDestinationFolder
    --     start:          a/x/y/
    --     destination:    a/b/c/d/e/f/
    --     relative path:  ../../b/c/d/e/f/
-   
+
    local lRelativePath      -- where we prepare the result
    local nStartItems        -- the number of folders in the start folder path
    local nDestinationItems  -- the number of folders in the destination folder path
    local lComparing         -- the index of the item in both paths that is being compared
-   
+
    set the itemdelimiter to "/"
    put the number of items of fStartFolder into nStartItems
-   put the number of items of fDestinationFolder into nDestinationItems    
+   put the number of items of fDestinationFolder into nDestinationItems
    put 0 into lComparing
    put empty into lRelativePath
    repeat
@@ -162,7 +268,7 @@ function relativePath fStartFolder,fDestinationFolder
       if lComparing > nStartItems then
          -- everything up to here was the same and the destination is longer:
          -- the relative part is just the rest of the destination path:
-         repeat while lComparing <= nDestinationItems        
+         repeat while lComparing <= nDestinationItems
             put (item lComparing of fDestinationFolder)&"/" after lRelativePath
             add 1 to lComparing
          end repeat
@@ -196,7 +302,7 @@ function relativePath fStartFolder,fDestinationFolder
    return lRelativePath
 end relativePath
 
-command userNew 
+command userNew
    -- ! should be the next available key (if 1 is taken, then 2; etc)
    -- ! for now only one doc in memory
    -- ! so new is being treated the same as close in the menuPick script in the File button
@@ -233,7 +339,7 @@ command userClose
          delete sGraphics[sNowDoc][tRec]["longID"]
       end if
    end repeat
-   
+
    put empty into sMain[sNowDoc]
    put empty into sGraphics[sNowDoc]
    put empty into sExpanded
@@ -242,7 +348,7 @@ command userClose
    put "New" into field "savedField" stack "primary"
    put empty into field "filepathField" stack "primary"
    -- sNowDoc won't change from 1
-   
+
    -- ! this is first done in the preOpenStack handler
    put "step myStep turn myTurn bond prev next skim read bulk trim" \
          into sPointerTags
@@ -251,7 +357,7 @@ command userClose
    put true into sMain[sNowDoc][0]["hide"]
    put 0 into sMain[sNowDoc][0][lastKey]
    put empty into sNowItem
-   
+
    put "2,1" & cr & "3,1" & cr & "4,1" into sMain[sNowDoc][1]["step"]
    put "state" into sMain[sNowDoc][2]["type"]
    put "1,1" into sMain[sNowDoc][2]["myStep"]
@@ -260,7 +366,7 @@ command userClose
    put "500,10" into sMain[sNowDoc][4]["coord"]
    put "1,1" into sMain[sNowDoc][4]["myStep"]
    put 4 into sMain[sNowDoc][0][lastKey]
-   
+
    -- erase any leftover graphics ------------------------------------------
    -- this will erase everything in the group except floorRect
    put 0 into tControl
@@ -271,7 +377,7 @@ command userClose
    repeat for each line tLine in tList
       if "id" is among the words of tLine then delete tLine
    end repeat
-   
+
    -- ! close one of multiple open docs
    render
 end userClose
@@ -335,13 +441,13 @@ command UIcheck
          end if
       end if
    end if
-   
+
    -- toggle availability
    set the disabled of button "infoButt" stack "primary" to true
    set the disabled of button "fileButt" stack "primary" to true
    set the disabled of button "hideButt" stack "primary" to true
    --   if the number of lines of pHilited is 1 then
-   if the number of lines of sNowItem is 1 then  
+   if the number of lines of sNowItem is 1 then
       -- infoButt
       --      if "step" is among the keys of sMain[sNowDoc][pHilited] then
       if "step" is among the keys of sMain[sNowDoc][sNowItem] then
@@ -362,7 +468,7 @@ command UIcheck
       --      if clearNegPairs(sMain[sNowDoc][pHilited]["myStep"]) is not empty then set the disabled of button "hideButt" stack "primary" to false
       if clearNegPairs(sMain[sNowDoc][sNowItem]["myStep"]) is not empty then set the disabled of button "hideButt" stack "primary" to false
    end if -- is a tag
-   
+
    -- undoButt/redoButt don't depend on the user's selection; see render
 end UIcheck
 
@@ -390,7 +496,7 @@ function isAlink pDocKey,pRecKey -- takes a rec, returns false or link facts
    -- find link type
    repeat for each line tPtr in tPointers
       put item 1 of tPtr into tPtr
-      if sMain[pDocKey][tPtr]["type"] is among the words of tLinkTypes then 
+      if sMain[pDocKey][tPtr]["type"] is among the words of tLinkTypes then
          put sMain[pDocKey][tPtr]["type"] into tNode["type"]
          exit repeat
       end if
@@ -408,7 +514,7 @@ function isAlink pDocKey,pRecKey -- takes a rec, returns false or link facts
             put item 1 of line 2 of sMain[pDocKey][tPtr][tNode["type"]] into tAlmost
             put item 1 of sMain[pDocKey][tAlmost]["myStep"] into tNode["Z"]
             -- Xcoord
-            -- Zcoord       
+            -- Zcoord
          end if
       end repeat
    end if
@@ -417,11 +523,11 @@ function isAlink pDocKey,pRecKey -- takes a rec, returns false or link facts
       case "flow"
          repeat for each line tPtr in tPointers
             put item 1 of tPtr into tPtr
-            if "prev" is among the keys of sMain[pDocKey][tPtr] then 
+            if "prev" is among the keys of sMain[pDocKey][tPtr] then
                put item 1 of sMain[pDocKey][tPtr]["prev"] into tAlmost
                put item 1 of sMain[pDocKey][tAlmost]["myStep"] into tNode["X"]
             end if
-            if "next" is among the keys of sMain[pDocKey][tPtr] then 
+            if "next" is among the keys of sMain[pDocKey][tPtr] then
                put item 1 of sMain[pDocKey][tPtr]["next"] into tAlmost
                put item 1 of sMain[pDocKey][tAlmost]["myStep"] into tNode["Z"]
             end if
@@ -430,11 +536,11 @@ function isAlink pDocKey,pRecKey -- takes a rec, returns false or link facts
       case "dive"
          repeat for each line tPtr in tPointers
             put item 1 of tPtr into tPtr
-            if "skim" is among the keys of sMain[pDocKey][tPtr] then 
+            if "skim" is among the keys of sMain[pDocKey][tPtr] then
                put item 1 of sMain[pDocKey][tPtr]["skim"] into tAlmost
                put item 1 of sMain[pDocKey][tAlmost]["myStep"] into tNode["X"]
             end if
-            if "read" is among the keys of sMain[pDocKey][tPtr] then 
+            if "read" is among the keys of sMain[pDocKey][tPtr] then
                put item 1 of sMain[pDocKey][tPtr]["read"] into tAlmost
                put item 1 of sMain[pDocKey][tAlmost]["myStep"] into tNode["Z"]
             end if
@@ -443,11 +549,11 @@ function isAlink pDocKey,pRecKey -- takes a rec, returns false or link facts
       case "rise"
          repeat for each line tPtr in tPointers
             put item 1 of tPtr into tPtr
-            if "bulk" is among the keys of sMain[pDocKey][tPtr] then 
+            if "bulk" is among the keys of sMain[pDocKey][tPtr] then
                put item 1 of sMain[pDocKey][tPtr]["bulk"] into tAlmost
                put item 1 of sMain[pDocKey][tAlmost]["myStep"] into tNode["X"]
             end if
-            if "trim" is among the keys of sMain[pDocKey][tPtr] then 
+            if "trim" is among the keys of sMain[pDocKey][tPtr] then
                put item 1 of sMain[pDocKey][tPtr]["trim"] into tAlmost
                put item 1 of sMain[pDocKey][tAlmost]["myStep"] into tNode["Z"]
             end if
@@ -494,7 +600,7 @@ command userState pRec
    -- if pRec is empty the user just wants a new state node
    newItem("state")
    -- if something is in pRec then the user wants it to be a state node
-   
+
    put "Unsaved" into field "savedField" stack "primary"
    render
 end userState
@@ -503,7 +609,7 @@ command userChange pRec
    -- if pRec is empty the user just wants a new change node
    newItem("change")
    -- if something is in pRec then the user wants it to be a change node
-   
+
    put "Unsaved" into field "savedField" stack "primary"
    render
 end userChange
@@ -531,7 +637,7 @@ command newItem pType
    put tRec+2 & "," & tRec+1 into sMain[sNowDoc][tRec+4]["myStep"]
    -- update highest key
    put tRec+4 into sMain[sNowDoc][0][lastKey]
-   
+
    -- render happens in userChange/userState
 end newItem
 
@@ -553,15 +659,15 @@ command userBond pRecs
    put tRec+2 & "," & tRec+1 & cr & tRec+3 & "," & tRec+1 & cr & tRec+4 & "," & tRec+1 & cr \
          & tRec+5 & "," & tRec+1 & cr & tRec+6 & "," & tRec+1 into sMain[sNowDoc][tRec+1]["turn"]
    put "newBond" into sMain[sNowDoc][tRec+1]["act"]
-   
+
    put tRec+2 into tYstep
    put tRec+3 & "," & tRec+1 & cr & tRec+4 & "," & tRec+1 into sMain[sNowDoc][tYstep]["step"]
    put tRec+1 & "," & tRec+1 into sMain[sNowDoc][tYstep]["myTurn"]
-   
+
    put "bond" into sMain[sNowDoc][tRec+3]["type"]
    put tRec+1 & "," & tRec+1 into sMain[sNowDoc][tRec+3]["myTurn"]
    put tYstep & "," & tRec+1 into sMain[sNowDoc][tRec+3]["myStep"]
-   
+
    put tRec+4 into tYbond
    put tRec+5 into tXbond
    put tRec+6 into tZbond
@@ -569,19 +675,19 @@ command userBond pRecs
    put tRec+1 & "," & tRec+1 into sMain[sNowDoc][tYbond]["myTurn"]
    put tYstep & "," & tRec+1 into sMain[sNowDoc][tYbond]["myStep"]
    -- this one was already done earlier
-   
+
    put tYbond & "," & tRec+1 into sMain[sNowDoc][tXbond]["bond"]
    put tRec+1 & "," & tRec+1 into sMain[sNowDoc][tXbond]["myTurn"]
    put tXstep & "," & tRec+1 into sMain[sNowDoc][tXbond]["myStep"]
    put cr & tXbond & "," & tRec+1 after sMain[sNowDoc][tXstep]["step"]
-   
+
    put tYbond & "," & tRec+1 into sMain[sNowDoc][tZbond]["bond"]
    put tRec+1 & "," & tRec+1 into sMain[sNowDoc][tZbond]["myTurn"]
    put tZstep & "," & tRec+1 into sMain[sNowDoc][tZbond]["myStep"]
    put cr & tZbond & "," & tRec+1 after sMain[sNowDoc][tZstep]["step"]
-   
+
    put tRec+6 into sMain[sNowDoc][0][lastKey]
-   
+
    put "Unsaved" into field "savedField" stack "primary"
    render
 end userBond
@@ -595,7 +701,7 @@ command userFlow pRecs
    put "next" into theForward
    put "prev" into theBackward
    newDilink tXstep,tZstep,theAct,theType,theForward,theBackward
-   
+
    put "Unsaved" into field "savedField" stack "primary"
    render
 end userFlow
@@ -609,7 +715,7 @@ command userDive pRecs
    put "read" into theForward
    put "skim" into theBackward
    newDilink tXstep,tZstep,theAct,theType,theForward,theBackward
-   
+
    put "Unsaved" into field "savedField" stack "primary"
    render
 end userDive
@@ -623,7 +729,7 @@ command userRise pRecs
    put "trim" into theForward
    put "bulk" into theBackward
    newDilink tXstep,tZstep,theAct,theType,theForward,theBackward
-   
+
    put "Unsaved" into field "savedField" stack "primary"
    render
 end userRise
@@ -650,42 +756,42 @@ command newDilink pXstep,pZstep,pAct,pType,pForward,pBackward
    -- +7 Z pBackward to Y pForward
    put tRec+7 into tZback
    put tRec+7 into sMain[sNowDoc][0][lastKey]
-   
+
    -- turn
    put tYstep & "," & tTurn & cr & tYtype & "," & tTurn & cr & tYback & "," & tTurn & cr \
          & tYfor & "," & tTurn & cr & tXfor & "," & tTurn & cr & tZback & "," & tTurn into sMain[sNowDoc][tTurn]["turn"]
    put pAct into sMain[sNowDoc][tTurn]["act"]
-   
+
    -- Y step
    put tYtype & "," & tTurn & cr & tYback & "," & tTurn & cr & tYfor & "," & tTurn into sMain[sNowDoc][tYstep]["step"]
    put tTurn & "," & tTurn into sMain[sNowDoc][tYstep]["myTurn"]
-   
+
    -- Y type
    put pType into sMain[sNowDoc][tYtype]["type"]
    put tTurn & "," & tTurn into sMain[sNowDoc][tYtype]["myTurn"]
    put tYstep & "," & tTurn into sMain[sNowDoc][tYtype]["myStep"]
-   
+
    -- pointers
    put tXfor & "," & tTurn into sMain[sNowDoc][tYback][pBackward]
    put tTurn & "," & tTurn into sMain[sNowDoc][tYback]["myTurn"]
    put tYstep & "," & tTurn into sMain[sNowDoc][tYback]["myStep"]
    -- this one was done when tYstep was created
-   
+
    put tZback & "," & tTurn into sMain[sNowDoc][tYfor][pForward]
    put tTurn & "," & tTurn into sMain[sNowDoc][tYfor]["myTurn"]
    put tYstep & "," & tTurn into sMain[sNowDoc][tYfor]["myStep"]
    -- this one was done when tYstep was created
-   
+
    put tYback & "," & tTurn into sMain[sNowDoc][tXfor][pForward]
    put tTurn & "," & tTurn into sMain[sNowDoc][tXfor]["myTurn"]
    put pXstep & "," & tTurn into sMain[sNowDoc][tXfor]["myStep"]
    put cr & tXfor & "," & tTurn after sMain[sNowDoc][pXstep]["step"]
-   
+
    put tYfor & "," & tTurn into sMain[sNowDoc][tZback][pBackward]
    put tTurn & "," & tTurn into sMain[sNowDoc][tZback]["myTurn"]
    put pZstep & "," & tTurn into sMain[sNowDoc][tZback]["myStep"]
    put cr & tZback & "," & tTurn after sMain[sNowDoc][pZstep]["step"]
-   
+
    -- render happens in the calling handler
 end newDilink
 
@@ -698,15 +804,15 @@ command userInfo
    put getTagData(sNowItem,tTag,sNowDoc) into tNowData
    -- create new record for turn and tag
    put sMain[sNowDoc][0][lastKey] into tRec
-   
+
    put tRec+2 & "," & tRec+1 into sMain[sNowDoc][tRec+1]["turn"]
    put "newInfo" into sMain[sNowDoc][tRec+1]["act"]
-   
+
    put tData into sMain[sNowDoc][tRec+2][tTag]
    put tRec+1 & "," & tRec+1 into sMain[sNowDoc][tRec+2]["myTurn"]
    put sNowItem & "," & tRec+1 into sMain[sNowDoc][tRec+2]["myStep"]
    put cr & tRec+2 & "," & tRec+1 after sMain[sNowDoc][sNowItem]["step"]
-   
+
    put tRec+2 into sMain[sNowDoc][0][lastKey]
    -- negate old tag if it existed
    if tNowData is not empty then
@@ -722,7 +828,7 @@ end userInfo
 command userFile
    -- ! at the moment this just stores whatever they picked and tries to display a preview
    -- ! it should be easy to break
-   
+
    put false into tShow
    answer file "attach this file to" && stepString(sNowDoc,sNowItem)
    if it is empty then exit userFile
@@ -741,7 +847,7 @@ command userFile
    if (char -3 to -1 of tName) is among the words of "gif jpg png bmp xwd xbm xpm pbm pgm ppm ict eps" then put true into tShow
    -- create a new tag
    -- data is the relative filepath
-   
+
 end userFile
 
 command userUndo
@@ -760,19 +866,19 @@ command userUndo
          end if
       end if
    end repeat
-   
+
    -- create the turn & undo tag records
    put sMain[sNowDoc][0][lastKey] into tRec
-   
+
    put tRec+2 & "," & tRec+1 into sMain[sNowDoc][tRec+1]["turn"]
    put "userUndo" into sMain[sNowDoc][tRec+1]["act"]
-   
+
    put tUndoThisRec & "," & tRec+1 into sMain[sNowDoc][tRec+2]["undo"]
    put tRec+1 & "," & tRec+1 into sMain[sNowDoc][tRec+2]["myTurn"]
-   
+
    put tRec+1 into tTurn
-   put tRec+2 into sMain[sNowDoc][0][lastKey] 
-   
+   put tRec+2 into sMain[sNowDoc][0][lastKey]
+
    -- search everything, reverse appropriate pointers
    repeat for each key tRecord in sMain[sNowDoc]
       repeat for each key tTag in sMain[sNowDoc][tRecord]
@@ -814,19 +920,19 @@ command userRedo
          end if
       end if
    end repeat
-   
+
    -- create the turn & redo tag records
    put sMain[sNowDoc][0][lastKey] into tRec
-   
+
    put tRec+2 & "," & tRec+1 into sMain[sNowDoc][tRec+1]["turn"]
    put "userRedo" into sMain[sNowDoc][tRec+1]["act"]
-   
+
    put tRedoThisRec & "," & tRec+1 into sMain[sNowDoc][tRec+2]["redo"]
    put tRec+1 & "," & tRec+1 into sMain[sNowDoc][tRec+2]["myTurn"]
-   
+
    put tRec+1 into tTurn
-   put tRec+2 into sMain[sNowDoc][0][lastKey] 
-   
+   put tRec+2 into sMain[sNowDoc][0][lastKey]
+
    -- search everything, reverse appropriate pointers
    repeat for each key tRecord in sMain[sNowDoc]
       repeat for each key tTag in sMain[sNowDoc][tRecord]
@@ -858,19 +964,19 @@ command userHide
    -- to hide a step, negate all of its active pointers
    -- a tag will not be displayed if no step points to it
    -- a step will not be displayed if it has no active pointers
-   
+
    -- turn
    -- negate pointers
    put sMain[sNowDoc][0][lastKey] into tRec
-   
+
    put tRec+2 & "," & tRec+1 into sMain[sNowDoc][tRec+1]["turn"]
    put "userHide" & "," & sNowItem into sMain[sNowDoc][tRec+1]["act"]
-   
+
    put sNowItem & "," & tRec+1 into sMain[sNowDoc][tRec+2]["hide"]
    put tRec+1 & "," & tRec+1 into sMain[sNowDoc][tRec+2]["myTurn"]
-   
+
    put tRec+2 into sMain[sNowDoc][0][lastKey]
-   
+
    -- if thing being hidden is a tag
    if "myStep" is among the keys of sMain[sNowDoc][sNowItem] then
       -- negate step pointer in myStep
@@ -883,7 +989,7 @@ command userHide
          end if
       end repeat
    end if
-   
+
    -- if thing being hidden isn't a tag, it must be a step
    if isAnode(sNowDoc,sNowItem) is false then
       -- if thing being hidden is a link
@@ -923,7 +1029,7 @@ end listOfLinks
 command hideStep pHideRec,pTurnRec
    -- pHideRec = the key of the rec to hide; negate it and pointers to it
    -- pTurnRec = the key of the rec responsible for hiding pHideRec
-   if the number of items of pHideRec is 2 then 
+   if the number of items of pHideRec is 2 then
       put item 2 of pHideRec into pTurnRec
       put item 1 of pHideRec into pHideRec
    end if
@@ -957,7 +1063,7 @@ command hideStep pHideRec,pTurnRec
                repeat for each line tStepB in tPtrB
                   put item 1 of tStepB into tStepB
                   put cr & "-" & tPtrAB & "," & pTurnRec after sMain[sNowDoc][tStepB]["step"]
-                  put cr & "-" & tStepB & "," & pTurnRec after sMain[sNowDoc][tPtrAB]["myStep"] 
+                  put cr & "-" & tStepB & "," & pTurnRec after sMain[sNowDoc][tPtrAB]["myStep"]
                end repeat
             end repeat
          end if
@@ -1015,7 +1121,7 @@ command  adjList
          if tRec is 0 then next repeat
          -- only visible steps
          put isAnode(tDoc,tRec) into tNode
-         if tNode is false then 
+         if tNode is false then
             put isAlink(tDoc,tRec) into tLink
             if tLink is not false then
                ------------- link type -------------------
@@ -1028,7 +1134,7 @@ command  adjList
             put true into tStep
          end if
          -------- this is the same for nodes and links --------------
-         if tStep is true then             
+         if tStep is true then
             ---------------- links & info  ---------------------
             put clearNegPairs(sMain[tDoc][tRec]["step"]) into tPointers
             repeat for each line tPtr in tPointers
@@ -1101,7 +1207,7 @@ command kahnSortOld
             set the wholeMatches to false
             -- follow a link (Y) out of tNode (X), preference: scope, flow, bond
             -- remove link (Y) from notVisitied list
-            -- if the node (Z) has no unvisited in-links of same type 
+            -- if the node (Z) has no unvisited in-links of same type
             -- then add node (Z) to planA
             -- follow scope when available ----------------------------------------------
             if sMainShort[tDoc][tNode]["read"] is not empty and sMainShort[tDoc][tNode]["bulk"] is not empty then
@@ -1115,7 +1221,7 @@ command kahnSortOld
                   put true into tLast
                   repeat for each line tSameType in sMainShort[tDoc][tNodeZ]["skim"]
                      replace cr with "" in tSameType
-                     if tSameType is among the items of tNotVisited then 
+                     if tSameType is among the items of tNotVisited then
                         put false into tLast
                         exit repeat
                      end if
@@ -1139,7 +1245,7 @@ command kahnSortOld
                put true into tLast
                repeat for each line tSameType in sMainShort[tDoc][tNodeZ]["prev"]
                   replace cr with "" in tSameType
-                  if tSameType is among the items of tNotVisited then 
+                  if tSameType is among the items of tNotVisited then
                      put false into tLast
                      exit repeat
                   end if
@@ -1199,7 +1305,7 @@ command topoSort
       end repeat -- tRec
       put tPlanA after tNextList
       put tPlanB after tNextList
-      get kahnSort(tDoc,tNextList) 
+      get kahnSort(tDoc,tNextList)
    end repeat -- tDoc
 end topoSort
 
@@ -1238,7 +1344,7 @@ function kahnSort pDoc,pSeedList
                put true into tLast
                repeat for each line tSameType in sMainShort[pDoc][tNodeZ]["skim"]
                   replace cr with "" in tSameType
-                  if tSameType is among the items of sNotVisited[pDoc] then 
+                  if tSameType is among the items of sNotVisited[pDoc] then
                      put false into tLast
                      exit repeat
                   end if
@@ -1285,7 +1391,7 @@ function kahnSort pDoc,pSeedList
             put true into tLast
             repeat for each line tSameType in sMainShort[pDoc][tNodeZ]["prev"]
                replace cr with "" in tSameType
-               if tSameType is among the items of sNotVisited[pDoc] then 
+               if tSameType is among the items of sNotVisited[pDoc] then
                   put false into tLast
                   exit repeat
                end if
@@ -1364,11 +1470,11 @@ command supplyDemand
                   --                  put tRec & "," after tRawEnd -- out flow no scope
             -- the baseline scope is stuff that's not encased, level 0
             -- ignore anything on level 0 that's mid-flow
-            if not (tTags["skim"] or tTags["trim"] or (tTags["prev"] and tTags["next"])) then 
+            if not (tTags["skim"] or tTags["trim"] or (tTags["prev"] and tTags["next"])) then
                if not tTags["prev"] then put tRec & "," after tSupplySide
                if not tTags["next"] then put tRec & "," after tDemandSide
                put tRec & "," after tSpelunk
-               switch 
+               switch
                   case not tTags["next"] and not tTags["prev"] -- solo
                      put "0,solo" into sResources[tDoc][tRec]["scopeRef"]
                      put tRec & "," after sScopeSketch[tDoc][0]["solo"]
@@ -1390,11 +1496,11 @@ command supplyDemand
                if tTags["bulk"] or tTags["read"] then -- top
                   put cr & "0,top" after sResources[tDoc][tRec]["scopeRef"]
                   put tRec & "," after sScopeSketch[tDoc][0]["top"]
-               end if            
+               end if
             end if -- not skim or trim or prev&next
          end if -- state or change
       end repeat -- tRec in tDoc
-      
+
       -- begin scope reference tracking
       -- each rec gets a line in scopeRef for each role
       -- 0 means it doesn't have a scope reference (uncased flow)
@@ -1420,7 +1526,7 @@ command supplyDemand
       --      repeat for each item tOut in tRawEnd
       --         put "0,out" into sResources[tDoc][tOut]["scopeRef"]
       --      end repeat
-      
+
       -- rawEnd and rawStart are ends of the same link; shouldn't be possible for only one to not be empty
       -- need the conditional so livecode doesn't barf on an empty file with nothing to evaluate
       --      if tScope is not empty or tRawEnd is not empty or tRawStart is not empty then
@@ -1446,7 +1552,7 @@ command supplyDemand
             put the keys of sMainShort[tDoc] into sNotVisited[tDoc]
             replace cr with "," in sNotVisited[tDoc]
             --            get gravitySort(tDoc,tScope & tRawEnd,"bulk trim prev next") -- total demand
-            get gravitySort(tDoc,tDemandSide,"bulk trim prev next") -- total demand 
+            get gravitySort(tDoc,tDemandSide,"bulk trim prev next") -- total demand
             put the keys of sMainShort[tDoc] into sNotVisited[tDoc]
             replace cr with "," in sNotVisited[tDoc]
             --            get gravitySort(tDoc,tScope & tRawStart,"read skim next prev") -- supply/demand mismatch
@@ -1462,7 +1568,7 @@ function gravitySort pDoc,pSeedList,pDirection
    -- pDirection = "read skim next prev" or "bulk trim prev next"; easy to refer to as word 1/2/3/4
    -- doesn't return anything
    -- just walks network, edits sResources, and terminates
-   -- ! gravity logic doesn't cross scope boundaries; this balances flows but not up or down scope   
+   -- ! gravity logic doesn't cross scope boundaries; this balances flows but not up or down scope
    -- scopeRef is assigned when a node is placed into the parameter, before being sent to gravitySort
    replace cr with "" in pSeedList -- should just be numbers and commas
    repeat for each item tStep in pSeedList
@@ -1562,7 +1668,7 @@ function gravitySort pDoc,pSeedList,pDirection
                         put true into sSomethingChanged
                      end if                  end repeat
                   end repeat
-               end if -- supply > demand 
+               end if -- supply > demand
                -- recalculate total supply
                put 0 into tTotSupply
                repeat for each word tHi in "skim prev"
@@ -1586,7 +1692,7 @@ function gravitySort pDoc,pSeedList,pDirection
                   end repeat
                end repeat
                put tTotSupply into sResources[pDoc][tStep]["totSupply"]
-               put tTotDemand into sResources[pDoc][tStep]["totDemand"]  
+               put tTotDemand into sResources[pDoc][tStep]["totDemand"]
                -- capture excess or shortfall (if external inventory insufficient)
                put 0 into sResources[pDoc][tStep]["excess"]
                put tTotSupply - tTotDemand into sResources[pDoc][tStep]["excess"]
@@ -1601,9 +1707,9 @@ function gravitySort pDoc,pSeedList,pDirection
                      put sResources[pDoc][tPoody]["gravity"] into tWannaBe
                      if (tWannaBe is not empty) and (tWannaBe > tGrav) then put tWannaBe into tGrav
                   end repeat
-               end repeat          
+               end repeat
                repeat for each word tKind in "next prev skim trim"
-                  repeat for each line tDink in sMainShort[pDoc][tStep][tKind]                     
+                  repeat for each line tDink in sMainShort[pDoc][tStep][tKind]
                      -- value might not need to change, if it does, make a note to run gravitySort again
                      put sResources[pDoc][tDink]["gravity"] into tOld
                      if tGrav is not tOld then
@@ -1625,7 +1731,7 @@ function gravitySort pDoc,pSeedList,pDirection
             -- #,out = has trim & prev tags
             -- and maybe this:
             -- #+1,top = has read & bulk tags
-            
+
             put empty into tNextList
             -- (1) mark this node visited
             -- travel scope, then flow (makes scope depth first and flow breadth first)
@@ -1634,7 +1740,7 @@ function gravitySort pDoc,pSeedList,pDirection
             -- if node (Z) has no unvisited links of same tag
             -- (4) then add node(Z) to nextList
             -- (5) pass pDoc and nextList to gravitySort
-            
+
             -- (1)
             set the wholeMatches to true
             delete item itemOffset(tStep,sNotVisited[pDoc]) in sNotVisited[pDoc]
@@ -1655,7 +1761,7 @@ function gravitySort pDoc,pSeedList,pDirection
                   put true into tLast
                   repeat for each line tSameType in sMainShort[pDoc][tNodeZ][word 2 of pDirection]
                      replace cr with "" in tSameType
-                     if tSameType is among the items of sNotVisited[pDoc] then 
+                     if tSameType is among the items of sNotVisited[pDoc] then
                         put false into tLast
                         exit repeat
                      end if
@@ -1676,7 +1782,7 @@ function gravitySort pDoc,pSeedList,pDirection
                      --                        if tTags["next"] and tTags["prev"] then put cr & "0,thru" after sResources[pDoc][tNodeZ]["scopeRef"]
                      --                        if not tTags["next"] and tTags["prev"] then put cr & "0,out" after sResources[pDoc][tNodeZ]["scopeRef"]
                      --                        if tTags["read"] and tTags["bulk"] then put cr & "0,top" after sResources[pDoc][tNodeZ]["scopeRef"]
-                     switch 
+                     switch
                         case not tTags["next"] and not tTags["prev"] -- solo
                            put tStep & ",solo" into sResources[pDoc][tNodeZ]["scopeRef"]
                            if tNodeZ is not among the items of sScopeSketch[pDoc][tStep]["solo"] then \
@@ -1704,7 +1810,7 @@ function gravitySort pDoc,pSeedList,pDirection
                         put cr & tStep & ",top" after sResources[pDoc][tNodeZ]["scopeRef"]
                         if tNodeZ is not among the items of sScopeSketch[pDoc][tStep]["top"] then \
                               put tNodeZ & "," after sScopeSketch[pDoc][tStep]["top"]
-                     end if        
+                     end if
                      filter sResources[pDoc][tNodeZ]["scopeRef"] without empty
                      --                  else -- not 0
                      --                     put item 1 of line (lineOffset("top",tLevel)) of tLevel into tLevel -- top labels lower scope level
@@ -1712,7 +1818,7 @@ function gravitySort pDoc,pSeedList,pDirection
                      --                     --                        if tTags["next"] and tTags["skim"] and not tTags["prev"] then put cr & tLevel & ",in" after sResources[pDoc][tNodeZ]["scopeRef"]
                      --                     --                        if not tNext and tPrev and tTrim then put cr & tLevel & ",out" after sResources[pDoc][tNodeZ]["scopeRef"]
                      --                     --                        if tTags["read"] and tTags["bulk"] then put cr & (tLevel+1) & ",top" after sResources[pDoc][tNodeZ]["scopeRef"]
-                     
+
                      --                     filter sResources[pDoc][tNodeZ]["scopeRef"] without empty
                      --                  end if -- tStep scope 0/n
                   end if -- tLast true/false
@@ -1731,7 +1837,7 @@ function gravitySort pDoc,pSeedList,pDirection
                put true into tLast
                repeat for each line tSameType in sMainShort[pDoc][tNodeZ][word 4 of pDirection]
                   replace cr with "" in tSameType
-                  if tSameType is among the items of sNotVisited[pDoc] then 
+                  if tSameType is among the items of sNotVisited[pDoc] then
                      put false into tLast
                      exit repeat
                   end if
@@ -1762,7 +1868,7 @@ function gravitySort pDoc,pSeedList,pDirection
                   --                     if tTags["read"] and tTags["bulk"] then put cr & (tLevel+1) & ",top" after sResources[pDoc][tNodeZ]["scopeRef"]
                   --                     filter sResources[pDoc][tNodeZ]["scopeRef"] without empty
                   --                  end if -- tStep scope 0/n
-                  switch 
+                  switch
                      case not tTags["next"] and not tTags["prev"] -- solo
                         put tCase & ",solo" into sResources[pDoc][tNodeZ]["scopeRef"]
                         if tNodeZ is not among the items of sScopeSketch[pDoc][tCase]["solo"] then \
@@ -1790,13 +1896,13 @@ function gravitySort pDoc,pSeedList,pDirection
                      put cr & tCase & ",top" after sResources[pDoc][tNodeZ]["scopeRef"]
                      if tNodeZ is not among the items of sScopeSketch[pDoc][tCase]["top"] then \
                            put tNodeZ & "," after sScopeSketch[pDoc][tCase]["top"]
-                  end if     
-                  filter sResources[pDoc][tNodeZ]["scopeRef"] without empty   
+                  end if
+                  filter sResources[pDoc][tNodeZ]["scopeRef"] without empty
                end if -- if tLast is true
             end repeat -- tLink in tStep, "next"
          end if -- tStep is in sNotVisited[pDoc]
-         -- (5) 
-         if tNextList is not empty then 
+         -- (5)
+         if tNextList is not empty then
             get gravitySort(pDoc,tNextList,pDirection)
          end if
          --------- travel -----------------
@@ -1910,7 +2016,7 @@ command render
    --         put tKey & "," after sScope[sNowDoc][item 1 of tLine][item 2 of tLine]
    --      end repeat
    --   end repeat
-   
+
    --   put empty into field "resourceField" stack "primary"
    --   put empty into tList
    -- for each key in sScopeSketch[sNowDoc]
@@ -1928,7 +2034,7 @@ command render
    -- start with "rec" 0
    -- replace a number alone on a line with it's string and some dashes based on counter
    -- next cycle will have new text from the string added, so replace numbers alone on lines
-   
+
    --   build a string to summarize each case node
    put empty into tStrings
    repeat for each key tCase in sScopeSketch[sNowDoc]
@@ -1950,7 +2056,7 @@ command render
       put empty into tData
       repeat for each item tH in sScopeSketch[sNowDoc][tCase]["thru"]
          put sResources[sNowDoc][tH]["excess"] into tMuch
-         if tMuch is not 0 and tMuch is not empty then 
+         if tMuch is not 0 and tMuch is not empty then
             if tH is among the keys of sScopeSketch[sNowDoc] then
                put tH & cr after tData
             else
@@ -1958,7 +2064,7 @@ command render
             end if
          end if
       end repeat
-      if tData is empty then 
+      if tData is empty then
          put "supply=demand" & cr after tStrings[tCase]
       else
          put tData after tStrings[tCase]
@@ -2028,9 +2134,9 @@ command render
       end repeat -- tJ
       put tWorking into tDisplay
    end repeat -- tAgain
-   
+
    put tDisplay into field "resourceField" stack "primary"
-   
+
    ------------------------------------ resources ---------------------------------
    ------------------------------------ graphical network -----------------------
    -- coordinates are added/changed elsewhere
@@ -2056,21 +2162,21 @@ command render
          end if
          -- node T/F
          put isAnode(sNowDoc,tRec) into tFacts
-         if tFacts is "false" then 
+         if tFacts is "false" then
             put false into tNode
          else
             put true into tNode
          end if
-         
+
          -- case: positive & node & no graphic - create field -----------------------
-         if tPos and tNode then 
+         if tPos and tNode then
             put listOfLinks(tRec) into sGraphics[sNowDoc][tRec]["links"]
             -- if no graphic exists, create it, since this node should be rendered
             if not tGraph then
                put getTagData(tRec,"coord",sNowDoc) into tXY
                -- just in case
                if tXY is empty and tRec is 2 then put "500,100" into tXY
-               if tXY is empty then put the loc of group "graphicNetwork" into tXY 
+               if tXY is empty then put the loc of group "graphicNetwork" into tXY
                set the loc of the templateField to netToWinCoord(tXY)
                set the textAlign of the templateField to center
                set the margins of the templateField to 5
@@ -2149,7 +2255,7 @@ command render
          set the tooltip of tGraphic to empty
          repeat for each word tInfo in "weight material duration whole series"
             put getTagData(tRec,tInfo,tDoc) into tData
-            if tData is not empty then 
+            if tData is not empty then
                put the tooltip of tGraphic into tTip
                put cr & tInfo & ": " & tData after tTip
                filter tTip without empty
@@ -2169,7 +2275,7 @@ command render
    --   put "Rootnode" into tForTree["0"]["rootNodeIds"] -- this creates the first rootNode
    put tDoc into tForTree["0"]["rootNodeIds"] -- this creates the first rootNode
    -- put cr & "Rootnode 2" after tForTree["0"]["rootNodeIds"]
-   
+
    put the keys of sMain[sNowDoc] into tDocKeys
    sort tDocKeys numeric ascending
    delete line 1 of tDocKeys -- ignore rec 0
@@ -2261,7 +2367,7 @@ command render
       if "turn" is among the keys of sMain[sNowDoc][tRec] then
          --         if sMain[sNowDoc][tRec]["act"] is "userUndo" then next repeat
          if sMain[sNowDoc][tRec]["act"] contains "do" then next repeat
-         if clearNegPairs(sMain[sNowDoc][tRec]["turn"]) is empty then 
+         if clearNegPairs(sMain[sNowDoc][tRec]["turn"]) is empty then
             set the disabled of button "redoButt" stack "primary" to false
          else
             set the disabled of button "undoButt" stack "primary" to false
@@ -2292,7 +2398,7 @@ function calcLinkCoord startNode,endNode,theType
    -- startNode (X)= x,y start of the line
    -- endNode (Z)= x,y end of the line
    -- theType = string
-   
+
    -- ! this is a weird exception for the beginning and ending dive/rise links
    -- ! it really shouldn't be here, but this is a convenient place to do it
    put getTagData(1,"coord",sNowDoc) into tTitleCoord
@@ -2302,7 +2408,7 @@ function calcLinkCoord startNode,endNode,theType
    if theType is "rise" then
       if endNode is tTitleCoord then put (item 1 of startNode)+50 & "," & item 2 of startNode into endNode
    end if
-   
+
    -- ! these control what the links look like------------------------------------------------
    put "-8,0" & cr & "0,0" & \
          cr & cr & "-4,-4" & cr & "0,0" & cr & "-4,4" into flowArrow
@@ -2312,8 +2418,8 @@ function calcLinkCoord startNode,endNode,theType
    put "9,9" & cr & "0,0" & cr & "9,-9" & \
          cr & cr & "5,9" & cr & "9,9" & cr & "9,5" & \
          cr & cr & "5,-9" & cr & "9,-9" & cr & "9,-5" into riseArrow
-      put 22 into arrowSpacing 
-   
+      put 22 into arrowSpacing
+
    -- tSimpleLine is the set of coords that define the start and end of the link
    -- find coord of X and Z step
    --   put getTagData(startNode,"coord") into tStartCoord
@@ -2355,7 +2461,7 @@ function calcLinkCoord startNode,endNode,theType
             put translateCoord(tPointedArrow,tLine) into tMovedArrow
             put tMovedArrow & cr & cr after tAllMovedArrows
          end repeat
-         put batchRoundCoord(tAllMovedArrows) into tFinalLine         
+         put batchRoundCoord(tAllMovedArrows) into tFinalLine
    end switch
    return tFinalLine
 end calcLinkCoord
@@ -2395,12 +2501,12 @@ function rotateCoord coordinates,bearing
    -- tested this, it's not the problem
    put (item 1 of line 2 of bearing) - (item 1 of line 1 of bearing) into tDistX
    put (item 2 of line 2 of bearing) - (item 2 of line 1 of bearing) into tDistY
-   
+
    -- tested this, it's not the problem
    put atan2(tDistX,tDistY) into tBearingAngle
-   
+
    repeat for each line tLine in coordinates
-      if tLine is empty then 
+      if tLine is empty then
          put return after tNewCoord
       else
          -- calculate angle of coordinates
@@ -2411,7 +2517,7 @@ function rotateCoord coordinates,bearing
          -- calculate new x coordinate
          put tHypot * cos(tAngle - tBearingAngle) into tNewX
          -- calculate new y coordinate
-         put tHypot * sin(tAngle - tBearingAngle) into tNewY      
+         put tHypot * sin(tAngle - tBearingAngle) into tNewY
          put return & tNewX & "," & tNewY after tNewCoord
       end if
    end repeat
@@ -2526,7 +2632,7 @@ command userDrag arguments
    -- when dragging is done, userMoveNode will record the final loc
    put winToNetCoord(tTheseCoords) into sGraphics[sNowDoc][tNodeKey]["coord"]
    set the loc of (item 1 of arguments) to tTheseCoords
-   
+
    ---------- links ------------------------------
    -- node can be connected to many links
    -- recalculate the points for each link
@@ -2578,10 +2684,10 @@ command changeInfo pBlerg
    -- pBlerg["rec"] = step's record key
    -- pBlerg["tag"] = tag string (this will be in a rec different from the step's rec)
    -- pBlerg["data"] = new data
-   
+
    -- if the change is identical to existing data, don't do anything
    if getTagData(pBlerg["rec"],pBlerg["tag"],sNowDoc) = pBlerg["data"] then exit changeInfo
-   
+
    put sMain[sNowDoc][0][lastKey] into tRec
    -- create turn
    put tRec+2 & "," & tRec+1 into sMain[sNowDoc][tRec+1]["turn"]
@@ -2596,16 +2702,16 @@ command changeInfo pBlerg
    put cr & "-" & tOldTag & "," & tRec+1 after sMain[sNowDoc][pBlerg["rec"]]["step"]
    -- point to new tag
    put cr & tRec+2 & "," & tRec+1 after sMain[sNowDoc][pBlerg["rec"]]["step"]
-   
+
    put "Unsaved" into field "savedField" stack "primary"
 end changeInfo
 
-function stepString tDaDoc,tEyeDee 
+function stepString tDaDoc,tEyeDee
    if tDaDoc is empty or tEyeDee is empty then break
    --takes in a step record and returns a string (type & id/title)
    put isAnode(tDaDoc,tEyeDee) into tType
    --   if tType is false then return "not a node"
-   if tType is false then 
+   if tType is false then
       -- it's a link
       -- # type [x] to [z]
       put isAlink(tDaDoc,tEyeDee) into tLinkFacts
