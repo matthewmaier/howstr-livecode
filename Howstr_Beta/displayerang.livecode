@@ -373,6 +373,7 @@ function makeNode pDetails
    set the location of the templateField to pDetails["coord"]
    set the threeD of the templatefield to false
    set the showborder of the templatefield to false
+   set the bordercolor of the templatefield to white
    set the backgroundcolor of the templatefield to "0,220,220"
    set the textSize of the templatefield to 14
    set the outerglow["color"] of the templatefield to "40,40,40"
@@ -404,30 +405,90 @@ end makeLink
 
 function mouseTracker @pGUI,@pHist,@p1Down,@p1Enter,pFocus,pNode
    -- sGUIstuff,sMouseHistory,s1Down,s1Enter,sNowFocus
-   -- state of button 1
+   -- this mostly replaces Livecode's built in mouse handlers because they couldn't reliably do what I wanted
+   -- this gets called for almost all mouse messages and compares current status to prior status
+   -- (1) research the state of the mouse
+   -- (1a) and the location of the mouse
+   -- (1b) compare old mouse button states to new
+   -- (1c) if an anchor, track new areas entered
+   -- (2) build preview based on research
+   -- tNow[1down]=true/false
+   -- tNow[3down]=true/false
+   -- tNow[inside]=empty/#
+   -- tNow[moving]=X,Y
+   -- tNow[fixed]=X,Y/empty
+   -- tNow[nodeSelected]=#,#,# (cuz they're organized first by node/link in GUIstuff)
+   -- tNow[linkSelected]=#,#,#
+   
+   -- (1) state of buttons
    put "false" into tNow["1down"]
-   if mouse(1) is "down" then put "true" into tNow["1down"]
-   -- location of mouse
+   if mouse(1) is "down" then put "true" into tNow["1down"] -- for preview logic
+   put "false" into tNow["3down"]
+   if mouse(3) is "down" then put "true" into tNow["3down"] -- for selection logic
+   -- (1a) location of mouse & selection indicators (since we're here)
    put empty into tNow["inside"]
    repeat for each word tType in "nodes links"
       repeat for each key tNum in pGUI[tType]
          -- within() doesn't depend on the rect, so how it treats negative space is more intuitive
-         --         if the mouseLoc is within (the rect of sGUIstuff[tType][tNum]["graphic"]) then
          if within(pGUI[tType][tNum]["graphic"],the mouseloc) then
             put tNum into tNow["inside"]
          end if
+         -- selection box
+         --         if the visible of graphic "selectBox" is true then
+         if tNow["3down"] then
+            if intersect(pGUI[tType][tNum]["graphic"],graphic "selectBox") then
+               -- set selection indicators
+               if tType is "nodes" then set the showborder of pGUI[tType][tNum]["graphic"] to true
+               --               set the borderColor of pGUI[tType][tNum]["graphic"] to white
+               if tType is "links" then  set the foregroundColor of pGUI[tType][tNum]["graphic"] to white
+               if tType is "node" then put tNum & "," after tNow["nodeSelected"]
+               if tType is "links" then put tNum & "," after tNow["linkSelected"]
+            end if
+         else
+            -- remove all selection indicators
+            if tType is "node" then set the showborder of pGUI[tType][tNum]["graphic"] to false
+            if tType is "links" then  set the foregroundColor of pGUI[tType][tNum]["graphic"] to "0,220,220"
+            --            set the showborder of pGUI[tType][tNum]["graphic"] to false
+            set the rect of graphic "selectBox" to "0,0,0,0"
+         end if
       end repeat
    end repeat
-   -- tNow[1down]=true/false
-   -- tNow[inside]=empty/#
+   -- remove duplicate node/link selections from list(s)
+   put tNow["nodeSelected"] into tA
+   split tA by comma
+   combine tA using comma
+   put tA into tNow["nodeSelected"]
+   put tNow["linkSelected"] into tA
+   split tA by comma
+   combine tA using comma
+   put tA into tNow["linkSelected"]
+   -- selection box calculation
+   put the mouseLoc into tNow["moving"]
+   put pHist["fixed"] into tNow["fixed"]
    
-   -- compare old to new
-   -- button 1 just transitioned from up to down
-   if pHist["1down"] is false and tNow["1down"] is true then 
+   -- (1b) compare old to new
+   if pHist["1down"] is false and tNow["1down"] is true then
+      -- button 1 just transitioned from up to down 
       put tNow["inside"] into p1Down -- becomes "anchor"
    end if
+   if pHist["3down"] is false and tNow["3down"] is true then
+      -- button 3 just transitioned from up to down
+      put the mouseLoc into tNow["fixed"] -- becomes fixed point for selectBox
+      set the layer of graphic "selectBox" to top
+      set the visible of graphic "selectBox" to true
+   end if
+   if pHist["3down"] is true and tNow["3down"] is false then
+      -- button 3 just transitioned from down to up
+      put empty into tNow["fixed"] -- no more selectBox
+      set the visible of graphic "selectBox" to false
+   end if
+   put pHist["fixed"] into tStuff["point1"]
+   put tNow["moving"] into tStuff["point2"]
+   -- ! there was an error where fixed would be empty the first time or something like that
+   if tStuff["point1"] is not empty then set the rect of graphic "selectBox" to twoPointBox(tStuff)
    
-   -- if there's an anchor node, track new areas entered
+   
+   -- (1c) if there's an anchor node, track new areas entered
    if p1Down is empty then
       -- either not inside a node, or mouse not down, or both
       put empty into p1Enter
@@ -439,7 +500,7 @@ function mouseTracker @pGUI,@pHist,@p1Down,@p1Enter,pFocus,pNode
       put tNow["inside"] into p1Enter
    end if
    
-   -- build preview request
+   -- (2) build preview request
    -- defaults to "nothing"
    put "nothing" into tPreview
    if p1Down is among the keys of pGUI["nodes"] then

@@ -1,4 +1,28 @@
 ﻿script "mathamagics"
+function twoPointBox pPoints
+   -- pPoints[point1/point2]
+   -- assuming points are recorded as x,y
+   put item 1 of pPoints["point1"] into tX1
+   put item 1 of pPoints["point2"] into tX2
+   put item 2 of pPoints["point1"] into tY1
+   put item 2 of pPoints["point2"] into tY2
+   if tX1 > tX2 then
+      put tX1 into tRight
+      put tX2 into tLeft
+   else
+      put tX1 into tLeft
+      put tX2 into tRight
+   end if
+   if tY1 > tY2 then
+      put tY1 into tBottom
+      put tY2 into tTop
+   else
+      put tY1 into tTop
+      put tY2 into tBottom
+   end if
+   return tLeft,tTop,tRight,tBottom
+end twoPointBox
+
 function ceilingNum pNumber
    -- got this from the interwebs because apparently livecode doesn't have a ceilingNum function
    ## Check we have been passed a number
