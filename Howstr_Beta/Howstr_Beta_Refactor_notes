@@ -124,3 +124,10 @@ array[focus]=#
 -- and there's no particular benefit; probably switch to a database anyway
 -- so just one doc per file at the moment
 - chose .how as the file extension; probably temporary anyway
+- in mouseTracker in displayerang
+-- there are lines changing the showborder and foregroundcolor of the graph elements
+-- it indicates being selected, but it should call "markSelected" and "markNotSelected" functions
+-- that way it's not hard coded to how the element is represented in the GUI
+- in mouseTracker, it would be nice if the selected elements deselect in real time
+-- at the moment if the selectBox hilites them they stay hilited until all selections cleared
+-- maybe they should deselect dynamically if the box moves off of them

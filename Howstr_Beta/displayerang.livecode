@@ -265,8 +265,8 @@ on assignLayers @pAll,pSeed,pTheLayer -- ! the recursive part of middleOut
    end if
 end assignLayers
 
-on displayManager pInfo,@pGUI,pSizes,pNow -- ! creates/changes/deletes controls
-   -- sGraphDrawing,sGUIstuff,tSizes
+on displayManager pInfo,@pGUI,pSizes,pNow,@pHist -- ! creates/changes/deletes controls
+   -- sGraphDrawing,sGUIstuff,tSizes,sNowFocus,sMouseHistory
    --pSizes[width/height/layer/node]
    lock messages
    -- delete old node graphics; brute force but not much to draw at the moment   
@@ -355,6 +355,10 @@ on displayManager pInfo,@pGUI,pSizes,pNow -- ! creates/changes/deletes controls
       set the visible of widget "iconUndo" to pInfo["undo"]
    end if
    set the visible of widget "iconRedo" to pInfo["redo"]
+   -- empty out selection and hide hide button
+   put empty into pHist["nodeSelected"]
+   put empty into pHist["linkSelected"]
+   set the visible of button "hideButt" to false
    unlock screen
    unlock messages
 end displayManager
@@ -404,11 +408,11 @@ function makeLink pThis
 end makeLink
 
 function mouseTracker @pGUI,@pHist,@p1Down,@p1Enter,pFocus,pNode
-   -- sGUIstuff,sMouseHistory,s1Down,s1Enter,sNowFocus
+   -- sGUIstuff,sMouseHistory,s1Down,s1Enter,sNowFocus,sNodeSize
    -- this mostly replaces Livecode's built in mouse handlers because they couldn't reliably do what I wanted
    -- this gets called for almost all mouse messages and compares current status to prior status
    -- (1) research the state of the mouse
-   -- (1a) and the location of the mouse
+   -- (1a) record the location of the mouse and selections
    -- (1b) compare old mouse button states to new
    -- (1c) if an anchor, track new areas entered
    -- (2) build preview based on research
@@ -427,44 +431,50 @@ function mouseTracker @pGUI,@pHist,@p1Down,@p1Enter,pFocus,pNode
    if mouse(3) is "down" then put "true" into tNow["3down"] -- for selection logic
    -- (1a) location of mouse & selection indicators (since we're here)
    put empty into tNow["inside"]
+   if pHist["3down"] is false and tNow["3down"] is true then -- reset selection when button down, otherwise retain
+      put empty into tNow["nodeSelected"]
+      put empty into tNow["linkSelected"]
+      set the visible of button "hideButt" to false
+   else
+      put pHist["nodeSelected"] into tNow["nodeSelected"]
+      put pHist["linkSelected"] into tNow["linkSelected"]
+   end if
    repeat for each word tType in "nodes links"
       repeat for each key tNum in pGUI[tType]
+         -- find out if the mouse is inside of a graph element
          -- within() doesn't depend on the rect, so how it treats negative space is more intuitive
          if within(pGUI[tType][tNum]["graphic"],the mouseloc) then
             put tNum into tNow["inside"]
          end if
+         -- clear hilite; will be reapplied later if element still selected
+         if tType is "nodes" and tNum is not among the items of pHist["nodeSelected"] then set the showborder of pGUI[tType][tNum]["graphic"] to false
+         if tType is "links" and tNum is not among the items of pHist["linkSelected"] then  set the foregroundColor of pGUI[tType][tNum]["graphic"] to "0,220,220"
          -- selection box
-         --         if the visible of graphic "selectBox" is true then
-         if tNow["3down"] then
-            if intersect(pGUI[tType][tNum]["graphic"],graphic "selectBox") then
-               -- set selection indicators
-               if tType is "nodes" then set the showborder of pGUI[tType][tNum]["graphic"] to true
-               --               set the borderColor of pGUI[tType][tNum]["graphic"] to white
-               if tType is "links" then  set the foregroundColor of pGUI[tType][tNum]["graphic"] to white
-               if tType is "node" then put tNum & "," after tNow["nodeSelected"]
-               if tType is "links" then put tNum & "," after tNow["linkSelected"]
+         if tNow["3down"] and intersect(pGUI[tType][tNum]["graphic"],graphic "selectBox","pixels") then
+            -- add any new selection to lists
+            if tType is "nodes" and tNum is not among the items of tNow["nodeSelected"] and tNum is not pFocus then 
+               put tNum & "," after tNow["nodeSelected"]
+               set the visible of button "hideButt" to true
             end if
-         else
-            -- remove all selection indicators
-            if tType is "node" then set the showborder of pGUI[tType][tNum]["graphic"] to false
-            if tType is "links" then  set the foregroundColor of pGUI[tType][tNum]["graphic"] to "0,220,220"
-            --            set the showborder of pGUI[tType][tNum]["graphic"] to false
-            set the rect of graphic "selectBox" to "0,0,0,0"
-         end if
+            if tType is "links" and tNum is not among the items of tNow["linkSelected"] then 
+               put tNum & "," after tNow["linkSelected"]
+               set the visible of button "hideButt" to true
+            end if
+         end if-- if 3down is true & intersection
       end repeat
    end repeat
-   -- remove duplicate node/link selections from list(s)
-   put tNow["nodeSelected"] into tA
-   split tA by comma
-   combine tA using comma
-   put tA into tNow["nodeSelected"]
-   put tNow["linkSelected"] into tA
-   split tA by comma
-   combine tA using comma
-   put tA into tNow["linkSelected"]
+   -- hilite selected elements
+   repeat for each item tNum in tNow["nodeSelected"]
+      set the showborder of pGUI["nodes"][tNum]["graphic"] to true
+   end repeat
+   repeat for each item tNum in tNow["linkSelected"]
+      set the foregroundColor of pGUI["links"][tNum]["graphic"] to white
+   end repeat
+   put tNow["nodeSelected"] & cr & tNow["linkSelected"] into field "showMe" -- ! for development
    -- selection box calculation
    put the mouseLoc into tNow["moving"]
    put pHist["fixed"] into tNow["fixed"]
+   
    
    -- (1b) compare old to new
    if pHist["1down"] is false and tNow["1down"] is true then
@@ -486,6 +496,7 @@ function mouseTracker @pGUI,@pHist,@p1Down,@p1Enter,pFocus,pNode
    put tNow["moving"] into tStuff["point2"]
    -- ! there was an error where fixed would be empty the first time or something like that
    if tStuff["point1"] is not empty then set the rect of graphic "selectBox" to twoPointBox(tStuff)
+   if tNow["3down"] is not true then set the rect of graphic "selectBox" to "0,0,0,0" -- otherwise it's still there messing with stuff like a ghost
    
    
    -- (1c) if there's an anchor node, track new areas entered

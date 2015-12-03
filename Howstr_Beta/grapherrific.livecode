@@ -1490,7 +1490,7 @@ on changeRequest pAsk,@pMain,pDoc
    -- change the focus
    -- x[focus]=# (this request shouldn't make it to this handler; should have already been handled)
    -- hide a step (and any associated steps) assumes hide list is in correct order
-   -- x[hide]=#
+   -- x[hide]=#,#,#
    -- undo/redo
    -- x[undo/redo]=true
    -- change the graph
