@@ -1,0 +1,1934 @@
+1:06:12 PM
+on quickModeSetup
+function newItem
+function newItem
+function newItem
+function newItem
+function newDilink
+function newDilink
+function newDilink
+function newDilink
+end quickModeSetup -----------
+command adjList
+function isAnode
+function clearNegPairs
+function clearNegPairs
+function clearNegPairs
+function clearNegPairs
+function isAnode
+function isAlink
+function clearNegPairs
+function isAnode
+function clearNegPairs
+function isAlink
+function clearNegPairs
+function clearNegPairs
+function clearNegPairs
+function clearNegPairs
+function isAnode
+function isAlink
+function clearNegPairs
+function isAnode
+function isAlink
+function clearNegPairs
+function isAnode
+function isAlink
+function clearNegPairs
+function isAnode
+function isAlink
+function clearNegPairs
+function isAnode
+function isAlink
+function clearNegPairs
+function isAnode
+function isAlink
+function clearNegPairs
+function isAnode
+function isAlink
+function clearNegPairs
+function isAnode
+function isAlink
+function clearNegPairs
+function isAnode
+function isAlink
+function clearNegPairs
+function isAnode
+function isAlink
+function clearNegPairs
+function isAnode
+function isAlink
+function clearNegPairs
+function isAnode
+function isAlink
+function clearNegPairs
+function isAnode
+function isAlink
+function clearNegPairs
+function isAnode
+function isAlink
+function clearNegPairs
+function isAnode
+function isAlink
+function clearNegPairs
+function isAnode
+function isAlink
+function clearNegPairs
+function isAnode
+function isAlink
+function clearNegPairs
+function isAnode
+function isAlink
+function clearNegPairs
+function isAnode
+function isAlink
+function clearNegPairs
+function isAnode
+function isAlink
+function clearNegPairs
+function isAnode
+function isAlink
+function clearNegPairs
+function isAnode
+function clearNegPairs
+function isAlink
+function clearNegPairs
+function clearNegPairs
+function clearNegPairs
+function clearNegPairs
+function isAnode
+function clearNegPairs
+function isAlink
+function clearNegPairs
+function clearNegPairs
+function clearNegPairs
+function clearNegPairs
+function isAnode
+function isAlink
+function clearNegPairs
+function isAnode
+function clearNegPairs
+function clearNegPairs
+function clearNegPairs
+function clearNegPairs
+function isAnode
+function isAlink
+function clearNegPairs
+function isAnode
+function isAlink
+function clearNegPairs
+function isAnode
+function isAlink
+function clearNegPairs
+function isAnode
+function clearNegPairs
+function clearNegPairs
+function clearNegPairs
+function clearNegPairs
+function isAnode
+function isAlink
+function clearNegPairs
+function isAnode
+function isAlink
+function clearNegPairs
+function isAnode
+function clearNegPairs
+function isAlink
+function clearNegPairs
+function clearNegPairs
+function clearNegPairs
+function clearNegPairs
+function isAnode
+function isAlink
+function clearNegPairs
+function isAnode
+function isAlink
+function clearNegPairs
+function isAnode
+function isAlink
+function clearNegPairs
+function isAnode
+function isAlink
+function clearNegPairs
+function isAnode
+function clearNegPairs
+function clearNegPairs
+function clearNegPairs
+function clearNegPairs
+function clearNegPairs
+on tempConvertData
+function symbolLookup
+function symbolLookup
+function symbolLookup
+function symbolLookup
+on middleOut
+on assignLayers
+on assignLayers
+on assignLayers
+on displayManager
+function makeNode
+function makeNode
+function makeNode
+function makeLink
+function makeLink
+end displayManager --------------
+on mouseEnter > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseEnter
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseEnter > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseEnter
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+on mouseMove > sBusy=true
+on mouseMove > sBusy=true
+mouseTrackerTracker > end mouseMove
+on mouseDown > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseDown
+on mouseUp > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker(tResponse has 'focus') > refreshDisplay
+refreshDisplay > mouseTrackerTracker(tResponse has 'focus')
+mouseTrackerTracker > end mouseUp
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on refreshDisplay
+on middleOut
+on assignLayers
+on assignLayers
+on assignLayers
+on displayManager
+function makeNode
+function makeNode
+function makeNode
+function makeLink
+function makeLink
+end displayManager --------------
+end refreshDisplay ---------
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseEnter > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseEnter
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseLeave > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseLeave
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseEnter > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseEnter
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker(tResponse has 'focus') > refreshDisplay
+refreshDisplay > mouseTrackerTracker(tResponse has 'focus')
+mouseTrackerTracker > end mouseMove
+on mouseLeave > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseLeave
+on mouseEnter > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseEnter
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on refreshDisplay
+on middleOut
+on assignLayers
+on assignLayers
+on assignLayers
+on displayManager
+function makeNode
+function makeNode
+function makeNode
+function makeLink
+function makeLink
+end displayManager --------------
+end refreshDisplay ---------
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseDown > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseDown
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseUp > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+on mouseMove > sBusy=true
+mouseTrackerTracker > end mouseUp
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker(tResponse has 'focus') > refreshDisplay
+refreshDisplay > mouseTrackerTracker(tResponse has 'focus')
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseDown > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseDown
+on refreshDisplay
+on middleOut
+on assignLayers
+on assignLayers
+on assignLayers
+on displayManager
+function makeNode
+function makeNode
+function makeNode
+function makeLink
+function makeLink
+end displayManager --------------
+end refreshDisplay ---------
+on mouseUp > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseUp
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseEnter > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseEnter
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseLeave > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseLeave
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseEnter > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseEnter
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseLeave > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseLeave
+on mouseEnter > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseEnter
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseDown > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseDown
+on mouseUp > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseUp
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseDown > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseDown
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+on mouseMove > sBusy=true
+on mouseMove > sBusy=true
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseDown > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseDown
+on mouseUp > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker(tResponse has 'focus') > refreshDisplay
+refreshDisplay > mouseTrackerTracker(tResponse has 'focus')
+mouseTrackerTracker > end mouseUp
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on refreshDisplay
+on middleOut
+on assignLayers
+on assignLayers
+on assignLayers
+on displayManager
+function makeNode
+function makeNode
+function makeNode
+function makeLink
+function makeLink
+end displayManager --------------
+end refreshDisplay ---------
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+on mouseMove > sBusy=true
+mouseTrackerTracker > end mouseMove
+on mouseDown > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+function TempNodeDetails
+function symbolLookup
+function symbolLookup
+function symbolLookup
+on detailsListMouseUp
+on mouseUp > sBusy=true
+on mouseMove > sBusy=true
+on mouseLeave > sBusy=true
+mouseTrackerTracker > end mouseDown
+on mouseEnter > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseEnter
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseEnter > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseEnter
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseLeave > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseLeave
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseEnter > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseEnter
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseDown > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseDown
+on mouseUp > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseUp
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+on mouseMove > sBusy=true
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker(tResponse has 'focus') > refreshDisplay
+refreshDisplay > mouseTrackerTracker(tResponse has 'focus')
+mouseTrackerTracker > end mouseMove
+on mouseDown > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseDown
+on refreshDisplay
+on middleOut
+on assignLayers
+on assignLayers
+on assignLayers
+on displayManager
+function makeNode
+function makeNode
+function makeNode
+function makeLink
+function makeLink
+end displayManager --------------
+end refreshDisplay ---------
+on mouseUp > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseUp
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseEnter > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseEnter
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseLeave > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+on mouseLeave > sBusy=true
+on mouseEnter > sBusy=true
+on mouseMove > sBusy=true
+on mouseMove > sBusy=true
+mouseTrackerTracker > end mouseLeave
+on mouseEnter > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker(tResponse has 'focus') > refreshDisplay
+refreshDisplay > mouseTrackerTracker(tResponse has 'focus')
+mouseTrackerTracker > end mouseEnter
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on refreshDisplay
+on middleOut
+on assignLayers
+on assignLayers
+on assignLayers
+on displayManager
+function makeNode
+function makeNode
+function makeNode
+function makeLink
+function makeLink
+end displayManager --------------
+end refreshDisplay ---------
+on mouseLeave > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseLeave
+on mouseEnter > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseEnter
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseLeave > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseLeave
+on mouseEnter > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseEnter
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+on mouseMove > sBusy=true
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseDown > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseDown
+on mouseUp > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseUp
+on mouseLeave > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+function lineMidpoint
+function rotateCoord
+mouseTrackerTracker > end mouseLeave
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+function lineMidpoint
+function rotateCoord
+mouseTrackerTracker > end mouseMove
+on mouseEnter > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+function lineMidpoint
+function rotateCoord
+mouseTrackerTracker > end mouseEnter
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+function lineMidpoint
+function rotateCoord
+mouseTrackerTracker > end mouseMove
+on mouseDown > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+function lineMidpoint
+function rotateCoord
+mouseTrackerTracker > end mouseDown
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+on mouseRelease > sBusy=true
+on mouseMove > sBusy=true
+mouseTrackerTracker > end mouseMove
+on mouseLeave > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseLeave
+on mouseEnter > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseEnter
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+on mouseMove > sBusy=true
+on mouseMove > sBusy=true
+mouseTrackerTracker > end mouseMove
+on mouseLeave > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseLeave
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseEnter > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseEnter
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseLeave > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseLeave
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseUp > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseUp
+on mouseEnter > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseEnter
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+on mouseMove > sBusy=true
+mouseTrackerTracker > end mouseMove
+on mouseLeave > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker(tResponse has 'focus') > refreshDisplay
+refreshDisplay > mouseTrackerTracker(tResponse has 'focus')
+mouseTrackerTracker > end mouseLeave
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on refreshDisplay
+on middleOut
+on assignLayers
+on assignLayers
+on assignLayers
+on displayManager
+function makeNode
+function makeNode
+function makeNode
+function makeLink
+function makeLink
+end displayManager --------------
+end refreshDisplay ---------
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseDown > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseDown
+on mouseUp > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseUp
+on mouseEnter > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseEnter
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseLeave > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+on mouseMove > sBusy=true
+on mouseEnter > sBusy=true
+on mouseMove > sBusy=true
+on mouseMove > sBusy=true
+mouseTrackerTracker > end mouseLeave
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker(tResponse has 'focus') > refreshDisplay
+refreshDisplay > mouseTrackerTracker(tResponse has 'focus')
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on refreshDisplay
+on middleOut
+on assignLayers
+on assignLayers
+on assignLayers
+on displayManager
+function makeNode
+function makeNode
+function makeNode
+function makeLink
+function makeLink
+end displayManager --------------
+end refreshDisplay ---------
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseLeave > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseLeave
+on mouseEnter > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseEnter
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseLeave > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseLeave
+on mouseEnter > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseEnter
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseLeave > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseLeave
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseEnter > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseEnter
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker(tResponse has 'focus') > refreshDisplay
+refreshDisplay > mouseTrackerTracker(tResponse has 'focus')
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on refreshDisplay
+on middleOut
+on assignLayers
+on assignLayers
+on assignLayers
+on displayManager
+function makeNode
+function makeNode
+function makeNode
+function makeLink
+function makeLink
+end displayManager --------------
+end refreshDisplay ---------
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseDown > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseDown
+on mouseUp > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseUp
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseDown > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseDown
+on mouseUp > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseUp
+on mouseEnter > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseEnter
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker(tResponse has 'focus') > refreshDisplay
+refreshDisplay > mouseTrackerTracker(tResponse has 'focus')
+mouseTrackerTracker > end mouseMove
+on mouseLeave > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseLeave
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on refreshDisplay
+on middleOut
+on assignLayers
+on assignLayers
+on assignLayers
+on displayManager
+function makeNode
+function makeNode
+function makeNode
+function makeLink
+function makeLink
+end displayManager --------------
+end refreshDisplay ---------
+on mouseLeave > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseLeave
+on mouseEnter > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseEnter
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+on mouseLeave > sBusy=true
+on mouseEnter > sBusy=true
+on mouseMove > sBusy=true
+mouseTrackerTracker > end mouseMove
+on mouseLeave > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker(tResponse has 'focus') > refreshDisplay
+refreshDisplay > mouseTrackerTracker(tResponse has 'focus')
+mouseTrackerTracker > end mouseLeave
+on mouseEnter > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseEnter
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseDown > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseDown
+on refreshDisplay
+on middleOut
+on assignLayers
+on assignLayers
+on assignLayers
+on displayManager
+function makeNode
+function makeNode
+function makeNode
+function makeLink
+function makeLink
+end displayManager --------------
+end refreshDisplay ---------
+on mouseUp > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseUp
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseEnter > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseEnter
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseLeave > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseLeave
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseDown > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseDown
+on mouseUp > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseUp
+on mouseEnter > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseEnter
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseLeave > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+on mouseMove > sBusy=true
+on mouseEnter > sBusy=true
+on mouseMove > sBusy=true
+on mouseMove > sBusy=true
+mouseTrackerTracker > end mouseLeave
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker(tResponse has 'focus') > refreshDisplay
+refreshDisplay > mouseTrackerTracker(tResponse has 'focus')
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseDown > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseDown
+on refreshDisplay
+on middleOut
+on assignLayers
+on assignLayers
+on assignLayers
+on displayManager
+function makeNode
+function makeNode
+function makeNode
+function makeLink
+function makeLink
+end displayManager --------------
+end refreshDisplay ---------
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseDown > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseDown
+on mouseUp > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseUp
+on mouseEnter > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseEnter
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseLeave > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseLeave
+on mouseEnter > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseEnter
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseLeave > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseLeave
+on mouseEnter > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseEnter
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseLeave > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseLeave
+on mouseEnter > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseEnter
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseLeave > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseLeave
+on mouseEnter > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseEnter
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseLeave > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseLeave
+on mouseEnter > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseEnter
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker(tResponse has 'focus') > refreshDisplay
+refreshDisplay > mouseTrackerTracker(tResponse has 'focus')
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on refreshDisplay
+on middleOut
+on assignLayers
+on assignLayers
+on assignLayers
+on displayManager
+function makeNode
+function makeNode
+function makeNode
+function makeLink
+function makeLink
+end displayManager --------------
+end refreshDisplay ---------
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseDown > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseDown
+on mouseUp > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseUp
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseDown > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseDown
+on mouseUp > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseUp
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseDown > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseDown
+on mouseUp > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseUp
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseDown > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseDown
+on mouseUp > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseUp
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseDown > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseDown
+on mouseUp > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseUp
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseDown > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseDown
+on mouseUp > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseUp
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseLeave > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseLeave
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseLeave > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseLeave

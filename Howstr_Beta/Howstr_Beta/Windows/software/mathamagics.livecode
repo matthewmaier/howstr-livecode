@@ -1,0 +1,223 @@
+﻿script "mathamagics"
+function twoPointBox pPoints
+   put "function twoPointBox" into xX["write"];    devLog xX
+   -- pPoints[point1/point2]
+   -- assuming points are recorded as x,y
+   put item 1 of pPoints["point1"] into tX1
+   put item 1 of pPoints["point2"] into tX2
+   put item 2 of pPoints["point1"] into tY1
+   put item 2 of pPoints["point2"] into tY2
+   if tX1 > tX2 then
+      put tX1 into tRight
+      put tX2 into tLeft
+   else
+      put tX1 into tLeft
+      put tX2 into tRight
+   end if
+   if tY1 > tY2 then
+      put tY1 into tBottom
+      put tY2 into tTop
+   else
+      put tY1 into tTop
+      put tY2 into tBottom
+   end if
+   return tLeft,tTop,tRight,tBottom
+end twoPointBox
+
+function ceilingNum pNumber
+   put "function ceilingNum" into xX["write"];    devLog xX
+   -- got this from the interwebs because apparently livecode doesn't have a ceilingNum function
+   ## Check we have been passed a number
+   if pNumber is not a number then
+      return "Error: not a number"
+   end if
+   ## Check if the number is already an integer or is negative
+   if pNumber < zero or pNumber is an integer then
+      ## truncating gives the ceilingNum
+      return trunc(pNumber)
+   else
+      ## truncate the number and add 1 to get the ceilingNum
+      return trunc(pNumber) + 1
+   end if
+end ceilingNum
+
+function calcLinkCoord startNode,endNode,theType
+   put "function calcLinkCoord" into xX["write"];    devLog xX
+   -- use network coordinates, not window coordinates
+   -- startNode (X)= x,y start of the line
+   -- endNode (Z)= x,y end of the line
+   -- theType = string
+   
+   -- ! this is a weird exception for the beginning and ending dive/rise links
+   -- ! it really shouldn't be here, but this is a convenient place to do it
+   put getTagData(1,"coord",sNowDoc) into tTitleCoord
+   if theType is "dive" then
+      if startNode is tTitleCoord then put (item 1 of endNode)-50 & "," & item 2 of endNode into startNode
+   end if
+   if theType is "rise" then
+      if endNode is tTitleCoord then put (item 1 of startNode)+50 & "," & item 2 of startNode into endNode
+   end if
+   
+   -- ! these control what the links look like------------------------------------------------
+   put "-8,0" & cr & "0,0" & \
+         cr & cr & "-4,-4" & cr & "0,0" & cr & "-4,4" into flowArrow
+   put "-9,9" & cr & "0,0" & cr & "-9,-9" & \
+         cr & cr & "0,4" & cr & "0,-4" & \
+         cr & cr & "-4,0" & cr & "0,0" into diveArrow
+   put "9,9" & cr & "0,0" & cr & "9,-9" & \
+         cr & cr & "5,9" & cr & "9,9" & cr & "9,5" & \
+         cr & cr & "5,-9" & cr & "9,-9" & cr & "9,-5" into riseArrow
+      put 22 into arrowSpacing 
+   
+   -- tSimpleLine is the set of coords that define the start and end of the link
+   -- find coord of X and Z step
+   --   put getTagData(startNode,"coord") into tStartCoord
+   --   put getTagData(endNode,"coord") into tEndCoord
+   put startNode & cr & endNode into tSimpleLine
+   filter tSimpleLine without empty
+   switch
+      case theType is "bond"
+         -- bond is easy, just a line
+         put tSimpleLine into tFinalLine
+         break
+      default
+         -- draw based on theType
+         put divideLine(tSimpleLine,arrowSpacing) into tChoppedUp
+         put empty into tListOfMids
+         repeat for each line tLine in tChoppedUp
+            if not (tLine is in tListOfMids) then
+               put tLine & return after tListOfMids
+            end if
+         end repeat
+         filter tListOfMids without empty
+         -- figure out which arrow shape to pass
+         switch theType
+            case "flow"
+               put rotateCoord(flowArrow,tSimpleLine) into tPointedArrow
+               break
+            case "dive"
+               put rotateCoord(diveArrow,tSimpleLine) into tPointedArrow
+               break
+            case "rise"
+               put rotateCoord(riseArrow,tSimpleLine) into tPointedArrow
+               break
+         end switch
+         -- now I have the offset for the arrow's points from each midpoint
+         -- create a new list of points
+         -- make a copy of the now rotated arrow's coordinates
+         -- translate based on list of mid points
+         repeat for each line tLine in tListOfMids
+            put translateCoord(tPointedArrow,tLine) into tMovedArrow
+            put tMovedArrow & cr & cr after tAllMovedArrows
+         end repeat
+         put batchRoundCoord(tAllMovedArrows) into tFinalLine         
+   end switch
+   return tFinalLine
+end calcLinkCoord
+
+function lineMidpoint pCoord
+   put "function lineMidpoint" into xX["write"];    devLog xX
+   -- coordinates = a list of two pairs of coordinates (x,y cr x,y)
+   --   put coordinates into tNewCoord
+   -- calculate distance between coordinate pairs
+   put (item 1 of line 2 of pCoord) - (item 1 of line 1 of pCoord) into tDistX
+   put (item 2 of line 2 of pCoord) - (item 2 of line 1 of pCoord) into tDistY
+   put sqrt(tDistX^2 + tDistY^2) into tHypot
+   -- divide distance in half
+   put (tDistX / 2) + item 1 of line 1 of pCoord into tMidX
+   put (tDistY / 2) + item 2 of line 1 of pCoord into tMidY
+   return (tMidX & "," & tMidY)
+end lineMidpoint
+
+function divideLine coordinates,distance
+   put "function divideLine" into xX["write"];    devLog xX
+   -- coordinates = a list of two pairs of coordinates (x,y cr x,y)
+   -- distance = maximum length of each subdivision
+   put coordinates into tNewCoord
+   -- calculate distance between coordinate pairs
+   put (item 1 of line 2 of coordinates) - (item 1 of line 1 of coordinates) into tDistX
+   put (item 2 of line 2 of coordinates) - (item 2 of line 1 of coordinates) into tDistY
+   put sqrt(tDistX^2 + tDistY^2) into tHypot
+   if distance < tHypot then
+      -- divide distance in half
+      put (tDistX / 2) + item 1 of line 1 of coordinates into tMidX
+      put (tDistY / 2) + item 2 of line 1 of coordinates into tMidY
+      -- coordinates for first half
+      put line 1 of coordinates into tFirstCoord
+      put return & tMidX & "," & tMidY after tFirstCoord
+      -- coordinates for second half
+      put tMidX & "," & tMidY into tNextCoord
+      put return & line 2 of coordinates after tNextCoord
+      -- call this function on each half
+      put return & divideLine(tFirstCoord,distance) after tNewCoord
+      put return & divideLine(tNextCoord,distance) after tNewCoord
+   else
+      return tNewCoord
+   end if
+   filter tNewCoord without empty
+   sort tNewCoord ascending
+   return tNewCoord
+end divideLine
+
+function rotateCoord coordinates,bearing
+   put "function rotateCoord" into xX["write"];    devLog xX
+   -- coordinates = list of coordinates (x,y cr x,y cr x,y etc)
+   -- bearing = a list of two pairs of coordinates for orientation (x,y cr x,y)
+   -- tested this, it's not the problem
+   put (item 1 of line 2 of bearing) - (item 1 of line 1 of bearing) into tDistX
+   put (item 2 of line 2 of bearing) - (item 2 of line 1 of bearing) into tDistY
+   
+   -- tested this, it's not the problem
+   put atan2(tDistX,tDistY) into tBearingAngle
+   
+   repeat for each line tLine in coordinates
+      if tLine is empty then 
+         put return after tNewCoord
+      else
+         -- calculate angle of coordinates
+         -- tested this, it's not the problem
+         put atan2(item 1 of tLine,item 2 of tLine) into tAngle
+         -- calculate coordinates' distance from origin
+         put sqrt((item 1 of tLine)^2 + (item 2 of tLine)^2) into tHypot
+         -- calculate new x coordinate
+         put tHypot * cos(tAngle - tBearingAngle) into tNewX
+         -- calculate new y coordinate
+         put tHypot * sin(tAngle - tBearingAngle) into tNewY      
+         put return & tNewX & "," & tNewY after tNewCoord
+      end if
+   end repeat
+   return tNewCoord
+end rotateCoord
+
+function translateCoord coordinates,newOrigin
+   put "function translateCoord" into xX["write"];    devLog xX
+   -- coordinates = a list of coordinates (x,y cr x,y cr x,y etc)
+   -- newOrigin = a coordinate (x,y)
+   repeat for each line tLine in coordinates
+      if tLine is empty then put return after tNewCoord
+      else
+         -- translate along x axis
+         put item 1 of tLine + item 1 of newOrigin into tNewX
+         -- translate along y axis
+         put item 2 of tLine + item 2 of newOrigin into tNewY
+         put return & tNewX & "," & tNewY after tNewCoord
+      end if
+   end repeat
+   return tNewCoord
+end translateCoord
+
+function batchRoundCoord coordinates
+   put "function batchRoundCoord" into xX["write"];    devLog xX
+   -- coordinates = a list of coordinates (x,y cr x,y cr x,y etc)
+   repeat for each line tLine in coordinates
+      if tLine is empty then
+         put return after tNewCoord
+      else
+         -- round the number off so it can be a point
+         put the round of item 1 of tLine into tNewX
+         put the round of item 2 of tLine into tNewY
+         put return & tNewX & "," & tNewY after tNewCoord
+      end if
+   end repeat
+   return tNewCoord
+end batchRoundCoord
