@@ -358,11 +358,14 @@ on displayManager pInfo,@pGUI,pSizes,pNow,@pHist -- ! creates/changes/deletes co
    set the backgroundColor of tBlerg to orange
    -- undo/redo icons
    -- for quick mode, don't allow user to undo the graph smaller than the minimum action group
-   if the number of lines of the keys of pInfo["nodes"] is 4 then
-      set the visible of widget "iconUndo" to false
-   else
-      set the visible of widget "iconUndo" to pInfo["undo"]
-   end if
+   -- ! 15DEC2015 hide can take graph down to 4 nodes with undo still being acceptable
+   -- what I really want to prevent is undoing back through the initialization steps
+   --   if the number of lines of the keys of pInfo["nodes"] is 4 then
+   --      set the visible of widget "iconUndo" to false
+   --   else
+   --      set the visible of widget "iconUndo" to pInfo["undo"]
+   --   end if
+   set the visible of widget "iconUndo" to pInfo["undo"]
    set the visible of widget "iconRedo" to pInfo["redo"]
    -- empty out selection and hide hide button
    put empty into pHist["nodeSelected"]

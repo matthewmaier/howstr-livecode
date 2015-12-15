@@ -1556,7 +1556,7 @@ on changeRequest pAsk,@pMain,pDoc
    -- turn's rec needs to go into all the pointers, but the pointers going into turn haven't been created yet
    -- so pick turn's rec, and reserve it's place
    -- fun with double-ended pointers
-   -- the newItem & newDilink functions should return a list of pointers with cr already at the front
+   -- the newItem & newDilink functions should return a list of pointers with cr already the first char
    put empty into tTurnPtrs
    put pMain[pDoc][0]["lastKey"] into tRec
    put tRec+1 into tTurn

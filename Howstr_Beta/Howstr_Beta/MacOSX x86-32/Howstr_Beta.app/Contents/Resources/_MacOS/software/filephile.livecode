@@ -1,22 +1,22 @@
 ﻿script "filephile"
 on devLog pPhase
-   -- chose not to put a logging step in the logging function itself
-   -- pPhase[write]=append to development log file
-   put pPhase["write"] into tWrite
-   set the itemDelimiter to "/"
-   get the effective fileName of this stack
-   set the defaultFolder to item 1 to -2 of it
-   put the defaultFolder into tFolder
-   --   replace "software" with "logs" in tFolder
-   -- ! apparently "this stack" is returning the main stack, not the folder filephile is in
-   put URL ("file:" & tFolder & "/logs/development.txt") into tLog
-   if tWrite is "initiate" then
-      --      put empty into tLog
-      put the long time into tLog
-   else
-      put tWrite into line (the number of lines of tLog)+1 of tLog
-   end if
-   put tLog into URL ("file:" & tFolder & "/logs/development.txt")
+   -- ! commented out 15DEC2015 cuz logging slows things down a lot
+   --   -- pPhase[write]=append to development log file
+   --   put pPhase["write"] into tWrite
+   --   set the itemDelimiter to "/"
+   --   get the effective fileName of this stack
+   --   set the defaultFolder to item 1 to -2 of it
+   --   put the defaultFolder into tFolder
+   --   --   replace "software" with "logs" in tFolder
+   --   -- ! apparently "this stack" is returning the main stack, not the folder filephile is in
+   --   put URL ("file:" & tFolder & "/logs/development.txt") into tLog
+   --   if tWrite is "initiate" then
+   --      --      put empty into tLog
+   --      put the long time into tLog
+   --   else
+   --      put tWrite into line (the number of lines of tLog)+1 of tLog
+   --   end if
+   --   put tLog into URL ("file:" & tFolder & "/logs/development.txt")
 end devLog
 
 command userOpen pFile

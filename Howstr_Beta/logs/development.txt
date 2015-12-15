@@ -1,4 +1,4 @@
-1:11:29 PM
+1:22:09 PM
 on quickModeSetup
 function newItem
 function newItem
@@ -171,3 +171,40 @@ function makeNode
 function makeLink
 function makeLink
 end displayManager --------------
+on mouseEnter > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseEnter
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseLeave > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseLeave
+on mouseEnter > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseEnter
+on mouseLeave > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseLeave
+on mouseEnter > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseEnter
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+function previewAndChange
+mouseTrackerTracker > end mouseMove
+on mouseMove > mouseTrackerTracker
+on mouseTrackerTracker
+on mouseLeave > sBusy=true
+function previewAndChange
+mouseTrackerTracker > end mouseMove
