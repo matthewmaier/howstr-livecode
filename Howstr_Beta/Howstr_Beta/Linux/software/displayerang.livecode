@@ -382,9 +382,10 @@ function makeNode pDetails
    -- pDetails[node/coord/size/type/displayString]
    -- ! assume doc is 1
    put 1 into tDoc
+   set the margins of the templateField to 3
    set the locked of the templateField to true
-   --   set the disabled of the templateField to true
    set the lockText of the templateField to true
+   set the dontwrap of the templateField to false
    set the height of the templateField to pDetails["size"]
    set the width of the templateField to pDetails["size"]
    set the name of the templateField to pDetails["node"] & "NodeGraphic"
@@ -398,10 +399,34 @@ function makeNode pDetails
    --   set the behavior of the templatefield to the long id of button "graphBehave"
    create field
    put it into tID
-   --   set the htmltext of (tID) to pDetails["node"]
-   --   set the htmltext of (tID) to (symbolLookup(pDetails["type"]) && pDetails["node"])
-   set the htmltext of (tID) to pDetails["displayString"]
    set the cGraphKey of (tID) to pDetails["node"]
+   set the htmltext of (tID) to pDetails["displayString"]   
+   -- size the node to fit the displayString, within limits
+   put the formattedHeight of word 1 to -1 of (tID) into tFormHigh
+   put the height of (tID) into tHigh
+   put 1 into tCounter
+   repeat while tFormHigh > tHigh
+      switch tCounter
+         case 1
+            set the width of (tID) to pDetails["size"] * 1.25
+            break
+         case 2
+            set the height of (tID) to pDetails["size"] * 1.5
+            break
+         case 3
+            set the textsize of (tID) to 12
+            break
+         case 4
+            set the textsize of (tID) to 10
+            break
+         default
+            exit repeat -- just finish
+      end switch
+      put tCounter + 1 into tCounter
+      put the formattedHeight of word 1 to -1 of (tID) into tFormHigh
+      put the height of (tID) into tHigh
+   end repeat
+   --   if the height of (tID) > pDetails["size"] then set the height of (tID) to the formattedHeight of word 1 to -1 of (tID)
    return tID
 end makeNode
 
@@ -1293,3 +1318,17 @@ function summarizeResources @pMain,@pSketch,@pResources,pDoc
    end repeat -- tAgain
    return tDisplay
 end summarizeResources
+
+on resizeStack pNewWidth, pNewHeight, pOldWidth, pOldHeight
+   put "on resizeStack" into xX["write"];    devLog xX
+   if the rect of this stack is the screenRect then
+      set the visible of widget "iconMaximize" to false
+      set the visible of widget "iconMediumsize" to true
+   else
+      set the visible of widget "iconMaximize" to true
+      set the visible of widget "iconMediumsize" to false
+   end if
+   -- all of the layer information for all of the graph data in memory is calculated by middleOut
+   -- so when the window resizes, displayManager updates the graphics based on what fits now
+   refreshDisplay
+end resizeStack
