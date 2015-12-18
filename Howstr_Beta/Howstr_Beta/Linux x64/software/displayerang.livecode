@@ -340,6 +340,12 @@ on displayManager pInfo,@pGUI,pSizes,pNow,@pHist -- ! creates/changes/deletes co
          put tStartCoord & cr & tEndCoord into tBox["line"]
          put pSizes["link"] into tBox["size"]
          put pInfo["links"][tLink]["type"] into tBox["type"]
+         put pInfo["links"][tLink]["weight"] into tWeight
+         if tWeight is empty then
+            put 1 into pGUI["links"][tLink]["weight"]
+         else
+            put tWeight into pGUI["links"][tLink]["weight"]
+         end if
          put tBox["type"] into pGUI["links"][tLink]["type"]
          put makeLink(tBox) into pGUI["links"][tLink]["graphic"]
       end if
@@ -464,8 +470,10 @@ function mouseTracker @pGUI,@pHist,@p1Down,@p1Enter,pFocus,pNode
    -- tNow[fixed]=X,Y/empty
    -- tNow[nodeSelected]=#,#,# (cuz they're organized first by node/link in GUIstuff)
    -- tNow[linkSelected]=#,#,#
+   -- tNow[tooltip]=true/false
    
-   -- (1) state of buttons
+   -- (1) state of controls
+   put the hilite of button "tooltipSwitch" into tNow["tooltip"]
    put "false" into tNow["1down"]
    if mouse(1) is "down" then put "true" into tNow["1down"] -- for preview logic
    put "false" into tNow["3down"]
@@ -538,7 +546,19 @@ function mouseTracker @pGUI,@pHist,@p1Down,@p1Enter,pFocus,pNode
    -- ! there was an error where fixed would be empty the first time or something like that
    if tStuff["point1"] is not empty then set the rect of graphic "selectBox" to twoPointBox(tStuff)
    if tNow["3down"] is not true then set the rect of graphic "selectBox" to "0,0,0,0" -- otherwise it's still there messing with stuff like a ghost
-   
+   if tNow["tooltip"] is true and tNow["inside"] is a number then
+      -- fill and resize the field
+      if tNow["inside"] is among the keys of pGUI["nodes"] then
+         put pGUI["nodes"][tNow["inside"]]["displayString"] into field "tooltipField"
+      else if tNow["inside"] is among the keys of pGUI["links"] then
+         put pGUI["links"][tNow["inside"]]["weight"] into field "tooltipField"
+      end if
+      set the height of field "tooltipField" to the formattedHeight of word 1 to -1 of field "tooltipField"
+      set the layer of field "tooltipField" to top
+      set the visible of field "tooltipField" to true
+   else
+      set the visible of field "tooltipField" to false
+   end if
    
    -- (1c) if there's an anchor node, track new areas entered
    if p1Down is empty then
