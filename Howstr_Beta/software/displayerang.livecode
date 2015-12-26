@@ -328,9 +328,10 @@ on displayManager pInfo,@pGUI,pSizes,pNow,@pHist -- ! creates/changes/deletes co
          put tCount + 1 into tCount
       end repeat
    end repeat
-   -- draw links...crudly
+   -- draw flow links...crudly --------------------------
    repeat for each key tLink in pInfo["links"]
-      if tLink is not 0 and pInfo["links"][tLInk]["type"] is not "dive" and pInfo["links"][tLInk]["type"] is not "rise" then
+      if tLink is 0 then next repeat
+      if pInfo["links"][tLInk]["type"] is not "dive" and pInfo["links"][tLInk]["type"] is not "rise" then -- FLOW
          put item 1 of pInfo["links"][tLink]["prev"] into tStart
          put item 1 of pInfo["links"][tLink]["next"] into tEnd
          put pSizes["node"] / 2 into tClean
@@ -348,8 +349,40 @@ on displayManager pInfo,@pGUI,pSizes,pNow,@pHist -- ! creates/changes/deletes co
          end if
          put tBox["type"] into pGUI["links"][tLink]["type"]
          put makeLink(tBox) into pGUI["links"][tLink]["graphic"]
+      else if pInfo["links"][tLInk]["type"] is "dive" then -- DIVE 
+         -- what node diving into
+         --- pInfo link>read=#
+         --- pGUI node>#>graphic
+         -- rect of that control
+         -- points = L-10,top cr L,T+10
+         put pInfo["links"][tLink]["read"] into tTheNode
+         put pGUI["nodes"][tTheNode]["graphic"] into tTheNodeName
+         put the rect of tTheNodeName into tTheNodeRect
+         put item 1 of tTheNodeRect into tL
+         put item 2 of tTheNodeRect into tT
+         put (tL-10) & "," & tT & cr & tL & "," & (tT+10) into tStuff["line"]
+         put tLink into tStuff["link"]
+         put 2 into tStuff["size"]
+         put makeScopeLink(tStuff) into pGUI["links"][tLink]["graphic"]
+      else if pInfo["links"][tLInk]["type"] is "rise" then -- RISE
+         -- what node rising out of
+         --- pInfo link>trim=#
+         --- pGUI node>#>graphic
+         -- rect of that control 
+         -- points = right,T+10 cr R+10,top
+         put pInfo["links"][tLink]["bulk"] into tTheNode
+         put pGUI["nodes"][tTheNode]["graphic"] into tTheNodeName
+         put the rect of tTheNodeName into tTheNodeRect
+         put item 3 of tTheNodeRect into tR
+         put item 2 of tTheNodeRect into tT
+         put tR  & "," & (tT+10) & cr & (tR+10) & "," & tT into tStuff["line"]
+         put tLink into tStuff["link"]
+         put 2 into tStuff["size"]
+         put makeScopeLink(tStuff) into pGUI["links"][tLink]["graphic"]
       end if
    end repeat
+   -- draw scope links...also crudly -------------------
+   
    -- make sure the node graphics are on top
    repeat for each key tNode in pGUI["nodes"]
       set the layer of pGUI["nodes"][tNode]["graphic"] to top
@@ -452,6 +485,21 @@ function makeLink pThis
    set the cGraphKey of it to pThis["link"]
    return it
 end makeLink
+
+function makeScopeLink pThis
+   set the style of the templateGraphic to "line"
+   set the endArrow of the templateGraphic to true
+   set the foregroundColor of the templategraphic to "0,220,220"
+   set the points of the templateGraphic to pThis["line"]
+   set the name of the templateGraphic to pThis["link"] & "LinkGraphic"
+   set the filled of the templateGraphic to false
+   set the linesize of the templateGraphic to pThis["size"]
+   set the outerglow["color"] of the templateGraphic to "40,40,40"
+   --   set the behavior of the templateGraphic to the long id of button "graphBehave"
+   create graphic
+   set the cGraphKey of it to pThis["link"]
+   return it
+end makeScopeLink
 
 function mouseTracker @pGUI,@pHist,@p1Down,@p1Enter,pFocus,pNode
    --   put "function mouseTracker" into xX["write"];    devLog xX
