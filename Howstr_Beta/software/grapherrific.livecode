@@ -1581,6 +1581,7 @@ on changeRequest pAsk,@pMain,pDoc
    end if
    ------------------------ end undo/redo ----------------------------------
    ----------------------- hide existing steps ------------------------------
+   -- ! needs to add any links attached to the nodes that aren't already listed
    -- assumes steps to hide are listed in correct order, comma delimited
    -- all hides (if multiple) are lumped in under same turn, so shouldn't need to list in a single hide tag
    put empty into tHide

@@ -550,14 +550,29 @@ function mouseTracker @pGUI,@pHist,@p1Down,@p1Enter,pFocus,pNode
          if tNow["3down"] and intersect(pGUI[tType][tNum]["graphic"],graphic "selectBox","pixels") then
             -- add any new selection to lists
             if tType is "nodes" and tNum is not among the items of tNow["nodeSelected"] and tNum is not pFocus then 
-               put tNum & "," after tNow["nodeSelected"]
+               --               put tNum & "," after tNow["nodeSelected"]
+               put tNum into item (the number of items of tNow["nodeSelected"])+1 of tNow["nodeSelected"]
                set the visible of button "hideButt" to true
             end if
             if tType is "links" and tNum is not among the items of tNow["linkSelected"] then 
-               put tNum & "," after tNow["linkSelected"]
+               --               put tNum & "," after tNow["linkSelected"]
+               put tNum into item (the number of items of tNow["linkSelected"])+1 of tNow["linkSelected"]
                set the visible of button "hideButt" to true
             end if
          end if-- if 3down is true & intersection
+      end repeat
+   end repeat
+   -- auto-select any links attached to a selected node
+   repeat for each item tNode in tNow["nodeSelected"]
+      --      put listOfLinks(tNode) into tLinks -- ! this is a pain with the current organization, but it's short and easy to replicate
+      -- pGUI[nodes][#][abutFlow/Dive/Rise]=#,# cr #,# (link rec),(node rec)
+      repeat for each word tKind in "abutFlow abutDive abutRise"
+         repeat for each line tConnection in pGUI["nodes"][tNode][tKind]
+            put item 1 of tConnection into tCon
+            if tCon is not among the items of tNow["linkSelected"] then
+               put tCon into item (the number of items of tNow["linkSelected"])+1 of tNow["linkSelected"]
+            end if
+         end repeat
       end repeat
    end repeat
    -- hilite selected elements
