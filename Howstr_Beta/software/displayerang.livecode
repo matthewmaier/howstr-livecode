@@ -110,7 +110,7 @@ on tempConvertData pShort,@pData,pDoc
       if pShort[pDoc][tRec]["type"] is among the words of "state change" then
          -- node...probably !
          put pShort[pDoc][tRec] into pData["nodes"][tRec]
-      else
+      else if tRec is not 0 then
          -- link...probably !
          put pShort[pDoc][tRec] into pData["links"][tRec]
       end if
@@ -160,6 +160,7 @@ on tempConvertData pShort,@pData,pDoc
 end tempConvertData
 
 on middleOut pData,@pDraw,pFocus -- ! a hacky way to draw the provided graph, calls assignLayers
+   -- ! as of 10JAN2016 middleOut only follows flow links, so it won't visit or follow dive/rise links
    put "on middleOut" into xX["write"];    devLog xX
    -- pData ! just sGraphData at the moment, maybe this should be an adjacency list ?
    -- setup variables --------------------------------------------------------------------------------
@@ -230,9 +231,15 @@ on middleOut pData,@pDraw,pFocus -- ! a hacky way to draw the provided graph, ca
       sort items of pData["layers"][tLayer] ascending numeric
       if char 1 of pData["layers"][tLayer] is "," then delete char 1 of pData["layers"][tLayer]
    end repeat
+   -- ! deal with elements that are visible but weren't discovered by middleOut
+   repeat for each word tKind in "nodes links"
+      repeat for each line tRec in the keys of pData[tKind]
+         if tRec is not among the items of pData["visited"][tKind] then
+            put tRec into item (the number of items of pData["unvisited"][tKind])+1 of pData["unvisited"][tKind]
+         end if
+      end repeat
+   end repeat
    put pData into pDraw
-   --   displayManager pData
-   --   displayManager
 end middleOut
 
 on assignLayers @pAll,pSeed,pTheLayer -- ! the recursive part of middleOut
