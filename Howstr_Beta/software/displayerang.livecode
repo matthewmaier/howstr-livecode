@@ -292,13 +292,10 @@ on displayManager pInfo,@pGUI,pSizes,pNow,@pHist -- ! creates/changes/deletes co
          end repeat
       end repeat
    end if
-   --   put the width of this stack into tWinWidth
-   --   put the height of this stack into tWinHeight
    put pSizes["width"] into tWinWidth
    put pSizes["height"] into tWinHeight
    put tWinWidth/2 into tCenterH
    lock screen
-   --   put empty into sDrawDetails
    put empty into pGUI
    -- specify case node
    put pInfo["case"] into pGUI["case"]
@@ -335,9 +332,46 @@ on displayManager pInfo,@pGUI,pSizes,pNow,@pHist -- ! creates/changes/deletes co
          put tCount + 1 into tCount
       end repeat
    end repeat
+   -- put miscellaneous nodes into the pool, or whatever ---------------------
+   -- not the case node cuz technically the whole window is the case node
+   put 0 into tCountThis
+   repeat for each item tNode in pInfo["unvisited"]["nodes"]
+      if tNode is not among the items of pInfo["case"] then
+         -- node coordinates
+         put (pSizes["node"]/2) + (tCountThis * (pSizes["node"] + pSizes["layer"])) into pGUI["nodes"][tNode]["horz"]
+         put tWinHeight-(pSizes["node"]/2) into pGUI["nodes"][tNode]["vert"]
+         -- build request
+         put tNode into tStuff["node"]
+         put pGUI["nodes"][tNode]["horz"] & "," & pGUI["nodes"][tNode]["vert"] into tStuff["coord"]
+         put pSizes["node"] into tStuff["size"]
+         put pInfo["nodes"][tNode]["type"] into tStuff["type"]
+         -- node type
+         put tStuff["type"] into pGUI["nodes"][tNode]["type"]
+         -- node's display string
+         put pInfo["nodes"][tNode]["displayString"] into pGUI["nodes"][tNode]["displayString"]
+         put pInfo["nodes"][tNode]["displayString"] into tStuff["displayString"]
+         -- node's graphic ID
+         put makeNode(tStuff) into pGUI["nodes"][tNode]["graphic"]      
+         put true into pGUI["nodes"][tNode]["misc"]
+         put tCountThis + 1 into tCountThis
+      end if
+   end repeat
    -- draw flow links...crudly --------------------------
    repeat for each key tLink in pInfo["links"]
-      if tLink is 0 then next repeat
+      if tLink is 0 then next repeat -- ! probably don't need this as of 11JAN2016
+      -- if this link is attached to a misc node, don't draw it
+      put false into tMoveOn
+      repeat for each key tSomething in pInfo["links"][tLink]
+         if tSomething is among the words of "next prev read skim bulk trim" then
+            put pInfo["links"][tLink][tSomething] into tTag
+            if pGUI["nodes"][tTag]["misc"] is true then 
+               put true into tMoveOn
+               exit repeat -- exit this small repeat test
+            end if
+         end if
+      end repeat
+      if tMoveOn is true then next repeat -- next tLink
+      -- okay, so go ahead and draw the link tLink
       if pInfo["links"][tLInk]["type"] is not "dive" and pInfo["links"][tLInk]["type"] is not "rise" then -- FLOW
          put item 1 of pInfo["links"][tLink]["prev"] into tStart
          put item 1 of pInfo["links"][tLink]["next"] into tEnd
