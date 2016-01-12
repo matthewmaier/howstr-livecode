@@ -334,9 +334,11 @@ on displayManager pInfo,@pGUI,pSizes,pNow,@pHist -- ! creates/changes/deletes co
    end repeat
    -- put miscellaneous nodes into the pool, or whatever ---------------------
    -- not the case node cuz technically the whole window is the case node
+   put false into tMisc
    put 0 into tCountThis
    repeat for each item tNode in pInfo["unvisited"]["nodes"]
       if tNode is not among the items of pInfo["case"] then
+         put true into tMisc
          -- node coordinates
          put (pSizes["node"]/2) + (tCountThis * (pSizes["node"] + pSizes["layer"])) into pGUI["nodes"][tNode]["horz"]
          put tWinHeight-(pSizes["node"]/2) into pGUI["nodes"][tNode]["vert"]
@@ -451,6 +453,9 @@ on displayManager pInfo,@pGUI,pSizes,pNow,@pHist -- ! creates/changes/deletes co
    put empty into pHist["nodeSelected"]
    put empty into pHist["linkSelected"]
    set the visible of button "hideButt" to false
+   -- set misc navigation buttons
+   set the visible of button "miscRightButt" to tMisc
+   set the visible of button "miscLeftButt" to tMisc
    unlock screen
    unlock messages
    put "end displayManager --------------" into xX["write"];    devLog xX
