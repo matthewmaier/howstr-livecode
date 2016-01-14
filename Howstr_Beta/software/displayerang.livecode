@@ -453,7 +453,7 @@ on displayManager pInfo,@pGUI,pSizes,pNow,@pHist -- ! creates/changes/deletes co
    put empty into pHist["nodeSelected"]
    put empty into pHist["linkSelected"]
    set the visible of button "hideButt" to false
-   -- set misc navigation buttons
+   -- set misc nodes navigation buttons
    set the visible of button "miscRightButt" to tMisc
    set the visible of button "miscLeftButt" to tMisc
    unlock screen
