@@ -826,7 +826,7 @@ command  adjList @pMain,@pShort
                         put item 1 of pMain[tDoc][tOtherPtr]["myStep"] & cr after pShort[tDoc][tRec][tAkey]
                      end repeat
                   else
-                     if tAkey is among the words of "title weight material whole duration series" then
+                     if tAkey is among the words of "title weight material whole duration series memo figure" then
                         put pMain[tDoc][tPtr][tAkey] into pShort[tDoc][tRec][tAkey]
                      end if
                      -- ! info will still list all the previous tag:data pairs as part of the string
