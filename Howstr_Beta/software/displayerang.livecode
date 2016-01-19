@@ -33,27 +33,7 @@ function tempNodeDetails @pShort,tDo
    put tLineCount + 1 into tLineCount
    put "divider" into tList[tLineCount]["label"]
    put cr & "==========" after tList["string"]
-   
-   --   -- this node's title
-   --   put pShort[tDoc][tNodeRec]["title"] into tTitle -- may or may not actually have a title
-   --   if tTitle is empty then put tNodeRec into tTitle
-   --   put pShort[tDoc][tNodeRec]["type"] into tThisNodeType
-   --   put tLineCount + 1 into tLineCount
-   --   put tLineCount into tList["master"]
-   --   put tNodeRec into tList[tLineCount]["rec"]
-   --   put tTitle into tList[tLineCount]["title"]
-   --   put "title" into tList[tLineCount]["label"]
-   --   put cr & "[empty title]" && symbolLookup(tThisNodeType) && tTitle after tList["string"]
-   --   -- this node's memo
-   --   put pShort[tDoc][tNodeRec]["memo"] into tMemo -- may or may not actually have a title
-   --   if tMemo is empty then put tNodeRec into tMemo
-   --   put pShort[tDoc][tNodeRec]["type"] into tThisNodeType
-   --   put tLineCount + 1 into tLineCount
-   --   put tNodeRec into tList[tLineCount]["rec"]
-   --   put tMemo into tList[tLineCount]["memo"]
-   --   put "memo" into tList[tLineCount]["label"]
-   --   put cr & "[empty memo]" && symbolLookup(tThisNodeType) && tMemo after tList["string"]
-   
+   -- main body of tag:data pairs for the node   
    put "title memo figure" into tDefaults
    repeat for each key tKey in pShort[tDoc][tNodeRec] -- ? this one might only actually catch "title"
       if tKey is not among the words of "type next prev skim trim read bulk info" then
@@ -63,7 +43,14 @@ function tempNodeDetails @pShort,tDo
          put pShort[tDoc][tNodeRec][tKey] into tList[tLineCount][tKey]
          if tList[tLineCount][tKey] is empty then put "[empty]" into tList[tLineCount][tKey]
          put pShort[tDoc][tNodeRec]["type"] into tThisNodeType
-         put cr & "[" & tKey & "]" && symbolLookup(tThisNodeType) && tList[tLineCount][tKey] after tList["string"]
+         if tKey is "figure" and tList[tLineCount][tKey] is not "[empty]" then
+            put cr & "[" & tKey & "]"  && "x" after tList["string"]
+            put tLineCount into tList["displayImage"]
+         else if tKey is "title" and tList[tLineCount][tKey] is not "[empty]" then
+            put cr & "[" & tKey & "]" && symbolLookup(tThisNodeType) && tList[tLineCount][tKey] after tList["string"]
+         else
+            put cr & "[" & tKey & "]" && tList[tLineCount][tKey] after tList["string"]
+         end if
          if tKey is among the words of tDefaults then delete word wordoffset(tKey, tDefaults) in tDefaults
       end if
    end repeat
