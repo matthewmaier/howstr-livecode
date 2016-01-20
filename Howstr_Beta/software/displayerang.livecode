@@ -44,7 +44,10 @@ function tempNodeDetails @pShort,tDo
          if tList[tLineCount][tKey] is empty then put "[empty]" into tList[tLineCount][tKey]
          put pShort[tDoc][tNodeRec]["type"] into tThisNodeType
          if tKey is "figure" and tList[tLineCount][tKey] is not "[empty]" then
-            put cr & "[" & tKey & "]"  && "x" after tList["string"]
+            put tList[tLineCount][tKey] into tPath
+            set itemdelimiter to slash
+            put the last item of tPath into tPath
+            put cr & "[" & tKey & "]"  && tPath after tList["string"]
             put tLineCount into tList["displayImage"]
          else if tKey is "title" and tList[tLineCount][tKey] is not "[empty]" then
             put cr & "[" & tKey & "]" && symbolLookup(tThisNodeType) && tList[tLineCount][tKey] after tList["string"]
