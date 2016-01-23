@@ -1,4 +1,55 @@
 ﻿script "mathamagics"
+command fitImageToConstraint pStuff
+   -- use either the maxRect or maxWidth&Height
+   -- stuff[longID]=livecode longID of image
+   -- stuff[maxWidth]=maximum width
+   -- stuff[maxHeight]=maximum height
+   -- stuff[maxRect]=left,top,right,bottom
+   
+   put pStuff["longID"] into tImage
+   if pStuff["maxRect"] is not empty then
+      put item 3 of pStuff["maxRect"] - item 1 of pStuff["maxRect"] into tWidth
+      put item 4 of pStuff["maxRect"] - item 2 of pStuff["maxRect"] into tHeight
+   else
+      put pStuff["maxWidth"] into tWidth
+      put pStuff["maxHeight"] into tHeight
+   end if
+   
+   put (the formattedWidth of tImage) / tWidth into tRatio
+   put (the formattedHeight of tImage) / tRatio into tProportionalHeight
+   put (the formattedHeight of tImage) / tHeight into tRatio
+   put (the formattedWidth of tImage) / tRatio into tProportionalWidth
+   
+   --   lock screen
+   --   if tProportionalHeight > tHeight then
+   --      set the width of tImage to tProportionalWidth
+   --      set the height of tImage to tHeight
+   --   else
+   --      set the width of tImage to tWidth
+   --      set the height of tImage to tProportionalHeight
+   --   end if
+   --   if pStuff["maxRect"] is not empty then
+   --      put (item 1 of pStuff["maxRect"]) + (tWidth / 2) into tX
+   --      put (item 2 of pStuff["maxRect"]) + (tHeight / 2) into tY
+   --      set the loc of tImage to tX,tY 
+   --   end if
+   --   unlock screen
+   
+   if tProportionalHeight > tHeight then
+      put tProportionalWidth into tResult["width"]
+      put tHeight into tResult["height"]
+   else
+      put tWidth into tResult["width"]
+      put tProportionalHeight into tResult["height"]
+   end if
+   if pStuff["maxRect"] is not empty then
+      put (item 1 of pStuff["maxRect"]) + (tWidth / 2) into tX
+      put (item 2 of pStuff["maxRect"]) + (tHeight / 2) into tY
+      put tX & "," & tY into tResult["center"]
+   end if
+   return tResult
+end fitImageToConstraint
+
 function twoPointBox pPoints
    put "function twoPointBox" into xX["write"];    devLog xX
    -- pPoints[point1/point2]

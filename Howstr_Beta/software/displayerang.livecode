@@ -615,9 +615,17 @@ function mouseTracker @pGUI,@pHist,@p1Down,@p1Enter,pFocus,pNode
    -- (1) state of controls
    put the hilite of button "tooltipSwitch" into tNow["tooltip"]
    put "false" into tNow["1down"]
-   if mouse(1) is "down" then put "true" into tNow["1down"] -- for preview logic
+   -- ! Jeremy's using Ubuntu 15.04 and the mouse() function returns a different number for button down
+   if the hilite of button "jeremyBugButt" is true then 
+      put 0 into mouseLeft
+      put 2 into mouseRight
+   else
+      put 1 into mouseLeft
+      put 3 into mouseRight
+   end if
+   if mouse(mouseLeft) is "down" then put "true" into tNow["1down"] -- for preview logic
    put "false" into tNow["3down"]
-   if mouse(3) is "down" then put "true" into tNow["3down"] -- for selection logic
+   if mouse(mouseRight) is "down" then put "true" into tNow["3down"] -- for selection logic
    -- (1a) location of mouse & selection indicators (since we're here)
    put empty into tNow["inside"]
    if pHist["3down"] is false and tNow["3down"] is true then -- reset selection when button down, otherwise retain
