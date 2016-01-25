@@ -43,6 +43,7 @@ function tempNodeDetails @pShort,tDo
          put pShort[tDoc][tNodeRec][tKey] into tList[tLineCount][tKey]
          if tList[tLineCount][tKey] is empty then put "[empty]" into tList[tLineCount][tKey]
          put pShort[tDoc][tNodeRec]["type"] into tThisNodeType
+         if tKey is "title" then put tLineCount into tList["master"]
          if tKey is "figure" and tList[tLineCount][tKey] is not "[empty]" then
             put tList[tLineCount][tKey] into tPath
             set itemdelimiter to slash
@@ -73,10 +74,10 @@ function tempNodeDetails @pShort,tDo
       put tNodeRec into tList[tLineCount]["rec"]
       put tPreset into tList[tLineCount]["label"]
       put "[empty]" into tList[tLineCount][tPreset]
+      if tPreset is "title" then put tLineCount into tList["master"]
       put pShort[tDoc][tNodeRec]["type"] into tThisNodeType
       put cr & "[" & tPreset & "]" && symbolLookup(tThisNodeType) && tList[tLineCount][tPreset] after tList["string"]
    end repeat
-   
    -- divider
    put tLineCount + 1 into tLineCount
    put "divider" into tList[tLineCount]["label"]

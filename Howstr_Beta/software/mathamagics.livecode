@@ -1,5 +1,5 @@
 ﻿script "mathamagics"
-command fitImageToConstraint pStuff
+function fitImageToConstraint pStuff
    -- use either the maxRect or maxWidth&Height
    -- stuff[longID]=livecode longID of image
    -- stuff[maxWidth]=maximum width
