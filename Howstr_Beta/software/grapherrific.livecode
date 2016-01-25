@@ -468,8 +468,10 @@ command changeInfo @pMain,pBlerg
    put pMain[pDoc][0][lastKey] into tRec -- this order makes it work better
    if pHide is true then
       -- negate the tag in the step [rec] that points to [tag]
+      -- negate the other end of the pointer
       put getTagKey(pMain,pBlerg) into tOldTag
       put cr & "-" & tOldTag & "," & tRec+1 after pMain[pDoc][pRec]["step"]
+      put cr & "-" & pRec & "," & tRec + 1 after pMain[pDoc][tOldTag]["myStep"]
       -- create turn
       put tRec+2 & "," & tRec+1 into pMain[pDoc][tRec+1]["turn"]
       put "changeInfo" into pMain[pDoc][tRec+1]["act"]
