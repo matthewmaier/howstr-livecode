@@ -11,6 +11,7 @@ function tempNodeDetails @pShort,tDo
    put "next trim" into tOutTags
    put 0 into tLineCount
    -- in links&node
+   -- ! I don't think [master] is necessary anymore, but it might be, I dunno 18JAN2016
    repeat for each word tTag in tInTags
       put pShort[tDoc][tNodeRec][tTag] into tLinks
       repeat for each line tLinkRec in tLinks
@@ -24,18 +25,63 @@ function tempNodeDetails @pShort,tDo
          put tOtherNode into tList[tLineCount]["node"]
          put tLinkRec into tList[tLineCount]["link"]
          put tLinkWeight into tList[tLineCount]["weight"]
+         put "weight" into tList[tLineCount]["label"]
          put cr & symbolLookup(tOtherType) && tOtherTitle && "[" & tTag & "]" &&  tLinkWeight && "IN>" after tList["string"]
       end repeat
    end repeat
-   -- this node's title
-   put pShort[tDoc][tNodeRec]["title"] into tTitle -- may or may not actually have a title
-   if tTitle is empty then put tNodeRec into tTitle
-   put pShort[tDoc][tNodeRec]["type"] into tThisNodeType
+   -- divider
    put tLineCount + 1 into tLineCount
-   put tLineCount into tList["master"]
-   put tNodeRec into tList[tLineCount]["rec"]
-   put tTitle into tList[tLineCount]["title"]
-   put cr & "[this node]" && symbolLookup(tThisNodeType) && tTitle after tList["string"]
+   put "divider" into tList[tLineCount]["label"]
+   put cr & "==========" after tList["string"]
+   -- main body of tag:data pairs for the node   
+   put "title memo figure" into tDefaults
+   repeat for each key tKey in pShort[tDoc][tNodeRec] -- ? this one might only actually catch "title"
+      if tKey is not among the words of "type next prev skim trim read bulk info" then
+         put tLineCount + 1 into tLineCount
+         put tNodeRec into tList[tLineCount]["rec"]
+         put tKey into tList[tLineCount]["label"]
+         put pShort[tDoc][tNodeRec][tKey] into tList[tLineCount][tKey]
+         if tList[tLineCount][tKey] is empty then put "[empty]" into tList[tLineCount][tKey]
+         put pShort[tDoc][tNodeRec]["type"] into tThisNodeType
+         if tKey is "title" then put tLineCount into tList["master"]
+         if tKey is "figure" and tList[tLineCount][tKey] is not "[empty]" then
+            put tList[tLineCount][tKey] into tPath
+            set itemdelimiter to slash
+            put the last item of tPath into tPath
+            put cr & "[" & tKey & "]"  && tPath after tList["string"]
+            put tLineCount into tList["displayImage"]
+         else if tKey is "title" and tList[tLineCount][tKey] is not "[empty]" then
+            put cr & "[" & tKey & "]" && symbolLookup(tThisNodeType) && tList[tLineCount][tKey] after tList["string"]
+         else
+            put cr & "[" & tKey & "]" && tList[tLineCount][tKey] after tList["string"]
+         end if
+         if tKey is among the words of tDefaults then delete word wordoffset(tKey, tDefaults) in tDefaults
+      end if
+   end repeat
+   repeat for each key tKey in pShort[tDoc][tNodeRec]["info"]
+      put tLineCount + 1 into tLineCount
+      put tNodeRec into tList[tLineCount]["rec"]
+      put tKey into tList[tLineCount]["label"]
+      put pShort[tDoc][tNodeRec]["info"][tKey] into tList[tLineCount][tKey]
+      if tList[tLineCount][tKey] is empty then put "[empty]" into tList[tLineCount][tKey]
+      put pShort[tDoc][tNodeRec]["type"] into tThisNodeType
+      put cr & "[" & tKey & "]" && symbolLookup(tThisNodeType) && tList[tLineCount][tKey] after tList["string"]
+      if tKey is among the words of tDefaults then delete word wordoffset(tKey, tDefaults) in tDefaults
+   end repeat
+   -- insert presets so that user can give them a value if they're empty
+   repeat for each word tPreset in tDefaults
+      put tLineCount + 1 into tLineCount
+      put tNodeRec into tList[tLineCount]["rec"]
+      put tPreset into tList[tLineCount]["label"]
+      put "[empty]" into tList[tLineCount][tPreset]
+      if tPreset is "title" then put tLineCount into tList["master"]
+      put pShort[tDoc][tNodeRec]["type"] into tThisNodeType
+      put cr & "[" & tPreset & "]" && symbolLookup(tThisNodeType) && tList[tLineCount][tPreset] after tList["string"]
+   end repeat
+   -- divider
+   put tLineCount + 1 into tLineCount
+   put "divider" into tList[tLineCount]["label"]
+   put cr & "==========" after tList["string"]
    -- out links&node
    repeat for each word tTag in tOutTags
       put pShort[tDoc][tNodeRec][tTag] into tLinks
@@ -50,6 +96,7 @@ function tempNodeDetails @pShort,tDo
          put tOtherNode into tList[tLineCount]["node"]
          put tLinkRec into tList[tLineCount]["link"]
          put tLinkWeight into tList[tLineCount]["weight"]
+         put "weight" into tList[tLineCount]["label"]
          put cr & ">OUT" && tLinkWeight && "[" & tTag & "]" && symbolLookup(tOtherType) && tOtherTitle after tList["string"]
       end repeat
    end repeat
@@ -110,7 +157,7 @@ on tempConvertData pShort,@pData,pDoc
       if pShort[pDoc][tRec]["type"] is among the words of "state change" then
          -- node...probably !
          put pShort[pDoc][tRec] into pData["nodes"][tRec]
-      else
+      else if tRec is not 0 then
          -- link...probably !
          put pShort[pDoc][tRec] into pData["links"][tRec]
       end if
@@ -160,6 +207,7 @@ on tempConvertData pShort,@pData,pDoc
 end tempConvertData
 
 on middleOut pData,@pDraw,pFocus -- ! a hacky way to draw the provided graph, calls assignLayers
+   -- ! as of 10JAN2016 middleOut only follows flow links, so it won't visit or follow dive/rise links
    put "on middleOut" into xX["write"];    devLog xX
    -- pData ! just sGraphData at the moment, maybe this should be an adjacency list ?
    -- setup variables --------------------------------------------------------------------------------
@@ -230,9 +278,15 @@ on middleOut pData,@pDraw,pFocus -- ! a hacky way to draw the provided graph, ca
       sort items of pData["layers"][tLayer] ascending numeric
       if char 1 of pData["layers"][tLayer] is "," then delete char 1 of pData["layers"][tLayer]
    end repeat
+   -- ! deal with elements that are visible but weren't discovered by middleOut
+   repeat for each word tKind in "nodes links"
+      repeat for each line tRec in the keys of pData[tKind]
+         if tRec is not among the items of pData["visited"][tKind] then
+            put tRec into item (the number of items of pData["unvisited"][tKind])+1 of pData["unvisited"][tKind]
+         end if
+      end repeat
+   end repeat
    put pData into pDraw
-   --   displayManager pData
-   --   displayManager
 end middleOut
 
 on assignLayers @pAll,pSeed,pTheLayer -- ! the recursive part of middleOut
@@ -285,13 +339,10 @@ on displayManager pInfo,@pGUI,pSizes,pNow,@pHist -- ! creates/changes/deletes co
          end repeat
       end repeat
    end if
-   --   put the width of this stack into tWinWidth
-   --   put the height of this stack into tWinHeight
    put pSizes["width"] into tWinWidth
    put pSizes["height"] into tWinHeight
    put tWinWidth/2 into tCenterH
    lock screen
-   --   put empty into sDrawDetails
    put empty into pGUI
    -- specify case node
    put pInfo["case"] into pGUI["case"]
@@ -328,9 +379,49 @@ on displayManager pInfo,@pGUI,pSizes,pNow,@pHist -- ! creates/changes/deletes co
          put tCount + 1 into tCount
       end repeat
    end repeat
-   -- draw links...crudly
+   -- put miscellaneous nodes into the pool, or whatever ---------------------
+   -- not the case node cuz technically the whole window is the case node
+   put false into tMisc
+   put 0 into tCountThis
+   repeat for each item tNode in pInfo["unvisited"]["nodes"]
+      if tNode is not among the items of pInfo["case"] then
+         put true into tMisc
+         -- node coordinates
+         put (pSizes["node"]/2) + (tCountThis * (pSizes["node"] + pSizes["layer"])) into pGUI["nodes"][tNode]["horz"]
+         put tWinHeight-(pSizes["node"]/2) into pGUI["nodes"][tNode]["vert"]
+         -- build request
+         put tNode into tStuff["node"]
+         put pGUI["nodes"][tNode]["horz"] & "," & pGUI["nodes"][tNode]["vert"] into tStuff["coord"]
+         put pSizes["node"] into tStuff["size"]
+         put pInfo["nodes"][tNode]["type"] into tStuff["type"]
+         -- node type
+         put tStuff["type"] into pGUI["nodes"][tNode]["type"]
+         -- node's display string
+         put pInfo["nodes"][tNode]["displayString"] into pGUI["nodes"][tNode]["displayString"]
+         put pInfo["nodes"][tNode]["displayString"] into tStuff["displayString"]
+         -- node's graphic ID
+         put makeNode(tStuff) into pGUI["nodes"][tNode]["graphic"]      
+         put true into pGUI["nodes"][tNode]["misc"]
+         put tCountThis + 1 into tCountThis
+      end if
+   end repeat
+   -- draw flow links...crudly --------------------------
    repeat for each key tLink in pInfo["links"]
-      if tLink is not 0 and pInfo["links"][tLInk]["type"] is not "dive" and pInfo["links"][tLInk]["type"] is not "rise" then
+      if tLink is 0 then next repeat -- ! probably don't need this as of 11JAN2016
+      -- if this link is attached to a misc node, don't draw it
+      put false into tMoveOn
+      repeat for each key tSomething in pInfo["links"][tLink]
+         if tSomething is among the words of "next prev read skim bulk trim" then
+            put pInfo["links"][tLink][tSomething] into tTag
+            if pGUI["nodes"][tTag]["misc"] is true then 
+               put true into tMoveOn
+               exit repeat -- exit this small repeat test
+            end if
+         end if
+      end repeat
+      if tMoveOn is true then next repeat -- next tLink
+      -- okay, so go ahead and draw the link tLink
+      if pInfo["links"][tLInk]["type"] is not "dive" and pInfo["links"][tLInk]["type"] is not "rise" then -- FLOW
          put item 1 of pInfo["links"][tLink]["prev"] into tStart
          put item 1 of pInfo["links"][tLink]["next"] into tEnd
          put pSizes["node"] / 2 into tClean
@@ -348,8 +439,40 @@ on displayManager pInfo,@pGUI,pSizes,pNow,@pHist -- ! creates/changes/deletes co
          end if
          put tBox["type"] into pGUI["links"][tLink]["type"]
          put makeLink(tBox) into pGUI["links"][tLink]["graphic"]
+      else if pInfo["links"][tLInk]["type"] is "dive" then -- DIVE 
+         -- what node diving into
+         --- pInfo link>read=#
+         --- pGUI node>#>graphic
+         -- rect of that control
+         -- points = L-10,top cr L,T+10
+         put pInfo["links"][tLink]["read"] into tTheNode
+         put pGUI["nodes"][tTheNode]["graphic"] into tTheNodeName
+         put the rect of tTheNodeName into tTheNodeRect
+         put item 1 of tTheNodeRect into tL
+         put item 2 of tTheNodeRect into tT
+         put (tL-10) & "," & tT & cr & tL & "," & (tT+10) into tStuff["line"]
+         put tLink into tStuff["link"]
+         put 2 into tStuff["size"]
+         put makeScopeLink(tStuff) into pGUI["links"][tLink]["graphic"]
+      else if pInfo["links"][tLInk]["type"] is "rise" then -- RISE
+         -- what node rising out of
+         --- pInfo link>trim=#
+         --- pGUI node>#>graphic
+         -- rect of that control 
+         -- points = right,T+10 cr R+10,top
+         put pInfo["links"][tLink]["bulk"] into tTheNode
+         put pGUI["nodes"][tTheNode]["graphic"] into tTheNodeName
+         put the rect of tTheNodeName into tTheNodeRect
+         put item 3 of tTheNodeRect into tR
+         put item 2 of tTheNodeRect into tT
+         put tR  & "," & (tT+10) & cr & (tR+10) & "," & tT into tStuff["line"]
+         put tLink into tStuff["link"]
+         put 2 into tStuff["size"]
+         put makeScopeLink(tStuff) into pGUI["links"][tLink]["graphic"]
       end if
    end repeat
+   -- draw scope links...also crudly -------------------
+   
    -- make sure the node graphics are on top
    repeat for each key tNode in pGUI["nodes"]
       set the layer of pGUI["nodes"][tNode]["graphic"] to top
@@ -377,6 +500,9 @@ on displayManager pInfo,@pGUI,pSizes,pNow,@pHist -- ! creates/changes/deletes co
    put empty into pHist["nodeSelected"]
    put empty into pHist["linkSelected"]
    set the visible of button "hideButt" to false
+   -- set misc nodes navigation buttons
+   set the visible of button "miscRightButt" to tMisc
+   set the visible of button "miscLeftButt" to tMisc
    unlock screen
    unlock messages
    put "end displayManager --------------" into xX["write"];    devLog xX
@@ -453,6 +579,21 @@ function makeLink pThis
    return it
 end makeLink
 
+function makeScopeLink pThis
+   set the style of the templateGraphic to "line"
+   set the endArrow of the templateGraphic to true
+   set the foregroundColor of the templategraphic to "0,220,220"
+   set the points of the templateGraphic to pThis["line"]
+   set the name of the templateGraphic to pThis["link"] & "LinkGraphic"
+   set the filled of the templateGraphic to false
+   set the linesize of the templateGraphic to pThis["size"]
+   set the outerglow["color"] of the templateGraphic to "40,40,40"
+   --   set the behavior of the templateGraphic to the long id of button "graphBehave"
+   create graphic
+   set the cGraphKey of it to pThis["link"]
+   return it
+end makeScopeLink
+
 function mouseTracker @pGUI,@pHist,@p1Down,@p1Enter,pFocus,pNode
    --   put "function mouseTracker" into xX["write"];    devLog xX
    -- sGUIstuff,sMouseHistory,s1Down,s1Enter,sNowFocus,sNodeSize
@@ -475,9 +616,17 @@ function mouseTracker @pGUI,@pHist,@p1Down,@p1Enter,pFocus,pNode
    -- (1) state of controls
    put the hilite of button "tooltipSwitch" into tNow["tooltip"]
    put "false" into tNow["1down"]
-   if mouse(1) is "down" then put "true" into tNow["1down"] -- for preview logic
+   -- ! Jeremy's using Ubuntu 15.04 and the mouse() function returns a different number for button down
+   if the hilite of button "jeremyBugButt" is true then 
+      put 0 into mouseLeft
+      put 2 into mouseRight
+   else
+      put 1 into mouseLeft
+      put 3 into mouseRight
+   end if
+   if mouse(mouseLeft) is "down" then put "true" into tNow["1down"] -- for preview logic
    put "false" into tNow["3down"]
-   if mouse(3) is "down" then put "true" into tNow["3down"] -- for selection logic
+   if mouse(mouseRight) is "down" then put "true" into tNow["3down"] -- for selection logic
    -- (1a) location of mouse & selection indicators (since we're here)
    put empty into tNow["inside"]
    if pHist["3down"] is false and tNow["3down"] is true then -- reset selection when button down, otherwise retain
@@ -502,14 +651,29 @@ function mouseTracker @pGUI,@pHist,@p1Down,@p1Enter,pFocus,pNode
          if tNow["3down"] and intersect(pGUI[tType][tNum]["graphic"],graphic "selectBox","pixels") then
             -- add any new selection to lists
             if tType is "nodes" and tNum is not among the items of tNow["nodeSelected"] and tNum is not pFocus then 
-               put tNum & "," after tNow["nodeSelected"]
+               --               put tNum & "," after tNow["nodeSelected"]
+               put tNum into item (the number of items of tNow["nodeSelected"])+1 of tNow["nodeSelected"]
                set the visible of button "hideButt" to true
             end if
             if tType is "links" and tNum is not among the items of tNow["linkSelected"] then 
-               put tNum & "," after tNow["linkSelected"]
+               --               put tNum & "," after tNow["linkSelected"]
+               put tNum into item (the number of items of tNow["linkSelected"])+1 of tNow["linkSelected"]
                set the visible of button "hideButt" to true
             end if
          end if-- if 3down is true & intersection
+      end repeat
+   end repeat
+   -- auto-select any links attached to a selected node
+   repeat for each item tNode in tNow["nodeSelected"]
+      --      put listOfLinks(tNode) into tLinks -- ! this is a pain with the current organization, but it's short and easy to replicate
+      -- pGUI[nodes][#][abutFlow/Dive/Rise]=#,# cr #,# (link rec),(node rec)
+      repeat for each word tKind in "abutFlow abutDive abutRise"
+         repeat for each line tConnection in pGUI["nodes"][tNode][tKind]
+            put item 1 of tConnection into tCon
+            if tCon is not among the items of tNow["linkSelected"] then
+               put tCon into item (the number of items of tNow["linkSelected"])+1 of tNow["linkSelected"]
+            end if
+         end repeat
       end repeat
    end repeat
    -- hilite selected elements

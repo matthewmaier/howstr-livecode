@@ -457,31 +457,48 @@ command changeInfo @pMain,pBlerg
    -- pBlerg["rec"] = step's record key
    -- pBlerg["tag"] = tag string (this will be in a rec different from the step's rec)
    -- pBlerg["data"] = new data
+   -- pBlerg["hide"] = true 
    put pBlerg["rec"] into pRec
    put pBlerg["tag"] into pTag
    put pBlerg["doc"] into pDoc   
    put pBlerg["data"] into pData
+   put pBlerg["hide"] into pHide
    -- if the change is identical to existing data, don't do anything
-   --   if getTagData(pBlerg["rec"],pBlerg["tag"],sNowDoc) = pBlerg["data"] then exit changeInfo
+   -- if pHide is true then hide the [tag] in the [rec] in the [doc]
    put pMain[pDoc][0][lastKey] into tRec -- this order makes it work better
-   put getTagData(pMain,pBlerg) into tOld
-   if tOld = pData then 
-      exit changeInfo -- they're the same, so don't bother changing anything
-   else if tOld is not empty then
-      -- negate node's old tag
+   if pHide is true then
+      -- negate the tag in the step [rec] that points to [tag]
+      -- negate the other end of the pointer
       put getTagKey(pMain,pBlerg) into tOldTag
       put cr & "-" & tOldTag & "," & tRec+1 after pMain[pDoc][pRec]["step"]
+      put cr & "-" & pRec & "," & tRec + 1 after pMain[pDoc][tOldTag]["myStep"]
+      -- create turn
+      put tRec+2 & "," & tRec+1 into pMain[pDoc][tRec+1]["turn"]
+      put "changeInfo" into pMain[pDoc][tRec+1]["act"]
+      put tOldTag & "," & tRec+1 into pMain[pDoc][tRec+2]["hide"]
+      put tRec+1 & "," & tRec+1 into pMain[pDoc][tRec+2]["myTurn"]
+   else
+      --      put pMain[pDoc][0][lastKey] into tRec -- this order makes it work better
+      put getTagData(pMain,pBlerg) into tOld
+      if tOld = pData then 
+         exit changeInfo -- they're the same, so don't bother changing anything
+      else if tOld is not empty then
+         -- negate node's old tag
+         put getTagKey(pMain,pBlerg) into tOldTag
+         put cr & "-" & tOldTag & "," & tRec+1 after pMain[pDoc][pRec]["step"]
+      end if
+      -- create turn
+      put tRec+2 & "," & tRec+1 into pMain[pDoc][tRec+1]["turn"]
+      put "changeInfo" into pMain[pDoc][tRec+1]["act"]
+      -- create new tag with new data
+      put pData into pMain[pDoc][tRec+2][pTag]
+      put tRec+1 & "," & tRec+1 into pMain[pDoc][tRec+2]["myTurn"]
+      put pRec & "," & tRec+1 into pMain[pDoc][tRec+2]["myStep"]
+      --      put tRec+2 into pMain[pDoc][0][lastKey]
+      -- point to new tag
+      put cr & tRec+2 & "," & tRec+1 after pMain[pDoc][pRec]["step"]
    end if
-   -- create turn
-   put tRec+2 & "," & tRec+1 into pMain[pDoc][tRec+1]["turn"]
-   put "changeInfo" into pMain[pDoc][tRec+1]["act"]
-   -- create new tag with new data
-   put pData into pMain[pDoc][tRec+2][pTag]
-   put tRec+1 & "," & tRec+1 into pMain[pDoc][tRec+2]["myTurn"]
-   put pRec & "," & tRec+1 into pMain[pDoc][tRec+2]["myStep"]
    put tRec+2 into pMain[pDoc][0][lastKey]
-   -- point to new tag
-   put cr & tRec+2 & "," & tRec+1 after pMain[pDoc][pRec]["step"]
 end changeInfo
 
 command userFile
@@ -507,7 +524,6 @@ command userFile
    if (char -3 to -1 of tName) is among the words of "gif jpg png bmp xwd xbm xpm pbm pgm ppm ict eps" then put true into tShow
    -- create a new tag
    -- data is the relative filepath
-   
 end userFile
 
 function undoTurn @pMain,pTemp
@@ -826,7 +842,7 @@ command  adjList @pMain,@pShort
                         put item 1 of pMain[tDoc][tOtherPtr]["myStep"] & cr after pShort[tDoc][tRec][tAkey]
                      end repeat
                   else
-                     if tAkey is among the words of "title weight material whole duration series" then
+                     if tAkey is among the words of "title weight material whole duration series memo figure" then
                         put pMain[tDoc][tPtr][tAkey] into pShort[tDoc][tRec][tAkey]
                      end if
                      -- ! info will still list all the previous tag:data pairs as part of the string
@@ -1581,6 +1597,7 @@ on changeRequest pAsk,@pMain,pDoc
    end if
    ------------------------ end undo/redo ----------------------------------
    ----------------------- hide existing steps ------------------------------
+   -- ! needs to add any links attached to the nodes that aren't already listed
    -- assumes steps to hide are listed in correct order, comma delimited
    -- all hides (if multiple) are lumped in under same turn, so shouldn't need to list in a single hide tag
    put empty into tHide
