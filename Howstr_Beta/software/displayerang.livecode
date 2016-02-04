@@ -478,10 +478,10 @@ on displayManager pInfo,@pGUI,pSizes,pNow,@pHist -- ! creates/changes/deletes co
       set the layer of pGUI["nodes"][tNode]["graphic"] to top
    end repeat
    -- then make sure the preview graphics are on top of that
-   set the layer of graphic "preFlow1" to top
-   set the layer of graphic "preFlow2" to top
-   set the layer of field "preState" to top
-   set the layer of field "preChange" to top
+   set the layer of graphic "preFlow1" stack "HowstrBeta" to top
+   set the layer of graphic "preFlow2" stack "HowstrBeta" to top
+   set the layer of field "preState" stack "HowstrBeta" to top
+   set the layer of field "preChange" stack "HowstrBeta" to top
    -- highlight focused node (since all nodes new, old highlighted one was deleted)
    put pGUI["nodes"][pNow]["graphic"] into tBlerg
    set the backgroundColor of tBlerg to orange
@@ -614,10 +614,10 @@ function mouseTracker @pGUI,@pHist,@p1Down,@p1Enter,pFocus,pNode
    -- tNow[tooltip]=true/false
    
    -- (1) state of controls
-   put the hilite of button "tooltipSwitch" into tNow["tooltip"]
+   put the hilite of button "tooltipSwitch" stack "HowstrBeta" into tNow["tooltip"]
    put "false" into tNow["1down"]
    -- ! Jeremy's using Ubuntu 15.04 and the mouse() function returns a different number for button down
-   if the hilite of button "jeremyBugButt" is true then 
+   if the hilite of button "jeremyBugButt" stack "HowstrBeta" is true then 
       put 0 into mouseLeft
       put 2 into mouseRight
    else
@@ -632,7 +632,7 @@ function mouseTracker @pGUI,@pHist,@p1Down,@p1Enter,pFocus,pNode
    if pHist["3down"] is false and tNow["3down"] is true then -- reset selection when button down, otherwise retain
       put empty into tNow["nodeSelected"]
       put empty into tNow["linkSelected"]
-      set the visible of button "hideButt" to false
+      set the visible of button "hideButt" stack "HowstrBeta" to false
    else
       put pHist["nodeSelected"] into tNow["nodeSelected"]
       put pHist["linkSelected"] into tNow["linkSelected"]
@@ -648,17 +648,17 @@ function mouseTracker @pGUI,@pHist,@p1Down,@p1Enter,pFocus,pNode
          if tType is "nodes" and tNum is not among the items of pHist["nodeSelected"] then set the showborder of pGUI[tType][tNum]["graphic"] to false
          if tType is "links" and tNum is not among the items of pHist["linkSelected"] then  set the foregroundColor of pGUI[tType][tNum]["graphic"] to "0,220,220"
          -- selection box
-         if tNow["3down"] and intersect(pGUI[tType][tNum]["graphic"],graphic "selectBox","pixels") then
+         if tNow["3down"] and intersect(pGUI[tType][tNum]["graphic"],graphic "selectBox" stack "HowstrBeta","pixels") then
             -- add any new selection to lists
             if tType is "nodes" and tNum is not among the items of tNow["nodeSelected"] and tNum is not pFocus then 
                --               put tNum & "," after tNow["nodeSelected"]
                put tNum into item (the number of items of tNow["nodeSelected"])+1 of tNow["nodeSelected"]
-               set the visible of button "hideButt" to true
+               set the visible of button "hideButt" stack "HowstrBeta" to true
             end if
             if tType is "links" and tNum is not among the items of tNow["linkSelected"] then 
                --               put tNum & "," after tNow["linkSelected"]
                put tNum into item (the number of items of tNow["linkSelected"])+1 of tNow["linkSelected"]
-               set the visible of button "hideButt" to true
+               set the visible of button "hideButt" stack "HowstrBeta" to true
             end if
          end if-- if 3down is true & intersection
       end repeat
@@ -683,7 +683,7 @@ function mouseTracker @pGUI,@pHist,@p1Down,@p1Enter,pFocus,pNode
    repeat for each item tNum in tNow["linkSelected"]
       set the foregroundColor of pGUI["links"][tNum]["graphic"] to white
    end repeat
-   put tNow["nodeSelected"] & cr & tNow["linkSelected"] into field "showMe" -- ! for development
+   put tNow["nodeSelected"] & cr & tNow["linkSelected"] into field "showMe" stack "HowstrBeta" -- ! for development
    -- selection box calculation
    put the mouseLoc into tNow["moving"]
    put pHist["fixed"] into tNow["fixed"]
@@ -697,31 +697,31 @@ function mouseTracker @pGUI,@pHist,@p1Down,@p1Enter,pFocus,pNode
    if pHist["3down"] is false and tNow["3down"] is true then
       -- button 3 just transitioned from up to down
       put the mouseLoc into tNow["fixed"] -- becomes fixed point for selectBox
-      set the layer of graphic "selectBox" to top
-      set the visible of graphic "selectBox" to true
+      set the layer of graphic "selectBox" stack "HowstrBeta" to top
+      set the visible of graphic "selectBox" stack "HowstrBeta" to true
    end if
    if pHist["3down"] is true and tNow["3down"] is false then
       -- button 3 just transitioned from down to up
       put empty into tNow["fixed"] -- no more selectBox
-      set the visible of graphic "selectBox" to false
+      set the visible of graphic "selectBox" stack "HowstrBeta" to false
    end if
    put pHist["fixed"] into tStuff["point1"]
    put tNow["moving"] into tStuff["point2"]
    -- ! there was an error where fixed would be empty the first time or something like that
-   if tStuff["point1"] is not empty then set the rect of graphic "selectBox" to twoPointBox(tStuff)
-   if tNow["3down"] is not true then set the rect of graphic "selectBox" to "0,0,0,0" -- otherwise it's still there messing with stuff like a ghost
+   if tStuff["point1"] is not empty then set the rect of graphic "selectBox" stack "HowstrBeta" to twoPointBox(tStuff)
+   if tNow["3down"] is not true then set the rect of graphic "selectBox" stack "HowstrBeta" to "0,0,0,0" -- otherwise it's still there messing with stuff like a ghost
    if tNow["tooltip"] is true and tNow["inside"] is a number then
       -- fill and resize the field
       if tNow["inside"] is among the keys of pGUI["nodes"] then
-         put pGUI["nodes"][tNow["inside"]]["displayString"] into field "tooltipField"
+         put pGUI["nodes"][tNow["inside"]]["displayString"] into field "tooltipField" stack "HowstrBeta" 
       else if tNow["inside"] is among the keys of pGUI["links"] then
-         put pGUI["links"][tNow["inside"]]["weight"] into field "tooltipField"
+         put pGUI["links"][tNow["inside"]]["weight"] into field "tooltipField" stack "HowstrBeta" 
       end if
-      set the height of field "tooltipField" to the formattedHeight of word 1 to -1 of field "tooltipField"
-      set the layer of field "tooltipField" to top
-      set the visible of field "tooltipField" to true
+      set the height of field "tooltipField" stack "HowstrBeta"  to the formattedHeight of word 1 to -1 of field "tooltipField"
+      set the layer of field "tooltipField" stack "HowstrBeta" to top
+      set the visible of field "tooltipField" stack "HowstrBeta" to true
    else
-      set the visible of field "tooltipField" to false
+      set the visible of field "tooltipField" stack "HowstrBeta" to false
    end if
    
    -- (1c) if there's an anchor node, track new areas entered
@@ -773,7 +773,7 @@ function mouseTracker @pGUI,@pHist,@p1Down,@p1Enter,pFocus,pNode
    put "p1Down:" && p1Down & cr after tBlerg
    put "p1Enter:" && p1Enter & cr after tBlerg
    put "preview:" && tPreview after tBlerg
-   put tBlerg into field "viewMouse"
+   put tBlerg into field "viewMouse" stack "HowstrBeta" 
    
    put false into tCommit
    -- button 1 just transitioned from down to up while there's an anchor
@@ -796,7 +796,7 @@ function mouseTracker @pGUI,@pHist,@p1Down,@p1Enter,pFocus,pNode
       -- #: node = new series of nodes & links
       -- info: = open node info
       put true into tCommit
-      put tPreview & cr before field "viewCommitments"   -- ! for development
+      put tPreview & cr before field "viewCommitments" stack "HowstrBeta"   -- ! for development
       put empty into p1Down
       put empty into p1Enter
    end if
@@ -820,40 +820,39 @@ function previewAndChange pToDo,pGUI,pNode -- returns "nothing" or array with ch
    -- pNode = display size of nodes in pixels   
    
    if pToDo is "nothing" then
-      set the visible of graphic "preFlow1" to false
-      set the visible of field "preState" to false
-      set the visible of field "preChange" to false
-      set the visible of graphic "preFlow2" to false
-      set the visible of graphic "preFocus" to false
-      set the visible of widget "preInfo" to false
+      set the visible of graphic "preFlow1" stack "HowstrBeta" to false
+      set the visible of field "preState" stack "HowstrBeta" to false
+      set the visible of field "preChange" stack "HowstrBeta" to false
+      set the visible of graphic "preFlow2" stack "HowstrBeta" to false
+      set the visible of graphic "preFocus" stack "HowstrBeta" to false
+      set the visible of widget "preInfo" stack "HowstrBeta" to false
       return "nothing"
    end if
    -- expand node to view/edit info
    if item 2 of pToDo is "info" then
       put pGUI["nodes"][item 1 of pToDo]["horz"] & "," & pGUI["nodes"][item 1 of pToDo]["vert"] into tSpot
-      set the location of widget "preInfo" to tSpot
-      --      set the layer of widget "preInfo" to bottom
-      set the visible of widget "preInfo" to true
+      set the location of widget "preInfo" stack "HowstrBeta" to tSpot
+      set the visible of widget "preInfo" stack "HowstrBeta" to true
       put item 1 of pToDo into tWhatever["info"]
       
-      set the visible of graphic "preFlow1" to false
-      set the visible of field "preState" to false
-      set the visible of field "preChange" to false
-      set the visible of graphic "preFlow2" to false
-      set the visible of graphic "preFocus" to false
+      set the visible of graphic "preFlow1" stack "HowstrBeta" to false
+      set the visible of field "preState" stack "HowstrBeta" to false
+      set the visible of field "preChange" stack "HowstrBeta" to false
+      set the visible of graphic "preFlow2" stack "HowstrBeta" to false
+      set the visible of graphic "preFocus" stack "HowstrBeta" to false
       return tWhatever
    else
-      set the visible of widget "preInfo" to false
+      set the visible of widget "preInfo" stack "HowstrBeta" to false
    end if
    -- shift focus to another node
    if pToDo is a number then
       put pGUI["nodes"][pToDo]["horz"] & "," & pGUI["nodes"][pToDo]["vert"] into tSpot
-      set the location of graphic "preFocus" to tSpot
-      set the visible of graphic "preFocus" to true
+      set the location of graphic "preFocus" stack "HowstrBeta" to tSpot
+      set the visible of graphic "preFocus" stack "HowstrBeta" to true
       put pToDo into tWhatever["focus"]
       return tWhatever
    else
-      set the visible of graphic "preFocus" to false
+      set the visible of graphic "preFocus" stack "HowstrBeta" to false
    end if
    ----------------------------------- research all conditions -------------------------
    -- tUno=# (always anchor)
@@ -952,13 +951,12 @@ function previewAndChange pToDo,pGUI,pNode -- returns "nothing" or array with ch
    ------------------------------ end geometry help ------------------------------
    -- show a single flow between the nodes
    if tUno is a number and tDos is a number and tSameType is false and tAdjacent is false then
-      set the points of graphic "preFlow1" to tLineCoord
-      set the visible of graphic "preFlow1" to true
-      set the visible of graphic "preFlow2" to false
-      set the visible of field "preState" to false
-      set the visible of field "preChange" to false
+      set the points of graphic "preFlow1" stack "HowstrBeta" to tLineCoord
+      set the visible of graphic "preFlow1" stack "HowstrBeta" to true
+      set the visible of graphic "preFlow2" stack "HowstrBeta" to false
+      set the visible of field "preState" stack "HowstrBeta" to false
+      set the visible of field "preChange" stack "HowstrBeta" to false
       -- format graph change request
-      --      put "user" into tTemp["a"]["from"]
       -- ! don't have a return address for area yet, but will need that
       put"flow_btwn_diffType" into tTemp[0]["act"]
       put "flow" into tTemp["a"]["type"]
@@ -973,21 +971,20 @@ function previewAndChange pToDo,pGUI,pNode -- returns "nothing" or array with ch
    end if
    -- show a single node, and two flows, between the nodes
    if tUno is a number and tDos is a number and tSameType is true then
-      set the points of graphic "preFlow1" to (tStartCoord & cr & tMidLeft)
-      set the points of graphic "preFlow2" to (tMidRight & cr & tEndCoord)
-      set the visible of graphic "preFlow1" to true
-      set the visible of graphic "preFlow2" to true
+      set the points of graphic "preFlow1" stack "HowstrBeta" to (tStartCoord & cr & tMidLeft)
+      set the points of graphic "preFlow2" stack "HowstrBeta" to (tMidRight & cr & tEndCoord)
+      set the visible of graphic "preFlow1" stack "HowstrBeta" to true
+      set the visible of graphic "preFlow2" stack "HowstrBeta" to true
       if tUnoType is "state" then
-         set the location of field "preChange" to tOffCoord
-         set the visible of field "preChange" to true
-         set the visible of field "preState" to false
+         set the location of field "preChange" stack "HowstrBeta" to tOffCoord
+         set the visible of field "preChange" stack "HowstrBeta" to true
+         set the visible of field "preState" stack "HowstrBeta" to false
       else
-         set the location of field "preState" to tOffCoord
-         set the visible of field "preChange" to false
-         set the visible of field "preState" to true
+         set the location of field "preState" stack "HowstrBeta" to tOffCoord
+         set the visible of field "preChange" stack "HowstrBeta" to false
+         set the visible of field "preState" stack "HowstrBeta" to true
       end if
       -- format graph change request
-      --      put "user" into tTemp["a"]["from"]
       -- ! don't have a return address for area yet, but will need that
       /*
       x[a][type]=state/change
@@ -1025,8 +1022,8 @@ function previewAndChange pToDo,pGUI,pNode -- returns "nothing" or array with ch
    -- must show flow, on correct side
    if tUno is a number and tDos is a number and not (tAdjacent is false) then ------------------------------------------------
       -- flow preview attached to uno (anchor)
-      set the visible of graphic "preFlow1" to true
-      set the visible of graphic "preFlow2" to false
+      set the visible of graphic "preFlow1" stack "HowstrBeta" to true
+      set the visible of graphic "preFlow2" stack "HowstrBeta" to false
       -- format graph change request
       -- state node [a], change node [b], three flows [c][d][e]
       -- hide existing flow [#]
@@ -1038,11 +1035,11 @@ function previewAndChange pToDo,pGUI,pNode -- returns "nothing" or array with ch
       put "flow" into tTemp["e"]["type"]
       put tAdjacent into tTemp["hide"]
       if tStartAtDos is false and tUnoType is "state" then
-         set the points of graphic "preFlow1" to (tStartCoord & cr & tMidLeft)
-         set the location of field "preChange" to tOffCoord
-         set the location of field "preState" to ((item 1 of tOffCoord + pNode) & "," & item 2 of tOffCoord)
-         set the visible of field "preChange" to true
-         set the visible of field "preState" to true
+         set the points of graphic "preFlow1" stack "HowstrBeta" to (tStartCoord & cr & tMidLeft)
+         set the location of field "preChange" stack "HowstrBeta" to tOffCoord
+         set the location of field "preState" stack "HowstrBeta" to ((item 1 of tOffCoord + pNode) & "," & item 2 of tOffCoord)
+         set the visible of field "preChange" stack "HowstrBeta" to true
+         set the visible of field "preState" stack "HowstrBeta" to true
          -- format graph change request
          -- uno > flow c > change b > flow d > state a > flow e > dos
          put tUno into tTemp["c"]["backward"]
@@ -1052,11 +1049,11 @@ function previewAndChange pToDo,pGUI,pNode -- returns "nothing" or array with ch
          put "a" into tTemp["e"]["backward"]
          put tDos into tTemp["e"]["forward"]
       else if tStartAtDos is false and tUnoType is "change" then
-         set the points of graphic "preFlow1" to (tStartCoord & cr & tMidLeft)
-         set the location of field "preState" to tOffCoord
-         set the location of field "preChange" to ((item 1 of tOffCoord + pNode) & "," & item 2 of tOffCoord)
-         set the visible of field "preChange" to true
-         set the visible of field "preState" to true
+         set the points of graphic "preFlow1" stack "HowstrBeta" to (tStartCoord & cr & tMidLeft)
+         set the location of field "preState" stack "HowstrBeta" to tOffCoord
+         set the location of field "preChange" stack "HowstrBeta" to ((item 1 of tOffCoord + pNode) & "," & item 2 of tOffCoord)
+         set the visible of field "preChange" stack "HowstrBeta" to true
+         set the visible of field "preState" stack "HowstrBeta" to true
          -- format graph change request
          -- uno > flow c > state a > flow d > change b > flow e > dos
          put tUno into tTemp["c"]["backward"]
@@ -1066,11 +1063,11 @@ function previewAndChange pToDo,pGUI,pNode -- returns "nothing" or array with ch
          put "b" into tTemp["e"]["backward"]
          put tDos into tTemp["e"]["forward"]
       else if tStartAtDos is true and tDosType is "state" then
-         set the points of graphic "preFlow1" to (tMidRight & cr & tEndCoord)
-         set the location of field "preState" to tOffCoord
-         set the location of field "preChange" to ((item 1 of tOffCoord - pNode) & "," & item 2 of tOffCoord)
-         set the visible of field "preChange" to true
-         set the visible of field "preState" to true
+         set the points of graphic "preFlow1" stack "HowstrBeta" to (tMidRight & cr & tEndCoord)
+         set the location of field "preState" stack "HowstrBeta" to tOffCoord
+         set the location of field "preChange" stack "HowstrBeta" to ((item 1 of tOffCoord - pNode) & "," & item 2 of tOffCoord)
+         set the visible of field "preChange" stack "HowstrBeta" to true
+         set the visible of field "preState" stack "HowstrBeta" to true
          -- format graph change request
          -- dos > flow e > change b > flow d > state a > flow c > uno
          put tDos into tTemp["e"]["backward"]
@@ -1080,11 +1077,11 @@ function previewAndChange pToDo,pGUI,pNode -- returns "nothing" or array with ch
          put "a" into tTemp["c"]["backward"]
          put tUno into tTemp["c"]["forward"]       
       else if tStartAtDos is true and tDosType is "change" then
-         set the points of graphic "preFlow1" to (tMidRight & cr & tEndCoord)
-         set the location of field "preChange" to tOffCoord
-         set the location of field "preState" to ((item 1 of tOffCoord - pNode) & "," & item 2 of tOffCoord)
-         set the visible of field "preChange" to true
-         set the visible of field "preState" to true
+         set the points of graphic "preFlow1" stack "HowstrBeta" to (tMidRight & cr & tEndCoord)
+         set the location of field "preChange" stack "HowstrBeta" to tOffCoord
+         set the location of field "preState" stack "HowstrBeta" to ((item 1 of tOffCoord - pNode) & "," & item 2 of tOffCoord)
+         set the visible of field "preChange" stack "HowstrBeta" to true
+         set the visible of field "preState" stack "HowstrBeta" to true
          -- format graph change request
          -- dos > flow e > state a > flow d > change b > flow c > uno
          put tDos into tTemp["e"]["backward"]
@@ -1108,12 +1105,12 @@ function previewAndChange pToDo,pGUI,pNode -- returns "nothing" or array with ch
       put "flow" into tTemp["a"]["type"]
       put "state" into tTemp["b"]["type"]
       if tDos is "right" and tUnoType is "change" then -- can't be #,# if script got this far
-         set the points of graphic "preFlow1" to tLineCoord
-         set the location of field "preState" to tMoving
-         set the visible of field "preChange" to false
-         set the visible of field "preState" to true
-         set the visible of graphic "preFlow1" to true
-         set the visible of graphic "preFlow2" to false
+         set the points of graphic "preFlow1" stack "HowstrBeta" to tLineCoord
+         set the location of field "preState" stack "HowstrBeta" to tMoving
+         set the visible of field "preChange" stack "HowstrBeta" to false
+         set the visible of field "preState" stack "HowstrBeta" to true
+         set the visible of graphic "preFlow1" stack "HowstrBeta" to true
+         set the visible of graphic "preFlow2" stack "HowstrBeta" to false
          -- format graph change request
          -- uno > flow a > state b > rise c > case
          put tUno into tTemp["a"]["backward"]
@@ -1122,13 +1119,13 @@ function previewAndChange pToDo,pGUI,pNode -- returns "nothing" or array with ch
          put "b" into tTemp["c"]["backward"]
          put pGUI["case"] into tTemp["c"]["forward"]
       else if tDos is "right" and tUnoType is "state" then
-         set the points of graphic "preFlow1" to tLineCoord
-         set the location of field "preChange" to tMoving
-         set the location of field "preState" to ((item 1 of tMoving + pNode) & "," & item 2 of tMoving)
-         set the visible of field "preChange" to true
-         set the visible of field "preState" to true
-         set the visible of graphic "preFlow1" to true
-         set the visible of graphic "preFlow2" to false
+         set the points of graphic "preFlow1" stack "HowstrBeta" to tLineCoord
+         set the location of field "preChange" stack "HowstrBeta" to tMoving
+         set the location of field "preState" stack "HowstrBeta" to ((item 1 of tMoving + pNode) & "," & item 2 of tMoving)
+         set the visible of field "preChange" stack "HowstrBeta" to true
+         set the visible of field "preState" stack "HowstrBeta" to true
+         set the visible of graphic "preFlow1" stack "HowstrBeta" to true
+         set the visible of graphic "preFlow2" stack "HowstrBeta" to false
          -- format graph change request
          -- uno > flow a > change d > flow e > state b > rise c > case
          -- since this is a state, going right, it might already have a rise link
@@ -1144,22 +1141,13 @@ function previewAndChange pToDo,pGUI,pNode -- returns "nothing" or array with ch
          if not (tUpish is false) then 
             put tUpish into tTemp["hide"]
          end if
-         --         if tUpish is false then
-         --            put "rise" into tTemp["c"]["type"]
-         --            put "b" into tTemp["c"]["backward"]
-         --            put pGUI["case"] into tTemp["c"]["forward"]
-         --         else
-         --            put "b" into tTemp[tUpish]["backward"]
-         --            put pGUI["case"] into tTemp[tUpish]["forward"]
-         --         end if
-         
       else if tDos is "left" and tUnoType is "change" then
-         set the points of graphic "preFlow1" to tLineCoord
-         set the location of field "preState" to tMoving
-         set the visible of field "preChange" to false
-         set the visible of field "preState" to true
-         set the visible of graphic "preFlow1" to true
-         set the visible of graphic "preFlow2" to false
+         set the points of graphic "preFlow1" stack "HowstrBeta" to tLineCoord
+         set the location of field "preState" stack "HowstrBeta" to tMoving
+         set the visible of field "preChange" stack "HowstrBeta" to false
+         set the visible of field "preState" stack "HowstrBeta" to true
+         set the visible of graphic "preFlow1" stack "HowstrBeta" to true
+         set the visible of graphic "preFlow2" stack "HowstrBeta" to false
          -- format graph change request
          -- case > dive c > state b > flow a > uno
          put "dive" into tTemp["c"]["type"]
@@ -1168,24 +1156,16 @@ function previewAndChange pToDo,pGUI,pNode -- returns "nothing" or array with ch
          put "b" into tTemp["a"]["backward"]
          put tUno into tTemp["a"]["forward"]
       else if tDos is "left" and tUnoType is "state" then
-         set the points of graphic "preFlow1" to tLineCoord
-         set the location of field "preChange" to tMoving
-         set the location of field "preState" to ((item 1 of tMoving - pNode) & "," & item 2 of tMoving)
-         set the visible of field "preChange" to true
-         set the visible of field "preState" to true
-         set the visible of graphic "preFlow1" to true
-         set the visible of graphic "preFlow2" to false
+         set the points of graphic "preFlow1" stack "HowstrBeta" to tLineCoord
+         set the location of field "preChange" stack "HowstrBeta" to tMoving
+         set the location of field "preState" stack "HowstrBeta" to ((item 1 of tMoving - pNode) & "," & item 2 of tMoving)
+         set the visible of field "preChange" stack "HowstrBeta" to true
+         set the visible of field "preState" stack "HowstrBeta" to true
+         set the visible of graphic "preFlow1" stack "HowstrBeta" to true
+         set the visible of graphic "preFlow2" stack "HowstrBeta" to false
          -- format graph change request
          -- case > c > b > e > d > a > uno
          -- since this is a state, going left, it might already have a dive link
-         --         if tDownish is false then
-         --            put "dive" into tTemp["c"]["type"]
-         --            put pGUI["case"] into tTemp["c"]["backward"]
-         --            put "b" into tTemp["c"]["forward"]
-         --         else
-         --            put pGUI["case"] into tTemp[tDownish]["backward"]
-         --            put "b" into tTemp[tDownish]["forward"]
-         --         end if
          if not (tDownish is false) then 
             put tDownish into tTemp["hide"]
          end if

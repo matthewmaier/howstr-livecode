@@ -300,3 +300,7 @@
 [0125/171140:WARNING:dns_config_service_win.cc(654)] Failed to read DnsConfig.
 [0125/171144:WARNING:dns_config_service_win.cc(654)] Failed to read DnsConfig.
 [0126/153310:WARNING:dns_config_service_win.cc(654)] Failed to read DnsConfig.
+[0203/205044:ERROR:renderer_main.cc(207)] Running without renderer sandbox
+[0203/205045:INFO:CONSOLE(266)] "[object Object]", source: file:///C:/Program%20Files%20(x86)/RunRev/LiveCode%20Community%208.0%20(dp%2013)/Documentation/html_viewer/js/dictionary_functions.js (266)
+[0203/205058:INFO:CONSOLE(266)] "[object Object]", source: file:///C:/Program%20Files%20(x86)/RunRev/LiveCode%20Community%208.0%20(dp%2013)/Documentation/html_viewer/js/dictionary_functions.js (266)
+[0203/205113:WARNING:message_in_transit_queue.cc(18)] Destroying nonempty message queue
