@@ -64,10 +64,10 @@ local sCaptureAreaGeometry
 
 on setupAsOf3FEB2016
       -- setup the window
-   set the decorations of this stack to "title"
+   set the decorations of stack "howstrBeta" to "title"
    --   set the decorations of this stack to empty
    --   set the windowShape of this stack to 2868
-   set the windowshape of this stack to 0
+   set the windowshape of stack "howstrBeta" to 0
    -- shouldn't be necessary forever, but a good hack for now
    set the foregroundColor of card 1 of stack "Ask Dialog" to "0,220,220"
    set the opaque  of button "Ok" of card 1 of stack "Ask Dialog" to false
@@ -89,15 +89,15 @@ on setupAsOf3FEB2016
    put empty into sGraphDrawing
    put 8 into sNowFocus
    middleOut sGraphData,sGraphDrawing,sNowFocus -- displayerang.livecode
-   put the width of this stack into tSizes["width"]
-   put the height of this stack into tSizes["height"]
+   put the width of stack "howstrBeta" into tSizes["width"]
+   put the height of stack "howstrBeta" into tSizes["height"]
    put 40 into sLayerSize
    put 60 into sNodeSize
    put 8 into sLinkSize
-   set the width of field "preState" to sNodeSize
-   set the height of field "preState" to sNodeSize
-   set the width of field "preChange" to sNodeSize
-   set the height of field "preChange" to sNodeSize
+   set the width of field "preState" stack "howstrBeta" to sNodeSize
+   set the height of field "preState" stack "howstrBeta" to sNodeSize
+   set the width of field "preChange" stack "howstrBeta" to sNodeSize
+   set the height of field "preChange" stack "howstrBeta" to sNodeSize
    put sLayerSize into tSizes["layer"]
    put sNodeSize into tSizes["node"]
    put sLinkSize into tSizes["link"]
@@ -120,19 +120,20 @@ on setupAsOf3FEB2016
    put 400,400,800,800 into sCaptureAreaGeometry["captureAreaRect"]
 end setupAsOf3FEB2016
 
-on resizeStack pNewWidth, pNewHeight, pOldWidth, pOldHeight
-   put "on resizeStack" into xX["write"];    devLog xX
-   if the rect of this stack is the screenRect then
-      set the visible of widget "iconMaximize" to false
-      set the visible of widget "iconMediumsize" to true
-   else
-      set the visible of widget "iconMaximize" to true
-      set the visible of widget "iconMediumsize" to false
-   end if
-   -- all of the layer information for all of the graph data in memory is calculated by middleOut
-   -- so when the window resizes, displayManager updates the graphics based on what fits now
-   refreshDisplay
-end resizeStack
+-- already in displayerang
+--on resizeStack pNewWidth, pNewHeight, pOldWidth, pOldHeight
+--   put "on resizeStack" into xX["write"];    devLog xX
+--   if the rect of this stack is the screenRect then
+--      set the visible of widget "iconMaximize" to false
+--      set the visible of widget "iconMediumsize" to true
+--   else
+--      set the visible of widget "iconMaximize" to true
+--      set the visible of widget "iconMediumsize" to false
+--   end if
+--   -- all of the layer information for all of the graph data in memory is calculated by middleOut
+--   -- so when the window resizes, displayManager updates the graphics based on what fits now
+--   refreshDisplay
+--end resizeStack
 
 on resizeNodeDetails pWidth,pHeight
    set itemdelimiter to comma
@@ -217,7 +218,6 @@ on expandImgButtMouseUp
    end if
    set the loc of stack "figureFocus" to tReply["center"]
    set the topleft of image "figureFull" stack "figureFocus" to "0,0"
-   
    go stack "figureFocus"
 end expandImgButtMouseUp
 
@@ -231,61 +231,6 @@ on unIconifyStack
    -- set to float above all other windows
    --   set the systemWindow of me to true
 end unIconifyStack
-
---on mouseUp
---   if sBusy is true then 
---      put "on mouseUp > sBusy=true" into xX["write"];   devLog xX
---      exit mouseUp
---   end if
---   put "on mouseUp > mouseTrackerTracker" into xX["write"];   devLog xX
---   mouseTrackerTracker
---   put "mouseTrackerTracker > end mouseUp" into xX["write"];   devLog xX
---end mouseUp
---on mouseDown tButt
---   if sBusy is true then 
---      put "on mouseDown > sBusy=true" into xX["write"];   devLog xX
---      exit mouseDown
---   end if
---   put "on mouseDown > mouseTrackerTracker" into xX["write"];   devLog xX
---   mouseTrackerTracker
---   put "mouseTrackerTracker > end mouseDown" into xX["write"];   devLog xX
---end mouseDown
---on mouseRelease
---   if sBusy is true then 
---      put "on mouseRelease > sBusy=true" into xX["write"];   devLog xX
---      exit mouseRelease
---   end if
---   put "on mouseRelease > mouseTrackerTracker" into xX["write"];   devLog xX
---   mouseTrackerTracker
---   put "mouseTrackerTracker > end mouseRelease" into xX["write"];   devLog xX
---end mouseRelease
---on mouseMove
---   if sBusy is true then 
---      put "on mouseMove > sBusy=true" into xX["write"];   devLog xX
---      exit mouseMove
---   end if
---   put "on mouseMove > mouseTrackerTracker" into xX["write"];   devLog xX
---   mouseTrackerTracker
---   put "mouseTrackerTracker > end mouseMove" into xX["write"];   devLog xX
---end mouseMove
---on mouseEnter
---   if sBusy is true then 
---      put "on mouseEnter > sBusy=true" into xX["write"];   devLog xX
---      exit mouseEnter
---   end if
---   put "on mouseEnter > mouseTrackerTracker" into xX["write"];   devLog xX
---   mouseTrackerTracker
---   put "mouseTrackerTracker > end mouseEnter" into xX["write"];   devLog xX
---end mouseEnter
---on mouseLeave
---   if sBusy is true then 
---      put "on mouseLeave > sBusy=true" into xX["write"];   devLog xX
---      exit mouseLeave
---   end if
---   put "on mouseLeave > mouseTrackerTracker" into xX["write"];   devLog xX
---   mouseTrackerTracker
---   put "mouseTrackerTracker > end mouseLeave" into xX["write"];   devLog xX
---end mouseLeave
 
 on mouseTrackerTracker
    put true into sBusy -- !
@@ -313,7 +258,7 @@ on mouseTrackerTracker
          put tResponse["focus"] into sNowFocus
          put "mouseTrackerTracker(tResponse has 'focus') > refreshDisplay" into xX["write"];    devLog xX
          --         refreshDisplay
-         send refreshDisplay to me in 50 milliseconds -- !
+         send refreshDisplay to me in 50 milliseconds -- ! seems to have fix freeze 11FEB2016
          put "refreshDisplay > mouseTrackerTracker(tResponse has 'focus')" into xX["write"];    devLog xX
       else if "info" is among the keys of tResponse then -- launch node details window
          put sNowDoc into tResponse["doc"]
@@ -328,7 +273,7 @@ on mouseTrackerTracker
 end mouseTrackerTracker
 
 on launchNodeDetails pStuff
-   put tempNodeDetails(sMainShort,pStuff) into tDeets
+   put tempNodeDetails(sMainShort,pStuff) into tDeets -- in displayerang
    -- x[string]=cr delimited list of details
    -- x[line #][link]=rec of link
    -- x[line #][node]=rec of linked node
@@ -360,7 +305,6 @@ on launchNodeDetails pStuff
    set the visible of button "snapCaptureButt" stack "NodeDetails" to false
    set the text of field "tagDataList" stack "NodeDetails" to tDeets["string"]
    go stack "NodeDetails"
-   --   go stack "NodeDetails" as modal
 end launchNodeDetails
 
 on detailsListMouseUp pLine
@@ -517,6 +461,9 @@ on nodeDetailsChanged
    -- if they want to close the nodeDetails window, without saving the project, they'll have to click the cancel (x) icon instead
    repeat for each key tKey in tDeets
       if tKey is a number and "new" is among the keys of tDeets[tKey] and tDeets[tKey]["new"] is not "[empty]" then
+         put sNowDoc into tStuff["doc"]
+         put tDeets[tKey]["rec"] into tStuff["rec"]
+         put tDeets[tKey]["label"] into tStuff["tag"]
          if tDeets[tKey]["new"] is "hide" then
             -- hide this tag of this rec
             -- only used for [figure] at the moment 22JAN2016
@@ -525,15 +472,15 @@ on nodeDetailsChanged
             -- pBlerg["tag"] = tag string (this will be in a rec different from the step's rec)
             -- pBlerg["data"] = new data
             -- pBlerg["hide"] = true 
-            put sNowDoc into tStuff["doc"]
+            --            put sNowDoc into tStuff["doc"]
             put true into tStuff["hide"]
-            put tDeets[tKey]["rec"] into tStuff["rec"]
-            put tDeets[tKey]["label"] into tStuff["tag"]
-            changeInfo sMain,tStuff
+            --            put tDeets[tKey]["rec"] into tStuff["rec"]
+            --            put tDeets[tKey]["label"] into tStuff["tag"]
+            --            changeInfo sMain,tStuff
          else if tDeets[tKey]["label"] is "figure" then --------------------------------- figure ---------------
-            put tDeets[tKey]["rec"] into tStuff["rec"]
-            put tDeets[tKey]["label"] into tStuff["tag"]
-            put sNowDoc into tStuff["doc"]
+            --            put tDeets[tKey]["rec"] into tStuff["rec"]
+            --            put tDeets[tKey]["label"] into tStuff["tag"]
+            --            put sNowDoc into tStuff["doc"]
             set the itemdelimiter to slash
             put tDeets[tKey]["new"]["copyFrom"] into tOldImgPath
             put item -1 of tOldImgPath into tImgName
@@ -545,14 +492,18 @@ on nodeDetailsChanged
             put tImgName into item -1 of tStuff["data"]
             --               export image "figureHolder" stack "nodeDetails" to URL ("binfile"& tStuff["data"])
             put URL("binfile:"& tOldImgPath) into URL("binfile:"& tStuff["data"])
-            changeInfo sMain,tStuff -- grapheriffic
-         else -- has [new], [new] is not 'hide', [label] is not 'figure' ------------- title, memo -----------
-            put tDeets[tKey]["rec"] into tStuff["rec"]
-            put tDeets[tKey]["label"] into tStuff["tag"]
-            put sNowDoc into tStuff["doc"]
+            --            changeInfo sMain,tStuff -- grapheriffic
+         else if tDeets[tKey]["node"] is a number then ------- weight ----------
+            put tDeets[tKey]["link"] into tStuff["rec"] -- overwrite cuz data stored differently
             put tDeets[tKey]["new"] into tStuff["data"]
-            changeInfo sMain,tStuff -- grapheriffic
+         else  --------- title, memo ----
+            --            put tDeets[tKey]["rec"] into tStuff["rec"]
+            --            put tDeets[tKey]["label"] into tStuff["tag"]
+            --            put sNowDoc into tStuff["doc"]
+            put tDeets[tKey]["new"] into tStuff["data"]
+            --            changeInfo sMain,tStuff -- grapheriffic
          end if -- 'new' is hide
+         changeInfo sMain,tStuff -- grapheriffic
       end if -- tKey is a num and 'new' is not [empty]
    end repeat
    refreshDraw
@@ -573,13 +524,13 @@ end refreshDraw
 
 on refreshDisplay
    put true into sBusy -- !
-   set the hilite of button "busySwitch" to sBusy
+   set the hilite of button "busySwitch" stack "howstrBeta" to sBusy
    put "on refreshDisplay" into xX["write"];    devLog xX
    -- takes simple graph data, lays it out, and puts it on screen
    put empty into sGraphDrawing
    middleOut sGraphData,sGraphDrawing,sNowFocus -- adds info to sGraphData, becomes sGraphDrawing; displayerang.livecode
-   put the width of this stack into tSizes["width"]
-   put the height of this stack into tSizes["height"]
+   put the width of stack "howstrBeta" into tSizes["width"]
+   put the height of stack "howstrBeta" into tSizes["height"]
    put sLayerSize into tSizes["layer"]
    put sNodeSize into tSizes["node"]
    put sLinkSize into tSizes["link"]
@@ -587,7 +538,7 @@ on refreshDisplay
    put "unsaved" into sMain[sNowDoc][0]["saveStatus"]
    put "end refreshDisplay ---------" into xX["write"];    devLog xX
    put false into sBusy -- !
-   set the hilite of button "busySwitch" to sBusy
+   set the hilite of button "busySwitch" stack "howstrBeta" to sBusy
 end refreshDisplay
 
 on userUndo
@@ -743,12 +694,12 @@ on hideButtMouseUp
 end hideButtMouseUp
 
 on tooltipSwitchChange
-   put the hilite of button "tooltipSwitch" into tX
+   put the hilite of button "tooltipSwitch" stack "howstrBeta" into tX
    put tX into sTooltipVisible
 end tooltipSwitchChange
 
 on busySwitchChange
-   get the hilite of button "busySwitch"
+   get the hilite of button "busySwitch" stack "howstrBeta"
    put it into sBusy
 end busySwitchChange
 

@@ -1483,16 +1483,29 @@ function summarizeResources @pMain,@pSketch,@pResources,pDoc
    return tDisplay
 end summarizeResources
 
-on resizeStack pNewWidth, pNewHeight, pOldWidth, pOldHeight
+--on resizeStack pNewWidth, pNewHeight, pOldWidth, pOldHeight
+--   put "on resizeStack" into xX["write"];    devLog xX
+--   if the rect of this stack is the screenRect then
+--      set the visible of widget "iconMaximize" to false
+--      set the visible of widget "iconMediumsize" to true
+--   else
+--      set the visible of widget "iconMaximize" to true
+--      set the visible of widget "iconMediumsize" to false
+--   end if
+--   -- all of the layer information for all of the graph data in memory is calculated by middleOut
+--   -- so when the window resizes, displayManager updates the graphics based on what fits now
+--   refreshDisplay
+--end resizeStack
+on resizeMainStack pNewWidth, pNewHeight, pOldWidth, pOldHeight
    put "on resizeStack" into xX["write"];    devLog xX
    if the rect of this stack is the screenRect then
-      set the visible of widget "iconMaximize" to false
-      set the visible of widget "iconMediumsize" to true
+      set the visible of widget "iconMaximize" stack "HowstrBeta" to false
+      set the visible of widget "iconMediumsize" stack "HowstrBeta" to true
    else
-      set the visible of widget "iconMaximize" to true
-      set the visible of widget "iconMediumsize" to false
+      set the visible of widget "iconMaximize" stack "HowstrBeta" to true
+      set the visible of widget "iconMediumsize" stack "HowstrBeta" to false
    end if
    -- all of the layer information for all of the graph data in memory is calculated by middleOut
    -- so when the window resizes, displayManager updates the graphics based on what fits now
    refreshDisplay
-end resizeStack
+end resizeMainStack
