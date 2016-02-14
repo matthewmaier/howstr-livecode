@@ -558,12 +558,17 @@ on userRedo
 end userRedo
 
 on instrButtMouseUp
-      put "on instrButtMouseUp" into xX["write"];    devLog xX
+   put "on instrButtMouseUp" into xX["write"];    devLog xX
+   -- need to save so there's a place to put stuff
+   if sMain[sNowDoc][0]["filepath"] is empty then
+      saveAsButtMouseUp
+      if sMain[sNowDoc][0]["filepath"] is empty then exit instrButtMouseUp
+   end if
    -- adjList already called on every change
    topoSort sMainShort,sTopoSort,sNotVisited,sNoteList
    put  writeInstructions(sMain,sMainShort,sTopoSort,sNotVisited) into tInstr
-   set the clipboardData["text"] to tInstr
-   answer tInstr
+   --   set the clipboardData["text"] to tInstr
+   --   answer tInstr
 end instrButtMouseUp
 
 on resoButtMouseUp

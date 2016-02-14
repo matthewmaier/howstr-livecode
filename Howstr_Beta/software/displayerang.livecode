@@ -1352,7 +1352,13 @@ function writeInstructions @pMain,@pShort,pTopo,pNoVisit
    --   put tInstructions into field "textInstr" stack "primary"
    --   if tInstructions is empty then put \
          --         "Network unclear. At least one node must have both dive and rise links." into field "textInstr" stack "primary"
-   return tInstructions
+   --   return tInstructions
+   put tInstructions into field "testHtml" stack "HowstrBeta"
+   put pMain[1][0]["filepath"] into tPath
+   set the itemdelimiter to slash
+   put "instructions.html" into item -1 of tPath
+   --   write the HTMLText of field "testHtml" stack "HowstrBeta" to file ("file:" & tPath)
+   put the HTMLText of field "testHtml" stack "HowstrBeta" into URL ("file:" & tPath)
 end writeInstructions
 
 function summarizeResources @pMain,@pSketch,@pResources,pDoc
