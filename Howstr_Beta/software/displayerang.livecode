@@ -1349,15 +1349,19 @@ function writeInstructions @pMain,@pShort,pTopo,pNoVisit
       end if
    end repeat -- tDoc in pTopo
    filter tInstructions without empty
-   --   put tInstructions into field "textInstr" stack "primary"
-   --   if tInstructions is empty then put \
-         --         "Network unclear. At least one node must have both dive and rise links." into field "textInstr" stack "primary"
-   --   return tInstructions
-   put tInstructions into field "testHtml" stack "HowstrBeta"
    put pMain[1][0]["filepath"] into tPath
    set the itemdelimiter to slash
+   put "resources.html" into item -1 of tPath
+   put tInstructions into field "testHtml" stack "HowstrBeta"-- needs to be in field for following edits
+   -- add link to resources
+   put "Resources" & cr before line 1 of field "testHtml" stack "HowstrBeta"
+   set the textStyle of word 1 of line 1 of field "testHtml" stack "HowstrBeta" to link
+   set the linkText of word 1 of line 1 of field "testHtml" stack "HowstrBeta" to tPath
+   -- add an easily understood header
+   put "Instructions as of" && the system date && the system time & cr before line 1 of field "testHtml" stack "HowstrBeta"
+   set the textStyle of line 1 of field "testHtml" stack "HowstrBeta" to "bold"
+   -- create or overwrite the instructions 
    put "instructions.html" into item -1 of tPath
-   --   write the HTMLText of field "testHtml" stack "HowstrBeta" to file ("file:" & tPath)
    put the HTMLText of field "testHtml" stack "HowstrBeta" into URL ("file:" & tPath)
 end writeInstructions
 
@@ -1486,7 +1490,22 @@ function summarizeResources @pMain,@pSketch,@pResources,pDoc
       end repeat -- tJ
       put tWorking into tDisplay
    end repeat -- tAgain
-   return tDisplay
+   --   return tDisplay
+   put empty into line 1 to 5 of tDisplay -- ! since only one scope level as of 14FEB2016, this first part isn't helping
+   put pMain[1][0]["filepath"] into tPath
+   set the itemdelimiter to slash
+   put "instructions.html" into item -1 of tPath
+   put tDisplay into field "testHtml" stack "HowstrBeta"-- needs to be in field for following edits
+   -- add link to instructions
+   put "Instructions" & cr before line 1 of field "testHtml" stack "HowstrBeta"
+   set the textStyle of word 1 of line 1 of field "testHtml" stack "HowstrBeta" to link
+   set the linkText of word 1 of line 1 of field "testHtml" stack "HowstrBeta" to tPath
+   -- add an easily understood header
+   put "Supply and Demand (bill of materials) as of" && the system date && the system time & cr before line 1 of field "testHtml" stack "HowstrBeta"
+   set the textStyle of line 1 of field "testHtml" stack "HowstrBeta" to "bold"
+   -- create or overwrite the resources 
+   put "resources.html" into item -1 of tPath
+   put the HTMLText of field "testHtml" stack "HowstrBeta" into URL ("file:" & tPath)
 end summarizeResources
 
 --on resizeStack pNewWidth, pNewHeight, pOldWidth, pOldHeight

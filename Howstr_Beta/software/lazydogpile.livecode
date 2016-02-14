@@ -569,15 +569,23 @@ on instrButtMouseUp
    put  writeInstructions(sMain,sMainShort,sTopoSort,sNotVisited) into tInstr
    --   set the clipboardData["text"] to tInstr
    --   answer tInstr
+   put sMain[sNowDoc][0]["filepath"] into tPath
+   set the itemdelimiter to slash
+   put "instructions.html" into item -1 of tPath
+   launch url ("file:" & tPath)
 end instrButtMouseUp
 
 on resoButtMouseUp
-      put "on resoButtMouseUP" into xX["write"];    devLog xX
+   put "on resoButtMouseUP" into xX["write"];    devLog xX
    -- adjList already called on every change
    --   topoSort sMainShort,sTopoSort,sNotVisited,sNoteList
    supplyDemand sMainShort,sScopeSketch,sResources,sSomethingChanged,sNotVisited
    put summarizeResources(sMain,sScopeSketch,sResources,sNowDoc) into tRes
-   answer tRes
+   --   answer tRes
+   put sMain[sNowDoc][0]["filepath"] into tPath
+   set the itemdelimiter to slash
+   put "resources.html" into item -1 of tPath
+   launch url ("file:" & tPath)
 end resoButtMouseUp
 
 on saveButtMouseUp
