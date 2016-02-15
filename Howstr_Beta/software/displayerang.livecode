@@ -1358,12 +1358,83 @@ function writeInstructions @pMain,@pShort,pTopo,pNoVisit
    set the textStyle of word 1 of line 1 of field "testHtml" stack "HowstrBeta" to link
    set the linkText of word 1 of line 1 of field "testHtml" stack "HowstrBeta" to tPath
    -- add an easily understood header
-   put "Instructions as of" && the system date && the system time & cr before line 1 of field "testHtml" stack "HowstrBeta"
+   put "Sorted Steps (Instructions) as of" && the system date && the system time & cr before line 1 of field "testHtml" stack "HowstrBeta"
    set the textStyle of line 1 of field "testHtml" stack "HowstrBeta" to "bold"
    -- create or overwrite the instructions 
    put "instructions.html" into item -1 of tPath
    put the HTMLText of field "testHtml" stack "HowstrBeta" into URL ("file:" & tPath)
 end writeInstructions
+
+function writeInstructionsHTML @pMain,@pShort,pTopo,pNoVisit
+   -- writes instructions directly in html
+   -- only one doc (doc 1) and only one scope level as of 14FEB2016
+   put empty into tInstructions
+   -- ! pTopo has case node listed first and last, which is redundant as long as we're only allowing one scope level 15FEB2016
+   -- pTopo controls in what order the steps appear
+   -- tDetailOrder controls in what order each piece of information appears in each step
+   put "stepString anchor cr memo cr figure cr prev cr next" into tDetailOrder
+   put pMain[1][0]["filepath"] into tPath
+   set the itemdelimiter to slash
+   put "resources.html" into item -1 of tPath
+   -- header kind of thing
+   set the itemdelimiter to comma
+   put item 1 of pTopo[1] into tCase
+   --   put 1 into tStuff["doc"]
+   --   put tCase into tStuff["rec"]
+   --   put stepString(pMain,tStuff) into field "testHtml" stack "HowstrBeta"
+   --   put the htmltext of field "testHtml" stack "HowstrBeta" into tBetter
+   --   put "<p><b>" & tBetter & "</b></p>" & cr after tInstructions
+   put pShort[1][tCase]["title"] into tCaseTitle
+   if tCaseTitle is not empy then 
+      put "<p><b>" & tCaseTitle & "</b></p>" & cr after tInstructions
+   else
+      put "<p><b>Untitled</b></p>" & cr after tInstructions
+   end if
+   delete item (itemoffset(tCase,pTopo[1])) of pTopo[1]
+   delete item (itemoffset(tCase,pTopo[1])) of pTopo[1] -- get rid of case node at start and end of list, at least for now 15FEB2016
+   put "<p><b>Sorted steps (Instructions) as of" && the system date && the system time & "</b></p>" & cr after tInstructions
+   put "<p><a href=" & quote & tPath & quote & ">Resources</a></p>" & cr after tInstructions
+   -- step kind of things
+   put 0 into tCount
+   repeat for each item tRec in pTopo[1]
+      put tCount + 1 into tCount
+      put empty into tStuff
+      put "<p>Step" && tCount & ") " after tInstructions -- once to start the step
+      repeat for each word tAdetail in tDetailOrder
+         switch tAdetail
+            case "stepString"
+               put 1 into tStuff["doc"]
+               put tRec into tStuff["rec"]
+               put stepString(pMain,tStuff) into field "testHtml" stack "HowstrBeta"
+               put the htmltext of field "testHtml" stack "HowstrBeta" into tUgly
+               replace "<p>" with "" in tUgly
+               replace "</p>" with "" in tUgly
+               put tUgly after tInstructions
+               break
+            case "anchor"
+               put "<a name=" & quote & tRec & quote & "></a>" after tInstructions
+               break
+            case "cr"
+               put cr after tInstructions
+               break
+            case "memo"
+               put pShort[1][tRec]["memo"] into tMemo
+               if tMemo is not empty then put tMemo after tInstructions
+               break
+            case "figure"
+               put pShort[1][tRec]["figure"] into tFigure
+               if tFigure is not empty then put "<img src=" & quote & tFigure & quote & ">" after tInstructions
+               break
+            case "prev"
+               break
+            case "next"
+               break
+         end switch
+      end repeat -- word in tDetailOrder
+      put "</p>" & cr after tInstructions -- once to end the step
+   end repeat -- rec in pTopo
+   return tInstructions
+end writeInstructionsHTML
 
 function summarizeResources @pMain,@pSketch,@pResources,pDoc
    put "function summarizeResources" into xX["write"];    devLog xX

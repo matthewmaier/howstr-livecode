@@ -566,12 +566,15 @@ on instrButtMouseUp
    end if
    -- adjList already called on every change
    topoSort sMainShort,sTopoSort,sNotVisited,sNoteList
-   put  writeInstructions(sMain,sMainShort,sTopoSort,sNotVisited) into tInstr
+   --   put  writeInstructions(sMain,sMainShort,sTopoSort,sNotVisited) into tInstr
+   put writeInstructionsHTML(sMain,sMainShort,sTopoSort,sNotVisited) into tInstr
    --   set the clipboardData["text"] to tInstr
    --   answer tInstr
-   put sMain[sNowDoc][0]["filepath"] into tPath
+   -- create or overwrite the instructions.html file
+   put sMain[sNowDoc][0]["filepath"] into tPath -- path for the *.how file
    set the itemdelimiter to slash
    put "instructions.html" into item -1 of tPath
+   put tInstr into URL ("file:" & tPath)
    launch url ("file:" & tPath)
 end instrButtMouseUp
 
