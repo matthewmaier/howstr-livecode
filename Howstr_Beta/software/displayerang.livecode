@@ -1367,7 +1367,7 @@ end writeInstructions
 
 function writeInstructionsHTML @pMain,@pShort,pTopo,pNoVisit
    -- writes instructions directly in html
-   -- only one doc (doc 1) and only one scope level as of 14FEB2016
+   -- ! assumes only one doc (doc 1) and only one scope level as of 14FEB2016
    put empty into tInstructions
    -- ! pTopo has case node listed first and last, which is redundant as long as we're only allowing one scope level 15FEB2016
    -- pTopo controls in what order the steps appear
@@ -1376,14 +1376,9 @@ function writeInstructionsHTML @pMain,@pShort,pTopo,pNoVisit
    put pMain[1][0]["filepath"] into tPath
    set the itemdelimiter to slash
    put "resources.html" into item -1 of tPath
-   -- header kind of thing
+   -- header kind of thing ----------------------------------------
    set the itemdelimiter to comma
    put item 1 of pTopo[1] into tCase
-   --   put 1 into tStuff["doc"]
-   --   put tCase into tStuff["rec"]
-   --   put stepString(pMain,tStuff) into field "testHtml" stack "HowstrBeta"
-   --   put the htmltext of field "testHtml" stack "HowstrBeta" into tBetter
-   --   put "<p><b>" & tBetter & "</b></p>" & cr after tInstructions
    put pShort[1][tCase]["title"] into tCaseTitle
    if tCaseTitle is not empy then 
       put "<p><b>" & tCaseTitle & "</b></p>" & cr after tInstructions
@@ -1395,7 +1390,7 @@ function writeInstructionsHTML @pMain,@pShort,pTopo,pNoVisit
    delete item (itemoffset(tCase,pTopo[1])) of pTopo[1] -- get rid of case node at start and end of list, at least for now 15FEB2016
    put "<p><b>Sorted steps (Instructions) as of" && the system date && the system time & "</b></p>" & cr after tInstructions
    put "<p><a href=" & quote & tPath & quote & ">Resources</a></p>" & cr after tInstructions
-   -- step kind of things
+   -- step kind of things -------------------------------------------------
    put 0 into tCount
    repeat for each item tRec in pTopo[1]
       put tCount + 1 into tCount
@@ -1613,8 +1608,84 @@ function summarizeResources @pMain,@pSketch,@pResources,pDoc
    put the HTMLText of field "testHtml" stack "HowstrBeta" into URL ("file:" & tPath)
 end summarizeResources
 
-function summarizeResourcesHTML @pMain,@pSketch,@pResources,pDoc
-   
+function summarizeResourcesHTML @pMain,@pShort,@pSketch,@pResources,pDoc
+   -- ! assumes one doc (doc[1]) and one scope level as of 15FEB2016
+   put "in thru out" into tPutOrder
+   put "amount stepString anchor cr memo cr figure cr prev cr next" into tDetailOrder
+   put pMain[1][0]["filepath"] into tPath
+   set the itemdelimiter to slash
+   put "instructions.html" into item -1 of tPath
+   -- header kind of thing ----------------------------------------
+   set the itemdelimiter to comma
+   put item 1 of pSketch[1][0]["top"] into tCase
+   put pShort[1][tCase]["title"] into tCaseTitle
+   if tCaseTitle is not empy then 
+      put "<p><b>" & tCaseTitle & "</b></p>" & cr after tResources
+   else
+      put "<p><b>Untitled</b></p>" & cr after tResources
+   end if
+   put "<p><b>Supply and demand (bill of materials) as of" && the system date && the system time & "</b></p>" & cr after tResources
+   put "<p><a href=" & quote & tPath & quote & ">Instructions</a></p>" & cr after tResources
+   -- table of contents kind of thing ---------------------------------
+   put "<p><a href=" & quote & "#in" & quote & ">Input</a></p>" & cr after tResources
+   put "<p><a href=" & quote & "#thru" & quote & ">Thruput</a></p>" & cr after tResources
+   put "<p><a href=" & quote & "#out" & quote & ">Output</a></p>" & cr after tResources
+   -- in/thru/out-put kind of things ------------------------------------
+   repeat for each word tPut in tPutOrder
+      switch tPut
+         case "in"
+            put "<p><b>Required at start:</b><a name=" & quote & "in" & quote & "></a></p>" & cr after tResources
+            break
+         case "thru"
+            put "<p><b>Excess during:</b><a name=" & quote & "thru" & quote & "></a></p>" & cr after tResources
+            break
+         case "out"
+            put "<p><b>Result at end:</b><a name=" & quote & "out" & quote & "></a></p>" & cr after tResources
+            break
+      end switch
+      set the itemdelimiter to comma
+      repeat for each item tRec in pSketch[1][2][tPut]
+         if tPut is "thru" and (pResources[1][tRec]["excess"] is empty) then next repeat
+         repeat for each word tAdetail in tDetailOrder
+            switch tAdetail
+               case "amount"
+                  if tPut is "in" then put "<p><b>" & pResources[1][tRec]["totDemand"] && "x</b>  " after tResources
+                  if tPut is "thru" then put "<p><b>" & pResources[1][tRec]["excess"] && "x</b>  " after tResources
+                  if tPut is "out" then put "<p><b>" & pResources[1][tRec]["totSupply"] && "x</b>  " after tResources
+                  break
+               case "stepString"
+                  put 1 into tStuff["doc"]
+                  put tRec into tStuff["rec"]
+                  put stepString(pMain,tStuff) into field "testHtml" stack "HowstrBeta"
+                  put the htmltext of field "testHtml" stack "HowstrBeta" into tUgly
+                  replace "<p>" with "<b>" in tUgly
+                  replace "</p>" with "</b>" in tUgly
+                  put tUgly after tResources
+                  break
+               case "anchor"
+                  put "<a name=" & quote & tRec & quote & "></a>" after tResources
+                  break
+               case "cr"
+                  put "<p></p>" & cr after tResources
+                  break
+               case "memo"
+                  put pShort[1][tRec]["memo"] into tMemo
+                  if tMemo is not empty then put tMemo after tResources
+                  break
+               case "figure"
+                  put pShort[1][tRec]["figure"] into tFigure
+                  if tFigure is not empty then 
+                     set the itemdelimiter to slash
+                     put item -1 of tFigure into tFigure
+                     put "<img src=" & quote & tFigure & quote & ">" after tResources
+                     set the itemdelimiter to comma
+                  end if
+                  break
+            end switch
+         end repeat -- word in tDetailOrder
+      end repeat -- tRec in tPut
+   end repeat -- tPut in tPutOrder
+   return tResources
 end summarizeResourcesHTML
 
 --on resizeStack pNewWidth, pNewHeight, pOldWidth, pOldHeight

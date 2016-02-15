@@ -583,11 +583,14 @@ on resoButtMouseUp
    -- adjList already called on every change
    --   topoSort sMainShort,sTopoSort,sNotVisited,sNoteList
    supplyDemand sMainShort,sScopeSketch,sResources,sSomethingChanged,sNotVisited
-   put summarizeResources(sMain,sScopeSketch,sResources,sNowDoc) into tRes
-   --   answer tRes
-   put sMain[sNowDoc][0]["filepath"] into tPath
+   --   put summarizeResources(sMain,sScopeSketch,sResources,sNowDoc) into tRes
+   put summarizeResourcesHTML(sMain,sMainShort,sScopeSketch,sResources,sNowDoc) into tRes
+   --   answer tRes   
+   -- create or overwrite the instructions.html file
+   put sMain[sNowDoc][0]["filepath"] into tPath -- path for the *.how file
    set the itemdelimiter to slash
    put "resources.html" into item -1 of tPath
+   put tRes into URL ("file:" & tPath)
    launch url ("file:" & tPath)
 end resoButtMouseUp
 
