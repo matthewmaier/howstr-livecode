@@ -1390,6 +1390,7 @@ function writeInstructionsHTML @pMain,@pShort,pTopo,pNoVisit
    else
       put "<p><b>Untitled</b></p>" & cr after tInstructions
    end if
+   set the wholematches to true
    delete item (itemoffset(tCase,pTopo[1])) of pTopo[1]
    delete item (itemoffset(tCase,pTopo[1])) of pTopo[1] -- get rid of case node at start and end of list, at least for now 15FEB2016
    put "<p><b>Sorted steps (Instructions) as of" && the system date && the system time & "</b></p>" & cr after tInstructions
@@ -1399,7 +1400,7 @@ function writeInstructionsHTML @pMain,@pShort,pTopo,pNoVisit
    repeat for each item tRec in pTopo[1]
       put tCount + 1 into tCount
       put empty into tStuff
-      put "<p>Step" && tCount & ") " after tInstructions -- once to start the step
+      put "<p><b>Step" && tCount & ") </b>" after tInstructions -- once to start the step
       repeat for each word tAdetail in tDetailOrder
          switch tAdetail
             case "stepString"
@@ -1407,15 +1408,15 @@ function writeInstructionsHTML @pMain,@pShort,pTopo,pNoVisit
                put tRec into tStuff["rec"]
                put stepString(pMain,tStuff) into field "testHtml" stack "HowstrBeta"
                put the htmltext of field "testHtml" stack "HowstrBeta" into tUgly
-               replace "<p>" with "" in tUgly
-               replace "</p>" with "" in tUgly
+               replace "<p>" with "<b>" in tUgly
+               replace "</p>" with "</b>" in tUgly
                put tUgly after tInstructions
                break
             case "anchor"
                put "<a name=" & quote & tRec & quote & "></a>" after tInstructions
                break
             case "cr"
-               put cr after tInstructions
+               put "<p></p>" & cr after tInstructions
                break
             case "memo"
                put pShort[1][tRec]["memo"] into tMemo
@@ -1423,11 +1424,44 @@ function writeInstructionsHTML @pMain,@pShort,pTopo,pNoVisit
                break
             case "figure"
                put pShort[1][tRec]["figure"] into tFigure
-               if tFigure is not empty then put "<img src=" & quote & tFigure & quote & ">" after tInstructions
+               if tFigure is not empty then 
+                  set the itemdelimiter to slash
+                  put item -1 of tFigure into tFigure
+                  put "<img src=" & quote & tFigure & quote & ">" after tInstructions
+                  set the itemdelimiter to comma
+               end if
                break
             case "prev"
+               put pShort[1][tRec]["prev"] into tList
+               if tList is not empty then
+                  put "Previous step(s): " after tInstructions
+                  repeat for each line tPrev in tList
+                     put pShort[1][tPrev]["prev"] into tPrev
+                     put 1 into tStuff["doc"]
+                     put tPrev into tStuff["rec"]
+                     put stepString(pMain,tStuff) into field "testHtml" stack "HowstrBeta"
+                     put the htmltext of field "testHtml" stack "HowstrBeta" into tUgly
+                     replace "<p>" with "" in tUgly
+                     replace "</p>" with "" in tUgly
+                     put "<a href=" & quote & "#" & tPrev & quote & ">" & tUgly & "</a>" after tInstructions
+                  end repeat
+               end if
                break
             case "next"
+               put pShort[1][tRec]["next"] into tList
+               if tList is not empty then
+                  put "Next step(s): " after tInstructions
+                  repeat for each line tNext in tList
+                     put pShort[1][tNext]["next"] into tNext
+                     put 1 into tStuff["doc"]
+                     put tNext into tStuff["rec"]
+                     put stepString(pMain,tStuff) into field "testHtml" stack "HowstrBeta"
+                     put the htmltext of field "testHtml" stack "HowstrBeta" into tUgly
+                     replace "<p>" with "" in tUgly
+                     replace "</p>" with "" in tUgly
+                     put "<a href=" & quote & "#" & tNext & quote & ">" & tUgly && "</a>" after tInstructions
+                  end repeat
+               end if
                break
          end switch
       end repeat -- word in tDetailOrder
@@ -1578,6 +1612,10 @@ function summarizeResources @pMain,@pSketch,@pResources,pDoc
    put "resources.html" into item -1 of tPath
    put the HTMLText of field "testHtml" stack "HowstrBeta" into URL ("file:" & tPath)
 end summarizeResources
+
+function summarizeResourcesHTML @pMain,@pSketch,@pResources,pDoc
+   
+end summarizeResourcesHTML
 
 --on resizeStack pNewWidth, pNewHeight, pOldWidth, pOldHeight
 --   put "on resizeStack" into xX["write"];    devLog xX
