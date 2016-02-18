@@ -45,7 +45,7 @@ local sGraphData -- ! for GUI test; replace
 ---- data[lastRec]=#
 local sResources -- array[doc][input/output][rec]=weight
 local sScopeSketch -- array[doc][case][role]=rec,rec,rec... start at case 0, then each [top]
-local sBusy -- added 15DEC2015 to block messages when a handler is still running
+--local sBusy -- added 15DEC2015 to block messages when a handler is still running; replaced with cBusy of stack howstrBeta 17FEB2016
 local sTooltipVisible -- ! this isn't actually being passed; the handler just checks the control itself
 local sNodeDetailsGeometry
 -- [startWidth] 400
@@ -63,7 +63,7 @@ local sCaptureAreaGeometry
 -- square icons set to middle of height and equally spaced across width, 1/5th each
 
 on setupAsOf3FEB2016
-      -- setup the window
+   -- setup the window
    set the decorations of stack "howstrBeta" to "title"
    --   set the decorations of this stack to empty
    --   set the windowShape of this stack to 2868
@@ -103,7 +103,8 @@ on setupAsOf3FEB2016
    put sLinkSize into tSizes["link"]
    displayManager sGraphDrawing,sGUIstuff,tSizes,sNowFocus,sMouseHistory -- displayerang.livecode
    put "unsaved" into sMain[sNowDoc][0]["saveStatus"]
-   put false into sBusy
+   --   put false into sBusy
+   set the cBusy of stack "HowstrBeta" to false
    put empty into field "filenameLabel" stack "HowstrBeta"
    -- initial geometry for node detail window
    put 400 into sNodeDetailsGeometry["startWidth"]
@@ -119,21 +120,6 @@ on setupAsOf3FEB2016
    -- initial geometry for screen capture area window
    put 400,400,800,800 into sCaptureAreaGeometry["captureAreaRect"]
 end setupAsOf3FEB2016
-
--- already in displayerang
---on resizeStack pNewWidth, pNewHeight, pOldWidth, pOldHeight
---   put "on resizeStack" into xX["write"];    devLog xX
---   if the rect of this stack is the screenRect then
---      set the visible of widget "iconMaximize" to false
---      set the visible of widget "iconMediumsize" to true
---   else
---      set the visible of widget "iconMaximize" to true
---      set the visible of widget "iconMediumsize" to false
---   end if
---   -- all of the layer information for all of the graph data in memory is calculated by middleOut
---   -- so when the window resizes, displayManager updates the graphics based on what fits now
---   refreshDisplay
---end resizeStack
 
 on resizeNodeDetails pWidth,pHeight
    set itemdelimiter to comma
@@ -233,7 +219,8 @@ on unIconifyStack
 end unIconifyStack
 
 on mouseTrackerTracker
-   put true into sBusy -- !
+   --   put true into sBusy -- !
+   set the cBusy of stack "HowstrBeta" to true
    put "on mouseTrackerTracker" into xX["write"];   devLog xX
    put mouseTracker(sGUIstuff,sMouseHistory,s1Down,s1Enter,sNowFocus,sNodeSize) into tResponse -- displayerang.livecode
    -- set dive/rise link creation buttons
@@ -269,7 +256,8 @@ on mouseTrackerTracker
          refreshDisplay
       end if
    end if
-   put false into sBusy -- !
+   --   put false into sBusy -- !
+   set the cBusy of stack "HowstrBeta" to false
 end mouseTrackerTracker
 
 on launchNodeDetails pStuff
@@ -511,7 +499,8 @@ on nodeDetailsChanged
 end nodeDetailsChanged
 
 on refreshDraw
-   put true into sBusy -- !
+   --   put true into sBusy -- !
+   set the cBusy of stack "HowstrBeta" to true
    put "on refreshDraw" into xX["write"];    devLog xX
    -- takes raw graph data, simplifies it, and preps it for display  
    adjList sMain,sMainShort
@@ -519,12 +508,15 @@ on refreshDraw
    tempConvertData sMainShort,sGraphData,sNowDoc -- backend alpha and frontend alpha used different data structures
    put "unsaved" into sMain[sNowDoc][0]["saveStatus"]
    put "end refreshDraw -------" into xX["write"];    devLog xX
-   put false into sBusy -- !
+   --   put false into sBusy -- !
+   set the cBusy of stack "HowstrBeta" to false
 end refreshDraw
 
 on refreshDisplay
-   put true into sBusy -- !
-   set the hilite of button "busySwitch" stack "howstrBeta" to sBusy
+   --   put true into sBusy -- !
+   set the cBusy of stack "HowstrBeta" to true
+   --   set the hilite of button "busySwitch" stack "howstrBeta" to sBusy
+   set the hilite of button "busySwitch" stack "HowstrBeta" to the cBusy of stack "HowstrBeta"
    put "on refreshDisplay" into xX["write"];    devLog xX
    -- takes simple graph data, lays it out, and puts it on screen
    put empty into sGraphDrawing
@@ -537,8 +529,9 @@ on refreshDisplay
    displayManager sGraphDrawing,sGUIstuff,tSizes,sNowFocus,sMouseHistory -- displayerang.livecode
    put "unsaved" into sMain[sNowDoc][0]["saveStatus"]
    put "end refreshDisplay ---------" into xX["write"];    devLog xX
-   put false into sBusy -- !
-   set the hilite of button "busySwitch" stack "howstrBeta" to sBusy
+   --   put false into sBusy -- !
+   set the cBusy of stack "HowstrBeta" to false
+   set the hilite of button "busySwitch" stack "howstrBeta" to the cBusy of stack "HowstrBeta"
 end refreshDisplay
 
 on userUndo
@@ -719,7 +712,8 @@ end tooltipSwitchChange
 
 on busySwitchChange
    get the hilite of button "busySwitch" stack "howstrBeta"
-   put it into sBusy
+   --   put it into sBusy
+   set the cBusy of stack "HowstrBeta" to it
 end busySwitchChange
 
 on caseButtMouseUp

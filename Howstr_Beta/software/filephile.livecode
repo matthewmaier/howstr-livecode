@@ -59,8 +59,8 @@ command userClose
    put empty into sExpanded
    put empty into sNowItem
    put empty into sThenItem
-   put "New" into field "savedField" stack "primary"
-   put empty into field "filepathField" stack "primary"
+   --   put "New" into field "savedField" stack "primary"
+   --   put empty into field "filepathField" stack "primary"
    -- sNowDoc won't change from 1
    
    -- ! this is first done in the preOpenStack handler
@@ -83,14 +83,14 @@ command userClose
    
    -- erase any leftover graphics ------------------------------------------
    -- this will erase everything in the group except floorRect
-   put 0 into tControl
-   repeat for the number of controls of group "graphicNetwork" of stack "primary"
-      add one to tControl
-      put the name of control tControl of group "graphicNetwork" of stack "primary" & cr after tList
-   end repeat
-   repeat for each line tLine in tList
-      if "id" is among the words of tLine then delete tLine
-   end repeat
+   --   put 0 into tControl
+   --   repeat for the number of controls of group "graphicNetwork" of stack "primary"
+   --      add one to tControl
+   --      put the name of control tControl of group "graphicNetwork" of stack "primary" & cr after tList
+   --   end repeat
+   --   repeat for each line tLine in tList
+   --      if "id" is among the words of tLine then delete tLine
+   --   end repeat
    
    -- ! close one of multiple open docs
    render

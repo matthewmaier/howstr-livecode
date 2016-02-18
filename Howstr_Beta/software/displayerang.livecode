@@ -147,6 +147,17 @@ function symbolLookup tArg --a lookup table for display symbols
    return "not found in symbolLookup function"
 end symbolLookup
 
+function symbolLookupHTML tArg --a lookup table for display symbols
+   put "function symbolLookup" into xX["write"];    devLog xX
+   switch tArg
+      case "state"
+         return "&#9632;"--box
+      case "change"
+         return "&#9650;" --triangle
+   end switch
+   return "not found in symbolLookup function"
+end symbolLookupHTML
+
 on tempConvertData pShort,@pData,pDoc
    put "on tempConvertData" into xX["write"];    devLog xX
    -- sMainShort to sGraphData
@@ -194,15 +205,32 @@ on tempConvertData pShort,@pData,pDoc
    put pShort[pDoc][0]["redo"] into pData["redo"]
    -- metatdata
    put pShort[pDoc][0]["pointerTags"] into pData["pointerTags"]
-   -- node display label
+   -- node display label ----------------
    repeat for each key tRec in pData["nodes"]
       put pShort[pDoc][tRec]["title"] into tForShow
       if tForShow is empty then
-         put symbolLookup(pShort[pDoc][tRec]["type"]) && tRec into tForShow
+         --         put symbolLookup(pShort[pDoc][tRec]["type"]) && tRec into tForShow
+         put "<p>" & symbolLookupHTML(pShort[pDoc][tRec]["type"]) && tRec & "</p>" into tForShow
       else
-         put symbolLookup(pShort[pDoc][tRec]["type"]) & " " before tForShow
+         --         put symbolLookup(pShort[pDoc][tRec]["type"]) & " " before tForShow
+         put symbolLookupHTML(pShort[pDoc][tRec]["type"]) into tSymbol
+         put "<p>" & tSymbol & space before tForShow
+         put "</p>" after tForShow
       end if
       put tForShow into pData["nodes"][tRec]["displayString"]
+      put tForShow into pData["nodes"][tRec]["displayStringExtended"]
+      -- pass forward the memo & figure if they're present
+      put pShort[pDoc][tRec]["memo"] into tForShow
+      if tForShow is not empty then put cr & "<p>" & tForShow & "</p>" after pData["nodes"][tRec]["displayStringExtended"]
+      put pShort[pDoc][tRec]["figure"] into tForShow
+      -- set all of the <img> tags to the same image object
+      -- later, if this figure needs to be shown in a field (like tooltip), that image object's filename will be set to the figure's path
+      -- the field's image won't care what's in the image object
+      -- 17624 is the ID of image "figureSource"
+      if tForShow is not empty then 
+         put cr & "<p><img src=17624></p>" after pData["nodes"][tRec]["displayStringExtended"]
+         
+      end if
    end repeat
 end tempConvertData
 
@@ -367,9 +395,12 @@ on displayManager pInfo,@pGUI,pSizes,pNow,@pHist -- ! creates/changes/deletes co
          put pInfo["nodes"][tNode]["type"] into tStuff["type"]
          -- node type
          put tStuff["type"] into pGUI["nodes"][tNode]["type"]
-         -- node's display string
+         -- node's display string & figure
          put pInfo["nodes"][tNode]["displayString"] into pGUI["nodes"][tNode]["displayString"]
          put pInfo["nodes"][tNode]["displayString"] into tStuff["displayString"]
+         put pInfo["nodes"][tNode]["displayStringExtended"] into pGUI["nodes"][tNode]["displayStringExtended"]
+         put pInfo["nodes"][tNode]["displayStringExtended"] into tStuff["displayStringExtended"]
+         put pInfo["nodes"][tNode]["figure"] into pGUI["nodes"][tNode]["figure"]
          -- node's graphic ID
          put makeNode(tStuff) into pGUI["nodes"][tNode]["graphic"]
          -- node's neighbors
@@ -399,6 +430,9 @@ on displayManager pInfo,@pGUI,pSizes,pNow,@pHist -- ! creates/changes/deletes co
          -- node's display string
          put pInfo["nodes"][tNode]["displayString"] into pGUI["nodes"][tNode]["displayString"]
          put pInfo["nodes"][tNode]["displayString"] into tStuff["displayString"]
+         put pInfo["nodes"][tNode]["displayStringExtended"] into pGUI["nodes"][tNode]["displayStringExtended"]
+         put pInfo["nodes"][tNode]["displayStringExtended"] into tStuff["displayStringExtended"]
+         put pInfo["nodes"][tNode]["figure"] into pGUI["nodes"][tNode]["figure"]
          -- node's graphic ID
          put makeNode(tStuff) into pGUI["nodes"][tNode]["graphic"]      
          put true into pGUI["nodes"][tNode]["misc"]
@@ -494,15 +528,15 @@ on displayManager pInfo,@pGUI,pSizes,pNow,@pHist -- ! creates/changes/deletes co
    --   else
    --      set the visible of widget "iconUndo" to pInfo["undo"]
    --   end if
-   set the visible of widget "iconUndo" to pInfo["undo"]
-   set the visible of widget "iconRedo" to pInfo["redo"]
+   set the visible of widget "iconUndo" stack "howstrBeta" to pInfo["undo"]
+   set the visible of widget "iconRedo" stack "howstrBeta" to pInfo["redo"]
    -- empty out selection and hide hide button
    put empty into pHist["nodeSelected"]
    put empty into pHist["linkSelected"]
-   set the visible of button "hideButt" to false
+   set the visible of button "hideButt" stack "howstrBeta" to false
    -- set misc nodes navigation buttons
-   set the visible of button "miscRightButt" to tMisc
-   set the visible of button "miscLeftButt" to tMisc
+   set the visible of button "miscRightButt" stack "howstrBeta" to tMisc
+   set the visible of button "miscLeftButt" stack "howstrBeta" to tMisc
    unlock screen
    unlock messages
    put "end displayManager --------------" into xX["write"];    devLog xX
@@ -511,7 +545,7 @@ end displayManager
 function makeNode pDetails
    put "function makeNode" into xX["write"];    devLog xX
    --   breakpoint
-   -- pDetails[node/coord/size/type/displayString]
+   -- pDetails[node/coord/size/type/displayString/displayStringExtended]
    -- ! assume doc is 1
    put 1 into tDoc
    set the margins of the templateField to 3
@@ -529,7 +563,8 @@ function makeNode pDetails
    set the textSize of the templatefield to 14
    set the outerglow["color"] of the templatefield to "40,40,40"
    --   set the behavior of the templatefield to the long id of button "graphBehave"
-   create field
+   put the defaultstack into tTemp
+   create field (the long ID of stack "HowstrBeta")
    put it into tID
    set the cGraphKey of (tID) to pDetails["node"]
    set the htmltext of (tID) to pDetails["displayString"]   
@@ -574,7 +609,7 @@ function makeLink pThis
    set the linesize of the templateGraphic to pThis["size"]
    set the outerglow["color"] of the templateGraphic to "40,40,40"
    --   set the behavior of the templateGraphic to the long id of button "graphBehave"
-   create graphic
+   create graphic (the long ID of stack "howstrBeta")
    set the cGraphKey of it to pThis["link"]
    return it
 end makeLink
@@ -589,7 +624,7 @@ function makeScopeLink pThis
    set the linesize of the templateGraphic to pThis["size"]
    set the outerglow["color"] of the templateGraphic to "40,40,40"
    --   set the behavior of the templateGraphic to the long id of button "graphBehave"
-   create graphic
+   create graphic (the long ID of stack "howstrBeta")
    set the cGraphKey of it to pThis["link"]
    return it
 end makeScopeLink
@@ -710,19 +745,56 @@ function mouseTracker @pGUI,@pHist,@p1Down,@p1Enter,pFocus,pNode
    -- ! there was an error where fixed would be empty the first time or something like that
    if tStuff["point1"] is not empty then set the rect of graphic "selectBox" stack "HowstrBeta" to twoPointBox(tStuff)
    if tNow["3down"] is not true then set the rect of graphic "selectBox" stack "HowstrBeta" to "0,0,0,0" -- otherwise it's still there messing with stuff like a ghost
-   if tNow["tooltip"] is true and tNow["inside"] is a number then
-      -- fill and resize the field
-      if tNow["inside"] is among the keys of pGUI["nodes"] then
-         put pGUI["nodes"][tNow["inside"]]["displayString"] into field "tooltipField" stack "HowstrBeta" 
-      else if tNow["inside"] is among the keys of pGUI["links"] then
-         put pGUI["links"][tNow["inside"]]["weight"] into field "tooltipField" stack "HowstrBeta" 
-      end if
-      set the height of field "tooltipField" stack "HowstrBeta"  to the formattedHeight of word 1 to -1 of field "tooltipField"
+   ---------------------------- tooltip --------------------------------------
+   if tNow["tooltip"] is true and tNow["inside"] is a number and tNow["1down"] is false and tNow["3down"] is false then
+      lock screen
+      
+      --      if tNow["inside"] is among the keys of pGUI["nodes"] then
+      --         set the filename of image "figureSource" stack "howstrBeta" to pGUI["nodes"][tNow["inside"]]["figure"]
+      --         set the rect of image "figureSource" stack "howstrBeta" to 0,0,50,50
+      --         set the htmlText of field "tooltipField" stack "HowstrBeta" to pGUI["nodes"][tNow["inside"]]["displayStringExtended"]       
+      --      else if tNow["inside"] is among the keys of pGUI["links"] then
+      --         put pGUI["links"][tNow["inside"]]["weight"] into field "tooltipField" stack "HowstrBeta" 
+      --      end if -- inside a node
+      
+      -- size the tooltip field
+      if pHist["tooltipRect"] is not empty and (tNow["inside"] is pHist["inside"]) then
+         put pHist["tooltipRect"] into tNow["tooltipRect"]
+      else
+         if tNow["inside"] is among the keys of pGUI["nodes"] then
+            set the filename of image "figureSource" stack "howstrBeta" to pGUI["nodes"][tNow["inside"]]["figure"]
+            set the rect of image "figureSource" stack "howstrBeta" to 0,0,50,50
+            set the htmlText of field "tooltipField" stack "HowstrBeta" to pGUI["nodes"][tNow["inside"]]["displayStringExtended"]       
+         else if tNow["inside"] is among the keys of pGUI["links"] then
+            put pGUI["links"][tNow["inside"]]["weight"] into field "tooltipField" stack "HowstrBeta" 
+         end if -- inside a node
+         -- set to 200x200; if formattedheight is <200, shrink height
+         set the rect of field "tooltipField" stack "howstrBeta" to 0,0,200,200
+         put the formattedHeight of char 1 to -1 of field "tooltipField" stack "HowstrBeta" into tHeight
+         if tHeight <200 then       
+            set the height of field "tooltipField" stack "HowstrBeta" to tHeight
+         end if
+         put the formattedWidth of char 1 to -1 of field "tooltipField" stack "HowstrBeta" into tWidth
+         if tWidth < 200 then
+            set the width of field "tooltipField" stack "HowstrBeta" to tWidth+10
+         end if
+         put the rect of field "tooltipField" stack "HowstrBeta" into tNow["tooltipRect"]
+      end if -- pHist tooltipRect not empty
+      
+      set the rect of field "tooltipField" stack "HowstrBeta" to tNow["tooltipRect"]
+      -- position the tooltip field
+      --      set the topleft of field "tooltipField" stack "HowstrBeta" to tNow["moving"] 
+      put the height of stack "howstrBeta" into tBL
+      set the bottomleft of field "tooltipField" stack "howstrBeta" to 0,(tBL)
+      --      breakpoint
       set the layer of field "tooltipField" stack "HowstrBeta" to top
       set the visible of field "tooltipField" stack "HowstrBeta" to true
+      unlock screen
    else
       set the visible of field "tooltipField" stack "HowstrBeta" to false
-   end if
+      put empty into tNow["tooltipRect"]
+   end if -- tooltip checked, and inside a graph element, and butt 1/3 not down
+   -------------------------------- end tooltip -----------------------------------
    
    -- (1c) if there's an anchor node, track new areas entered
    if p1Down is empty then
@@ -1279,91 +1351,92 @@ on graphManager pDo -- ! will be more complicated when not just a test
    middleOut sGraphData
 end graphManager
 
-function writeInstructions @pMain,@pShort,pTopo,pNoVisit
-   put "function writeInstructions" into xX["write"];    devLog xX
-   repeat for each key tDoc in pTopo
-      put empty into tInstructions
-      put empty into tFootnotes -- array[tDoc]=1,2,3,n note rec in footnote order
-      put empty into tIndent
-      put empty into tScope
-      repeat for each item tRec in pTopo[tDoc]
-         put empty into tTheNotes
-         -- use OPEN label if this is the first reference to a particular container node, and increase indent
-         -- use CLOSE label if this is the second reference, and decrease indent
-         if pShort[tDoc][tRec]["read"] is not empty and pShort[tDoc][tRec]["bulk"] is not empty then
-            if tRec is among the items of tScope then
-               -- container node, and second time listed
-               put tDoc into tStuff["doc"]
-               put tRec into tStuff["rec"]
-               put cr & tIndent && "CLOSE" && stepString(pMain,tStuff) after tInstructions
-               delete char -1 of tIndent
-            else -- container node, first time listed
-               put tDoc into tStuff["doc"]
-               put tRec into tStuff["rec"]
-               put cr & tIndent && itemOffset(tRec,pTopo[tDoc]) && "OPEN" && stepString(pMain,tStuff) after tInstructions
-               put tRec & "," after tScope
-               put "-" after tIndent
-            end if -- tRec among tScope
-         else -- not a container node
-            put tDoc into tStuff["doc"]
-            put tRec into tStuff["rec"]
-            put cr & tIndent && itemOffset(tRec,pTopo[tDoc]) && stepString(pMain,tStuff) after tInstructions
-         end if -- read and bulk not empty
-         -- ! this logic isn't applicable since bond links arnen't used anymore
-         -- build the footnote list
-         --         if tRec is among the keys of sNoteList[tDoc] then
-         --            -- this step has one or more notes
-         --            repeat for each item tNote in sNoteList[tDoc][tRec]
-         --               if tNote is among the items of tFootnotes[tDoc] then
-         --                  -- this note, bonded to tRec, already has a footnote position
-         --                  put itemOffset(tNote,tFootnotes[tDoc]) & "," after tTheNotes
-         --               else
-         --                  -- this note, bonded to tRec, does not yet have a footnote position
-         --                  put tNote & "," after tFootnotes[tDoc]
-         --                  put itemOffset(tNote,tFootnotes[tDoc]) & "," after tTheNotes
-         --               end if
-         --            end repeat
-         --            if char -1 of tTheNotes is "," then delete char -1 in tTheNotes
-         --            put " *" & tTheNotes & cr after tInstructions
-         --         end if
-      end repeat -- tRec in pTopo[tDoc]
-      -- ! also not applicable anymore, since no more bond links
-      --      put cr & "NOTES" after tInstructions
-      --      repeat for each item tFoot in tFootnotes[tDoc]
-      --         put cr & itemOffset(tFoot,tFootnotes[tDoc]) && stepString(tDoc,tFoot) after tInstructions
-      --      end repeat -- tFoot in tFootnotes
-      -------- orphans ------------------
-      if pNoVisit[tDoc] is not empty then
-         put empty into tRollCall
-         repeat for each item tOrphan in pNoVisit[tDoc]
-            if pShort[tDoc][tOrphan]["type"] is among the words of "state change" then
-               put tDoc into tStuff["doc"]
-               put tOrphan into tStuff["rec"]
-               put cr & stepString(pMain,tStuff) after tRollCall
-            end if
-         end repeat
-         if tRollCall is not empty then
-            put cr & "ORPHANS" after tInstructions
-            put tRollCall after tInstructions
-         end if
-      end if
-   end repeat -- tDoc in pTopo
-   filter tInstructions without empty
-   put pMain[1][0]["filepath"] into tPath
-   set the itemdelimiter to slash
-   put "resources.html" into item -1 of tPath
-   put tInstructions into field "testHtml" stack "HowstrBeta"-- needs to be in field for following edits
-   -- add link to resources
-   put "Resources" & cr before line 1 of field "testHtml" stack "HowstrBeta"
-   set the textStyle of word 1 of line 1 of field "testHtml" stack "HowstrBeta" to link
-   set the linkText of word 1 of line 1 of field "testHtml" stack "HowstrBeta" to tPath
-   -- add an easily understood header
-   put "Sorted Steps (Instructions) as of" && the system date && the system time & cr before line 1 of field "testHtml" stack "HowstrBeta"
-   set the textStyle of line 1 of field "testHtml" stack "HowstrBeta" to "bold"
-   -- create or overwrite the instructions 
-   put "instructions.html" into item -1 of tPath
-   put the HTMLText of field "testHtml" stack "HowstrBeta" into URL ("file:" & tPath)
-end writeInstructions
+-- ! 15FEB2016 using writeInstructionsHTML now, but this is more general so don't delete
+--function writeInstructions @pMain,@pShort,pTopo,pNoVisit
+--   put "function writeInstructions" into xX["write"];    devLog xX
+--   repeat for each key tDoc in pTopo
+--      put empty into tInstructions
+--      put empty into tFootnotes -- array[tDoc]=1,2,3,n note rec in footnote order
+--      put empty into tIndent
+--      put empty into tScope
+--      repeat for each item tRec in pTopo[tDoc]
+--         put empty into tTheNotes
+--         -- use OPEN label if this is the first reference to a particular container node, and increase indent
+--         -- use CLOSE label if this is the second reference, and decrease indent
+--         if pShort[tDoc][tRec]["read"] is not empty and pShort[tDoc][tRec]["bulk"] is not empty then
+--            if tRec is among the items of tScope then
+--               -- container node, and second time listed
+--               put tDoc into tStuff["doc"]
+--               put tRec into tStuff["rec"]
+--               put cr & tIndent && "CLOSE" && stepString(pMain,tStuff) after tInstructions
+--               delete char -1 of tIndent
+--            else -- container node, first time listed
+--               put tDoc into tStuff["doc"]
+--               put tRec into tStuff["rec"]
+--               put cr & tIndent && itemOffset(tRec,pTopo[tDoc]) && "OPEN" && stepString(pMain,tStuff) after tInstructions
+--               put tRec & "," after tScope
+--               put "-" after tIndent
+--            end if -- tRec among tScope
+--         else -- not a container node
+--            put tDoc into tStuff["doc"]
+--            put tRec into tStuff["rec"]
+--            put cr & tIndent && itemOffset(tRec,pTopo[tDoc]) && stepString(pMain,tStuff) after tInstructions
+--         end if -- read and bulk not empty
+--         -- ! this logic isn't applicable since bond links arnen't used anymore
+--         -- build the footnote list
+--         --         if tRec is among the keys of sNoteList[tDoc] then
+--         --            -- this step has one or more notes
+--         --            repeat for each item tNote in sNoteList[tDoc][tRec]
+--         --               if tNote is among the items of tFootnotes[tDoc] then
+--         --                  -- this note, bonded to tRec, already has a footnote position
+--         --                  put itemOffset(tNote,tFootnotes[tDoc]) & "," after tTheNotes
+--         --               else
+--         --                  -- this note, bonded to tRec, does not yet have a footnote position
+--         --                  put tNote & "," after tFootnotes[tDoc]
+--         --                  put itemOffset(tNote,tFootnotes[tDoc]) & "," after tTheNotes
+--         --               end if
+--         --            end repeat
+--         --            if char -1 of tTheNotes is "," then delete char -1 in tTheNotes
+--         --            put " *" & tTheNotes & cr after tInstructions
+--         --         end if
+--      end repeat -- tRec in pTopo[tDoc]
+--      -- ! also not applicable anymore, since no more bond links
+--      --      put cr & "NOTES" after tInstructions
+--      --      repeat for each item tFoot in tFootnotes[tDoc]
+--      --         put cr & itemOffset(tFoot,tFootnotes[tDoc]) && stepString(tDoc,tFoot) after tInstructions
+--      --      end repeat -- tFoot in tFootnotes
+--      -------- orphans ------------------
+--      if pNoVisit[tDoc] is not empty then
+--         put empty into tRollCall
+--         repeat for each item tOrphan in pNoVisit[tDoc]
+--            if pShort[tDoc][tOrphan]["type"] is among the words of "state change" then
+--               put tDoc into tStuff["doc"]
+--               put tOrphan into tStuff["rec"]
+--               put cr & stepString(pMain,tStuff) after tRollCall
+--            end if
+--         end repeat
+--         if tRollCall is not empty then
+--            put cr & "ORPHANS" after tInstructions
+--            put tRollCall after tInstructions
+--         end if
+--      end if
+--   end repeat -- tDoc in pTopo
+--   filter tInstructions without empty
+--   put pMain[1][0]["filepath"] into tPath
+--   set the itemdelimiter to slash
+--   put "resources.html" into item -1 of tPath
+--   put tInstructions into field "testHtml" stack "HowstrBeta"-- needs to be in field for following edits
+--   -- add link to resources
+--   put "Resources" & cr before line 1 of field "testHtml" stack "HowstrBeta"
+--   set the textStyle of word 1 of line 1 of field "testHtml" stack "HowstrBeta" to link
+--   set the linkText of word 1 of line 1 of field "testHtml" stack "HowstrBeta" to tPath
+--   -- add an easily understood header
+--   put "Sorted Steps (Instructions) as of" && the system date && the system time & cr before line 1 of field "testHtml" stack "HowstrBeta"
+--   set the textStyle of line 1 of field "testHtml" stack "HowstrBeta" to "bold"
+--   -- create or overwrite the instructions 
+--   put "instructions.html" into item -1 of tPath
+--   put the HTMLText of field "testHtml" stack "HowstrBeta" into URL ("file:" & tPath)
+--end writeInstructions
 
 function writeInstructionsHTML @pMain,@pShort,pTopo,pNoVisit
    -- writes instructions directly in html
@@ -1465,148 +1538,149 @@ function writeInstructionsHTML @pMain,@pShort,pTopo,pNoVisit
    return tInstructions
 end writeInstructionsHTML
 
-function summarizeResources @pMain,@pSketch,@pResources,pDoc
-   put "function summarizeResources" into xX["write"];    devLog xX
-   -- sMain,sScopeSketch,sResources,sNowDoc
-   -- for each key in sScopeSketch[sNowDoc]
-   -- build summary string, put in tArray[blerg]
-   -- for each key in sScopeSketch[sNowDoc]
-   -- replace top with relevant summary string
-   -- string
-   -- OPEN whatever
-   -- IN
-   -- THRU
-   -- OUT
-   -- MISC
-   -- second time
-   -- repeat until all recs in tStrings visited
-   -- start with "rec" 0
-   -- replace a number alone on a line with it's string and some dashes based on counter
-   -- next cycle will have new text from the string added, so replace numbers alone on lines
-   
-   --   build a string to summarize each case node
-   put empty into tStrings
-   repeat for each key tCase in pSketch[pDoc]
-      if tCase = 0 then
-         -- maybe just don't print anything
-      else
-         put pDoc into tStuff["doc"]
-         put tCase into tStuff["rec"]
-         put "OPEN" && stepString(pMain,tStuff) & cr into tStrings[tCase]
-      end if
-      put "IN-PUT" & cr after tStrings[tCase]
-      repeat for each item tN in pSketch[pDoc][tCase]["in"]
-         -- if this also has role top, just put its rec alone on a line
-         if tN is among the keys of pSketch[pDoc] then
-            put tN & cr after tStrings[tCase]
-         else
-            put pDoc into tStuff["doc"]
-            put tN into tStuff["rec"]
-            put pResources[pDoc][tN]["totDemand"] && "x" && stepString(pMain,tStuff) & cr after tStrings[tCase]
-         end if
-      end repeat
-      put "THRU-PUT" & cr after tStrings[tCase]
-      put empty into tData
-      repeat for each item tH in pSketch[pDoc][tCase]["thru"]
-         put pResources[pDoc][tH]["excess"] into tMuch
-         if tMuch is not 0 and tMuch is not empty then 
-            if tH is among the keys of pSketch[pDoc] then
-               put tH & cr after tData
-            else
-               put pDoc into tStuff["doc"]
-               put tH into tStuff["rec"]
-               put tMuch && "x" && stepString(pMain,tStuff) & cr after tData
-            end if
-         end if
-      end repeat
-      if tData is empty then 
-         put "supply=demand" & cr after tStrings[tCase]
-      else
-         put tData after tStrings[tCase]
-      end if
-      put "OUT-PUT" & cr after tStrings[tCase]
-      repeat for each item tU in pSketch[pDoc][tCase]["out"]
-         if tU is among the keys of pSketch[pDoc] then
-            put tU & cr after tStrings[tCase]
-         else
-            put pDoc into tStuff["doc"]
-            put tU into tStuff["rec"]
-            put pResources[pDoc][tU]["totSupply"] && "x" && stepString(pMain,tStuff) & cr after tStrings[tCase]
-         end if
-      end repeat
-      put "NOT-PUT" & cr after tStrings[tCase]
-      repeat for each item tS in pSketch[pDoc][tCase]["solo"]
-         if tS is among the keys of pSketch[pDoc] then
-            put tS & cr after tStrings[tCase]
-         else
-            put pDoc into tStuff["doc"]
-            put tS into tStuff["rec"]
-            put pResources[pDoc][tS]["totSupply"] && "x" && stepString(pMain,tStuff) & cr after tStrings[tCase]
-         end if
-      end repeat
-   end repeat -- tCase in pSketch[pDoc]
-   -- build a bigger string with the case node summaries nested appropriately
-   --   repeat for each key tKey in tStrings
-   --      filter tStrings[tKey] without empty
-   --   end repeat
-   --   put tStrings[0] into tSummary -- 0 is a pseudo case to encase absolutely everything
-   -- embed one string in another
-   put " " into tIndent
-   put the keys of pSketch[pDoc] into tAll
-   replace cr with "," in tAll -- items instead of lines
-   put tStrings[0] into tDisplay
-   filter tDisplay without empty -- remove any trailing cr
-   put tDisplay into tWorking
-   put true into tAgain
-   repeat while tAgain is true
-      put false into tAgain
-      put empty into tInserts
-      put "-" before tIndent
-      repeat with tJ = 1 to the number of lines of tWorking
-         put line tJ of tWorking into tWorkIt
-         replace " " with "" in tWorkIt
-         replace "-" with "" in tWorkIt
-         replace cr with "" in tWorkIt
-         -- if tWorkIt has a rec then it should be just the clean rec now
-         if tWorkIt is among the items of tAll then
-            put tStrings[tWorkIt] into tInserts[tJ]["string"] -- so now array[line offset][string]=new string
-            repeat with tJJ = 1 to the number of lines of tInserts[tJ]["string"]
-               put tIndent before line tJJ of tInserts[tJ]["string"]
-            end repeat
-            put tWorkIt into tInserts[tJ]["rec"] -- so now array[line offset][rec]=num to replace
-         end if
-         if tJ = the number of lines of tWorking then
-            -- the last line was just checked to see if it needed replacing
-            put the keys of tInserts into tOrder
-            sort tOrder numeric descending -- highest line offset to lowest
-            repeat for each line tNext in tOrder
-               put true into tAgain
-               -- delete line
-               -- insert new string before line
-               delete line tNext of tWorking
-               put tInserts[tNext]["string"] before line tNext of tWorking
-            end repeat
-         end if
-      end repeat -- tJ
-      put tWorking into tDisplay
-   end repeat -- tAgain
-   --   return tDisplay
-   put empty into line 1 to 5 of tDisplay -- ! since only one scope level as of 14FEB2016, this first part isn't helping
-   put pMain[1][0]["filepath"] into tPath
-   set the itemdelimiter to slash
-   put "instructions.html" into item -1 of tPath
-   put tDisplay into field "testHtml" stack "HowstrBeta"-- needs to be in field for following edits
-   -- add link to instructions
-   put "Instructions" & cr before line 1 of field "testHtml" stack "HowstrBeta"
-   set the textStyle of word 1 of line 1 of field "testHtml" stack "HowstrBeta" to link
-   set the linkText of word 1 of line 1 of field "testHtml" stack "HowstrBeta" to tPath
-   -- add an easily understood header
-   put "Supply and Demand (bill of materials) as of" && the system date && the system time & cr before line 1 of field "testHtml" stack "HowstrBeta"
-   set the textStyle of line 1 of field "testHtml" stack "HowstrBeta" to "bold"
-   -- create or overwrite the resources 
-   put "resources.html" into item -1 of tPath
-   put the HTMLText of field "testHtml" stack "HowstrBeta" into URL ("file:" & tPath)
-end summarizeResources
+-- ! 15FEB2016 using summarizeResourcesHTML now, but this logic is more general so don't delete
+--function summarizeResources @pMain,@pSketch,@pResources,pDoc
+--   put "function summarizeResources" into xX["write"];    devLog xX
+--   -- sMain,sScopeSketch,sResources,sNowDoc
+--   -- for each key in sScopeSketch[sNowDoc]
+--   -- build summary string, put in tArray[blerg]
+--   -- for each key in sScopeSketch[sNowDoc]
+--   -- replace top with relevant summary string
+--   -- string
+--   -- OPEN whatever
+--   -- IN
+--   -- THRU
+--   -- OUT
+--   -- MISC
+--   -- second time
+--   -- repeat until all recs in tStrings visited
+--   -- start with "rec" 0
+--   -- replace a number alone on a line with it's string and some dashes based on counter
+--   -- next cycle will have new text from the string added, so replace numbers alone on lines
+
+--   --   build a string to summarize each case node
+--   put empty into tStrings
+--   repeat for each key tCase in pSketch[pDoc]
+--      if tCase = 0 then
+--         -- maybe just don't print anything
+--      else
+--         put pDoc into tStuff["doc"]
+--         put tCase into tStuff["rec"]
+--         put "OPEN" && stepString(pMain,tStuff) & cr into tStrings[tCase]
+--      end if
+--      put "IN-PUT" & cr after tStrings[tCase]
+--      repeat for each item tN in pSketch[pDoc][tCase]["in"]
+--         -- if this also has role top, just put its rec alone on a line
+--         if tN is among the keys of pSketch[pDoc] then
+--            put tN & cr after tStrings[tCase]
+--         else
+--            put pDoc into tStuff["doc"]
+--            put tN into tStuff["rec"]
+--            put pResources[pDoc][tN]["totDemand"] && "x" && stepString(pMain,tStuff) & cr after tStrings[tCase]
+--         end if
+--      end repeat
+--      put "THRU-PUT" & cr after tStrings[tCase]
+--      put empty into tData
+--      repeat for each item tH in pSketch[pDoc][tCase]["thru"]
+--         put pResources[pDoc][tH]["excess"] into tMuch
+--         if tMuch is not 0 and tMuch is not empty then 
+--            if tH is among the keys of pSketch[pDoc] then
+--               put tH & cr after tData
+--            else
+--               put pDoc into tStuff["doc"]
+--               put tH into tStuff["rec"]
+--               put tMuch && "x" && stepString(pMain,tStuff) & cr after tData
+--            end if
+--         end if
+--      end repeat
+--      if tData is empty then 
+--         put "supply=demand" & cr after tStrings[tCase]
+--      else
+--         put tData after tStrings[tCase]
+--      end if
+--      put "OUT-PUT" & cr after tStrings[tCase]
+--      repeat for each item tU in pSketch[pDoc][tCase]["out"]
+--         if tU is among the keys of pSketch[pDoc] then
+--            put tU & cr after tStrings[tCase]
+--         else
+--            put pDoc into tStuff["doc"]
+--            put tU into tStuff["rec"]
+--            put pResources[pDoc][tU]["totSupply"] && "x" && stepString(pMain,tStuff) & cr after tStrings[tCase]
+--         end if
+--      end repeat
+--      put "NOT-PUT" & cr after tStrings[tCase]
+--      repeat for each item tS in pSketch[pDoc][tCase]["solo"]
+--         if tS is among the keys of pSketch[pDoc] then
+--            put tS & cr after tStrings[tCase]
+--         else
+--            put pDoc into tStuff["doc"]
+--            put tS into tStuff["rec"]
+--            put pResources[pDoc][tS]["totSupply"] && "x" && stepString(pMain,tStuff) & cr after tStrings[tCase]
+--         end if
+--      end repeat
+--   end repeat -- tCase in pSketch[pDoc]
+--   -- build a bigger string with the case node summaries nested appropriately
+--   --   repeat for each key tKey in tStrings
+--   --      filter tStrings[tKey] without empty
+--   --   end repeat
+--   --   put tStrings[0] into tSummary -- 0 is a pseudo case to encase absolutely everything
+--   -- embed one string in another
+--   put " " into tIndent
+--   put the keys of pSketch[pDoc] into tAll
+--   replace cr with "," in tAll -- items instead of lines
+--   put tStrings[0] into tDisplay
+--   filter tDisplay without empty -- remove any trailing cr
+--   put tDisplay into tWorking
+--   put true into tAgain
+--   repeat while tAgain is true
+--      put false into tAgain
+--      put empty into tInserts
+--      put "-" before tIndent
+--      repeat with tJ = 1 to the number of lines of tWorking
+--         put line tJ of tWorking into tWorkIt
+--         replace " " with "" in tWorkIt
+--         replace "-" with "" in tWorkIt
+--         replace cr with "" in tWorkIt
+--         -- if tWorkIt has a rec then it should be just the clean rec now
+--         if tWorkIt is among the items of tAll then
+--            put tStrings[tWorkIt] into tInserts[tJ]["string"] -- so now array[line offset][string]=new string
+--            repeat with tJJ = 1 to the number of lines of tInserts[tJ]["string"]
+--               put tIndent before line tJJ of tInserts[tJ]["string"]
+--            end repeat
+--            put tWorkIt into tInserts[tJ]["rec"] -- so now array[line offset][rec]=num to replace
+--         end if
+--         if tJ = the number of lines of tWorking then
+--            -- the last line was just checked to see if it needed replacing
+--            put the keys of tInserts into tOrder
+--            sort tOrder numeric descending -- highest line offset to lowest
+--            repeat for each line tNext in tOrder
+--               put true into tAgain
+--               -- delete line
+--               -- insert new string before line
+--               delete line tNext of tWorking
+--               put tInserts[tNext]["string"] before line tNext of tWorking
+--            end repeat
+--         end if
+--      end repeat -- tJ
+--      put tWorking into tDisplay
+--   end repeat -- tAgain
+--   --   return tDisplay
+--   put empty into line 1 to 5 of tDisplay -- ! since only one scope level as of 14FEB2016, this first part isn't helping
+--   put pMain[1][0]["filepath"] into tPath
+--   set the itemdelimiter to slash
+--   put "instructions.html" into item -1 of tPath
+--   put tDisplay into field "testHtml" stack "HowstrBeta"-- needs to be in field for following edits
+--   -- add link to instructions
+--   put "Instructions" & cr before line 1 of field "testHtml" stack "HowstrBeta"
+--   set the textStyle of word 1 of line 1 of field "testHtml" stack "HowstrBeta" to link
+--   set the linkText of word 1 of line 1 of field "testHtml" stack "HowstrBeta" to tPath
+--   -- add an easily understood header
+--   put "Supply and Demand (bill of materials) as of" && the system date && the system time & cr before line 1 of field "testHtml" stack "HowstrBeta"
+--   set the textStyle of line 1 of field "testHtml" stack "HowstrBeta" to "bold"
+--   -- create or overwrite the resources 
+--   put "resources.html" into item -1 of tPath
+--   put the HTMLText of field "testHtml" stack "HowstrBeta" into URL ("file:" & tPath)
+--end summarizeResources
 
 function summarizeResourcesHTML @pMain,@pShort,@pSketch,@pResources,pDoc
    -- ! assumes one doc (doc[1]) and one scope level as of 15FEB2016
