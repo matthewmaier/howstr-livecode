@@ -563,8 +563,10 @@ function makeNode pDetails
    set the textSize of the templatefield to 14
    set the outerglow["color"] of the templatefield to "40,40,40"
    --   set the behavior of the templatefield to the long id of button "graphBehave"
+   set the defaultstack to "HowstrBeta"
    put the defaultstack into tTemp
-   create field (the long ID of stack "HowstrBeta")
+   --   create field (the long ID of stack "HowstrBeta")
+   create field
    put it into tID
    set the cGraphKey of (tID) to pDetails["node"]
    set the htmltext of (tID) to pDetails["displayString"]   
@@ -609,7 +611,8 @@ function makeLink pThis
    set the linesize of the templateGraphic to pThis["size"]
    set the outerglow["color"] of the templateGraphic to "40,40,40"
    --   set the behavior of the templateGraphic to the long id of button "graphBehave"
-   create graphic (the long ID of stack "howstrBeta")
+   --   create graphic (the long ID of stack "howstrBeta")
+   create graphic
    set the cGraphKey of it to pThis["link"]
    return it
 end makeLink
@@ -624,7 +627,8 @@ function makeScopeLink pThis
    set the linesize of the templateGraphic to pThis["size"]
    set the outerglow["color"] of the templateGraphic to "40,40,40"
    --   set the behavior of the templateGraphic to the long id of button "graphBehave"
-   create graphic (the long ID of stack "howstrBeta")
+   --   create graphic (the long ID of stack "howstrBeta")
+   create graphic
    set the cGraphKey of it to pThis["link"]
    return it
 end makeScopeLink
@@ -747,16 +751,7 @@ function mouseTracker @pGUI,@pHist,@p1Down,@p1Enter,pFocus,pNode
    if tNow["3down"] is not true then set the rect of graphic "selectBox" stack "HowstrBeta" to "0,0,0,0" -- otherwise it's still there messing with stuff like a ghost
    ---------------------------- tooltip --------------------------------------
    if tNow["tooltip"] is true and tNow["inside"] is a number and tNow["1down"] is false and tNow["3down"] is false then
-      lock screen
-      
-      --      if tNow["inside"] is among the keys of pGUI["nodes"] then
-      --         set the filename of image "figureSource" stack "howstrBeta" to pGUI["nodes"][tNow["inside"]]["figure"]
-      --         set the rect of image "figureSource" stack "howstrBeta" to 0,0,50,50
-      --         set the htmlText of field "tooltipField" stack "HowstrBeta" to pGUI["nodes"][tNow["inside"]]["displayStringExtended"]       
-      --      else if tNow["inside"] is among the keys of pGUI["links"] then
-      --         put pGUI["links"][tNow["inside"]]["weight"] into field "tooltipField" stack "HowstrBeta" 
-      --      end if -- inside a node
-      
+      lock screen      
       -- size the tooltip field
       if pHist["tooltipRect"] is not empty and (tNow["inside"] is pHist["inside"]) then
          put pHist["tooltipRect"] into tNow["tooltipRect"]
@@ -781,12 +776,44 @@ function mouseTracker @pGUI,@pHist,@p1Down,@p1Enter,pFocus,pNode
          put the rect of field "tooltipField" stack "HowstrBeta" into tNow["tooltipRect"]
       end if -- pHist tooltipRect not empty
       
-      set the rect of field "tooltipField" stack "HowstrBeta" to tNow["tooltipRect"]
       -- position the tooltip field
-      --      set the topleft of field "tooltipField" stack "HowstrBeta" to tNow["moving"] 
-      put the height of stack "howstrBeta" into tBL
-      set the bottomleft of field "tooltipField" stack "howstrBeta" to 0,(tBL)
-      --      breakpoint
+      set the bottomright of field "tooltipField" stack "HowstrBeta" to tNow["moving"]
+      put the rect of field "tooltipField" stack "HowstrBeta" into tNow["tooltipRect"]
+      put item 1 of tNow["tooltipRect"] into tL
+      put item 2 of tNow["tooltipRect"] into tT
+      put item 3 of tNow["tooltipRect"] into tR
+      put item 4 of tNow["tooltipRect"] into tB
+      put item 1 of tNow["moving"] into tX
+      put item 2 of tNow["moving"] into tY
+      put the width of stack "HowstrBeta" into tW
+      put the height of stack "HowstrBeta" into tH
+      -- horizontal
+      if tL < 0 then
+         -- adjust to right side of mouse
+         put tR-tL into tSize
+         put tX+10 into tL
+         put tX+tSize+10 into tR
+      else if tR > tW then
+         put tR-tL into tSize
+         put tX-5 into tR
+         put tX-5-tSize into tL
+         -- adjust to left side of mouse
+      end if
+      -- vertical
+      if tT < 50 then
+         -- adjust below mouse
+         put tB-tT into tSize
+         put tY+10 into tT
+         put tY+tSize+10 into tB
+      else if tB > tH then
+         -- adjust above mouse
+         put tB-tT into tSize
+         put tY+5 into tB
+         put tY-tSize-5 into tT
+      end if
+      put tL,tT,tR,tB into tNow["tooltipRect"]
+      set the rect of field "tooltipField" stack "HowstrBeta" to tNow["tooltipRect"]
+      --      set the topleft of field "tooltipField" stack "HowstrBeta" to tNow["moving"]
       set the layer of field "tooltipField" stack "HowstrBeta" to top
       set the visible of field "tooltipField" stack "HowstrBeta" to true
       unlock screen
