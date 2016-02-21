@@ -565,6 +565,7 @@ function makeNode pDetails
    --   set the behavior of the templatefield to the long id of button "graphBehave"
    set the defaultstack to "HowstrBeta"
    put the defaultstack into tTemp
+   --   put the defaultstack into field "filenameLabel" stack "HowstrBeta" -- ! just for troubleshooting !!!
    --   create field (the long ID of stack "HowstrBeta")
    create field
    put it into tID
@@ -612,6 +613,7 @@ function makeLink pThis
    set the outerglow["color"] of the templateGraphic to "40,40,40"
    --   set the behavior of the templateGraphic to the long id of button "graphBehave"
    --   create graphic (the long ID of stack "howstrBeta")
+   set the defaultstack to "HowstrBeta"
    create graphic
    set the cGraphKey of it to pThis["link"]
    return it
@@ -628,6 +630,7 @@ function makeScopeLink pThis
    set the outerglow["color"] of the templateGraphic to "40,40,40"
    --   set the behavior of the templateGraphic to the long id of button "graphBehave"
    --   create graphic (the long ID of stack "howstrBeta")
+   set the defaultstack to "HowstrBeta"
    create graphic
    set the cGraphKey of it to pThis["link"]
    return it

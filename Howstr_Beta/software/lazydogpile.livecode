@@ -63,31 +63,53 @@ local sCaptureAreaGeometry
 -- square icons set to middle of height and equally spaced across width, 1/5th each
 
 on setupAsOf3FEB2016
+   set the defaultstack to "HowstrBeta"
    -- setup the window
    set the decorations of stack "howstrBeta" to "title"
    --   set the decorations of this stack to empty
    --   set the windowShape of this stack to 2868
    set the windowshape of stack "howstrBeta" to 0
-   -- shouldn't be necessary forever, but a good hack for now
+   --   -- shouldn't be necessary forever, but a good hack for now
    set the foregroundColor of card 1 of stack "Ask Dialog" to "0,220,220"
-   set the opaque  of button "Ok" of card 1 of stack "Ask Dialog" to false
-   set the opaque  of button "Cancel" of card 1 of stack "Ask Dialog" to false
+   --   set the opaque  of button "Ok" of card 1 of stack "Ask Dialog" to false
+   --   set the opaque  of button "Cancel" of card 1 of stack "Ask Dialog" to false
    set the foregroundColor of card 1 of stack "Answer Dialog" to "0,220,220"
-   set the opaque  of button "Ok" of card 1 of stack "Answer Dialog" to false
+   --   set the opaque  of button "Ok" of card 1 of stack "Answer Dialog" to false
+   --   set the opaque  of button "close current" of card 1 of stack "Answer Dialog" to false
+   --   set the opaque  of button "close" of card 1 of stack "Answer Dialog" to false
+   
+   repeat with i = 1 to the number of buttons of card 1 of stack "Ask Dialog"
+      --      put the name of button i of group "mygroup" after field 1
+      set the opaque  of button i of card 1 of stack "Ask Dialog" to false
+   end repeat
+   repeat with i = 1 to the number of buttons of card 1 of stack "Answer Dialog"
+      --      put the name of button i of group "mygroup" after field 1
+      set the opaque  of button i of card 1 of stack "Answer Dialog" to false
+   end repeat
+   
    put empty into sMain
    put empty into sNowDoc
    put empty into sNowItem
    put empty into sPointerTags
    -- initiate development logging
    put "initiate" into xX["write"];    devLog xX
-   quickModeSetup sMain,sNowDoc,sNowItem,sPointerTags
+   quickModeSetup sMain,sNowDoc,sNowItem,sPointerTags -- quickiator
    put empty into sMainShort
    adjList sMain,sMainShort
-   --   topoSort sMainShort,sTopoSort,sNotVisited,sNoteList
    put empty into sGraphData
    tempConvertData sMainShort,sGraphData,sNowDoc -- backend alpha and frontend alpha used different data structures
    put empty into sGraphDrawing
-   put 8 into sNowFocus
+   --   put 8 into sNowFocus 
+   -- find a good node to focus on; highest is probably the last place they worked
+   put the keys of sMainShort[sNowDoc] into tKeys
+   sort tKeys numeric descending
+   repeat for each line tAkey in tKeys
+      if sMainShort[sNowDoc][tAkey]["type"] is "state" then
+         put tAkey into sNowFocus
+         exit repeat
+      end if
+   end repeat
+   -- now middleOut can start
    middleOut sGraphData,sGraphDrawing,sNowFocus -- displayerang.livecode
    put the width of stack "howstrBeta" into tSizes["width"]
    put the height of stack "howstrBeta" into tSizes["height"]
@@ -601,7 +623,7 @@ on saveButtMouseUp
       set itemdelimiter to slash
       put item -1 of sMain[sNowDoc][0]["filepath"] into tForShow
       replace ".how" with "" in tForShow
-      put tForShow into field "filenameLabel"
+      put tForShow into field "filenameLabel" stack "HowstrBeta"
    end if
 end saveButtMouseUp
 
@@ -638,8 +660,18 @@ on loadButtMouseUp
          put tChosenFile into sMain[sNowDoc][0]["filepath"]
          put item -1 of tChosenFile into tForShow
          replace ".how" with "" in tForShow
-         put tForShow into field "filenameLabel"
+         put tForShow into field "filenameLabel" stack "HowstrBeta"
          refreshDraw
+         -- find a good node to focus on; highest is probably the last place they worked
+         put the keys of sMainShort[sNowDoc] into tKeys
+         sort tKeys numeric descending
+         repeat for each line tAkey in tKeys
+            if sMainShort[sNowDoc][tAkey]["type"] is "state" then
+               put tAkey into sNowFocus
+               exit repeat
+            end if
+         end repeat
+         -- now middleOut can proceed
          refreshDisplay
       else
          break
@@ -677,7 +709,7 @@ on saveAsButtMouseUp
       put tFullName into sMain[sNowDoc][0]["filepath"]
       put item -1 of tFullName into tForShow
       replace ".how" with "" in tForShow
-      put tForShow into field "filenameLabel"
+      put tForShow into field "filenameLabel" stack "HowstrBeta"
    end if
 end saveAsButtMouseUp
 

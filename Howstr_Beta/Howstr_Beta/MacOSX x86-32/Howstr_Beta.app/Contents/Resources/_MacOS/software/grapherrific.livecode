@@ -127,25 +127,25 @@ function clearNegPairs pRecKey -- takes a list of pointers; returns list of non-
    return pRecKey
 end clearNegPairs
 
-command userState pRec
-   put "command userState" into xX["write"];    devLog xX
-   -- if pRec is empty the user just wants a new state node
-   newItem("state")
-   -- if something is in pRec then the user wants it to be a state node
-   
-   put "Unsaved" into field "savedField" stack "primary"
-   render
-end userState
+--command userState pRec
+--   put "command userState" into xX["write"];    devLog xX
+--   -- if pRec is empty the user just wants a new state node
+--   newItem("state")
+--   -- if something is in pRec then the user wants it to be a state node
 
-command userChange pRec
-   put "command userChange" into xX["write"];    devLog xX
-   -- if pRec is empty the user just wants a new change node
-   newItem("change")
-   -- if something is in pRec then the user wants it to be a change node
-   
-   put "Unsaved" into field "savedField" stack "primary"
-   render
-end userChange
+--   put "Unsaved" into field "savedField" stack "primary"
+--   render
+--end userState
+
+--command userChange pRec
+--   put "command userChange" into xX["write"];    devLog xX
+--   -- if pRec is empty the user just wants a new change node
+--   newItem("change")
+--   -- if something is in pRec then the user wants it to be a change node
+
+--   put "Unsaved" into field "savedField" stack "primary"
+--   render
+--end userChange
 
 function newItem @pMain,pDoc,pType,pTurn
    put "function newItem" into xX["write"];    devLog xX
@@ -189,50 +189,50 @@ function newItem @pMain,pDoc,pType,pTurn
    end if
 end newItem
 
-command userFlow pRecs
-   put "command userFlow" into xX["write"];    devLog xX
-   -- pRecs: X rec & cr & Z rec
-   put line 1 of pRecs into tXstep
-   put line 2 of pRecs into tZstep
-   put "newFlow" into theAct
-   put "flow" into theType
-   put "next" into theForward
-   put "prev" into theBackward
-   newDilink tXstep,tZstep,theAct,theType,theForward,theBackward
-   
-   put "Unsaved" into field "savedField" stack "primary"
-   render
-end userFlow
+--command userFlow pRecs
+--   put "command userFlow" into xX["write"];    devLog xX
+--   -- pRecs: X rec & cr & Z rec
+--   put line 1 of pRecs into tXstep
+--   put line 2 of pRecs into tZstep
+--   put "newFlow" into theAct
+--   put "flow" into theType
+--   put "next" into theForward
+--   put "prev" into theBackward
+--   newDilink tXstep,tZstep,theAct,theType,theForward,theBackward
 
-command userDive pRecs
-   put "command userDive" into xX["write"];    devLog xX
-   -- pRecs: X rec & cr & Z rec
-   put line 1 of pRecs into tXstep
-   put line 2 of pRecs into tZstep
-   put "newDive" into theAct
-   put "dive" into theType
-   put "read" into theForward
-   put "skim" into theBackward
-   newDilink tXstep,tZstep,theAct,theType,theForward,theBackward
-   
-   put "Unsaved" into field "savedField" stack "primary"
-   render
-end userDive
+--   put "Unsaved" into field "savedField" stack "primary"
+--   render
+--end userFlow
 
-command userRise pRecs
-   put "command userRise" into xX["write"];    devLog xX
-   -- pRecs: X rec & cr & Z rec
-   put line 1 of pRecs into tXstep
-   put line 2 of pRecs into tZstep
-   put "newRise" into theAct
-   put "rise" into theType
-   put "trim" into theForward
-   put "bulk" into theBackward
-   newDilink tXstep,tZstep,theAct,theType,theForward,theBackward
-   
-   put "Unsaved" into field "savedField" stack "primary"
-   render
-end userRise
+--command userDive pRecs
+--   put "command userDive" into xX["write"];    devLog xX
+--   -- pRecs: X rec & cr & Z rec
+--   put line 1 of pRecs into tXstep
+--   put line 2 of pRecs into tZstep
+--   put "newDive" into theAct
+--   put "dive" into theType
+--   put "read" into theForward
+--   put "skim" into theBackward
+--   newDilink tXstep,tZstep,theAct,theType,theForward,theBackward
+
+--   put "Unsaved" into field "savedField" stack "primary"
+--   render
+--end userDive
+
+--command userRise pRecs
+--   put "command userRise" into xX["write"];    devLog xX
+--   -- pRecs: X rec & cr & Z rec
+--   put line 1 of pRecs into tXstep
+--   put line 2 of pRecs into tZstep
+--   put "newRise" into theAct
+--   put "rise" into theType
+--   put "trim" into theForward
+--   put "bulk" into theBackward
+--   newDilink tXstep,tZstep,theAct,theType,theForward,theBackward
+
+--   put "Unsaved" into field "savedField" stack "primary"
+--   render
+--end userRise
 
 function newDilink @pMain,pDoc,pXstep,pZstep,pAct,pType,pForward,pBackward,pTurn
    put "function newDilink" into xX["write"];    devLog xX
@@ -640,56 +640,56 @@ function redoTurn @pMain,pTemp
    end if -- tRedoThisRec is not empy
 end redoTurn
 
-command userHide
-   put "command userHide" into xX["write"];    devLog xX
-   -- ! assumes the current selection (sNowItem) is the target
-   -- to hide a tag, follow myStep and negate the pointer to the tag
-   -- to hide a step, negate all of its active pointers
-   -- a tag will not be displayed if no step points to it
-   -- a step will not be displayed if it has no active pointers
-   
-   -- turn
-   -- negate pointers
-   put sMain[sNowDoc][0][lastKey] into tRec
-   
-   put tRec+2 & "," & tRec+1 into sMain[sNowDoc][tRec+1]["turn"]
-   put "userHide" & "," & sNowItem into sMain[sNowDoc][tRec+1]["act"]
-   
-   put sNowItem & "," & tRec+1 into sMain[sNowDoc][tRec+2]["hide"]
-   put tRec+1 & "," & tRec+1 into sMain[sNowDoc][tRec+2]["myTurn"]
-   
-   put tRec+2 into sMain[sNowDoc][0][lastKey]
-   
-   -- if thing being hidden is a tag
-   if "myStep" is among the keys of sMain[sNowDoc][sNowItem] then
-      -- negate step pointer in myStep
-      repeat for each line tPtr in sMain[sNowDoc][sNowItem]["myStep"]
-         put item 1 of tPtr into tTarget
-         if char 1 of tTarget is not "-" then
-            put cr & "-" & tTarget & "," & tRec+1 after sMain[sNowDoc][sNowItem]["myStep"]
-            -- negate tag pointer in step
-            put cr & "-" & sNowItem & "," & tRec+1 after sMain[sNowDoc][tTarget]["step"]
-         end if
-      end repeat
-   end if
-   
-   -- if thing being hidden isn't a tag, it must be a step
-   if isAnode(sNowDoc,sNowItem) is false then
-      -- if thing being hidden is a link
-      hideStep(sNowItem,tRec+1)
-   else
-      -- if thing being hidden is a node (will take its links with it)
-      -- links first
-      put listOfLinks(sNowItem) into tLinks
-      repeat for each item tLink in tLinks
-         hideStep(tLink,tRec+1)
-      end repeat
-      -- then the node itself
-      hideStep(sNowItem,tRec+1)
-   end if
-   put "Unsaved" into field "savedField" stack "primary"
-   render
-end userHide
+--command userHide
+--   put "command userHide" into xX["write"];    devLog xX
+--   -- ! assumes the current selection (sNowItem) is the target
+--   -- to hide a tag, follow myStep and negate the pointer to the tag
+--   -- to hide a step, negate all of its active pointers
+--   -- a tag will not be displayed if no step points to it
+--   -- a step will not be displayed if it has no active pointers
+
+--   -- turn
+--   -- negate pointers
+--   put sMain[sNowDoc][0][lastKey] into tRec
+
+--   put tRec+2 & "," & tRec+1 into sMain[sNowDoc][tRec+1]["turn"]
+--   put "userHide" & "," & sNowItem into sMain[sNowDoc][tRec+1]["act"]
+
+--   put sNowItem & "," & tRec+1 into sMain[sNowDoc][tRec+2]["hide"]
+--   put tRec+1 & "," & tRec+1 into sMain[sNowDoc][tRec+2]["myTurn"]
+
+--   put tRec+2 into sMain[sNowDoc][0][lastKey]
+
+--   -- if thing being hidden is a tag
+--   if "myStep" is among the keys of sMain[sNowDoc][sNowItem] then
+--      -- negate step pointer in myStep
+--      repeat for each line tPtr in sMain[sNowDoc][sNowItem]["myStep"]
+--         put item 1 of tPtr into tTarget
+--         if char 1 of tTarget is not "-" then
+--            put cr & "-" & tTarget & "," & tRec+1 after sMain[sNowDoc][sNowItem]["myStep"]
+--            -- negate tag pointer in step
+--            put cr & "-" & sNowItem & "," & tRec+1 after sMain[sNowDoc][tTarget]["step"]
+--         end if
+--      end repeat
+--   end if
+
+--   -- if thing being hidden isn't a tag, it must be a step
+--   if isAnode(sNowDoc,sNowItem) is false then
+--      -- if thing being hidden is a link
+--      hideStep(sNowItem,tRec+1)
+--   else
+--      -- if thing being hidden is a node (will take its links with it)
+--      -- links first
+--      put listOfLinks(sNowItem) into tLinks
+--      repeat for each item tLink in tLinks
+--         hideStep(tLink,tRec+1)
+--      end repeat
+--      -- then the node itself
+--      hideStep(sNowItem,tRec+1)
+--   end if
+--   put "Unsaved" into field "savedField" stack "primary"
+--   render
+--end userHide
 
 function listOfLinks pNode
    put "function listOfLinks" into xX["write"];    devLog xX
