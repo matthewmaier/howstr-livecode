@@ -518,7 +518,7 @@ on displayManager pInfo,@pGUI,pSizes,pNow,@pHist -- ! creates/changes/deletes co
    set the layer of field "preChange" stack "HowstrBeta" to top
    -- highlight focused node (since all nodes new, old highlighted one was deleted)
    put pGUI["nodes"][pNow]["graphic"] into tBlerg
-   set the backgroundColor of tBlerg to orange
+   set the backgroundColor of tBlerg to "0,100,100"
    -- undo/redo icons
    -- for quick mode, don't allow user to undo the graph smaller than the minimum action group
    -- ! 15DEC2015 hide can take graph down to 4 nodes with undo still being acceptable
@@ -725,7 +725,7 @@ function mouseTracker @pGUI,@pHist,@p1Down,@p1Enter,pFocus,pNode
    repeat for each item tNum in tNow["linkSelected"]
       set the foregroundColor of pGUI["links"][tNum]["graphic"] to white
    end repeat
-   put tNow["nodeSelected"] & cr & tNow["linkSelected"] into field "showMe" stack "HowstrBeta" -- ! for development
+   --   put tNow["nodeSelected"] & cr & tNow["linkSelected"] into field "showMe" stack "HowstrBeta" -- ! for development
    -- selection box calculation
    put the mouseLoc into tNow["moving"]
    put pHist["fixed"] into tNow["fixed"]
