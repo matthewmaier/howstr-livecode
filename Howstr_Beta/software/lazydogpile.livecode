@@ -100,16 +100,16 @@ on setupAsOf3FEB2016
    tempConvertData sMainShort,sGraphData,sNowDoc -- backend alpha and frontend alpha used different data structures
    put empty into sGraphDrawing
    --   put 8 into sNowFocus 
-   -- find a good node to focus on; highest is probably the last place they worked
-   put the keys of sMainShort[sNowDoc] into tKeys
-   sort tKeys numeric descending
-   repeat for each line tAkey in tKeys
-      if sMainShort[sNowDoc][tAkey]["type"] is "state" then
-         put tAkey into sNowFocus
-         exit repeat
-      end if
-   end repeat
-   -- now middleOut can start
+   --   -- find a good node to focus on; highest is probably the last place they worked
+   --   put the keys of sMainShort[sNowDoc] into tKeys
+   --   sort tKeys numeric descending
+   --   repeat for each line tAkey in tKeys
+   --      if sMainShort[sNowDoc][tAkey]["type"] is "state" then
+   --         put tAkey into sNowFocus
+   --         exit repeat
+   --      end if
+   --   end repeat
+   --   -- now middleOut can start
    middleOut sGraphData,sGraphDrawing,sNowFocus -- displayerang.livecode
    put the width of stack "howstrBeta" into tSizes["width"]
    put the height of stack "howstrBeta" into tSizes["height"]
@@ -662,16 +662,16 @@ on loadButtMouseUp
          replace ".how" with "" in tForShow
          put tForShow into field "filenameLabel" stack "HowstrBeta"
          refreshDraw
-         -- find a good node to focus on; highest is probably the last place they worked
-         put the keys of sMainShort[sNowDoc] into tKeys
-         sort tKeys numeric descending
-         repeat for each line tAkey in tKeys
-            if sMainShort[sNowDoc][tAkey]["type"] is "state" then
-               put tAkey into sNowFocus
-               exit repeat
-            end if
-         end repeat
-         -- now middleOut can proceed
+         --         -- find a good node to focus on; highest is probably the last place they worked
+         --         put the keys of sMainShort[sNowDoc] into tKeys
+         --         sort tKeys numeric descending
+         --         repeat for each line tAkey in tKeys
+         --            if sMainShort[sNowDoc][tAkey]["type"] is "state" then
+         --               put tAkey into sNowFocus
+         --               exit repeat
+         --            end if
+         --         end repeat
+         --         -- now middleOut can proceed
          refreshDisplay
       else
          break

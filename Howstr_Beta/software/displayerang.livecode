@@ -234,13 +234,23 @@ on tempConvertData pShort,@pData,pDoc
    end repeat
 end tempConvertData
 
-on middleOut pData,@pDraw,pFocus -- ! a hacky way to draw the provided graph, calls assignLayers
+on middleOut pData,@pDraw,@pFocus -- ! a hacky way to draw the provided graph, calls assignLayers
    -- ! as of 10JAN2016 middleOut only follows flow links, so it won't visit or follow dive/rise links
    put "on middleOut" into xX["write"];    devLog xX
    -- pData ! just sGraphData at the moment, maybe this should be an adjacency list ?
    -- setup variables --------------------------------------------------------------------------------
    put empty into pData["layers"]
    put empty into pData["visited"]
+   -- make sure the focus node is actually focusable
+   put the keys of pData["nodes"] into tKeys
+   put empty into tRecs
+   repeat for each line tLine in tKeys
+      if tLine is a number then put tLine into line (the number of lines of tRecs)+1 of tRecs
+   end repeat
+   if pFocus is not among the lines of tRecs then
+      sort tRecs numeric descending
+      put line 1 of tRecs into pFocus
+   end if
    -- recursively assign layers ------------------------------------------------------------------------
    -- pass pData by reference, and focus node, and initial layer
    -- add layer and visited info to pData
