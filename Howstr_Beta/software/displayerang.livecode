@@ -1738,18 +1738,25 @@ function summarizeResourcesHTML @pMain,@pShort,@pSketch,@pResources,pDoc
    -- ! assumes one doc (doc[1]) and one scope level as of 15FEB2016
    put "in thru out" into tPutOrder
    put "amount stepString anchor cr memo cr figure cr prev cr next" into tDetailOrder
+   put empty into tResources
    put pMain[1][0]["filepath"] into tPath
    set the itemdelimiter to slash
    put "instructions.html" into item -1 of tPath
    -- header kind of thing ----------------------------------------
    set the itemdelimiter to comma
    put item 1 of pSketch[1][0]["top"] into tCase
+   put "<head>" & cr & "<title>" after tResources
    put pShort[1][tCase]["title"] into tCaseTitle
    if tCaseTitle is not empy then 
-      put "<p><b>" & tCaseTitle & "</b></p>" & cr after tResources
+      --      put "<p><b>" & tCaseTitle & "</b></p>" & cr after tResources
+      put tCaseTitle after tResources
    else
-      put "<p><b>Untitled</b></p>" & cr after tResources
+      --      put "<p><b>Untitled</b></p>" & cr after tResources
+      put "Untitled" into tCaseTitle
+      put tCasteTitle after tResources
    end if
+   put "</title>" & cr & "</head>" & cr & "<body>" & cr after tResources
+   put "<p><b>" & tCaseTitle & "</b></p>" & cr after tResources
    put "<p><b>Supply and demand (bill of materials) as of" && the system date && the system time & "</b></p>" & cr after tResources
    put "<p><a href=" & quote & tPath & quote & ">Instructions</a></p>" & cr after tResources
    -- table of contents kind of thing ---------------------------------
@@ -1803,7 +1810,10 @@ function summarizeResourcesHTML @pMain,@pShort,@pSketch,@pResources,pDoc
                   if tFigure is not empty then 
                      set the itemdelimiter to slash
                      put item -1 of tFigure into tFigure
-                     put "<img src=" & quote & tFigure & quote & ">" after tResources
+                     --                     put "<img src=" & quote & tFigure & quote & ">" after tResources
+                     put "<a href=" & quote & tFigure & quote && "target=" & quote & "_blank" & quote & ">" after tResources
+                     put "<img src=" & quote & tFigure & quote && "width=" & quote & "200" & quote & ">" after tResources
+                     put "</a>" after tResources
                      set the itemdelimiter to comma
                   end if
                   break
