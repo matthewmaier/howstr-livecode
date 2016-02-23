@@ -1484,20 +1484,27 @@ function writeInstructionsHTML @pMain,@pShort,pTopo,pNoVisit
    put empty into tInstructions
    -- ! pTopo has case node listed first and last, which is redundant as long as we're only allowing one scope level 15FEB2016
    -- pTopo controls in what order the steps appear
-   -- tDetailOrder controls in what order each piece of information appears in each step
+   -- tDetailOrder controls in what order each piece of information (tag) appears in each step
    put "stepString anchor cr memo cr figure cr prev cr next" into tDetailOrder
    put pMain[1][0]["filepath"] into tPath
    set the itemdelimiter to slash
    put "resources.html" into item -1 of tPath
+   put "<html>" & cr after tInstructions
    -- header kind of thing ----------------------------------------
    set the itemdelimiter to comma
    put item 1 of pTopo[1] into tCase
    put pShort[1][tCase]["title"] into tCaseTitle
+   put "<head>" & cr & "<title>" after tInstructions
    if tCaseTitle is not empy then 
-      put "<p><b>" & tCaseTitle & "</b></p>" & cr after tInstructions
+      --      put "<p><b>" & tCaseTitle & "</b></p>" & cr after tInstructions
+      put tCaseTitle after tInstructions
    else
-      put "<p><b>Untitled</b></p>" & cr after tInstructions
+      --      put "<p><b>Untitled</b></p>" & cr after tInstructions
+      put "Untitled" into tCaseTitle
+      put tCasteTitle after tInstructions
    end if
+   put "</title>" & cr & "</head>" & cr & "<body>" & cr after tInstructions
+   put "<p><b>" & tCaseTitle & "</b></p>" & cr after tInstructions
    set the wholematches to true
    delete item (itemoffset(tCase,pTopo[1])) of pTopo[1]
    delete item (itemoffset(tCase,pTopo[1])) of pTopo[1] -- get rid of case node at start and end of list, at least for now 15FEB2016
@@ -1535,7 +1542,11 @@ function writeInstructionsHTML @pMain,@pShort,pTopo,pNoVisit
                if tFigure is not empty then 
                   set the itemdelimiter to slash
                   put item -1 of tFigure into tFigure
-                  put "<img src=" & quote & tFigure & quote & ">" after tInstructions
+                  --                  put "<img src=" & quote & tFigure & quote & ">" after tInstructions
+                  put "<a href=" & quote & tFigure & quote && "target=" & quote & "_blank" & quote & ">" after tInstructions
+                  --                  put "<img src=" & quote & tFigure & quote && "width=" & quote & "200" & quote && "height=" & quote & "200" & quote & ">" after tInstructions
+                  put "<img src=" & quote & tFigure & quote && "width=" & quote & "200" & quote & ">" after tInstructions
+                  put "</a>" after tInstructions
                   set the itemdelimiter to comma
                end if
                break
@@ -1575,6 +1586,7 @@ function writeInstructionsHTML @pMain,@pShort,pTopo,pNoVisit
       end repeat -- word in tDetailOrder
       put "</p>" & cr after tInstructions -- once to end the step
    end repeat -- rec in pTopo
+   put "</body>" & cr & "</html>" & cr after tInstructions
    return tInstructions
 end writeInstructionsHTML
 
