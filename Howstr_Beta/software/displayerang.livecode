@@ -1487,7 +1487,7 @@ function writeInstructionsHTML @pMain,@pShort,pTopo,pNoVisit
    -- pTopo controls in what order the steps appear
    -- tDetailOrder controls in what order each piece of information (tag) appears in each step
    --   put "stepString anchor cr memo cr figure cr prev cr next" into tDetailOrder
-   put "cr stepString anchor cr memo cr figure" into tDetailOrder -- don't need next/prev for action table
+   put "cr weight stepString anchor cr memo cr figure" into tDetailOrder -- don't need next/prev for action table
    put pMain[1][0]["filepath"] into tPath
    set the itemdelimiter to slash
    put "resources.html" into item -1 of tPath
@@ -1538,7 +1538,11 @@ function writeInstructionsHTML @pMain,@pShort,pTopo,pNoVisit
       -- prev
       put "cStart" into item (the number of items of tTable)+1 of tTable
       repeat for each line tLine in pShort[1][tRec]["prev"]
-         put pShort[1][tLine]["prev"] into item (the number of items of tTable)+1 of tTable
+         --         put pShort[1][tLine]["prev"] into item (the number of items of tTable)+1 of tTable
+         put pShort[1][tLine]["prev"] into tNode
+         put pShort[1][tLine]["weight"] into tWeight
+         if tWeight is empty then put 1 into tWeight
+         put tNode & "/" & tWeight into item (the number of items of tTable)+1 of tTable
       end repeat
       put "cEnd" into item (the number of items of tTable)+1 of tTable
       -- change
@@ -1548,7 +1552,11 @@ function writeInstructionsHTML @pMain,@pShort,pTopo,pNoVisit
       -- next
       put "cStart" into item (the number of items of tTable)+1 of tTable
       repeat for each line tLine in pShort[1][tRec]["next"]
-         put pShort[1][tLine]["next"] into item (the number of items of tTable)+1 of tTable
+         --         put pShort[1][tLine]["next"] into item (the number of items of tTable)+1 of tTable
+         put pShort[1][tLine]["next"] into tNode
+         put pShort[1][tLine]["weight"] into tWeight
+         if tWeight is empty then put 1 into tWeight
+         put tNode & "/" & tWeight into item (the number of items of tTable)+1 of tTable
       end repeat
       put "cEnd" into item (the number of items of tTable)+1 of tTable
       put "rEnd" into item (the number of items of tTable)+1 of tTable
@@ -1568,26 +1576,37 @@ function writeInstructionsHTML @pMain,@pShort,pTopo,pNoVisit
             case tPiece is "cEnd" -- end column
                put "</td>" & cr after tInstructions
                break
-            case tPiece is a number -- a number, representing a rec
-               put tPiece into tRec
-               if tRec is among the items of tTopoVisited then -- only state recs end up in visited list, but it's okay cuz changes only appear once
+            default 
+               set the itemdelimiter to "/"
+               put item 1 of tPiece into tNode
+               put item 2 of tPiece into tWeight
+               set the itemdelimiter to comma
+               
+               if tNode is among the items of tTopoVisited then -- only state recs end up in visited list, but it's okay cuz changes only appear once
                   -- just reference the previous step details
                   put pShort[1][tPrev]["prev"] into tPrev
                   put 1 into tStuff["doc"]
-                  put tRec into tStuff["rec"]
+                  put tNode into tStuff["rec"]
                   put stepString(pMain,tStuff) into field "testHtml" stack "HowstrBeta"
                   put the htmltext of field "testHtml" stack "HowstrBeta" into tUgly
                   replace "<p>" with "" in tUgly
                   replace "</p>" with "" in tUgly
-                  put "<a href=" & quote & "#" & tRec & quote & ">" & tUgly & "</a>" after tInstructions
+                  if tNode is tRec then -- this one is a change, so weight isn't applicable
+                     put "<a href=" & quote & "#" & tNode & quote & ">" & tUgly & "</a>" after tInstructions
+                  else
+                     put "<a href=" & quote & "#" & tNode & quote & ">" & "(" & tWeight & "x) " & tUgly & "</a>" after tInstructions
+                  end if
                else
-                  put tRec into item (the number of items of tTopoVisited)+1 of tTopoVisited
-                  -- since tRec hasn't been visited yet, write out all the details
+                  put tNode into item (the number of items of tTopoVisited)+1 of tTopoVisited
+                  -- since tNode hasn't been visited yet, write out all the details
                   repeat for each word tAdetail in tDetailOrder
                      switch tAdetail
+                        case "weight"
+                           if tNode is not tRec then put "(" & tWeight & "x) " after tInstructions
+                           break
                         case "stepString"
                            put 1 into tStuff["doc"]
-                           put tRec into tStuff["rec"]
+                           put tNode into tStuff["rec"]
                            put stepString(pMain,tStuff) into field "testHtml" stack "HowstrBeta"
                            put the htmltext of field "testHtml" stack "HowstrBeta" into tUgly
                            replace "<p>" with "<b>" in tUgly
@@ -1595,17 +1614,17 @@ function writeInstructionsHTML @pMain,@pShort,pTopo,pNoVisit
                            put tUgly after tInstructions
                            break
                         case "anchor"
-                           put "<a name=" & quote & tRec & quote & "></a>" after tInstructions
+                           put "<a name=" & quote & tNode & quote & "></a>" after tInstructions
                            break
                         case "cr"
                            put "<p></p>" & cr after tInstructions
                            break
                         case "memo"
-                           put pShort[1][tRec]["memo"] into tMemo
+                           put pShort[1][tNode]["memo"] into tMemo
                            if tMemo is not empty then put tMemo after tInstructions
                            break
                         case "figure"
-                           put pShort[1][tRec]["figure"] into tFigure
+                           put pShort[1][tNode]["figure"] into tFigure
                            if tFigure is not empty then 
                               set the itemdelimiter to slash
                               put item -1 of tFigure into tFigure
@@ -1616,7 +1635,7 @@ function writeInstructionsHTML @pMain,@pShort,pTopo,pNoVisit
                            end if
                            break
                         case "prev"
-                           put pShort[1][tRec]["prev"] into tList
+                           put pShort[1][tNode]["prev"] into tList
                            if tList is not empty then
                               put "Previous step(s): " after tInstructions
                               repeat for each line tPrev in tList
@@ -1632,7 +1651,7 @@ function writeInstructionsHTML @pMain,@pShort,pTopo,pNoVisit
                            end if
                            break
                         case "next"
-                           put pShort[1][tRec]["next"] into tList
+                           put pShort[1][tNode]["next"] into tList
                            if tList is not empty then
                               put "Next step(s): " after tInstructions
                               repeat for each line tNext in tList
@@ -1649,7 +1668,7 @@ function writeInstructionsHTML @pMain,@pShort,pTopo,pNoVisit
                            break
                      end switch -- what to do given tAdetail
                   end repeat -- word in tDetailOrder
-               end if -- tRec is among tTopoVisited
+               end if -- tNode is among tTopoVisited
          end switch -- what to do given tPiece
       end repeat -- item tPiece in tTable
       put "</table>" & cr after tInstructions
