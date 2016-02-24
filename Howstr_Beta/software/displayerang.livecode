@@ -1485,7 +1485,8 @@ function writeInstructionsHTML @pMain,@pShort,pTopo,pNoVisit
    -- ! pTopo has case node listed first and last, which is redundant as long as we're only allowing one scope level 15FEB2016
    -- pTopo controls in what order the steps appear
    -- tDetailOrder controls in what order each piece of information (tag) appears in each step
-   put "stepString anchor cr memo cr figure cr prev cr next" into tDetailOrder
+   --   put "stepString anchor cr memo cr figure cr prev cr next" into tDetailOrder
+   put "cr stepString anchor cr memo cr figure" into tDetailOrder -- don't need next/prev for action table
    put pMain[1][0]["filepath"] into tPath
    set the itemdelimiter to slash
    put "resources.html" into item -1 of tPath
@@ -1510,82 +1511,148 @@ function writeInstructionsHTML @pMain,@pShort,pTopo,pNoVisit
    delete item (itemoffset(tCase,pTopo[1])) of pTopo[1] -- get rid of case node at start and end of list, at least for now 15FEB2016
    put "<p><b>Sorted steps (Instructions) as of" && the system date && the system time & "</b></p>" & cr after tInstructions
    put "<p><a href=" & quote & tPath & quote & ">Resources</a></p>" & cr after tInstructions
-   -- step kind of things -------------------------------------------------
+   -- list of only the change steps (define action groups)
+   put empty into pTopoChanges
+   repeat for each item tBlerg in pTopo[1]
+      if pShort[1][tBlerg]["type"] is "change" then put tBlerg into item (the number of items of pTopoChanges)+1 of pTopoChanges
+   end repeat
+   -- start action table
+   -- column header list
+   -- column input states
+   -- column change
+   -- column output states
+   -- end action table
    put 0 into tCount
-   repeat for each item tRec in pTopo[1]
+   put empty into tTopoVisited
+   repeat for each item tRec in pTopoChanges
       put tCount + 1 into tCount
       put empty into tStuff
-      put "<p><b>Step" && tCount & ") </b>" after tInstructions -- once to start the step
-      repeat for each word tAdetail in tDetailOrder
-         switch tAdetail
-            case "stepString"
-               put 1 into tStuff["doc"]
-               put tRec into tStuff["rec"]
-               put stepString(pMain,tStuff) into field "testHtml" stack "HowstrBeta"
-               put the htmltext of field "testHtml" stack "HowstrBeta" into tUgly
-               replace "<p>" with "<b>" in tUgly
-               replace "</p>" with "</b>" in tUgly
-               put tUgly after tInstructions
+      put "<p><b>Action" && tCount & ") </b>" & cr after tInstructions -- once to start the step
+      put "<table border=" & quote & "1" & quote & ">" & cr after tInstructions
+      put "<tr><th>In State(s)</th><th>Change</th><th>Out State(s)</th></tr>" & cr after tInstructions
+      -- build a string to expand on
+      put empty into tTable
+      set itemdelimiter to comma
+      put "rStart" into item 1 of tTable
+      -- prev
+      put "cStart" into item (the number of items of tTable)+1 of tTable
+      repeat for each line tLine in pShort[1][tRec]["prev"]
+         put pShort[1][tLine]["prev"] into item (the number of items of tTable)+1 of tTable
+      end repeat
+      put "cEnd" into item (the number of items of tTable)+1 of tTable
+      -- change
+      put "cStart" into item (the number of items of tTable)+1 of tTable
+      put tRec into item (the number of items of tTable)+1 of tTable
+      put "cEnd" into item (the number of items of tTable)+1 of tTable
+      -- next
+      put "cStart" into item (the number of items of tTable)+1 of tTable
+      repeat for each line tLine in pShort[1][tRec]["next"]
+         put pShort[1][tLine]["next"] into item (the number of items of tTable)+1 of tTable
+      end repeat
+      put "cEnd" into item (the number of items of tTable)+1 of tTable
+      put "rEnd" into item (the number of items of tTable)+1 of tTable
+      
+      -- step kind of things -------------------------------------------------
+      repeat for each item tPiece in tTable
+         switch 
+            case tPiece is "rStart" -- start row
+               put "<tr>" after tInstructions
                break
-            case "anchor"
-               put "<a name=" & quote & tRec & quote & "></a>" after tInstructions
+            case tPiece is "rEnd" -- end row
+               put "</tr>" & cr after tInstructions
                break
-            case "cr"
-               put "<p></p>" & cr after tInstructions
+            case tPiece is "cStart" -- start column
+               put "<td valign=" & quote & "top" & quote & ">" after tInstructions
                break
-            case "memo"
-               put pShort[1][tRec]["memo"] into tMemo
-               if tMemo is not empty then put tMemo after tInstructions
+            case tPiece is "cEnd" -- end column
+               put "</td>" & cr after tInstructions
                break
-            case "figure"
-               put pShort[1][tRec]["figure"] into tFigure
-               if tFigure is not empty then 
-                  set the itemdelimiter to slash
-                  put item -1 of tFigure into tFigure
-                  --                  put "<img src=" & quote & tFigure & quote & ">" after tInstructions
-                  put "<a href=" & quote & tFigure & quote && "target=" & quote & "_blank" & quote & ">" after tInstructions
-                  --                  put "<img src=" & quote & tFigure & quote && "width=" & quote & "200" & quote && "height=" & quote & "200" & quote & ">" after tInstructions
-                  put "<img src=" & quote & tFigure & quote && "width=" & quote & "200" & quote & ">" after tInstructions
-                  put "</a>" after tInstructions
-                  set the itemdelimiter to comma
-               end if
-               break
-            case "prev"
-               put pShort[1][tRec]["prev"] into tList
-               if tList is not empty then
-                  put "Previous step(s): " after tInstructions
-                  repeat for each line tPrev in tList
-                     put pShort[1][tPrev]["prev"] into tPrev
-                     put 1 into tStuff["doc"]
-                     put tPrev into tStuff["rec"]
-                     put stepString(pMain,tStuff) into field "testHtml" stack "HowstrBeta"
-                     put the htmltext of field "testHtml" stack "HowstrBeta" into tUgly
-                     replace "<p>" with "" in tUgly
-                     replace "</p>" with "" in tUgly
-                     put "<a href=" & quote & "#" & tPrev & quote & ">" & tUgly & "</a>" after tInstructions
-                  end repeat
-               end if
-               break
-            case "next"
-               put pShort[1][tRec]["next"] into tList
-               if tList is not empty then
-                  put "Next step(s): " after tInstructions
-                  repeat for each line tNext in tList
-                     put pShort[1][tNext]["next"] into tNext
-                     put 1 into tStuff["doc"]
-                     put tNext into tStuff["rec"]
-                     put stepString(pMain,tStuff) into field "testHtml" stack "HowstrBeta"
-                     put the htmltext of field "testHtml" stack "HowstrBeta" into tUgly
-                     replace "<p>" with "" in tUgly
-                     replace "</p>" with "" in tUgly
-                     put "<a href=" & quote & "#" & tNext & quote & ">" & tUgly && "</a>" after tInstructions
-                  end repeat
-               end if
-               break
-         end switch
-      end repeat -- word in tDetailOrder
-      put "</p>" & cr after tInstructions -- once to end the step
-   end repeat -- rec in pTopo
+            case tPiece is a number -- a number, representing a rec
+               put tPiece into tRec
+               if tRec is among the items of tTopoVisited then -- only state recs end up in visited list, but it's okay cuz changes only appear once
+                  -- just reference the previous step details
+                  put pShort[1][tPrev]["prev"] into tPrev
+                  put 1 into tStuff["doc"]
+                  put tRec into tStuff["rec"]
+                  put stepString(pMain,tStuff) into field "testHtml" stack "HowstrBeta"
+                  put the htmltext of field "testHtml" stack "HowstrBeta" into tUgly
+                  replace "<p>" with "" in tUgly
+                  replace "</p>" with "" in tUgly
+                  put "<a href=" & quote & "#" & tRec & quote & ">" & tUgly & "</a>" after tInstructions
+               else
+                  put tRec into item (the number of items of tTopoVisited)+1 of tTopoVisited
+                  -- since tRec hasn't been visited yet, write out all the details
+                  repeat for each word tAdetail in tDetailOrder
+                     switch tAdetail
+                        case "stepString"
+                           put 1 into tStuff["doc"]
+                           put tRec into tStuff["rec"]
+                           put stepString(pMain,tStuff) into field "testHtml" stack "HowstrBeta"
+                           put the htmltext of field "testHtml" stack "HowstrBeta" into tUgly
+                           replace "<p>" with "<b>" in tUgly
+                           replace "</p>" with "</b>" in tUgly
+                           put tUgly after tInstructions
+                           break
+                        case "anchor"
+                           put "<a name=" & quote & tRec & quote & "></a>" after tInstructions
+                           break
+                        case "cr"
+                           put "<p></p>" & cr after tInstructions
+                           break
+                        case "memo"
+                           put pShort[1][tRec]["memo"] into tMemo
+                           if tMemo is not empty then put tMemo after tInstructions
+                           break
+                        case "figure"
+                           put pShort[1][tRec]["figure"] into tFigure
+                           if tFigure is not empty then 
+                              set the itemdelimiter to slash
+                              put item -1 of tFigure into tFigure
+                              put "<a href=" & quote & tFigure & quote && "target=" & quote & "_blank" & quote & ">" after tInstructions
+                              put "<img src=" & quote & tFigure & quote && "width=" & quote & "200" & quote & ">" after tInstructions
+                              put "</a>" after tInstructions
+                              set the itemdelimiter to comma
+                           end if
+                           break
+                        case "prev"
+                           put pShort[1][tRec]["prev"] into tList
+                           if tList is not empty then
+                              put "Previous step(s): " after tInstructions
+                              repeat for each line tPrev in tList
+                                 put pShort[1][tPrev]["prev"] into tPrev
+                                 put 1 into tStuff["doc"]
+                                 put tPrev into tStuff["rec"]
+                                 put stepString(pMain,tStuff) into field "testHtml" stack "HowstrBeta"
+                                 put the htmltext of field "testHtml" stack "HowstrBeta" into tUgly
+                                 replace "<p>" with "" in tUgly
+                                 replace "</p>" with "" in tUgly
+                                 put "<a href=" & quote & "#" & tPrev & quote & ">" & tUgly & "</a>" after tInstructions
+                              end repeat
+                           end if
+                           break
+                        case "next"
+                           put pShort[1][tRec]["next"] into tList
+                           if tList is not empty then
+                              put "Next step(s): " after tInstructions
+                              repeat for each line tNext in tList
+                                 put pShort[1][tNext]["next"] into tNext
+                                 put 1 into tStuff["doc"]
+                                 put tNext into tStuff["rec"]
+                                 put stepString(pMain,tStuff) into field "testHtml" stack "HowstrBeta"
+                                 put the htmltext of field "testHtml" stack "HowstrBeta" into tUgly
+                                 replace "<p>" with "" in tUgly
+                                 replace "</p>" with "" in tUgly
+                                 put "<a href=" & quote & "#" & tNext & quote & ">" & tUgly && "</a>" after tInstructions
+                              end repeat
+                           end if
+                           break
+                     end switch -- what to do given tAdetail
+                  end repeat -- word in tDetailOrder
+               end if -- tRec is among tTopoVisited
+         end switch -- what to do given tPiece
+      end repeat -- item tPiece in tTable
+      put "</table>" & cr after tInstructions
+   end repeat -- item tRec in tTopoChanges
    put "</body>" & cr & "</html>" & cr after tInstructions
    return tInstructions
 end writeInstructionsHTML
