@@ -703,12 +703,10 @@ function mouseTracker @pGUI,@pHist,@p1Down,@p1Enter,pFocus,pNode
          if tNow["3down"] and intersect(pGUI[tType][tNum]["graphic"],graphic "selectBox" stack "HowstrBeta","pixels") then
             -- add any new selection to lists
             if tType is "nodes" and tNum is not among the items of tNow["nodeSelected"] and tNum is not pFocus then 
-               --               put tNum & "," after tNow["nodeSelected"]
                put tNum into item (the number of items of tNow["nodeSelected"])+1 of tNow["nodeSelected"]
                set the visible of button "hideButt" stack "HowstrBeta" to true
             end if
             if tType is "links" and tNum is not among the items of tNow["linkSelected"] then 
-               --               put tNum & "," after tNow["linkSelected"]
                put tNum into item (the number of items of tNow["linkSelected"])+1 of tNow["linkSelected"]
                set the visible of button "hideButt" stack "HowstrBeta" to true
             end if
@@ -856,16 +854,19 @@ function mouseTracker @pGUI,@pHist,@p1Down,@p1Enter,pFocus,pNode
       if p1Enter is among the keys of pGUI["nodes"] and p1Enter is not p1Down then 
          put p1Down & "," & p1Enter into tPreview
       else if p1Enter is p1Down then
-         put p1Down & "," & "info" into tPreview
+         --         put p1Down & "," & "info" into tPreview -- ! swap 1
+         put p1Down into tPreview
       end if
       -- link can't be target
       if p1Enter is among the keys of pGUI["links"] then put "nothing" into tPreview    
+      
       if p1Enter is empty then 
          if p1Down is among the keys of pGUI["nodes"] then
             if p1Down is pFocus then
                put "nothing" into tPreview
             else
-               put p1Down into tPreview
+               --               put p1Down into tPreview -- ! swap 2
+               put p1Down & "," & "info" into tPreview
             end if
          else
             put "nothing" into tPreview
