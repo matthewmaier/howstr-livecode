@@ -849,27 +849,28 @@ function mouseTracker @pGUI,@pHist,@p1Down,@p1Enter,pFocus,pNode
    -- (2) build preview request
    -- defaults to "nothing"
    put "nothing" into tPreview
-   if p1Down is among the keys of pGUI["nodes"] then
+   if p1Down is among the keys of pGUI["nodes"] then -- butt down in a node
       -- anchor and target
-      if p1Enter is among the keys of pGUI["nodes"] and p1Enter is not p1Down then 
-         put p1Down & "," & p1Enter into tPreview
-      else if p1Enter is p1Down then
+      if p1Enter is among the keys of pGUI["nodes"] and p1Enter is not p1Down then -- entered another node
+         put p1Down & "," & p1Enter into tPreview -- preview appropriate links/nodes between anchor & target
+      else if p1Enter is p1Down then -- reentered node where butt down
          --         put p1Down & "," & "info" into tPreview -- ! swap 1
-         put p1Down into tPreview
+         put p1Down into tPreview -- preview focus on this node
       end if
       -- link can't be target
-      if p1Enter is among the keys of pGUI["links"] then put "nothing" into tPreview    
+      if p1Enter is among the keys of pGUI["links"] then put "nothing" into tPreview -- don't do anything if entered a link
       
-      if p1Enter is empty then 
-         if p1Down is among the keys of pGUI["nodes"] then
-            if p1Down is pFocus then
-               put "nothing" into tPreview
-            else
-               --               put p1Down into tPreview -- ! swap 2
-               put p1Down & "," & "info" into tPreview
-            end if
+      if p1Enter is empty then -- never left the node where butt down
+         if p1Down is among the keys of pGUI["nodes"] then -- butt down in node (already checked for this in first if ?!)
+            --            if p1Down is pFocus then
+            --               put "nothing" into tPreview
+            --            else
+            --               --               put p1Down into tPreview -- ! swap 2
+            --               put p1Down & "," & "info" into tPreview
+            --            end if
+            put p1Down & "," & "info" into tPreview -- show info preview
          else
-            put "nothing" into tPreview
+            put "nothing" into tPreview -- down in something not a node, no info preview
          end if
       end if
       if p1Enter is "background" and p1Down is among the keys of pGUI["nodes"] then
@@ -958,11 +959,16 @@ function previewAndChange pToDo,pGUI,pNode -- returns "nothing" or array with ch
       set the visible of widget "preInfo" stack "HowstrBeta" to false
    end if
    -- shift focus to another node
-   if pToDo is a number then
+   if the number of items of pToDo is 1 and pToDo is a number then
       put pGUI["nodes"][pToDo]["horz"] & "," & pGUI["nodes"][pToDo]["vert"] into tSpot
       set the location of graphic "preFocus" stack "HowstrBeta" to tSpot
       set the visible of graphic "preFocus" stack "HowstrBeta" to true
       put pToDo into tWhatever["focus"]
+      -- make sure these don't show at the same time
+      set the visible of graphic "preFlow1" stack "HowstrBeta" to false
+      set the visible of field "preState" stack "HowstrBeta" to false
+      set the visible of field "preChange" stack "HowstrBeta" to false
+      set the visible of graphic "preFlow2" stack "HowstrBeta" to false
       return tWhatever
    else
       set the visible of graphic "preFocus" stack "HowstrBeta" to false
