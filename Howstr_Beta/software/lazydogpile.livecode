@@ -714,13 +714,24 @@ on saveAsButtMouseUp
 end saveAsButtMouseUp
 
 on iconCloseMouseUp
-      put "on iconCloseMouseUp" into xX["write"];    devLog xX
+   --      put "on iconCloseMouseUp" into xX["write"];    devLog xX
+   --   if sMain[sNowDoc][0]["saveStatus"] is "unsaved" then
+   --      answer "Close without saving?" with "Close" or "Cancel"
+   --      if it is "cancel" then exit iconCloseMouseUp
+   --   end if
+   --   quit
+   closeStackRequest
+end iconCloseMouseUp
+
+on closeStackRequest
+   put "on closeStackRequest" into xX["write"];    devLog xX
    if sMain[sNowDoc][0]["saveStatus"] is "unsaved" then
       answer "Close without saving?" with "Close" or "Cancel"
-      if it is "cancel" then exit iconCloseMouseUp
+      if it is "cancel" then exit closeStackRequest
    end if
-   quit
-end iconCloseMouseUp
+   --   quit
+   pass closeStackRequest
+end closeStackRequest
 
 on hideButtMouseUp
    put "on hideButtMouseUp" into xX["write"];    devLog xX
@@ -749,14 +760,23 @@ on busySwitchChange
 end busySwitchChange
 
 on caseButtMouseUp
-   ask "name for case node"
-   put it into tStuff["data"]
-   put "title" into tStuff["tag"]
-   put sNowDoc into tStuff["doc"]
-   put 2 into tStuff["rec"]
-   changeInfo sMain,tStuff -- grapheriffic
-   refreshDraw
-   refreshDisplay
+   -- load up existing case node title if it exists
+   put sMainShort[sNowDoc][2]["title"] into tCurrent
+   if tCurrent is empty then
+      ask "name for case node"
+   else
+      ask "name for case node" with tCurrent
+   end if
+   -- only request a change if the case node title actually changed
+   if it is not tCurrent then
+      put it into tStuff["data"]
+      put "title" into tStuff["tag"]
+      put sNowDoc into tStuff["doc"]
+      put 2 into tStuff["rec"]
+      changeInfo sMain,tStuff -- grapheriffic
+      refreshDraw
+      refreshDisplay
+   end if
 end caseButtMouseUp
 
 on miscRightButtMouseUp
