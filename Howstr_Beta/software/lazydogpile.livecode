@@ -69,6 +69,8 @@ on setupAsOf3FEB2016
    --   set the decorations of this stack to empty
    --   set the windowShape of this stack to 2868
    set the windowshape of stack "howstrBeta" to 0
+   set the minHeight of stack "howstrBeta" to 400
+   set the minWidth of stack "howstrBeta" to 500
    --   -- shouldn't be necessary forever, but a good hack for now
    set the foregroundColor of card 1 of stack "Ask Dialog" to "0,220,220"
    --   set the opaque  of button "Ok" of card 1 of stack "Ask Dialog" to false
@@ -314,6 +316,7 @@ on launchNodeDetails pStuff
    set the visible of button "setCaptureButt" stack "NodeDetails" to false
    set the visible of button "snapCaptureButt" stack "NodeDetails" to false
    set the text of field "tagDataList" stack "NodeDetails" to tDeets["string"]
+   set the loc of stack "nodeDetails" to the screenmouseloc -- set nodedetails to popup under the mouse
    go stack "NodeDetails"
 end launchNodeDetails
 
@@ -373,12 +376,12 @@ on detailsListMouseUp pLine
       set the visible of button "setCaptureButt" stack "NodeDetails" to false
       set the visible of button "snapCaptureButt" stack "NodeDetails" to false
       put tLabel into field "tagLabel" stack "NodeDetails"
-      select the text of field "editData" stack "NodeDetails"
       if tDeets[pLine]["new"] is not empty and tDeets[pLine]["new"] is not "hide" then
          put tDeets[pLine]["new"] into field "editData" stack "NodeDetails"
       else 
          put tDeets[pLine][tLabel] into field "editData" stack "NodeDetails"
       end if
+      select the text of field "editData" stack "NodeDetails"
    end if -- if label is divider
    set the cNodeDetails of stack "NodeDetails" to tDeets
 end detailsListMouseUp
@@ -714,23 +717,18 @@ on saveAsButtMouseUp
 end saveAsButtMouseUp
 
 on iconCloseMouseUp
-   --      put "on iconCloseMouseUp" into xX["write"];    devLog xX
-   --   if sMain[sNowDoc][0]["saveStatus"] is "unsaved" then
-   --      answer "Close without saving?" with "Close" or "Cancel"
-   --      if it is "cancel" then exit iconCloseMouseUp
-   --   end if
-   --   quit
-   closeStackRequest
-end iconCloseMouseUp
-
-on closeStackRequest
    put "on closeStackRequest" into xX["write"];    devLog xX
    if sMain[sNowDoc][0]["saveStatus"] is "unsaved" then
       answer "Close without saving?" with "Close" or "Cancel"
-      if it is "cancel" then exit closeStackRequest
+      if it is "cancel" then exit iconCloseMouseUp
    end if
-   --   quit
-   pass closeStackRequest
+   quit
+end iconCloseMouseUp
+
+on closeStackRequest
+   -- for whatever reason this only gets sent by the window decoration (at least in Windows where I tested it)
+   -- so this blocks the window decorations from closing any of the stacks
+   -- forces user to use the "X" icons
 end closeStackRequest
 
 on hideButtMouseUp

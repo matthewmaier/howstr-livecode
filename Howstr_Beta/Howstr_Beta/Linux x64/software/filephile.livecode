@@ -1,0 +1,97 @@
+﻿script "filephile"
+on devLog pPhase
+   --   -- ! commented out 15DEC2015 cuz logging slows things down a lot
+   --   -- pPhase[write]=append to development log file
+   --   put pPhase["write"] into tWrite
+   --   set the itemDelimiter to "/"
+   --   get the effective fileName of this stack
+   --   set the defaultFolder to item 1 to -2 of it
+   --   put the defaultFolder into tFolder
+   --   --   replace "software" with "logs" in tFolder
+   --   -- ! apparently "this stack" is returning the main stack, not the folder filephile is in
+   --   put URL ("file:" & tFolder & "/logs/development.txt") into tLog
+   --   if tWrite is "initiate" then
+   --      --      put empty into tLog
+   --      put the long time into tLog
+   --   else
+   --      put tWrite into line (the number of lines of tLog)+1 of tLog
+   --   end if
+   --   put tLog into URL ("file:" & tFolder & "/logs/development.txt")
+end devLog
+
+command userOpen pFile
+   put "command userOpen" into xX["write"];    devLog xX
+   -- pFile is the filepath of the document to open
+   put URL ("file:" & pFile) into tJason
+   --   put arrayFromJson(tArray) into sMain[sNowDoc]
+   --   dispatch "myCommand" to card "myCard" with "Hello World", tArray, tCSV
+   dispatch "cmdArrayFromJson" to stack "easyJSON" with tJason
+   put the result into sMain[sNowDoc]
+   render
+end userOpen
+
+command userSave pFile
+   put "command userSave" into xX["write"];    devLog xX
+   -- pFile is the filepath of the document to save (or save over)
+   put sMain[sNowDoc] into tArray
+   --   put the keys of tArray into tKeys
+   --   sort tKeys numeric ascending
+   --   repeat for each line tRec in tKeys
+   --   end repeat
+   --   put jsonFromArray(tArray) into URL ("file:" & pFile)
+   dispatch "cmdJsonFromArray" to stack "easyJSON" with tArray
+   put the result into URL ("file:" & pFile)
+end userSave
+
+command userClose
+   put "command userClose" into xX["write"];    devLog xX
+   -- delete graphic objects
+   put the keys of sGraphics[sNowDoc] into tKeys
+   repeat for each line tRec in tKeys
+      if exists(sGraphics[sNowDoc][tRec]["longID"]) then
+         -- delete the node graphic
+         delete sGraphics[sNowDoc][tRec]["longID"]
+      end if
+   end repeat
+   
+   put empty into sMain[sNowDoc]
+   put empty into sGraphics[sNowDoc]
+   put empty into sExpanded
+   put empty into sNowItem
+   put empty into sThenItem
+   --   put "New" into field "savedField" stack "primary"
+   --   put empty into field "filepathField" stack "primary"
+   -- sNowDoc won't change from 1
+   
+   -- ! this is first done in the preOpenStack handler
+   put "step myStep turn myTurn bond prev next skim read bulk trim" \
+         into sPointerTags
+   put empty into sMain
+   put 1 into sNowDoc
+   put true into sMain[sNowDoc][0]["hide"]
+   put 0 into sMain[sNowDoc][0][lastKey]
+   put empty into sNowItem
+   
+   put "2,1" & cr & "3,1" & cr & "4,1" into sMain[sNowDoc][1]["step"]
+   put "state" into sMain[sNowDoc][2]["type"]
+   put "1,1" into sMain[sNowDoc][2]["myStep"]
+   put "untitled project" into sMain[sNowDoc][3]["title"]
+   put "1,1" into sMain[sNowDoc][3]["myStep"]
+   put "500,10" into sMain[sNowDoc][4]["coord"]
+   put "1,1" into sMain[sNowDoc][4]["myStep"]
+   put 4 into sMain[sNowDoc][0][lastKey]
+   
+   -- erase any leftover graphics ------------------------------------------
+   -- this will erase everything in the group except floorRect
+   --   put 0 into tControl
+   --   repeat for the number of controls of group "graphicNetwork" of stack "primary"
+   --      add one to tControl
+   --      put the name of control tControl of group "graphicNetwork" of stack "primary" & cr after tList
+   --   end repeat
+   --   repeat for each line tLine in tList
+   --      if "id" is among the words of tLine then delete tLine
+   --   end repeat
+   
+   -- ! close one of multiple open docs
+   render
+end userClose

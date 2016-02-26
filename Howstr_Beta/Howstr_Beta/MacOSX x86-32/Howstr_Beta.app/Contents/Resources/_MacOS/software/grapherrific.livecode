@@ -1,0 +1,1710 @@
+﻿script "grapherrific"
+function isAnode @pMain,pDocKey,pRecKey -- takes a rec (in sNowDoc); returns false or node facts
+   put "function isAnode" into xX["write"];    devLog xX
+   -- pRecKey: a single record number
+   -- pDocKey: a single doc number
+   if "step" is not among the keys of pMain[pDocKey][pRecKey] then return false
+   put false into tNode
+   put clearNegPairs(pMain[pDocKey][pRecKey]["step"]) into tPointers
+   repeat for each line tPtr in tPointers
+      put item 1 of tPtr into tPtr
+      if pMain[pDocKey][tPtr]["type"] is "state" then put "state" into tNode
+      if pMain[pDocKey][tPtr]["type"] is "change" then put "change" into tNode
+   end repeat
+   return tNode
+end isAnode
+
+function isAlink @pMain,pDocKey,pRecKey -- takes a rec, returns false or link facts
+   put "function isAlink" into xX["write"];    devLog xX
+   -- pRecKey: a single record number
+   -- pDocKey: a single doc number
+   if "step" is not among the keys of pMain[pDocKey][pRecKey] then return false
+   put "bond flow dive rise" into tLinkTypes
+   put false into tNode
+   put clearNegPairs(pMain[pDocKey][pRecKey]["step"]) into tPointers
+   -- find link type
+   repeat for each line tPtr in tPointers
+      put item 1 of tPtr into tPtr
+      if pMain[pDocKey][tPtr]["type"] is among the words of tLinkTypes then 
+         put pMain[pDocKey][tPtr]["type"] into tNode["type"]
+         exit repeat
+      end if
+   end repeat
+   -- find the right tag
+   -- start step (node) is X, link step is Y, end step (node) is Z
+   -- bond is easy
+   if tNode["type"] is "bond" then
+      repeat for each line tPtr in tPointers
+         put item 1 of tPtr into tPtr
+         if tNode["type"] is among the keys of pMain[pDocKey][tPtr] then
+            put tPtr into tNode["Y"]
+            put item 1 of line 1 of pMain[pDocKey][tPtr][tNode["type"]] into tAlmost
+            put item 1 of pMain[pDocKey][tAlmost]["myStep"] into tNode["X"]
+            put item 1 of line 2 of pMain[pDocKey][tPtr][tNode["type"]] into tAlmost
+            put item 1 of pMain[pDocKey][tAlmost]["myStep"] into tNode["Z"]
+            -- Xcoord
+            -- Zcoord       
+         end if
+      end repeat
+   end if
+   -- directed links are more complicated
+   switch tNode["type"]
+      case "flow"
+         repeat for each line tPtr in tPointers
+            put item 1 of tPtr into tPtr
+            if "prev" is among the keys of pMain[pDocKey][tPtr] then 
+               put item 1 of pMain[pDocKey][tPtr]["prev"] into tAlmost
+               put item 1 of pMain[pDocKey][tAlmost]["myStep"] into tNode["X"]
+            end if
+            if "next" is among the keys of pMain[pDocKey][tPtr] then 
+               put item 1 of pMain[pDocKey][tPtr]["next"] into tAlmost
+               put item 1 of pMain[pDocKey][tAlmost]["myStep"] into tNode["Z"]
+            end if
+         end repeat
+         break
+      case "dive"
+         repeat for each line tPtr in tPointers
+            put item 1 of tPtr into tPtr
+            if "skim" is among the keys of pMain[pDocKey][tPtr] then 
+               put item 1 of pMain[pDocKey][tPtr]["skim"] into tAlmost
+               put item 1 of pMain[pDocKey][tAlmost]["myStep"] into tNode["X"]
+            end if
+            if "read" is among the keys of pMain[pDocKey][tPtr] then 
+               put item 1 of pMain[pDocKey][tPtr]["read"] into tAlmost
+               put item 1 of pMain[pDocKey][tAlmost]["myStep"] into tNode["Z"]
+            end if
+         end repeat
+         break
+      case "rise"
+         repeat for each line tPtr in tPointers
+            put item 1 of tPtr into tPtr
+            if "bulk" is among the keys of pMain[pDocKey][tPtr] then 
+               put item 1 of pMain[pDocKey][tPtr]["bulk"] into tAlmost
+               put item 1 of pMain[pDocKey][tAlmost]["myStep"] into tNode["X"]
+            end if
+            if "trim" is among the keys of pMain[pDocKey][tPtr] then 
+               put item 1 of pMain[pDocKey][tPtr]["trim"] into tAlmost
+               put item 1 of pMain[pDocKey][tAlmost]["myStep"] into tNode["Z"]
+            end if
+         end repeat
+         break
+   end switch
+   -- tNode is either false
+   -- or it's an array with type, X, Y, Z
+   return tNode
+end isAlink
+
+function areLinked pX,pZ
+   put "function areLinked" into xX["write"];    devLog xX
+   -- pX & pZ are each a single record number
+   -- if there is already a link connecting them, return true
+   -- otherwise return false
+   put false into tLink
+   put listOfLinks(pX) into pXlinks
+   put listOfLinks(pZ) into pZlinks
+   repeat for each item tTest in pXlinks
+      if pXlinks is among the items of pZlinks then
+         put true into tLink
+         exit repeat
+      end if
+   end repeat
+   return tLink
+end areLinked
+
+function clearNegPairs pRecKey -- takes a list of pointers; returns list of non-negated pointers
+   put "function clearNegPairs" into xX["write"];    devLog xX
+   -- ? why did I call this pRecKey if it's not a record key, it's a list of pointers...whatever
+   repeat for each line tEvilTwin in pRecKey
+      if char 1 of item 1 of tEvilTwin is "-" then
+         put tEvilTwin into tGoodTwin
+         put item 1 of tEvilTwin into tEvilTwin
+         delete char 1 of tGoodTwin
+         put item 1 of tGoodTwin into tGoodTwin
+         delete line lineOffset(tEvilTwin,pRecKey) of pRecKey
+         delete line lineOffset(tGoodTwin,pRecKey) of pRecKey
+      end if
+   end repeat
+   return pRecKey
+end clearNegPairs
+
+--command userState pRec
+--   put "command userState" into xX["write"];    devLog xX
+--   -- if pRec is empty the user just wants a new state node
+--   newItem("state")
+--   -- if something is in pRec then the user wants it to be a state node
+
+--   put "Unsaved" into field "savedField" stack "primary"
+--   render
+--end userState
+
+--command userChange pRec
+--   put "command userChange" into xX["write"];    devLog xX
+--   -- if pRec is empty the user just wants a new change node
+--   newItem("change")
+--   -- if something is in pRec then the user wants it to be a change node
+
+--   put "Unsaved" into field "savedField" stack "primary"
+--   render
+--end userChange
+
+function newItem @pMain,pDoc,pType,pTurn
+   put "function newItem" into xX["write"];    devLog xX
+   -- pMain = graph data
+   -- pDoc = sNowDoc ! will need to be more complicated address in future
+   -- pType: ! at the moment just state/change
+   -- can accept an existing turn, or create a new one
+   -- ! update this to accept an array instead of a list of doc/type/turn/etc
+   -- returns list of all new pointers if provided a turn
+   -- or returns pointer for step if no turn provided
+   if pTurn is not empty then
+      -- use this provided turn
+      put pMain[pDoc][0][lastKey] into tRec
+      -- new step
+      put tRec+2 & "," & pTurn into pMain[pDoc][tRec+1]["step"]
+      put pTurn & "," & pTurn into pMain[pDoc][tRec+1]["myTurn"]
+      -- new type tag
+      put pType into pMain[pDoc][tRec+2]["type"]
+      put pTurn & "," & pTurn into pMain[pDoc][tRec+2]["myTurn"]
+      put tRec+1 & "," & pTurn into pMain[pDoc][tRec+2]["myStep"]
+      -- update highest key
+      put tRec+2 into pMain[pDoc][0][lastKey]
+      put cr & tRec+1 & "," & pTurn & cr & tRec+2 & "," & pTurn into tTemp["pointers"]
+      put tRec+1 into tTemp["step"]
+      return tTemp
+   else
+      -- new turn
+      put pMain[pDoc][0][lastKey] into tRec
+      put tRec+2 & "," & tRec+1 & cr & tRec+3 & "," & tRec+1 into pMain[pDoc][tRec+1]["turn"]
+      put "newItem" into pMain[pDoc][tRec+1]["act"]
+      -- new step
+      put tRec+3 & "," & tRec+1 into pMain[pDoc][tRec+2]["step"]
+      put tRec+1 & "," & tRec+1 into pMain[pDoc][tRec+2]["myTurn"]
+      -- new type tag
+      put pType into pMain[pDoc][tRec+3]["type"]
+      put tRec+1 & "," & tRec+1 into pMain[pDoc][tRec+3]["myTurn"]
+      put tRec+2 & "," & tRec+1 into pMain[pDoc][tRec+3]["myStep"]
+      -- update highest key
+      put tRec+3 into pMain[pDoc][0][lastKey]
+      return tRec+2
+   end if
+end newItem
+
+--command userFlow pRecs
+--   put "command userFlow" into xX["write"];    devLog xX
+--   -- pRecs: X rec & cr & Z rec
+--   put line 1 of pRecs into tXstep
+--   put line 2 of pRecs into tZstep
+--   put "newFlow" into theAct
+--   put "flow" into theType
+--   put "next" into theForward
+--   put "prev" into theBackward
+--   newDilink tXstep,tZstep,theAct,theType,theForward,theBackward
+
+--   put "Unsaved" into field "savedField" stack "primary"
+--   render
+--end userFlow
+
+--command userDive pRecs
+--   put "command userDive" into xX["write"];    devLog xX
+--   -- pRecs: X rec & cr & Z rec
+--   put line 1 of pRecs into tXstep
+--   put line 2 of pRecs into tZstep
+--   put "newDive" into theAct
+--   put "dive" into theType
+--   put "read" into theForward
+--   put "skim" into theBackward
+--   newDilink tXstep,tZstep,theAct,theType,theForward,theBackward
+
+--   put "Unsaved" into field "savedField" stack "primary"
+--   render
+--end userDive
+
+--command userRise pRecs
+--   put "command userRise" into xX["write"];    devLog xX
+--   -- pRecs: X rec & cr & Z rec
+--   put line 1 of pRecs into tXstep
+--   put line 2 of pRecs into tZstep
+--   put "newRise" into theAct
+--   put "rise" into theType
+--   put "trim" into theForward
+--   put "bulk" into theBackward
+--   newDilink tXstep,tZstep,theAct,theType,theForward,theBackward
+
+--   put "Unsaved" into field "savedField" stack "primary"
+--   render
+--end userRise
+
+function newDilink @pMain,pDoc,pXstep,pZstep,pAct,pType,pForward,pBackward,pTurn
+   put "function newDilink" into xX["write"];    devLog xX
+   -- for new flow: x,z,newFlow,flow,next,prev
+   -- for new dive: x,z,newDive,dive,read,skim
+   -- for new rise: x,z,newRise,rise,trim,bulk
+   -- pTurn = optional external turn; if not provided this function creates its own turn and returns step#
+   -- if provided, this function uses pTurn and returns a list of pointers to all recs for inclusion in the turn
+   -- ! yeah, yeah, I know I shouldn't do it by duplicating 90% of the logic. sue me.
+   -- ! also rewrite the parameters to be an array
+   if pTurn is empty then
+      -- this logic is unchanged
+      put pMain[pDoc][0][lastKey] into tRec
+      -- as in step X is flowed to step Z thru step Y
+      -- X forward <-> Y backward/Y forward <-> Z backward
+      -- +1 turn
+      put tRec+1 into tTurn
+      -- +2 Y step
+      put tRec+2 into tYstep
+      -- +3 Y type: pType
+      put tRec+3 into tYtype
+      -- +4 Y pBackward to X pForward
+      put tRec+4 into tYback
+      -- +5 Y pForward to Z pBackward
+      put tRec+5 into tYfor
+      -- +6 X pForward to Y pBackward
+      put tRec+6 into tXfor
+      -- +7 Z pBackward to Y pForward
+      put tRec+7 into tZback
+      put tRec+7 into pMain[pDoc][0][lastKey]
+      
+      -- turn
+      put tYstep & "," & tTurn & cr & tYtype & "," & tTurn & cr & tYback & "," & tTurn & cr \
+      & tYfor & "," & tTurn & cr & tXfor & "," & tTurn & cr & tZback & "," & tTurn into pMain[pDoc][tTurn]["turn"]
+      put pAct into pMain[pDoc][tTurn]["act"]
+      
+      -- Y step
+      put tYtype & "," & tTurn & cr & tYback & "," & tTurn & cr & tYfor & "," & tTurn into pMain[pDoc][tYstep]["step"]
+      put tTurn & "," & tTurn into pMain[pDoc][tYstep]["myTurn"]
+      
+      -- Y type
+      put pType into pMain[pDoc][tYtype]["type"]
+      put tTurn & "," & tTurn into pMain[pDoc][tYtype]["myTurn"]
+      put tYstep & "," & tTurn into pMain[pDoc][tYtype]["myStep"]
+      
+      -- pointers
+      put tXfor & "," & tTurn into pMain[pDoc][tYback][pBackward]
+      put tTurn & "," & tTurn into pMain[pDoc][tYback]["myTurn"]
+      put tYstep & "," & tTurn into pMain[pDoc][tYback]["myStep"]
+      -- this one was done when tYstep was created
+      
+      put tZback & "," & tTurn into pMain[pDoc][tYfor][pForward]
+      put tTurn & "," & tTurn into pMain[pDoc][tYfor]["myTurn"]
+      put tYstep & "," & tTurn into pMain[pDoc][tYfor]["myStep"]
+      -- this one was done when tYstep was created
+      
+      put tYback & "," & tTurn into pMain[pDoc][tXfor][pForward]
+      put tTurn & "," & tTurn into pMain[pDoc][tXfor]["myTurn"]
+      put pXstep & "," & tTurn into pMain[pDoc][tXfor]["myStep"]
+      put cr & tXfor & "," & tTurn after pMain[pDoc][pXstep]["step"]
+      
+      put tYfor & "," & tTurn into pMain[pDoc][tZback][pBackward]
+      put tTurn & "," & tTurn into pMain[pDoc][tZback]["myTurn"]
+      put pZstep & "," & tTurn into pMain[pDoc][tZback]["myStep"]
+      put cr & tZback & "," & tTurn after pMain[pDoc][pZstep]["step"]
+      
+      return tRec+2
+   else -- pTurn provided ------------------------------------------------
+      put pMain[pDoc][0][lastKey] into tRec
+      put pTurn into tTurn
+      -- as in step X is flowed to step Z thru step Y
+      -- X forward <-> Y backward/Y forward <-> Z backward
+      --      -- +1 turn
+      --      put tRec+1 into tTurn
+      -- +1 Y step
+      put tRec+1 into tYstep
+      -- +2 Y type: pType
+      put tRec+2 into tYtype
+      -- +3 Y pBackward to X pForward
+      put tRec+3 into tYback
+      -- +4 Y pForward to Z pBackward
+      put tRec+4 into tYfor
+      -- +5 X pForward to Y pBackward
+      put tRec+5 into tXfor
+      -- +6 Z pBackward to Y pForward
+      put tRec+6 into tZback
+      put tRec+6 into pMain[pDoc][0][lastKey]
+      
+      -- Y step
+      put tYtype & "," & tTurn & cr & tYback & "," & tTurn & cr & tYfor & "," & tTurn into pMain[pDoc][tYstep]["step"]
+      put tTurn & "," & tTurn into pMain[pDoc][tYstep]["myTurn"]
+      
+      -- Y type
+      put pType into pMain[pDoc][tYtype]["type"]
+      put tTurn & "," & tTurn into pMain[pDoc][tYtype]["myTurn"]
+      put tYstep & "," & tTurn into pMain[pDoc][tYtype]["myStep"]
+      
+      -- pointers
+      put tXfor & "," & tTurn into pMain[pDoc][tYback][pBackward]
+      put tTurn & "," & tTurn into pMain[pDoc][tYback]["myTurn"]
+      put tYstep & "," & tTurn into pMain[pDoc][tYback]["myStep"]
+      -- this one was done when tYstep was created
+      
+      put tZback & "," & tTurn into pMain[pDoc][tYfor][pForward]
+      put tTurn & "," & tTurn into pMain[pDoc][tYfor]["myTurn"]
+      put tYstep & "," & tTurn into pMain[pDoc][tYfor]["myStep"]
+      -- this one was done when tYstep was created
+      
+      put tYback & "," & tTurn into pMain[pDoc][tXfor][pForward]
+      put tTurn & "," & tTurn into pMain[pDoc][tXfor]["myTurn"]
+      put pXstep & "," & tTurn into pMain[pDoc][tXfor]["myStep"]
+      put cr & tXfor & "," & tTurn after pMain[pDoc][pXstep]["step"]
+      
+      put tYfor & "," & tTurn into pMain[pDoc][tZback][pBackward]
+      put tTurn & "," & tTurn into pMain[pDoc][tZback]["myTurn"]
+      put pZstep & "," & tTurn into pMain[pDoc][tZback]["myStep"]
+      put cr & tZback & "," & tTurn after pMain[pDoc][pZstep]["step"]
+      
+      -- turn
+      put cr & tYstep & "," & tTurn & cr & tYtype & "," & tTurn & cr & tYback & "," & tTurn & cr \
+      & tYfor & "," & tTurn & cr & tXfor & "," & tTurn & cr & tZback & "," & tTurn into tTemp["pointers"]
+      put tYstep into tTemp["step"]
+      return tTemp
+   end if
+end newDilink
+
+function newDilink_Old @pMain,pDoc,pXstep,pZstep,pAct,pType,pForward,pBackward
+   put "function newDilink_Old" into xX["write"];    devLog xX
+   -- for flow: x,z,newFlow,flow,next,prev
+   -- for dive: x,z,newDive,dive,read,skim
+   -- for rise: x,z,newRise,rise,trim,bulk
+   put pMain[pDoc][0][lastKey] into tRec
+   -- as in step X is flowed to step Z thru step Y
+   -- X forward <-> Y backward/Y forward <-> Z backward
+   -- +1 turn
+   put tRec+1 into tTurn
+   -- +2 Y step
+   put tRec+2 into tYstep
+   -- +3 Y type: pType
+   put tRec+3 into tYtype
+   -- +4 Y pBackward to X pForward
+   put tRec+4 into tYback
+   -- +5 Y pForward to Z pBackward
+   put tRec+5 into tYfor
+   -- +6 X pForward to Y pBackward
+   put tRec+6 into tXfor
+   -- +7 Z pBackward to Y pForward
+   put tRec+7 into tZback
+   put tRec+7 into pMain[pDoc][0][lastKey]
+   
+   -- turn
+   put tYstep & "," & tTurn & cr & tYtype & "," & tTurn & cr & tYback & "," & tTurn & cr \
+   & tYfor & "," & tTurn & cr & tXfor & "," & tTurn & cr & tZback & "," & tTurn into pMain[pDoc][tTurn]["turn"]
+   put pAct into pMain[pDoc][tTurn]["act"]
+   
+   -- Y step
+   put tYtype & "," & tTurn & cr & tYback & "," & tTurn & cr & tYfor & "," & tTurn into pMain[pDoc][tYstep]["step"]
+   put tTurn & "," & tTurn into pMain[pDoc][tYstep]["myTurn"]
+   
+   -- Y type
+   put pType into pMain[pDoc][tYtype]["type"]
+   put tTurn & "," & tTurn into pMain[pDoc][tYtype]["myTurn"]
+   put tYstep & "," & tTurn into pMain[pDoc][tYtype]["myStep"]
+   
+   -- pointers
+   put tXfor & "," & tTurn into pMain[pDoc][tYback][pBackward]
+   put tTurn & "," & tTurn into pMain[pDoc][tYback]["myTurn"]
+   put tYstep & "," & tTurn into pMain[pDoc][tYback]["myStep"]
+   -- this one was done when tYstep was created
+   
+   put tZback & "," & tTurn into pMain[pDoc][tYfor][pForward]
+   put tTurn & "," & tTurn into pMain[pDoc][tYfor]["myTurn"]
+   put tYstep & "," & tTurn into pMain[pDoc][tYfor]["myStep"]
+   -- this one was done when tYstep was created
+   
+   put tYback & "," & tTurn into pMain[pDoc][tXfor][pForward]
+   put tTurn & "," & tTurn into pMain[pDoc][tXfor]["myTurn"]
+   put pXstep & "," & tTurn into pMain[pDoc][tXfor]["myStep"]
+   put cr & tXfor & "," & tTurn after pMain[pDoc][pXstep]["step"]
+   
+   put tYfor & "," & tTurn into pMain[pDoc][tZback][pBackward]
+   put tTurn & "," & tTurn into pMain[pDoc][tZback]["myTurn"]
+   put pZstep & "," & tTurn into pMain[pDoc][tZback]["myStep"]
+   put cr & tZback & "," & tTurn after pMain[pDoc][pZstep]["step"]
+   
+   return tRec+2
+end newDilink_Old
+
+--command userInfo
+--   ask "info,data (EX: title,the quick brown fox)"
+--   if it is empty then exit userInfo
+--   put item 1 of it into tTag
+--   put item 2 to -1 of it into tData
+--   put getTagKey(sNowItem,tTag,sNowDoc) into tNowRec
+--   put getTagData(sNowItem,tTag,sNowDoc) into tNowData
+--   -- create new record for turn and tag
+--   put sMain[sNowDoc][0][lastKey] into tRec
+
+--   put tRec+2 & "," & tRec+1 into sMain[sNowDoc][tRec+1]["turn"]
+--   put "newInfo" into sMain[sNowDoc][tRec+1]["act"]
+
+--   put tData into sMain[sNowDoc][tRec+2][tTag]
+--   put tRec+1 & "," & tRec+1 into sMain[sNowDoc][tRec+2]["myTurn"]
+--   put sNowItem & "," & tRec+1 into sMain[sNowDoc][tRec+2]["myStep"]
+--   put cr & tRec+2 & "," & tRec+1 after sMain[sNowDoc][sNowItem]["step"]
+
+--   put tRec+2 into sMain[sNowDoc][0][lastKey]
+--   -- negate old tag if it existed
+--   if tNowData is not empty then
+--      -- tag exists already
+--      -- negate pointer for old tag record
+--      put cr & "-" & sNowItem & "," & tRec+1 after sMain[sNowDoc][tNowRec]["myStep"]
+--      put cr & "-" & tNowRec & "," & tRec+1 after sMain[sNowDoc][sNowItem]["step"]
+--   end if
+--   put "Unsaved" into field "savedField" stack "primary"
+--   render
+--end userInfo
+
+command changeInfo @pMain,pBlerg
+   put "command changeInfo" into xX["write"];    devLog xX
+   -- pBlerg["doc"] = doc in address
+   -- pBlerg["rec"] = step's record key
+   -- pBlerg["tag"] = tag string (this will be in a rec different from the step's rec)
+   -- pBlerg["data"] = new data
+   -- pBlerg["hide"] = true 
+   put pBlerg["rec"] into pRec
+   put pBlerg["tag"] into pTag
+   put pBlerg["doc"] into pDoc   
+   put pBlerg["data"] into pData
+   put pBlerg["hide"] into pHide
+   -- if the change is identical to existing data, don't do anything
+   -- if pHide is true then hide the [tag] in the [rec] in the [doc]
+   put pMain[pDoc][0][lastKey] into tRec -- this order makes it work better
+   if pHide is true then
+      -- negate the tag in the step [rec] that points to [tag]
+      -- negate the other end of the pointer
+      put getTagKey(pMain,pBlerg) into tOldTag
+      put cr & "-" & tOldTag & "," & tRec+1 after pMain[pDoc][pRec]["step"]
+      put cr & "-" & pRec & "," & tRec + 1 after pMain[pDoc][tOldTag]["myStep"]
+      -- create turn
+      put tRec+2 & "," & tRec+1 into pMain[pDoc][tRec+1]["turn"]
+      put "changeInfo" into pMain[pDoc][tRec+1]["act"]
+      put tOldTag & "," & tRec+1 into pMain[pDoc][tRec+2]["hide"]
+      put tRec+1 & "," & tRec+1 into pMain[pDoc][tRec+2]["myTurn"]
+   else
+      --      put pMain[pDoc][0][lastKey] into tRec -- this order makes it work better
+      put getTagData(pMain,pBlerg) into tOld
+      if tOld = pData then 
+         exit changeInfo -- they're the same, so don't bother changing anything
+      else if tOld is not empty then
+         -- negate node's old tag
+         put getTagKey(pMain,pBlerg) into tOldTag
+         put cr & "-" & tOldTag & "," & tRec+1 after pMain[pDoc][pRec]["step"]
+      end if
+      -- create turn
+      put tRec+2 & "," & tRec+1 into pMain[pDoc][tRec+1]["turn"]
+      put "changeInfo" into pMain[pDoc][tRec+1]["act"]
+      -- create new tag with new data
+      put pData into pMain[pDoc][tRec+2][pTag]
+      put tRec+1 & "," & tRec+1 into pMain[pDoc][tRec+2]["myTurn"]
+      put pRec & "," & tRec+1 into pMain[pDoc][tRec+2]["myStep"]
+      --      put tRec+2 into pMain[pDoc][0][lastKey]
+      -- point to new tag
+      put cr & tRec+2 & "," & tRec+1 after pMain[pDoc][pRec]["step"]
+   end if
+   put tRec+2 into pMain[pDoc][0][lastKey]
+end changeInfo
+
+command userFile
+   put "command userFile" into xX["write"];    devLog xX
+   -- ! at the moment this just stores whatever they picked and tries to display a preview
+   -- ! it should be easy to break
+   
+   put false into tShow
+   answer file "attach this file to" && stepString(sNowDoc,sNowItem)
+   if it is empty then exit userFile
+   put it into tPath
+   put it into tName
+   set the itemdelimiter to "/"
+   put the seconds & "-" & the last item of tName into tName
+   --   replace defaultFolder with "" in tName
+   --   if char 1 of tName is "/" then delete char 1 of tName
+   --   answer tName && relativePath(defaultFolder,tPath)
+   -- livecode supports:
+   -- image: gif, jpg, png, bmp, xwd, xbm, xpm, pbm, pgm, ppm, pict, eps
+   -- audio: wav, aiff, au, midi, snd, mp3, aac
+   -- video: quicktime, avi, mpeg, mp4
+   answer tName
+   if (char -3 to -1 of tName) is among the words of "gif jpg png bmp xwd xbm xpm pbm pgm ppm ict eps" then put true into tShow
+   -- create a new tag
+   -- data is the relative filepath
+end userFile
+
+function undoTurn @pMain,pTemp
+   put "function undoTurn" into xX["write"];    devLog xX
+   put pTemp["doc"] into tDoc
+   put pTemp["turn"] into tTurn
+   put pMain[tDoc][0]["pointerTags"] into tPointerTags
+   -- count backwards from highest record
+   -- locate first positive turn
+   -- search entire array and negate any pointer attributed to that turn
+   put the keys of pMain[tDoc] into tDocument
+   sort tDocument numeric descending
+   put empty into tUndoThisRec
+   repeat for each line tToUndo in tDocument
+      -- lack of a turn tag looks the same as a negated turn tag
+      if clearNegPairs(pMain[tDoc][tToUndo]["turn"]) is not empty then
+         if pMain[tDoc][tToUndo]["act"] is not "undoTurn" then
+            -- this is the youngest positive turn
+            put tToUndo into tUndoThisRec
+            exit repeat
+         end if
+      end if
+   end repeat
+   
+   if tUndoThisRec is not empty then
+      -- create the  undo tag records
+      put pMain[tDoc][0][lastKey] into tRec
+      put tUndoThisRec & "," & tTurn into pMain[tDoc][tRec+1]["undo"]
+      put tTurn & "," & tTurn into pMain[tDoc][tRec+1]["myTurn"]
+      put tRec+1 into pMain[tDoc][0][lastKey] 
+      put cr & tRec+1 & "," & tTurn into tTemp["pointers"]
+      
+      -- search everything, reverse appropriate pointers
+      repeat for each key tRecord in pMain[tDoc]
+         repeat for each key tTag in pMain[tDoc][tRecord]
+            if tTag is among the words of tPointerTags then
+               repeat for each line tPointer in pMain[tDoc][tRecord][tTag]
+                  if item 2 of tPointer is tUndoThisRec then
+                     -- this pointer is attributed to the rec that needs to be undone; reverse it
+                     put item 1 of tPointer into tTarget
+                     if char 1 of tTarget is "-" then
+                        -- negative, then append positive
+                        delete char 1 of tTarget
+                        put cr & tTarget & "," & tTurn after pMain[tDoc][tRecord][tTag]
+                     else
+                        -- positive, then append negative
+                        put cr & "-" & tTarget & "," & tTurn after pMain[tDoc][tRecord][tTag]
+                     end if
+                  end if
+               end repeat
+            end if
+         end repeat
+      end repeat
+      return tTemp["pointers"]
+   else
+      return "nothing to undo"
+   end if -- tUndoThisRec is not empty
+end undoTurn
+
+function redoTurn @pMain,pTemp
+   put "function redoTurn" into xX["write"];    devLog xX
+   put pTemp["doc"] into tDoc
+   put pTemp["turn"] into tTurn
+   put pMain[tDoc][0]["pointerTags"] into tPointerTags
+   -- count backwards from highest record
+   -- locate first positive undo turn
+   -- search entire array and negate any pointer attributed to that turn
+   put the keys of pMain[tDoc] into tDocument
+   sort tDocument numeric descending
+   put empty into tRedoThisRec
+   repeat for each line tToRedo in tDocument
+      -- lack of a turn tag looks the same as a negated turn tag
+      if clearNegPairs(pMain[tDoc][tToRedo]["turn"]) is not empty then
+         if pMain[tDoc][tToRedo]["act"] is "undoTurn" then
+            -- this is the youngest positive undo turn
+            put tToRedo into tRedoThisRec
+            exit repeat
+         end if
+      end if
+   end repeat
+   
+   if tRedoThisRec is not empty then
+      -- create the turn & redo tag records
+      put pMain[tDoc][0][lastKey] into tRec   
+      put tRedoThisRec & "," & tTurn into pMain[tDoc][tRec+1]["redo"]
+      put tTurn & "," & tTurn into pMain[tDoc][tRec+1]["myTurn"]
+      put tRec+1 into pMain[tDoc][0][lastKey] 
+      put cr & tRec+1 & "," & tTurn into tTemp["pointers"]
+      
+      -- search everything, reverse appropriate pointers
+      repeat for each key tRecord in pMain[tDoc]
+         repeat for each key tTag in pMain[tDoc][tRecord]
+            if tTag is among the words of tPointerTags then
+               repeat for each line tPointer in pMain[tDoc][tRecord][tTag]
+                  if item 2 of tPointer is tRedoThisRec then
+                     -- this pointer is attributed to the rec that needs to be redone; reverse it
+                     put item 1 of tPointer into tTarget
+                     if char 1 of tTarget is "-" then
+                        -- negative, then append positive
+                        delete char 1 of tTarget
+                        put cr & tTarget & "," & tTurn after pMain[tDoc][tRecord][tTag]
+                     else
+                        -- positive, then append negative
+                        put cr & "-" & tTarget & "," & tTurn after pMain[tDoc][tRecord][tTag]
+                     end if
+                  end if
+               end repeat
+            end if
+         end repeat
+      end repeat
+      return tTemp["pointers"]
+   else
+      return "nothing to redo"
+   end if -- tRedoThisRec is not empy
+end redoTurn
+
+--command userHide
+--   put "command userHide" into xX["write"];    devLog xX
+--   -- ! assumes the current selection (sNowItem) is the target
+--   -- to hide a tag, follow myStep and negate the pointer to the tag
+--   -- to hide a step, negate all of its active pointers
+--   -- a tag will not be displayed if no step points to it
+--   -- a step will not be displayed if it has no active pointers
+
+--   -- turn
+--   -- negate pointers
+--   put sMain[sNowDoc][0][lastKey] into tRec
+
+--   put tRec+2 & "," & tRec+1 into sMain[sNowDoc][tRec+1]["turn"]
+--   put "userHide" & "," & sNowItem into sMain[sNowDoc][tRec+1]["act"]
+
+--   put sNowItem & "," & tRec+1 into sMain[sNowDoc][tRec+2]["hide"]
+--   put tRec+1 & "," & tRec+1 into sMain[sNowDoc][tRec+2]["myTurn"]
+
+--   put tRec+2 into sMain[sNowDoc][0][lastKey]
+
+--   -- if thing being hidden is a tag
+--   if "myStep" is among the keys of sMain[sNowDoc][sNowItem] then
+--      -- negate step pointer in myStep
+--      repeat for each line tPtr in sMain[sNowDoc][sNowItem]["myStep"]
+--         put item 1 of tPtr into tTarget
+--         if char 1 of tTarget is not "-" then
+--            put cr & "-" & tTarget & "," & tRec+1 after sMain[sNowDoc][sNowItem]["myStep"]
+--            -- negate tag pointer in step
+--            put cr & "-" & sNowItem & "," & tRec+1 after sMain[sNowDoc][tTarget]["step"]
+--         end if
+--      end repeat
+--   end if
+
+--   -- if thing being hidden isn't a tag, it must be a step
+--   if isAnode(sNowDoc,sNowItem) is false then
+--      -- if thing being hidden is a link
+--      hideStep(sNowItem,tRec+1)
+--   else
+--      -- if thing being hidden is a node (will take its links with it)
+--      -- links first
+--      put listOfLinks(sNowItem) into tLinks
+--      repeat for each item tLink in tLinks
+--         hideStep(tLink,tRec+1)
+--      end repeat
+--      -- then the node itself
+--      hideStep(sNowItem,tRec+1)
+--   end if
+--   put "Unsaved" into field "savedField" stack "primary"
+--   render
+--end userHide
+
+function listOfLinks pNode
+   put "function listOfLinks" into xX["write"];    devLog xX
+   -- pNode = record key of a node
+   -- returns a comma delimited list of the record keys of all the links attached to pNode
+   -- find the recs of the links attached to this node
+   put clearNegPairs(sMain[sNowDoc][pNode]["step"]) into tRecPtrs
+   put empty into tY -- will be list of link step records, if any links attached to this node
+   repeat for each line tPtr in tRecPtrs
+      repeat for each key tAkey in sMain[sNowDoc][item 1 of tPtr]
+         if tAkey is among the words of "bond next prev read skim trim bulk" then
+            repeat for each line tOtherPtr in sMain[sNowDoc][item 1 of tPtr][tAkey]
+               put item 1 of sMain[sNowDoc][item 1 of tOtherPtr]["myStep"] & "," after tY
+            end repeat
+         end if
+      end repeat
+   end repeat
+   return tY
+end listOfLinks
+
+command hideStep @pMain,pNums
+   put "command hideStep" into xX["write"];    devLog xX
+   put pNums["target"] into tHide
+   put pNums["turn"] into tTurn
+   put pNums["doc"] into tDoc
+
+   -- need clearNegPairs to work
+   
+   -- this works on nodes and links
+   -- but, call it on the links first, then on the node
+   -- negate these groups of pointers
+   -- stepA<tPtrA>myStepA
+   --                        linkA<tPtrAB>linkB
+   --                                               myStepB<tPtrB>stepB
+   put "prev next skim read bulk trim" into tLinkTags
+   put clearNegPairs(pMain[tDoc][tHide]["step"]) into tStepA
+   repeat for each line tPtrA in tStepA
+      put item 1 of tPtrA into tPtrA
+      put cr & "-" & tPtrA & "," & tTurn after pMain[tDoc][tHide]["step"]
+      put cr & "-" & tHide & "," & tTurn after pMain[tDoc][tPtrA]["myStep"]
+      repeat for each key tLinkA in pMain[tDoc][tPtrA]
+         if tLinkA is among the words of tLinkTags then
+            put clearNegPairs(pMain[tDoc][tPtrA][tLinkA]) into tLink
+            repeat for each line tPtrAB in tLink
+               put item 1 of tPtrAB into tPtrAB
+               put cr & "-" & tPtrAB & "," & tTurn after pMain[tDoc][tPtrA][tLinkA]
+               --               if tLinkA is "bond" then put "bond" into tLinkAmirror
+               if tLinkA is "next" then put "prev" into tLinkAmirror
+               if tLinkA is "prev" then put "next" into tLinkAmirror
+               if tLinkA is "read" then put "skim" into tLinkAmirror
+               if tLinkA is "skim" then put "read" into tLinkAmirror
+               if tLinkA is "trim" then put "bulk" into tLinkAmirror
+               if tLinkA is "bulk" then put "trim" into tLinkAmirror
+               put cr & "-" & tPtrA & "," & tTurn after pMain[tDoc][tPtrAB][tLinkAmirror]
+               put clearNegPairs(pMain[tDoc][tPtrAB]["myStep"]) into tPtrB
+               repeat for each line tStepB in tPtrB
+                  put item 1 of tStepB into tStepB
+                  put cr & "-" & tPtrAB & "," & tTurn after pMain[tDoc][tStepB]["step"]
+                  put cr & "-" & tStepB & "," & tTurn after pMain[tDoc][tPtrAB]["myStep"] 
+               end repeat
+            end repeat
+         end if
+      end repeat
+   end repeat
+   --   put "Unsaved" into field "savedField" stack "primary"
+end hideStep
+
+function getTagData @pMain,pStuff -- pRec,pTag,pDoc
+   put "function getTagData" into xX["write"];    devLog xX
+   put pStuff["rec"] into pRec
+   put pStuff["tag"] into pTag
+   put pStuff["doc"] into pDoc
+   -- ! only works for steps at the moment
+   -- assumes active doc
+   -- pRec is a key
+   -- pTag is a string
+   -- will return whatever is in that tag, if it's pointed to with that rec
+   put empty into tData
+   put clearNegPairs(pMain[pDoc][pRec]["step"]) into tPointers
+   repeat for each line tPtr in tPointers
+      put item 1 of tPtr into tPtr -- throw out the turn's key
+      if pTag is among the keys of pMain[pDoc][tPtr] then
+         put pMain[pDoc][tPtr][pTag] into tData
+      end if
+   end repeat
+   return tData
+end getTagData
+
+function getTagKey @pMain,pStuff -- pRec,pTag,pDoc
+   put "function getTagKey" into xX["write"];    devLog xX
+   put pStuff["rec"] into pRec
+   put pStuff["tag"] into pTag
+   put pStuff["doc"] into pDoc
+   -- ! only works for steps at the moment
+   -- assumes active doc
+   -- pRec is a key
+   -- pTag is a string
+   -- will return the tag's record key, if it exists
+   put empty into tKey
+   put clearNegPairs(pMain[pDoc][pRec]["step"]) into tPointers
+   repeat for each line tPtr in tPointers
+      put item 1 of tPtr into tPtr -- throw out the turn's key
+      if pTag is among the keys of pMain[pDoc][tPtr] then
+         put tPtr into tKey
+      end if
+   end repeat
+   return tKey
+end getTagKey
+
+command  adjList @pMain,@pShort
+   put "command adjList" into xX["write"];    devLog xX
+   -- makes a simpler adjacency list
+   -- takes in sMain[doc][rec][etc]
+   -- puts a simple array of only visible nodes and links into sMainShort
+   -- doesn't sort anything
+   -- if a node
+   -- array[doc][rec][next/prev/read/skim/bulk/trim]=rec & cr
+   -- array[doc][rec][type]=state/change/bond/flow/dive/rise
+   -- array[doc][rec][info]=tag,data & cr
+   put empty into pShort
+   repeat for each key tDoc in pMain
+      repeat for each key tRec in pMain[tDoc]
+         if tRec is 0 then next repeat
+         -- only visible steps
+         put isAnode(pMain,tDoc,tRec) into tNode
+         if tNode is false then 
+            put isAlink(pMain,tDoc,tRec) into tLink
+            if tLink is not false then
+               ------------- link type -------------------
+               put tLink["type"] into pShort[tDoc][tRec]["type"]
+               put true into tStep
+            end if
+         else
+            ------------- node type -------------------
+            put tNode into pShort[tDoc][tRec]["type"]
+            put true into tStep
+         end if
+         -------- this is the same for nodes and links --------------
+         if tStep is true then             
+            ---------------- links & info  ---------------------
+            put clearNegPairs(pMain[tDoc][tRec]["step"]) into tPointers
+            repeat for each line tPtr in tPointers
+               put item 1 of tPtr into tPtr
+               repeat for each key tAkey in pMain[tDoc][tPtr]
+                  if tAkey is among the words of "next prev read skim trim bulk" then
+                     ------------------- links -------------------
+                     put clearNegPairs(pMain[tDoc][tPtr][tAkey]) into tPointersAgain
+                     repeat for each line tOtherPtr in tPointersAgain
+                        put item 1 of tOtherPtr into tOtherPtr
+                        put item 1 of pMain[tDoc][tOtherPtr]["myStep"] & cr after pShort[tDoc][tRec][tAkey]
+                     end repeat
+                  else
+                     if tAkey is among the words of "title weight material whole duration series memo figure" then
+                        put pMain[tDoc][tPtr][tAkey] into pShort[tDoc][tRec][tAkey]
+                     end if
+                     -- ! info will still list all the previous tag:data pairs as part of the string
+                     if tAkey is not among the words of "coord turn act myTurn myStep type" then
+                        ----------------- info --------------------
+                        put tAkey & ":" & pMain[tDoc][tPtr][tAkey] & cr after pShort[tDoc][tRec]["info"]
+                     end if
+                  end if
+               end repeat
+            end repeat
+         end if
+      end repeat
+   end repeat
+   -- clean up trailing cr
+   repeat for each key tDoc in pShort
+      repeat for each key tRec in pShort[tDoc]
+         repeat for each key tTag in pShort[tDoc][tRec]
+            filter pShort[tDoc][tRec][tTag] without empty
+         end repeat
+      end repeat
+   end repeat
+   -- answer important questions about the state of the graph ------------------------------------------
+   -- undo/redo
+   -- undo is available if a single turn has a single positive pointer
+   -- redo is available if the youngest turn has no positive pointers
+   -- the following counts backwards through the records
+   -- it ignores any record that's not a turn (also ignores undo turns)
+   -- when it gets to the youngest turn it checks for positive pointers
+   -- if no positive pointers in the youngest turn, enable redo & repeat again
+   -- if youngest turn has positive pointers, enable undo & exit (can't redo)
+   -- if redo was enabled, continues counting back to next turn
+   -- continues to record 1
+   -- if no turns have a positive pointer undo stays disabled
+   -- exits repeat as soon as undo enabled
+   repeat for each key tDoc in pMain
+      put "false" into pShort[tDoc][0]["undo"]
+      put "false" into pShort[tDoc][0]["redo"]
+      put the keys of pMain[tDoc] into tRecords
+      sort tRecords numeric descending
+      repeat for each line tRec in tRecords
+         if "turn" is among the keys of pMain[tDoc][tRec] then
+            if pMain[tDoc][tRec]["act"] contains "do" then next repeat
+            if clearNegPairs(pMain[tDoc][tRec]["turn"]) is empty then 
+               --               set the disabled of button "redoButt" stack "primary" to false
+               put "true" into pShort[tDoc][0]["redo"]
+            else
+               --               set the disabled of button "undoButt" stack "primary" to false
+               put "true" into pShort[tDoc][0]["undo"]
+               exit repeat
+            end if
+         end if
+      end repeat
+   end repeat 
+   -- metadata
+   repeat for each key tDoc in pMain
+      put pMain[tDoc][0]["pointerTags"] into pShort[tDoc][0]["pointerTags"]
+   end repeat
+end adjList
+
+command topoSort @pShort,@pTopo,@pNoViz,@pNotes
+   put "command topoSort" into xX["write"];    devLog xX
+   put empty into pTopo -- will contain the sorted nodes
+   put empty into tPlanA -- scope nodes outside of flow
+   put empty into tPlanB -- unscoped nodes at beginning of flow
+   put empty into pNotes -- treats nodes linked in by bond as "footnotes"
+   ---------------- list of seed nodes ----------------------
+   repeat for each key tDoc in pShort
+      put the keys of pShort[tDoc] into pNoViz[tDoc]
+      replace cr with "," in pNoViz[tDoc]
+      repeat for each key tRec in pShort[tDoc]
+         if pShort[tDoc][tRec]["type"] is "state" or pShort[tDoc][tRec]["type"] is "change" then
+            put the keys of pShort[tDoc][tRec] into tTheKeys
+            put false into tPrev
+            put false into tNext
+            put false into tRead
+            put false into tBulk
+            put false into tSkim
+            if "prev" is among the lines of tTheKeys then put true into tPrev
+            if "next" is among the lines of tTheKeys then put true into tNext
+            if "read" is among the lines of tTheKeys then put true into tRead
+            if "bulk" is among the lines of tTheKeys then put true into tBulk
+            if "skim" is among the lines of tTheKeys then put true into tSkim
+            if tRead and tBulk and not tNext and not tPrev then put tRec & "," after tPlanA
+            if tNext and not tPrev and not tSkim and not tBulk then put tRec & "," after tPlanB
+         end if
+      end repeat -- tRec
+      put tPlanA after tNextList
+      put tPlanB after tNextList
+      get kahnSort(pShort,pTopo,pNoViz,pNotes,tDoc,tNextList) 
+   end repeat -- tDoc
+end topoSort
+
+function kahnSort @pShort,@pTopo,@pNoViz,@pNotes,pDoc,pSeedList
+   put "function kahnSort" into xX["write"];    devLog xX
+   -- pDoc = document number
+   -- pSeedList = ordered comma delimited list of records in pDoc
+   -- doesn't return anything
+   -- just walks network, edits sTopoSort (pTopo), and terminates
+   put empty into tNextList
+   replace cr with "" in pSeedList
+   repeat for each item tStep in pSeedList
+      delete item 1 of pSeedList
+      if tStep is among the items of pNoViz[pDoc] then
+         -- this node has not been visited
+         -- in the order scope, then flow ( ! bond handled elsewhere at the moment)
+         -- follow each link (Y) out of tStep (X)
+         -- remove link (Y) from notVisited
+         -- if node (Z) has no unvisited in-links of same type
+         -- then add node(Z) to nextList
+         -- pass pDoc and nextList to kahnSort
+         ------------ move node from notVisited to topoSort -------------------------------
+         put tStep & "," after pTopo[pDoc]
+         set the wholeMatches to true
+         delete item itemOffset(tStep,pNoViz[pDoc]) in pNoViz[pDoc]
+         set the wholeMatches to false
+         ------------ scope link(s) --------------------------------------------------------------
+         -- both read and bulk links means this node contains other nodes --------------
+         if pShort[pDoc][tStep]["read"] is not empty and pShort[pDoc][tStep]["bulk"] is not empty then
+            repeat for each line tLink in pShort[pDoc][tStep]["read"]
+               replace cr with "" in tLink
+               set the wholeMatches to true
+               delete item itemOffset(tLink,pNoViz[pDoc]) in pNoViz[pDoc]
+               set the wholeMatches to false
+               put pShort[pDoc][tLink]["read"] into tNodeZ
+               replace cr with "" in tNodeZ
+               put true into tLast
+               repeat for each line tSameType in pShort[pDoc][tNodeZ]["skim"]
+                  replace cr with "" in tSameType
+                  if tSameType is among the items of pNoViz[pDoc] then 
+                     put false into tLast
+                     exit repeat
+                  end if
+               end repeat -- tSameType in tNodeZ
+               if tLast is true then
+                  put tNodeZ & "," after tNextList
+               end if
+            end repeat -- tLink in tStep, "read"
+         end if -- both read and bulk links
+         -- trim is forwards along a rise link, back towards the container node --------
+         -- visit the returning rise links and, if the last rise link is visited add the container node again
+         -- ! thus the container node will show up twice in the topolotical sort
+         repeat for each line tLink in pShort[pDoc][tStep]["trim"]
+            replace cr with "" in tLink
+            set the wholeMatches to true
+            delete item itemOffset(tLink,pNoViz[pDoc]) in pNoViz[pDoc]
+            set the wholeMatches to false
+            put pShort[pDoc][tLink]["trim"] into tNodeZ
+            replace cr with "" in tNodeZ
+            put true into tLast
+            repeat for each line tSameType in pShort[pDoc][tNodeZ]["bulk"]
+               replace cr with "" in tSameType
+               if tSameType is among the items of pNoViz[pDoc] then
+                  put false into tLast
+                  exit repeat
+               end if
+            end repeat -- tSameType in tNodeZ
+            if tLast is true then
+               put tNodeZ & "," after tNextList
+               -- ! the container node has already been visited, so it's not in pNoViz
+               -- ? maybe don't mark it visited until it's arrived at through the last rise link
+               put tNodeZ & "," after pTopo[pDoc]
+            end if
+         end repeat -- tLink in tStep, "trim"
+         ------------- flow link(s) ----------------------------------------------------------------
+         -- node only needs to have a next link to travel ------------------------------------
+         repeat for each line tLink in pShort[pDoc][tStep]["next"]
+            replace cr with "" in tLink
+            set the wholeMatches to true
+            delete item itemOffset(tLink,pNoViz[pDoc]) in pNoViz[pDoc]
+            set the wholeMatches to false
+            put pShort[pDoc][tLink]["next"] into tNodeZ
+            replace cr with "" in tNodeZ
+            put true into tLast
+            repeat for each line tSameType in pShort[pDoc][tNodeZ]["prev"]
+               replace cr with "" in tSameType
+               if tSameType is among the items of pNoViz[pDoc] then 
+                  put false into tLast
+                  exit repeat
+               end if
+            end repeat -- tSameType in tNodeZ
+            if tLast is true then
+               put tNodeZ & "," after tNextList
+            end if
+         end repeat -- tLink in tStep, "next"
+         ----------- bond link(s) --------------------------------------------------------------
+         -- bond links are weird; they're treated as notes at the moment -------------
+         -- bond links aren't followed, just recorded --------------------------------------
+         -- so each nodeZ is a "note" attached to a step (state or change) -------------
+         repeat for each line tLink in pShort[pDoc][tStep]["bond"]
+            replace cr with "" in tLink
+            set the wholeMatches to true
+            delete item itemOffset(tLink,pNoViz[pDoc]) in pNoViz[pDoc]
+            put pShort[pDoc][tLink]["bond"] into tNodeZ
+            replace cr with "," in tNodeZ
+            delete item itemOffset(tStep,tNodeZ) in tNodeZ
+            replace "," with "" in tNodeZ
+            delete item itemOffset(tNodeZ,pNoViz[pDoc]) in pNoViz[pDoc]
+            set the wholeMatches to false
+            -- tNodeZ is a note attached to tStep
+            put tStep & "," after pNotes[pDoc][tNodeZ]
+            put tNodeZ & "," after pNotes [pDoc][tStep]
+            -- later, the only recs that will get called will be the scope/flow nodes
+            -- they'll find the list of bonded nodes
+         end repeat -- tLink in tStep, "bond"
+      end if -- tStep is in sNotVisited[pDoc]
+      if tNextList is not empty then get kahnSort(pShort,pTopo,pNoViz,pNotes,pDoc,tNextList) 
+   end repeat -- each tStep in pSeedList
+end kahnSort
+
+function tagBoolean @pShort,pStuff
+   put "function tagBoolean" into xX["write"];    devLog xX
+   put pStuff["doc"] into pDoc
+   put pStuff["rec"] into pRec
+   put the keys of pShort[pDoc][pRec] into tTheKeys
+   put false into tTag["prev"]
+   put false into tTag["next"]
+   put false into tTag["read"]
+   put false into tTag["bulk"]
+   put false into tTag["skim"]
+   put false into tTag["trim"]
+   if "prev" is among the lines of tTheKeys then put true into tTag["prev"]
+   if "next" is among the lines of tTheKeys then put true into tTag["next"]
+   if "read" is among the lines of tTheKeys then put true into tTag["read"]
+   if "bulk" is among the lines of tTheKeys then put true into tTag["bulk"]
+   if "skim" is among the lines of tTheKeys then put true into tTag["skim"]
+   if "trim" is among the lines of tTheKeys then put true into tTag["trim"]
+   return tTag
+end tagBoolean
+
+command supplyDemand @pShort,@pSketch,@pResources,@pChanged,@pNoVisit
+   put "command supplyDemand" into xX["write"];    devLog xX
+   --sMainShort,sScopeSketch,sResources,sSomethingChanged,sNotVisited
+   -- list of seed nodes
+   repeat for each key tDoc in pShort
+      if tDoc is 0 then next repeat
+      put empty into tScope
+      put empty into tRawStart
+      put empty into tRawEnd
+      put empty into tOrphan
+      put empty into pSketch[tDoc]
+      --      put empty into pSketch
+      -- ? maybe don't need to do this right here since it happens in gravitySort
+      repeat for each key tRec in pResources[tDoc]
+         put empty into pResources[tDoc][tRec]["scopeRef"]
+      end repeat
+      repeat for each key tRec in pShort[tDoc]
+         if tRec is 0 then next repeat
+         if pShort[tDoc][tRec]["type"] is "state" or pShort[tDoc][tRec]["type"] is "change" then
+            put tDoc into tStuff["doc"]
+            put tRec into tStuff["rec"]
+            put tagBoolean(pShort,tStuff) into tTags
+            -- raw node, no flow, no case
+            -- this combination will first catch project containers at the highest level
+            -- it will then catch flows that aren't contained
+            -- nodes all by themselves aren't even bothered with
+            -- the baseline scope is stuff that's not encased, level 0
+            -- ignore anything on level 0 that's mid-flow
+            if not (tTags["skim"] or tTags["trim"] or (tTags["prev"] and tTags["next"])) then 
+               if not tTags["prev"] then put tRec & "," after tSupplySide
+               if not tTags["next"] then put tRec & "," after tDemandSide
+               put tRec & "," after tSpelunk
+               switch 
+                  case not tTags["next"] and not tTags["prev"] -- solo
+                     put "0,solo" into pResources[tDoc][tRec]["scopeRef"]
+                     put tRec & "," after pSketch[tDoc][0]["solo"]
+                     break
+                  case tTags["next"] and not tTags["prev"] -- in
+                     put "0,in" into pResources[tDoc][tRec]["scopeRef"]
+                     put tRec & "," after pSketch[tDoc][0]["in"]
+                     break
+                  case tTags["next"] and tTags["prev"] and not tTags["skim"] and not tTags["trim"] -- thru
+                     -- can't be thru at the moment, but whatevs
+                     put "0,thru" into pResources[tDoc][tRec]["scopeRef"]
+                     put tRec & "," after pSketch[tDoc][0]["thru"]
+                     break
+                  case tTags["prev"] and not tTags["next"] -- out
+                     put "0,out" into pResources[tDoc][tRec]["scopeRef"]
+                     put tRec & "," after pSketch[tDoc][0]["out"]
+                     break
+               end switch
+               if tTags["bulk"] or tTags["read"] then -- top
+                  put cr & "0,top" after pResources[tDoc][tRec]["scopeRef"]
+                  put tRec & "," after pSketch[tDoc][0]["top"]
+               end if            
+            end if -- not skim or trim or prev&next
+         end if -- state or change
+      end repeat -- tRec in tDoc
+      
+      -- begin scope reference tracking
+      -- each rec gets a line in scopeRef for each role
+      -- 0 means it doesn't have a scope reference (uncased flow)
+      -- 1 means it's a case node at the 0 flow level
+      -- 2 means it's flow encased by a 1 case node
+      -- 3 means it's a case node at the 2 flow level
+      -- 4 means it's flow encased by a 3 case node, etc
+      -- top means it's a case node
+      -- in means it begins the flow at that reference level; out means it ends the flow
+      -- thru means it's part of the flow
+      -- entry also specifies the rec of the case node
+      -- [scope level],[scope role],[case rec]
+      -- #,top/in/thru/out,#
+      --      repeat for each key tRec in pResources[tDoc]
+      --         put empty into pResources[tDoc][tRec]["scopeRef"]
+      --      end repeat
+      --      repeat for each item tTop in tScope
+      --         put "1,top" into pResources[tDoc][tTop]["scopeRef"]
+      --      end repeat
+      --      repeat for each item tIn in tRawStart
+      --         put "0,in" into pResources[tDoc][tIn]["scopeRef"]
+      --      end repeat
+      --      repeat for each item tOut in tRawEnd
+      --         put "0,out" into pResources[tDoc][tOut]["scopeRef"]
+      --      end repeat
+      
+      -- rawEnd and rawStart are ends of the same link; shouldn't be possible for only one to not be empty
+      -- need the conditional so livecode doesn't barf on an empty file with nothing to evaluate
+      --      if tScope is not empty or tRawEnd is not empty or tRawStart is not empty then
+      if tSpelunk is not empty then
+         -- first empty out resource information
+         -- call gravitySort outputs-to-inputs to figure total demand and increase supply to meet/exceed
+         -- call gravitySort inputs-to-outputs to figure supply/demand mismatch
+         -- keep doing that until nothing changes
+         repeat for each key tFoo in pResources[tDoc]
+            -- input & output used by old resource calculation
+            --            if tFoo is "input" then next repeat
+            --            if tFoo is "output" then next repeat
+            put empty into pResources[tDoc][tFoo]["gravity"]
+            if pShort[tDoc][tFoo]["type"] is "state" then
+               put empty into pResources[tDoc][tFoo]["excess"]
+               put empty into pResources[tDoc][tFoo]["totSupply"]
+               put empty into pResources[tDoc][tFoo]["totDemand"]
+            end if
+         end repeat
+         put true into pChanged
+         put 0 into tRepeatLimit
+         repeat while pChanged is true
+            put tRepeatLimit + 1 into tRepeatLimit
+            if tRepeatLimit > (the number of lines of the keys of pShort[tDoc]) then 
+               --               breakpoint
+               answer "error: repeat limit reached in supplyDemand function" -- ! had a bug and not sure if it's totally fixed 28NOV2015
+               exit repeat
+            end if
+            put false into pChanged -- do this repeat at least once
+            put the keys of pShort[tDoc] into pNoVisit[tDoc]
+            replace cr with "," in pNoVisit[tDoc]
+            get gravitySort(pShort,pSketch,pResources,pChanged,pNoVisit,tDoc,tDemandSide,"bulk trim prev next") -- total demand 
+            put the keys of pShort[tDoc] into pNoVisit[tDoc]
+            replace cr with "," in pNoVisit[tDoc]
+            get gravitySort(pShort,pSketch,pResources,pChanged,pNoVisit,tDoc,tSupplySide,"read skim next prev") -- supply/demand mismatch
+         end repeat
+      end if
+   end repeat -- tDoc in pShort
+end supplyDemand
+
+function gravitySort @pShort,@pSketch,@pResources,@pChanged,@pNoVisit,pDoc,pSeedList,pDirection
+   put "function gravitySort" into xX["write"];    devLog xX
+   -- sMainShort,sScopeSketch,sResources,sSomethingChanged,sNotVisited
+   -- pDoc = document number
+   -- pSeedList = ordered comma delimited list of records in pDoc
+   -- pDirection = "read skim next prev" or "bulk trim prev next"; easy to refer to as word 1/2/3/4
+   -- doesn't return anything
+   -- just walks network, edits sResources, and terminates
+   -- ! gravity logic doesn't cross scope boundaries; this balances flows but not up or down scope   
+   -- scopeRef is assigned when a node is placed into the parameter, before being sent to gravitySort
+   replace cr with "" in pSeedList -- should just be numbers and commas
+   repeat for each item tStep in pSeedList
+      --      -- ? should this be item offset of tStep
+      --      delete item 1 of pSeedList
+      set the wholeMatches to true
+      delete item itemOffset(tStep,pSeedList) in pSeedList
+      set the wholeMatches to false
+      if tStep is among the items of pNoVisit[pDoc] then
+         -- this node has not been visited before
+         -- in the seed list, and not visited yet, means it's ready to be balanced
+         if pShort[pDoc][tStep]["type"] is "state" then
+            --------- balance ---------------
+            -- if undefined, gravity and skim default to 1
+            -- (A) if tStep is a state
+            -- (1) total supply = (skim weight * gravity) + (prev weight * gravity)
+            -- (2) total demand = (trim weight * gravity) + (next weight * gravity)
+            -- (3) if total supply < total demand, adjust skim & prev gravity to total equal or greater than demand
+            -- ! assumes infinite supply, which will change when user can define finite resources
+            -- (4) if total supply > total demand, note excess in sResources[doc][rec][excess]
+            -- (B) if tStep is a change
+            -- (1) highest demand gravity applied to all links in action group
+            put empty into tSupply -- comma & cr delimited list, #,# cr #,# etc
+            repeat for each word tHi in "skim prev"
+               repeat for each line tBye in pShort[pDoc][tStep][tHi]
+                  put 1 into tG
+                  put 1 into tW
+                  if pResources[pDoc][tBye]["gravity"] is not empty then put pResources[pDoc][tBye]["gravity"] into tG
+                  if pShort[pDoc][tBye]["weight"] is not empty then put pShort[pDoc][tBye]["weight"] into tW
+                  put tW & "," & tG & cr after tSupply
+               end repeat
+            end repeat
+            -- total demand
+            put empty into tDemand -- comma & cr delimited list, #,# cr #,# etc
+            repeat for each word tHi in "trim next"
+               repeat for each line tBye in pShort[pDoc][tStep][tHi]
+                  put 1 into tG
+                  put 1 into tW
+                  if pResources[pDoc][tBye]["gravity"] is not empty then put pResources[pDoc][tBye]["gravity"] into tG
+                  if pShort[pDoc][tBye]["weight"] is not empty then put pShort[pDoc][tBye]["weight"] into tW
+                  put tW & "," & tG & cr after tDemand
+               end repeat
+            end repeat
+            -- this way we can refer to the raw values if they need to change later
+            filter tSupply without empty
+            filter tDemand without empty
+            put 0 into tTotSupply
+            put 0 into tSupplyW
+            repeat for each line tSup in tSupply
+               put (item 1 of tSup) * (item 2 of tSup) + tTotSupply into tTotSupply
+               put item 1 of tSup + tSupplyW into tSupplyW
+            end repeat
+            put 0 into tTotDemand
+            put 0 into tDemandW
+            repeat for each line tDem in tDemand
+               put (item 1 of tDem) * (item 2 of tDem) + tTotDemand into tTotDemand
+               put item 1 of tDem + tDemandW into tDemandW
+            end repeat
+            -- (A3) is supply < demand, so increase supply gravity to balance
+            -- divide total demand by supply weight to get new gravity
+            -- round up (supply always meets or exceeds demand
+            -- apply gravity
+            if tTotSupply < tTotDemand then
+               -- ! should be improved to "solve" to create less or zero excess when multiple supply options
+               -- ! in the future this should allow for the user to specify unequal gravity sharing
+               if tTotSupply = 0 then
+                  put 1 into tGravity
+               else
+                  put ceilingNum(tTotDemand / tSupplyW) into tGravity
+               end if
+               -- if supply needs to increase, apply gravity to supply links
+               repeat for each word tDoody in "skim prev"
+                  repeat for each line tPoody in pShort[pDoc][tStep][tDoody]
+                     -- value might not need to change, if it does, make a note to run gravitySort again
+                     put pResources[pDoc][tPoody]["gravity"] into tOld
+                     if tGravity is not tOld then
+                        put tGravity into pResources[pDoc][tPoody]["gravity"]
+                        put true into pChanged
+                     end if
+                  end repeat
+               end repeat
+            end if -- supply < demand
+            -- (A4) is supply > demand, so increase demand gravity to balance
+            -- divide total supply by demand weight to get new gravity
+            -- round down (demand always meets or disappoints supply)
+            -- apply gravity
+            -- --------------- ! begin edit 28NOV2015 ---------------------------
+            -- so I think this was to use gravity to show how much you'd get out of the project if you used up all of the supply
+            -- but it's causing an infinite repeat cycle where a pair of paths keep incrementing to catch up to each other
+            -- the excess supply should be treated as an option, not a requirement
+            --            if tTotSupply > tTotDemand then
+            --               if tTotDemand = 0 then
+            --                  put 1 into tGravity
+            --               else
+            --                  put trunc(tTotSupply / tDemandW) into tGravity
+            --               end if
+            --               -- if demand needs to increase, apply gravity to demand links
+            --               repeat for each word tDoody in "trim next"
+            --                  repeat for each line tPoody in pShort[pDoc][tStep][tDoody]
+            --                     -- value might not need to change, if it does, make a note to run gravitySort again
+            --                     put pResources[pDoc][tPoody]["gravity"] into tOld
+            --                     if tGravity is not tOld then
+            --                        put tGravity into pResources[pDoc][tPoody]["gravity"]
+            --                        put true into pChanged
+            --                     end if                  
+            --                  end repeat
+            --               end repeat
+            --            end if -- supply > demand 
+            -- --------------- ! end edit 28NOV2015 ---------------------------
+            -- recalculate total supply
+            put 0 into tTotSupply
+            repeat for each word tHi in "skim prev"
+               repeat for each line tBye in pShort[pDoc][tStep][tHi]
+                  put 1 into tG
+                  put 1 into tW
+                  if pResources[pDoc][tBye]["gravity"] is not empty then put pResources[pDoc][tBye]["gravity"] into tG
+                  if pShort[pDoc][tBye]["weight"] is not empty then put pShort[pDoc][tBye]["weight"] into tW
+                  put (tG * tW) + tTotSupply into tTotSupply
+               end repeat
+            end repeat
+            -- recalcualte total demand
+            put 0 into tTotDemand
+            repeat for each word tHi in "trim next"
+               repeat for each line tBye in pShort[pDoc][tStep][tHi]
+                  put 1 into tG
+                  put 1 into tW
+                  if pResources[pDoc][tBye]["gravity"] is not empty then put pResources[pDoc][tBye]["gravity"] into tG
+                  if pShort[pDoc][tBye]["weight"] is not empty then put pShort[pDoc][tBye]["weight"] into tW
+                  put (tG * tW) + tTotDemand into tTotDemand
+               end repeat
+            end repeat
+            put tTotSupply into pResources[pDoc][tStep]["totSupply"]
+            put tTotDemand into pResources[pDoc][tStep]["totDemand"]  
+            -- capture excess or shortfall (if external inventory insufficient)
+            put 0 into pResources[pDoc][tStep]["excess"]
+            put tTotSupply - tTotDemand into pResources[pDoc][tStep]["excess"]
+            -- (B1)
+         else -- tStep is not a state, must be a change
+            -- determine largest gravity and distribute to all links in action group
+            -- ! this is allowing for the possibility that changes have dive/rise links
+            -- ! might be a bad idea, but I'll allow it for the moment
+            put 1 into tGrav
+            repeat for each word tDoody in "skim prev trim next"
+               repeat for each line tPoody in pShort[pDoc][tStep][tDoody]
+                  put pResources[pDoc][tPoody]["gravity"] into tWannaBe
+                  if (tWannaBe is not empty) and (tWannaBe > tGrav) then put tWannaBe into tGrav
+               end repeat
+            end repeat          
+            repeat for each word tKind in "next prev skim trim"
+               repeat for each line tDink in pShort[pDoc][tStep][tKind]                     
+                  -- value might not need to change, if it does, make a note to run gravitySort again
+                  put pResources[pDoc][tDink]["gravity"] into tOld
+                  if tGrav is not tOld then
+                     put tGrav into pResources[pDoc][tDink]["gravity"]
+                     put true into pChanged
+                  end if
+               end repeat
+            end repeat
+         end if -- tStep state or change
+         --------- balance ---------------
+         --------- travel -----------------
+         -- about scopeRef
+         -- assume tStep's complete scopeRef was already determined
+         -- so figure tNodeZ's complete scopeRef when identified as going into next seed list
+         -- # = tStep's scope level
+         -- one of these:
+         -- #,thru = has next & prev tags
+         -- #,in = has skim & next tags
+         -- #,out = has trim & prev tags
+         -- and maybe this:
+         -- #+1,top = has read & bulk tags
+         
+         put empty into tNextList
+         -- (1) mark this node visited
+         -- travel scope, then flow (makes scope depth first and flow breadth first)
+         -- (2) follow each link (Y) of tStep (X) in pDirection
+         -- (3) remove link (Y) from notVisited
+         -- if node (Z) has no unvisited links of same tag
+         -- (4) then add node(Z) to nextList
+         -- (5) pass pDoc and nextList to gravitySort
+         
+         -- (1)
+         set the wholeMatches to true
+         delete item itemOffset(tStep,pNoVisit[pDoc]) in pNoVisit[pDoc]
+         set the wholeMatches to false
+         ------------ scope link(s) --------------------------------------------------------------
+         -- (2) both read and bulk links means this node contains other nodes --------------
+         if pShort[pDoc][tStep]["read"] is not empty or pShort[pDoc][tStep]["bulk"] is not empty then
+            -- which direction to travel depends on pDirection
+            repeat for each line tLink in pShort[pDoc][tStep][word 1 of pDirection]
+               replace cr with "" in tLink
+               -- (3) remove link Y from notVisited
+               set the wholeMatches to true
+               delete item itemOffset(tLink,pNoVisit[pDoc]) in pNoVisit[pDoc]
+               set the wholeMatches to false
+               put pShort[pDoc][tLink][word 1 of pDirection] into tNodeZ
+               replace cr with "" in tNodeZ
+               put true into tLast
+               repeat for each line tSameType in pShort[pDoc][tNodeZ][word 2 of pDirection]
+                  replace cr with "" in tSameType
+                  if tSameType is among the items of pNoVisit[pDoc] then 
+                     put false into tLast
+                     exit repeat
+                  end if
+               end repeat -- tSameType in tNodeZ
+               if tLast is true then
+                  -- (4) all of the preceeding links of this type have been visited
+                  put tNodeZ & "," after tNextList
+                  -- scopeRef
+                  -- tStep and tNodeZ are scope linked, not flow linked, so tNodeZ is encased by tStep (in or out)
+                  -- research tNodeZ
+                  put pDoc into tStuff["doc"]
+                  put tNodeZ into tStuff["rec"]
+                  put tagBoolean(pShort,tStuff) into tTags
+                  put empty into pResources[pDoc][tNodeZ]["scopeRef"]
+                  -- figure out how to label tNodeZ
+                  switch 
+                     case not tTags["next"] and not tTags["prev"] -- solo
+                        put tStep & ",solo" into pResources[pDoc][tNodeZ]["scopeRef"]
+                        if tNodeZ is not among the items of pSketch[pDoc][tStep]["solo"] then \
+                              put tNodeZ & "," after pSketch[pDoc][tStep]["solo"]
+                        break
+                     case tTags["skim"] and tTags["next"] and not tTags["prev"] -- in
+                        put tStep & ",in" into pResources[pDoc][tNodeZ]["scopeRef"]
+                        if tNodeZ is not among the items of pSketch[pDoc][tStep]["in"] then \
+                              put tNodeZ & "," after pSketch[pDoc][tStep]["in"]
+                        break
+                     case tTags["next"] and tTags["prev"] and not tTags["skim"] and not tTags["trim"] -- thru
+                        -- can't be thru at the moment, but whatevs
+                        put tStep & ",thru" into pResources[pDoc][tNodeZ]["scopeRef"]
+                        if tNodeZ is not among the items of pSketch[pDoc][tStep]["thru"] then \
+                              put tNodeZ & "," after pSketch[pDoc][tStep]["thru"]
+                        break
+                     case tTags["trim"] and tTags["prev"] and not tTags["next"] -- out
+                        put tStep & ",out" into pResources[pDoc][tNodeZ]["scopeRef"]
+                        if tNodeZ is not among the items of pSketch[pDoc][tStep]["out"] then \
+                              put tNodeZ & "," after pSketch[pDoc][tStep]["out"]
+                        break
+                  end switch
+                  -- can be a top, in addition to solo/in/thru/out
+                  if tTags["bulk"] or tTags["read"] then -- top
+                     put cr & tStep & ",top" after pResources[pDoc][tNodeZ]["scopeRef"]
+                     if tNodeZ is not among the items of pSketch[pDoc][tStep]["top"] then \
+                           put tNodeZ & "," after pSketch[pDoc][tStep]["top"]
+                  end if        
+                  filter pResources[pDoc][tNodeZ]["scopeRef"] without empty
+               end if -- tLast true/false
+            end repeat -- tLink in tStep
+         end if -- both read and bulk links
+         ------------- flow link(s) ----------------------------------------------------------------
+         -- (2) follow follow next or prev
+         repeat for each line tLink in pShort[pDoc][tStep][word 3 of pDirection]
+            replace cr with "" in tLink
+            -- (3) remove link Y from notVisited
+            set the wholeMatches to true
+            delete item itemOffset(tLink,pNoVisit[pDoc]) in pNoVisit[pDoc]
+            set the wholeMatches to false
+            put pShort[pDoc][tLink][word 3 of pDirection] into tNodeZ
+            replace cr with "" in tNodeZ
+            put true into tLast
+            repeat for each line tSameType in pShort[pDoc][tNodeZ][word 4 of pDirection]
+               replace cr with "" in tSameType
+               if tSameType is among the items of pNoVisit[pDoc] then 
+                  put false into tLast
+                  exit repeat
+               end if
+            end repeat -- tSameType in tNodeZ
+            if tLast is true then
+               -- (4) all of the preceeding links of this type have been visited
+               put tNodeZ & "," after tNextList
+               -- scopeRef
+               -- tStep and tNodeZ are flow linked, not scope linked, so same scope level
+               -- research tNodeZ
+               put pDoc into tStuff["doc"]
+               put tNodeZ into tStuff["rec"]
+               put tagBoolean(pShort,tStuff) into tTags
+               put empty into pResources[pDoc][tNodeZ]["scopeRef"]
+               put item 1 of line 1 of pResources[pDoc][tStep]["scopeRef"] into tCase
+               switch 
+                  case not tTags["next"] and not tTags["prev"] -- solo
+                     put tCase & ",solo" into pResources[pDoc][tNodeZ]["scopeRef"]
+                     if tNodeZ is not among the items of pSketch[pDoc][tCase]["solo"] then \
+                           put tNodeZ & "," after pSketch[pDoc][tCase]["solo"]
+                     break
+                  case tTags["skim"] and tTags["next"] and not tTags["prev"] -- in
+                     put tCase & ",in" into pResources[pDoc][tNodeZ]["scopeRef"]
+                     if tNodeZ is not among the items of pSketch[pDoc][tCase]["in"] then \
+                           put tNodeZ & "," after pSketch[pDoc][tCase]["in"]
+                     break
+                  case tTags["next"] and tTags["prev"] and not tTags["skim"] and not tTags["trim"] -- thru
+                     -- can't be thru at the moment, but whatevs
+                     put tCase & ",thru" into pResources[pDoc][tNodeZ]["scopeRef"]
+                     if tNodeZ is not among the items of pSketch[pDoc][tCase]["thru"] then \
+                           put tNodeZ & "," after pSketch[pDoc][tCase]["thru"]
+                     break
+                  case tTags["trim"] and tTags["prev"] and not tTags["next"] -- out
+                     put tCase & ",out" into pResources[pDoc][tNodeZ]["scopeRef"]
+                     if tNodeZ is not among the items of pSketch[pDoc][tCase]["out"] then \
+                           put tNodeZ & "," after pSketch[pDoc][tCase]["out"]
+                     break
+               end switch
+               -- can be a top, in addition to solo/in/thru/out
+               if tTags["bulk"] or tTags["read"] then -- top
+                  put cr & tCase & ",top" after pResources[pDoc][tNodeZ]["scopeRef"]
+                  if tNodeZ is not among the items of pSketch[pDoc][tCase]["top"] then \
+                        put tNodeZ & "," after pSketch[pDoc][tCase]["top"]
+               end if     
+               filter pResources[pDoc][tNodeZ]["scopeRef"] without empty   
+            end if -- if tLast is true
+         end repeat -- tLink in tStep, "next"
+      end if -- tStep is in pNoVisit[pDoc]
+      -- (5) 
+      if tNextList is not empty then 
+         --            get gravitySort(pDoc,tNextList,pDirection)
+         get gravitySort(pShort,pSketch,pResources,pChanged,pNoVisit,pDoc,tNextList,pDirection)
+      end if
+      --------- travel -----------------
+   end repeat -- each tStep in pSeedList
+end gravitySort
+
+on changeRequest pAsk,@pMain,pDoc
+   put "on changeRequest" into xX["write"];    devLog xX
+   -- pDoc=doc number
+   -- pMain[doc][rec][tag]=data/pointers
+   -- pAsk=array with change request
+   -- change the focus
+   -- x[focus]=# (this request shouldn't make it to this handler; should have already been handled)
+   -- hide a step (and any associated steps) assumes hide list is in correct order
+   -- x[hide]=#,#,#
+   -- undo/redo
+   -- x[undo/redo]=true
+   -- change the graph
+   -- new elements are identified by letters (a, b, c, etc); existing elements id'd by their record #
+   -- x[letter][tag]
+   -- x[ltr][type]=flow/dive/rise/state/change
+   -- x[ltr][backward/forward]=ltr/#
+   
+   -- execution order:
+   -- hide links then nodes
+   -- create nodes then links (letters)
+   -- delta nodes then links (existing rec numbers) (not using this at the moment; just hide and create)
+   
+   -------------------------------------- start research -----------------------------------------------------------
+   put empty into tNewNodes
+   put empty into tNewLinks
+   -- ! it could be nice to modify existing elements, rather than just hide them
+   -- that way if they've already got weights, or whatever, that data can be kept
+   -- but it was complicated so I haven't bothered yet
+   --   put empty into tDeltaNodes
+   --   put empty into tDeltaLinks
+   repeat for each key tKey in pAsk
+      if tKey is not a number and pAsk[tKey]["type"] is among the words of "state change" then
+         put tKey & "," after tNewNodes
+      else if tKey is not a number and pAsk[tKey]["type"] is among the words of "flow dive rise" then
+         put tKey & "," after tNewLinks
+      else if tKey is a number and tKey>0 and pAsk[tKey]["type"] is among the words of "state change" then
+         put tKey & "," after tDeltaNodes
+      else if tKey is a number and tKey>0 and pAsk[tKey]["type"] is among the words of "flow dive rise" then
+         put tKey & "," after tDeltaLinks
+      end if
+   end repeat 
+   ------------------------------------ end research -----------------------------------------------------
+   -- generate one master turn for all the following changes
+   -- turn's rec needs to go into all the pointers, but the pointers going into turn haven't been created yet
+   -- so pick turn's rec, and reserve it's place
+   -- fun with double-ended pointers
+   -- the newItem & newDilink functions should return a list of pointers with cr already the first char
+   put empty into tTurnPtrs
+   put pMain[pDoc][0]["lastKey"] into tRec
+   put tRec+1 into tTurn
+   put tRec+1 into pMain[pDoc][0]["lastKey"]
+   ------------------------ undo/redo -------------------------------------
+   put empty into tStuff
+   put pDoc into tTemp["doc"]
+   put tTurn into tTemp["turn"]
+   if pAsk["undo"] is true then 
+      put undoTurn(pMain,tTemp) into tTurnPtrs
+      filter tTurnPtrs without empty
+      put tTurnPtrs into pMain[pDoc][tTurn]["turn"]
+      put "undoTurn" into pMain[pDoc][tTurn]["act"]
+      return "whatever"
+   end if
+   if pAsk["redo"] is true then 
+      put redoTurn(pMain,tTemp) into tTurnPtrs
+      filter tTurnPtrs without empty
+      put tTurnPtrs into pMain[pDoc][tTurn]["turn"]
+      put "redoTurn" into pMain[pDoc][tTurn]["act"]
+      return "whatever"
+   end if
+   ------------------------ end undo/redo ----------------------------------
+   ----------------------- hide existing steps ------------------------------
+   -- ! needs to add any links attached to the nodes that aren't already listed
+   -- assumes steps to hide are listed in correct order, comma delimited
+   -- all hides (if multiple) are lumped in under same turn, so shouldn't need to list in a single hide tag
+   put empty into tHide
+   put pAsk["hide"] into tHide
+   if tHide is not empty then
+      repeat for each item tThis in tHide
+         -- use next available rec key and increment lastKey
+         put pMain[pDoc][0]["lastKey"] into tRec
+         put tRec+1 into tHideRec
+         put tRec+1 into pMain[pDoc][0]["lastKey"]
+         put tThis & "," & tTurn into pMain[pDoc][tHideRec]["hide"]
+         put tTurn & "," & tTurn into pMain[pDoc][tHideRec]["myTurn"]
+         -- call hideStep on target
+         put tThis into tNums["target"]
+         put tTurn into tNums["turn"]
+         put pDoc into tNums["doc"]
+         hideStep pMain,tNums
+         -- add this hide tag to the master turn for this whole change request
+         put cr & tHideRec & "," & tTurn after tTurnPtrs
+      end repeat 
+   end if
+   ---------------------- end hide existing steps ----------------------------------
+   -- create new nodes, then new links -------------------------------------------------
+   if tNewNodes is not empty then
+      repeat for each item tNode in tNewNodes
+         put newItem(pMain,pDoc,pAsk[tNode]["type"],tTurn) into tStuff
+         put tStuff["step"] into pAsk[tNode]["step"]
+         put tStuff["pointers"] after tTurnPtrs
+      end repeat
+   end if
+   if tNewLinks is not empty then
+      repeat for each item tLink in tNewLinks
+         -- look up the step rec num to replace the letter
+         put pAsk[tLink]["backward"] into tBack
+         put pAsk[tLink]["forward"] into tFwd
+         if tBack is not a number then put pAsk[tBack]["step"] into tBack
+         if tFwd is not a number then put pAsk[tFwd]["step"] into tFwd
+         switch pAsk[tLink]["type"]
+            case "flow"
+               put newDilink(pMain,pDoc,tBack,tFwd,"notused","flow","next","prev",tTurn) into tStuff
+               break
+            case "dive"
+               put newDilink(pMain,pDoc,tBack,tFwd,"notused","dive","read","skim",tTurn) into tStuff
+               break
+            case "rise"
+               put newDilink(pMain,pDoc,tBack,tFwd,"notused","rise","trim","bulk",tTurn) into tStuff
+               break
+         end switch
+         put tStuff["step"] into pAsk[tLink]["step"]
+         put tStuff["pointers"] after tTurnPtrs
+      end repeat
+   end if
+   ------------------------------- end new nodes then links -----------------------------
+   ------------- return results ------------------------------
+   filter tTurnPtrs without empty
+   put tTurnPtrs into pMain[pDoc][tTurn]["turn"]
+   put pAsk[0]["act"] into pMain[pDoc][tTurn]["act"]
+end changeRequest
+
+-- commented out 12NOV2015 cuz not planning to use bond links anymore
+--command userBond pRecs
+--   -- pRecs: X rec & cr & Z rec
+--   put line 1 of pRecs into tXstep
+--   put line 2 of pRecs into tZstep
+--   put sMain[sNowDoc][0][lastKey] into tRec
+--   -- as in step X is bonded to step Z thru step Y
+--   -- +1 turn
+--   -- +2 Y step
+--   -- +3 Y type:bond
+--   -- +4 Y, bond: Xptr, Zptr
+--   -- +5 X's bond, bond: Yptr
+--   -- +6 Z's bond, bond: Yptr
+--   -- pointers link the locations where they're recorded
+--   -- so Yrec's bond tag has its own rec, which is what X&Z's bond tags point to, and vice versa
+--   -- ptr 2 thru 6
+--   put tRec+2 & "," & tRec+1 & cr & tRec+3 & "," & tRec+1 & cr & tRec+4 & "," & tRec+1 & cr \
+--   & tRec+5 & "," & tRec+1 & cr & tRec+6 & "," & tRec+1 into sMain[sNowDoc][tRec+1]["turn"]
+--   put "newBond" into sMain[sNowDoc][tRec+1]["act"]
+
+--   put tRec+2 into tYstep
+--   put tRec+3 & "," & tRec+1 & cr & tRec+4 & "," & tRec+1 into sMain[sNowDoc][tYstep]["step"]
+--   put tRec+1 & "," & tRec+1 into sMain[sNowDoc][tYstep]["myTurn"]
+
+--   put "bond" into sMain[sNowDoc][tRec+3]["type"]
+--   put tRec+1 & "," & tRec+1 into sMain[sNowDoc][tRec+3]["myTurn"]
+--   put tYstep & "," & tRec+1 into sMain[sNowDoc][tRec+3]["myStep"]
+
+--   put tRec+4 into tYbond
+--   put tRec+5 into tXbond
+--   put tRec+6 into tZbond
+--   put tXbond & "," & tRec+1 & cr & tZbond & "," & tRec+1 into sMain[sNowDoc][tYbond]["bond"]
+--   put tRec+1 & "," & tRec+1 into sMain[sNowDoc][tYbond]["myTurn"]
+--   put tYstep & "," & tRec+1 into sMain[sNowDoc][tYbond]["myStep"]
+--   -- this one was already done earlier
+
+--   put tYbond & "," & tRec+1 into sMain[sNowDoc][tXbond]["bond"]
+--   put tRec+1 & "," & tRec+1 into sMain[sNowDoc][tXbond]["myTurn"]
+--   put tXstep & "," & tRec+1 into sMain[sNowDoc][tXbond]["myStep"]
+--   put cr & tXbond & "," & tRec+1 after sMain[sNowDoc][tXstep]["step"]
+
+--   put tYbond & "," & tRec+1 into sMain[sNowDoc][tZbond]["bond"]
+--   put tRec+1 & "," & tRec+1 into sMain[sNowDoc][tZbond]["myTurn"]
+--   put tZstep & "," & tRec+1 into sMain[sNowDoc][tZbond]["myStep"]
+--   put cr & tZbond & "," & tRec+1 after sMain[sNowDoc][tZstep]["step"]
+
+--   put tRec+6 into sMain[sNowDoc][0][lastKey]
+
+--   put "Unsaved" into field "savedField" stack "primary"
+--   render
+--end userBond
