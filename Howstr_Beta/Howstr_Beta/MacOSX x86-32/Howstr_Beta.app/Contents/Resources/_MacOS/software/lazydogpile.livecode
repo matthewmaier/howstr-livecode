@@ -700,7 +700,7 @@ on saveAsButtMouseUp
    put "data" into item -1 of tPath -- files go into the data folder
    -- if the case node already has a name in it, suggest that
    put sMainShort[sNowDoc][2]["title"] into tCaseName
-   ask "name this file (do not include a file extension)" with tCaseName
+   ask ("name this file (do not include a file extension)" & cr & tPath) with tCaseName
    if the result is not "cancel" then
       put it into tFileName
       put jsonFromArray(sMain[sNowDoc]) into tResult
