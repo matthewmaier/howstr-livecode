@@ -46,43 +46,35 @@
     <UL>
         <LI>Main Window</LI>
         <UL>
-            <LI>preInfo</LI>
-            <LI>preFocus</LI>
-            <LI>iconMediumsize</LI>
-            <LI>viewMouse</LI>
-            <LI>viewCommitments</LI>
-            <LI>helpField</LI>
-            <LI>iconClose</LI>
-            <LI>iconHelp</LI>
-            <LI>iconMaximize</LI>
-            <LI>iconMinimize</LI>
-            <LI>iconUndo</LI>
-            <LI>scopeGraphic</LI>
-            <LI>instrButt</LI>
-            <LI>resoButt</LI>
-            <LI>saveAsButt</LI>
-            <LI>loadButt</LI>
-            <LI>hideButt</LI>
-            <LI>tooltipSwitch</LI>
-            <LI>caseButt</LI>
-            <LI>busySwitch</LI>
-            <LI>miscLeftButt</LI>
-            <LI>miscRightButt</LI>
-            <LI>diveButt</LI>
-            <LI>riseButt</LI>
-            <LI>jeremyBugButt</LI>
-            <LI>filenameLabel</LI>
-            <LI>selectBox</LI>
-            <LI>figureSource</LI>
-            <LI>tooltipField</LI>
-            <LI>testHtml</LI>
-            <LI>#NodeGraphic</LI>
-            <LI>#LinkGraphic</LI>
-            <LI>preFlow</LI>
-            <LI>preState</LI>
-            <LI>preChange</LI>
+            <LI><a name="preInfo">preInfo</a> <img src="screensnaps/preInfo.png"> Preview indicating that if you releaes the left mouse button the <a href="#node_details">node details</a> for this node will open.</LI>
+            <LI><a name="preFocus">preFocus</a> <img src="screensnaps/preFocus.png"> Preview indicating that if you releaes the left mouse button this node will become the "focused" node. When the graph is redrawn the algorithm will start at this node and work outwards. Any graph element not connected to the focus node by flow links will be placed in the miscellaneous pool at the bottom of the main window.</LI>
+            <LI><a name="iconMediumsize">iconMediumsize</a> <img src="screensnaps/iconMediumsize.png"> Click this icon to make the main window take up part of the screen (instead of being minimized or maximized).</LI>
+            <LI><a name="iconClose">iconClose</a> <img src="screensnaps/iconClose.png"> Click this icon to close Howstr Desktop. You will be prompted to save if the current project has unsaved changes. The application always loads with a fresh project, which triggers the "do you want to save" prompt upon closing, but there is no need to save this default project.</LI>
+            <LI><a name="iconHelp">iconHelp</a> <img src="screensnaps/iconHelp.png"> Click this icon to bring up helpful information. The helpfulness of the information may vary.</LI>
+            <LI><a name="iconMaximize">iconMaximize</a> <img src="screensnaps/iconMaximize.png"> Click this icon to make the main window take up the whole screen.</LI>
+            <LI><a name="iconMinimize">iconMinimize</a> <img src="screensnaps/iconMinimize.png"> Click this icon to make the main window disappear. (It's like magic, but actually it's just advanced technology)</LI>
+            <LI><a name="iconUndo">iconUndo</a> <img src="screensnaps/iconUndo.png"> Click this icon to undo the most recent change to the network. NotionAll is add-only, so this will add an event which negates the pointers to the last change. You can "undo" everything that has ever happend in a project by adding a sufficiently long string of undo events. You can then redo everything that ever happened, all the way back to where you started, as long as you don't add some new event (which would break the chain). </LI>
+            <LI><a name="instrButt">Instructions Button</a> <img src="screensnaps/instrButt.png"> Click this button to generate and export an up-to-date set of instructions. The instructions are algorithmically created out of the action groups in the network. The exported *.html file is placed into the project folder.</LI>
+            <LI><a name="resoButt">Resources Button</a> <img src="screensnaps/resoButt.png"> Click this button to generate and export an up-to-date list of resources. The resource list has inputs (a bill of materials), thruputs (any excess stuff not entirely used up during an action), and outputs (what the project creates). The exported *.html file is placed into the project folder. NOTE: the calculation does not distinguish between tools (stuff that gets reused, like a hammer) and materials (stuff that get used up, like nails). It should be obvious in most cases that you don't need dozens of hammers, but it is an incorrect multiple.</LI>
+            <LI><a name="saveAsButt">Save As Button</a> <img src="screensnaps/saveAsButt.png"> Click this button to save the project under a new name.</LI>
+            <LI><a name="loadButt">Load Button</a> <img src="screensnaps/loadButt.png"> Click this button to close the current project and open a previously saved project.</LI>
+            <LI><a name="hideButt">Hide Button</a> <img src="screensnaps/hideButt.png"> Click this button to hide the currently selected graph element(s). NotionAll is add-only, so nothing is ever deleted. Instead, the pointers that tell the algorithms to include it in the network are negated. </LI>
+            <LI><a name="tooltipSwitch">Tooltip Checkbox</a> <img src="screensnaps/tooltipSwitch.png"> Check this box to have a tooltip follow the mouse and display the contents of the nodes and the weight of the links. Uncheck to dismiss the tooltip.</LI>
+            <LI><a name="caseButt">Case Button</a> <img src="screensnaps/caseButt.png"> Click this button to bring up a prompt to change the title of the case node. The case node title is different from the file name of the project.</LI>
+            <LI><a name="busySwitch">Busy Checkbox</a> <img src="screensnaps/busySwitch.png"> Some of the functions are intensive, so when they start they flag the system as "busy." In testing sometimes a function would get stuck, and so would the "busy" flag. If the user interface freezes, try checking and unchecking this box to clear the "busy" flag.</LI>
+            <LI><a name="miscLeftButt">Miscellaneous Left Button</a> <img src="screensnaps/miscLeftButt.png"> Click this button to scroll the miscellanous pool left.</LI>
+            <LI><a name="miscRightButt">Miscellaneous RIght Button</a> <img src="screensnaps/miscRightButt.png"> Click this button to scroll the miscellanous pool Right.</LI>
+            <LI><a name="diveButt">Dive Link Button</a> <img src="screensnaps/diveButt.png"> Click this button to create a dive link from the case node to the selected node. It's important for this link to be in the right place so the algorithms work. Basically, a dive link specifies the beginning of a project.</LI>
+            <LI><a name="riseButt">Rise Link Button</a> <img src="screensnaps/riseButt.png"> Click this button to create a rise link from the selected node to the case node. It's important for this link to be in the right place so the algorithms work. Basically, a rise link specifies the end of a project.</LI>
+            <LI><a name="jeremyBugButt">Jeremy's Bug Checkbox</a> <img src="screensnaps/jeremyBugButt.png"> Jeremy used Howstr on Linux. Jeremy's mouse didn't work correctly. Jeremy and Matt discovered that Linux increments the mouse button numbers by one. If your mouse buttons don't work correctly, try checking the box.</LI>
+            <LI><a name="filenameLabel">Filename Label</a> <img src="screensnaps/filenameLabel.png"> If the current project has been saved then its filename will appear here.</LI>
+            <LI><a name="selectBox">Selection Box</a> <img src="screensnaps/selectBox.png"> Click and drag the right mouse button. Nodes and links are highlighted white when they're selected. Selecting a node automatically selects all of the links attached to it. Right click anywhere in the background to clear the selection.</LI>
+            <LI><a name="tooltipField">Tooltip</a> <img src="screensnaps/tooltip.png"> When the tooltip checkbox is checked the tooltip will follow the mouse around and display whatever is inside of the node/link the mouse hovers over.</LI>
+            <LI><a name="NodeGraphic">Node Graphic</a> <img src="screensnaps/NodeGraphic.png"> Nodes are represented by boxes. States have a squre character and changes have a triangle character. They resize a bit to try to fit a preview of their contents.</LI>
+            <LI><a name="flowGraphic">Flow Link Graphic</a> <img src="screensnaps/flowGraphic.png"> Flow links specify precedence relationships and are drawn left-to-right. So the left thing has to happen before the right thing can happen. Another way to think of it is supply/demand. The stuff to the right demands something through the flow link and the stuff on the left supplies it through the flow link.</LI>
+            <LI><a name="previewGraphics">Preview Graphics</a> <img src="screensnaps/previewGraphics.png"> The network has to be constructed according to a certain pattern for the algorithms to work. Howstr makes building a canonical network easy by restricting you to a few correct options. The options are displayed in a preview. If a preview is showing, then releasing the mouse button will commit the preview. Move the mouse to directly under/over a node to clear the preview.</LI>
         </UL>
-        <LI>Node Details</LI>
+        <LI><a name="node_details">Node Details</a></LI>
         <UL>
             <LI>iconCancel</LI>
             <LI>iconOkay</LI>
