@@ -74,19 +74,29 @@
             <LI><a name="flowGraphic">Flow Link Graphic</a> <img src="screensnaps/flowGraphic.png"> Flow links specify precedence relationships and are drawn left-to-right. So the left thing has to happen before the right thing can happen. Another way to think of it is supply/demand. The stuff to the right demands something through the flow link and the stuff on the left supplies it through the flow link.</LI>
             <LI><a name="previewGraphics">Preview Graphics</a> <img src="screensnaps/previewGraphics.PNG"> The network has to be constructed according to a certain pattern for the algorithms to work. Howstr makes building a canonical network easy by restricting you to a few correct options. The options are displayed in a preview. If a preview is showing, then releasing the mouse button will commit the preview. Move the mouse to directly under/over a node to clear the preview.</LI>
         </UL>
-        <LI><a name="node_details">Node Details</a></LI>
+        <LI><a name="node_details">Node Details</a> has a couple of different control layouts depending on which tag is being edited.</LI>
         <UL>
-            <LI>iconCancel</LI>
-            <LI>iconOkay</LI>
-            <LI>snapCaptureButt</LI>
-            <LI>setCaptureButt</LI>
-            <LI>expandImgButt</LI>
-            <LI>clearImgButt</LI>
-            <LI>loadImgButt</LI>
-            <LI>figureHolder</LI>
-            <LI>editData</LI>
-            <LI>tagLabel</LI>
-            <LI>tagDataList</LI>
+            <table>
+            <tr>
+                <td width="50%">
+                    <LI><a name="iconCancel">Cancel Icon</a> (2) the "X". Click this to abandon any changes and close the node details.</LI>
+                    <LI><a name="iconOkay">Okay Icon</a> (1) the "check mark". Click this to commit any changes and close the node details.</LI>
+                    <LI><a name="snapCaptureButt">Snap Capture Button</a> (12) Click this button to capture a screenshot from the current capture area.</LI>
+                    <LI><a name="setCaptureButt">Set Capture Area Button</a> (11) Click this button to bring up the capture area so that it can be changed.</LI>
+                    <LI><a name="expandImgButt">Expand Image Button</a> (10) Click this button to see a full-sized version of the image in Figure View.</LI>
+                    <LI><a name="clearImgButt">Clear Image Button</a> (9) Click this button to clear out the image. If this image is already attached to the node, it will be removed from the node. If you cleared an image in error you can undo it, or click the cancel icon to close node details without commiting the clear.</LI>
+                    <LI><a name="loadImgButt">Load Image Button</a> (8) Click this button to load an image from a file.</LI>
+                    <LI><a name="figureHolder">Figure Preview</a> (13) This is a preview of the image.</LI>
+                    <LI><a name="editData">Edit Tag Text</a> (7) This field contains the text of tags like "title" and "memo". Editing the text in this field, and commiting it, will change the tag on the node.</LI>
+                    <LI><a name="tagLabel">Tag Label</a> (6) This field displays the name of the tag (cannot be edited).</LI>
+                    <LI><a name="tagDataList">Tag List</a> (3,4,5) This field displays the in-links, tags, and out-links belonging to this node. Click on an in-link (3) or an out-link (5) to change its weight. Click on a tag (4) to change its text or image.</LI>
+                </td>
+            <td width="50%">
+                    <img src="screensnaps/nodeDetailsText.png">
+                    <img src="screensnaps/nodeDetailsFigure.png">
+                </td>
+            </tr>
+            </table>
         </UL>
         <LI>Figure View</LI>
         <UL>
