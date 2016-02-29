@@ -39,11 +39,8 @@
         </div>
 
         <h3>
-<a id="welcome-to-howstr" class="anchor" href="#welcome-to-howstr" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Welcome to Howstr's project page</h3>
-          
-<UL>
-    <LI>Windows and Controls</LI>
-    <UL>
+<a id="windows-and-controls" class="anchor" href="#windows-and-controls" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Windows and Controls</h3>
+                    
         <LI>Main Window</LI>
         <UL>
             <LI><a name="preInfo">preInfo</a> <img src="screensnaps/preInfo.png"> Preview indicating that if you releaes the left mouse button the <a href="#node_details">node details</a> for this node will open.</LI>
@@ -127,17 +124,29 @@
             </tr>
             </table>
         </UL>
-    </UL>
-        <LI>Actions</LI>
-        <LI>Terms</LI>
-</UL>
-          
-<!--
-<h3>
-<a id="howstr-resources" class="anchor" href="#howstr-resources" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Resources</h3>
-          
-<p>Check out the dictionary for all the details.</p>
--->
+    
+    <h3>
+<a id="actions" class="anchor" href="#actions" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Actions</h3>
+    
+    <h3>
+<a id="terms" class="anchor" href="#terms" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Terms</h3>
+   
+            <UL>
+                <LI><a name="action-group">Action Group</a> An action group (or just 'action') consists, at a minimum, of one input state, one change, and one output state. The action is to change the previous state into the next state. There can be an unlimited number of input/output states but there will only be one change.</LI>
+                <LI><a name="case-node">Case Node</a> The entire project you see in the main window is made up of nodes and links. There is an invisible node which contains the entire project. It might help to think of the window itself as this containing or "case" node. The case node title should be used to summarize the entire project. This title is optional and is not the same as the project's filename.</LI>
+                <LI><a name="change-node">Change Node</a> A change node (or just 'change') is an addressable location along the precedence dimension which captures events that change the world. A change is true for a period of time. For example, if you start with bread, and want toast, the change would be using the toaster to cook the bread.</LI>
+                <LI><a name="filename">Filename</a> When Howstr saves a project to disk it needs a unique name for the file. This is complimentary to, but distinct from, the case node title. The filename is required; the case node title is optional.</LI>
+                <LI><a name="focused-node">Focused Node</a> The algorithm which draws the network assumes the network could be infinitly large. So the drawing process starts from a single node and works outwards by following flow links. The on-screen appearance of the network can vary not at all, a little bit, or dramatically, depending on which node is focused. For example, if one or more graph elements cannot be reached from the focused node, all of them will be placed in the miscellaneous pool. Changing the focused node does not change the project in any way; it only changes the way it's displayed at the moment.</LI>
+                <LI><a name="miscellaneous-pool">Miscellaneous Pool</a> This is a row at the bottom of the main window which renders any and all nodes that can't be reached (by following flow links) from the focused node. It will not display links, but they're still in the network. Nodes in the misc pool work just like nodes in the main graph. Keep in mind that the alteration preview and commit logic relies on the relative positions of nodes on-screen. Use the left and right buttons to scroll the misc pool horizontally.</LI>
+                <LI><a name="NotionAll">NotionAll</a> Howstr relies on a particular adjacency list schema to organize all of the nodes and links. NotionAll is a two-level network. The base layer is records pointing to each other. The working layer is nodes and links named according to whatever convention you want. So NotionAll is a superset of all possible relational networks. NotionAll is also an append-only ledger. The combination means that NotionAll can describe a network, and any arbitrary change to that network (including redefinition of its elements) and recreate the condition of the network at any point in its history.</LI>
+                <LI><a name="precedence-dimension">Precedence Dimension</a> This is the primary dimension in Howstr. It captures the way some things have to happen before other things can happen. The relationship between previous things and next things is captured with flow links. Howstr manages the majority of flow links for the user.</LI>
+                <LI><a name="preview">Preview</a> The Hostr Desktop beta user interface speeds up the creation of canonical models by providing a limited set of pre-formatted additions. By moving the mouse with the button held down you can see what alteration you'd get if you released the buton. The preview logic is partly based on the relative on-screen positions of the network elements. For example, flow always goes left-to-right.</LI>
+                <LI><a name="scope-dimension">Scope Dimension</a> The primary dimension in Howstr Beta is the precedence dimension. The scope dimension refers to an orthogonal dimensions describing less and more detailed information. The case node is a less detailed description of the entire project graph. Basically, since it's one node, you describe the whole project in one sentence. The scope dimension follows a pair of links. The dive links go from the case node to all of the starting states and the rise links go from all of the ending states back to the case node. None of the throughput nodes get scope links. Howstr Beta relies on the user to manage most of the scope links.</LI>
+                <LI><a name="selection">Selection</a> You can select one or more graph elements to perform alterations. Selection a node automatically selects all links attached to it. You cannot select the focused node, mostly because if you hide it then the graph drawing will change dramatically, which can be disorienting. If you want to hide the focused node just focus on a different node and then select it.</LI>
+                <LI><a name="state-node">State Node</a> A state node (or just 'state') is an addressable location along the precedence dimension which captures a set of definitions that are all true simultaneously. A state can technically describe a period of time, but only so long as none of the defintions changes in any significant way. For example, if you start with bread (that you intend to toast) the characteristics of the bread remain stable for a long time; bread is bread. Once toasted, the temperature of the toast will change quickly, so if the temperature is important (as for spreading butter) then it's noteworthy that the state "toast" wouldn't last very long. It might be important to distinguish between "hot toast" and "cold toast." </LI>
+                <LI><a name="supply-and-demand">Supply and Demand</a> Every individual action group in Howstr can be described in terms of supply and demand. It's demand if you read from right-to-left (next backwards to previous). It's supply if you read from left-to-right (previous forwards to next). Any chain of actions works the same way. So as long as each individual action is described correctly, the entire project can be described automatically.</LI>
+                <LI><a name="tags">Tags</a> The graph elements in Howstr Beta can be tagged with a few pre-selected pieces of information. NotionAll supports any arbitrary tag, but dealing with that is complicated in practice and I haven't implemented support for it yet. At the moment, you can change the weight of a link (multiply it), and nodes can have a title (140 characters), memo, and image.</LI>
+            </UL>
 
       </section>
 
