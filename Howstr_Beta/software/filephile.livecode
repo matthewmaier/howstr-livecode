@@ -96,20 +96,6 @@ command userClose
    render
 end userClose
 
-function relativeToAbsolute pPaths
-   -- takes in 1) the relative path stored in a tag and 2) the absolute path to the *.how file
-   -- returns the proper absolute path to the media
-   -- also formats the whole thing with Livecode syntax like "binfile"
-   -- pPaths[absolute]
-   -- pPaths[relative]
-   -- ("binfile:"& tPath)
-   set itemdelimiter to slash
-   put pPaths["absolute"] into tNew
-   put pPaths["relative"] into item -1 of tNew
-   put "binfile:" before tNew
-   return tNew
-end relativeToAbsolute
-
 function correctAbsoluteMediaPath pPaths
    -- accepts the absolute path the *.how file was loaded from this time
    -- and assumes it's in a project folder with any associated media
@@ -134,3 +120,31 @@ function correctAbsoluteMediaPath pPaths
    if tMediaFolder is not empty and tMediaFolder is not tProjectFolder then put pPaths["targetMedia"] into tForReturn
    return tForReturn
 end correctAbsoluteMediaPath
+
+function saveNewProject pPaths
+   -- pPaths["newPath"] = full path, no filename
+   set itemdelimiter to slash
+   create folder pPaths["newPath"]
+   put item -1 of pPaths["newPath"] into tFilename
+   put pPaths["newPath"] & "/" & tFileName & ".how" into tFullName
+   put pPaths["fileData"] into URL ("file:" & tFullName)
+   return tFullName
+   --   put "saved" into sMain[sNowDoc][0]["saveStatus"]
+   --   put tFullName into sMain[sNowDoc][0]["filepath"]
+   --   put item -1 of tFullName into tForShow
+   --   replace ".how" with "" in tForShow
+   --   put tForShow into field "filenameLabel" stack "HowstrBeta"
+end saveNewProject
+
+function loadNewProject pPaths
+   -- pPaths["newProjectFolder"] = path to the folder containing the project
+   put "Error in loadNewProject: some-project.how not found" into tForReturn["data"]
+   put pPaths["newProjectFolder"] into tFullPath
+   set itemdelimiter to slash
+   put "/" & item -1 of tFullPath & ".how" after tFullPath
+   if there is a file tFullPath then
+      put URL ("file:" & tFullPath) into tForReturn["data"]
+      put tFullPath into tForReturn["fullPath"]
+   end if
+   return tForReturn
+end loadNewProject
