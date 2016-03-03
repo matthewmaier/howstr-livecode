@@ -646,7 +646,7 @@ function makeScopeLink pThis
    return it
 end makeScopeLink
 
-function mouseTracker @pGUI,@pHist,@p1Down,@p1Enter,pFocus,pNode
+function mouseTracker @pGUI,@pHist,@p1Down,@p1Enter,pFocus,pNode,pPath
    --   put "function mouseTracker" into xX["write"];    devLog xX
    -- sGUIstuff,sMouseHistory,s1Down,s1Enter,sNowFocus,sNodeSize
    -- this mostly replaces Livecode's built in mouse handlers because they couldn't reliably do what I wanted
@@ -768,7 +768,9 @@ function mouseTracker @pGUI,@pHist,@p1Down,@p1Enter,pFocus,pNode
          put pHist["tooltipRect"] into tNow["tooltipRect"]
       else
          if tNow["inside"] is among the keys of pGUI["nodes"] then
-            set the filename of image "figureSource" stack "howstrBeta" to pGUI["nodes"][tNow["inside"]]["figure"]
+            put pGUI["nodes"][tNow["inside"]]["figure"] into tReq["targetMedia"]
+            put pPath into tReq["projectFile"]
+            set the filename of image "figureSource" stack "howstrBeta" to correctAbsoluteMediaPath(tReq)
             set the rect of image "figureSource" stack "howstrBeta" to 0,0,50,50
             set the htmlText of field "tooltipField" stack "HowstrBeta" to pGUI["nodes"][tNow["inside"]]["displayStringExtended"]       
          else if tNow["inside"] is among the keys of pGUI["links"] then
@@ -1494,9 +1496,9 @@ function writeInstructionsHTML @pMain,@pShort,pTopo,pNoVisit
    -- tDetailOrder controls in what order each piece of information (tag) appears in each step
    --   put "stepString anchor cr memo cr figure cr prev cr next" into tDetailOrder
    put "cr weight stepString anchor cr memo cr figure" into tDetailOrder -- don't need next/prev for action table
-   put pMain[1][0]["filepath"] into tPath
+   put pMain[1][0]["filepath"] into tPath -- absolute path to *.how file
    set the itemdelimiter to slash
-   put "resources.html" into item -1 of tPath
+   put "resources.html" into item -1 of tPath -- now absolute path to resources file adjacent to *.how file
    put "<html>" & cr after tInstructions
    -- header kind of thing ----------------------------------------
    set the itemdelimiter to comma

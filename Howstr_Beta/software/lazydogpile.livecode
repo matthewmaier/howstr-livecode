@@ -246,7 +246,8 @@ on mouseTrackerTracker
    --   put true into sBusy -- !
    set the cBusy of stack "HowstrBeta" to true
    put "on mouseTrackerTracker" into xX["write"];   devLog xX
-   put mouseTracker(sGUIstuff,sMouseHistory,s1Down,s1Enter,sNowFocus,sNodeSize) into tResponse -- displayerang.livecode
+   put sMain[sNowDoc][0]["filepath"] into tPath
+   put mouseTracker(sGUIstuff,sMouseHistory,s1Down,s1Enter,sNowFocus,sNodeSize,tPath) into tResponse -- displayerang.livecode
    -- set dive/rise link creation buttons
    if the number of items of sMouseHistory["nodeSelected"] is 1 then
       put sMouseHistory["nodeSelected"] into tRec
@@ -339,8 +340,9 @@ on detailsListMouseUp pLine
       set the visible of button "snapCaptureButt" stack "NodeDetails" to false
    else if tLabel is "figure" then
       if tDeets[pLine]["figure"] is not "[empty]" then
-         -- this means there's an image file in the graph
-         set the filename of image "figureHolder" stack "NodeDetails" to tDeets[pLine]["figure"]
+         put tDeets[pLine]["figure"] into tReq["targetMedia"]
+         put sMain[sNowDoc][0]["filepath"] into tReq["projectFile"]
+         set the filename of image "figureHolder" stack "NodeDetails" to correctAbsoluteMediaPath(tReq)
          put the rect of field "editData" stack "NodeDetails" into tQuery["maxRect"]
          put the long id of image "figureHolder" stack "NodeDetails" into tQuery["longID"]
          put fitImageToConstraint(tQuery) into tGimme
@@ -432,7 +434,7 @@ on clearImgButtMouseUp pLine
    -- there can be a file in the graph, which will show up in [figure]
    -- there can be a file just added in nodeDetails, which will show up in [new][copyfrom]
    -- if a new file was just loaded, clear will get rid of the new one
-   -- if there's ONLY an existing file, clear will remove it from the graph
+   -- if there's ONLY an existing file, clear will create a request to remove it from the graph
    if tDeets[pLine]["new"] is not empty then
       delete variable tDeets[pLine]["new"]
       put false into tDeets["newFigure"]
@@ -443,7 +445,9 @@ on clearImgButtMouseUp pLine
          set the visible of button "expandImgButt" stack "NodeDetails" to false 
       else
          -- cleared the just loaded image, so set the preview back to the image currently in the tag
-         set the filename of image "figureHolder" stack "NodeDetails" to tDeets[pLine]["figure"]
+         put tDeets[pLine]["figure"] into tReq["targetMedia"]
+         put sMain[sNowDoc][0]["filepath"] into tReq["projectFile"]
+         set the filename of image "figureHolder" stack "NodeDetails" to correctAbsoluteMediaPath(tReq)
          put the rect of field "editData" stack "NodeDetails" into tQuery["maxRect"]
          put the long id of image "figureHolder" stack "NodeDetails" into tQuery["longID"]
          put fitImageToConstraint(tQuery) into tGimme
@@ -501,10 +505,12 @@ on nodeDetailsChanged
                -- user had to change the original file name to not conflict with what's already in the folder
                put tDeets[tKey]["new"]["newName"] into tImgName
             end if
-            put sMain[sNowDoc][0]["filepath"] into tStuff["data"]
-            put tImgName into item -1 of tStuff["data"]
-            --               export image "figureHolder" stack "nodeDetails" to URL ("binfile"& tStuff["data"])
-            put URL("binfile:"& tOldImgPath) into URL("binfile:"& tStuff["data"])
+            --            put sMain[sNowDoc][0]["filepath"] into tStuff["data"]
+            --            put tImgName into item -1 of tStuff["data"]
+            put tImgName into tStuff["data"] -- relative path to media in same proj folder as *.how file
+            put sMain[sNowDoc][0]["filepath"] into tReq["projectFile"]
+            put tImgName into tReq["targetMedia"]
+            put URL("binfile:"& tOldImgPath) into URL("binfile:" & correctAbsoluteMediaPath(tReq))
             --            changeInfo sMain,tStuff -- grapheriffic
          else if tDeets[tKey]["node"] is a number then ------- weight ----------
             put tDeets[tKey]["link"] into tStuff["rec"] -- overwrite cuz data stored differently
@@ -660,21 +666,11 @@ on loadButtMouseUp
          put arrayFromJson(tJason) into sMain[1]
          put 1 into sNowDoc
          -- filepath
-         put tChosenFile into sMain[sNowDoc][0]["filepath"]
+         put tChosenFile into sMain[sNowDoc][0]["filepath"] -- absolute path to *.how file
          put item -1 of tChosenFile into tForShow
          replace ".how" with "" in tForShow
          put tForShow into field "filenameLabel" stack "HowstrBeta"
          refreshDraw
-         --         -- find a good node to focus on; highest is probably the last place they worked
-         --         put the keys of sMainShort[sNowDoc] into tKeys
-         --         sort tKeys numeric descending
-         --         repeat for each line tAkey in tKeys
-         --            if sMainShort[sNowDoc][tAkey]["type"] is "state" then
-         --               put tAkey into sNowFocus
-         --               exit repeat
-         --            end if
-         --         end repeat
-         --         -- now middleOut can proceed
          refreshDisplay
       else
          break
