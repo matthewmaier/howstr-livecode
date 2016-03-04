@@ -19,7 +19,7 @@ on devLog pPhase
    --   put tLog into URL ("file:" & tFolder & "/logs/development.txt")
 end devLog
 
-command userOpen pFile
+command userOpen pFile -- bypassed for what's in loadButtMouseUp
    put "command userOpen" into xX["write"];    devLog xX
    -- pFile is the filepath of the document to open
    put URL ("file:" & pFile) into tJason
@@ -95,3 +95,56 @@ command userClose
    -- ! close one of multiple open docs
    render
 end userClose
+
+function correctAbsoluteMediaPath pPaths
+   -- accepts the absolute path the *.how file was loaded from this time
+   -- and assumes it's in a project folder with any associated media
+   -- and assumes the *.how file has the same name as the project folder
+   -- and also accepts whatever path is available to try to get to the media
+   -- that could be just a filename, or an absolute path, or an out-of-date absolute path, URL, etc
+   -- pPaths[projectFile] = absolute path to the *.how file currently open
+   -- pPaths[targetMedia] = some kind of path to the desired media
+   -- after 3MAR2016 tags with URIs are relative; before then they were absolute (stupid, I know)
+   -- the important part is the folder; if it matches we can adjust the path; if not it must be external
+   -- ! techncially this could be a problem since two different could use the same project folder name
+   set itemdelimiter to slash
+   put "Error: no paths provided" into tForReturn
+   -- since the *.how file is supposed to be in the same folder as the media...
+   -- this should work for absolute & relative media paths
+   put pPaths["projectFile"] into tForReturn
+   put item -1 of pPaths["targetMedia"] into item -1 of tForReturn
+   -- it's possible the media path is external, like a URL
+   -- if so then it's the user's problem if the path doesn't work
+   put item -2 of pPaths["projectFile"] into tProjectFolder -- currently open *.how file's folder
+   put item -2 of pPaths["targetMedia"] into tMediaFolder
+   if tMediaFolder is not empty and tMediaFolder is not tProjectFolder then put pPaths["targetMedia"] into tForReturn
+   return tForReturn
+end correctAbsoluteMediaPath
+
+function saveNewProject pPaths
+   -- pPaths["newPath"] = full path, no filename
+   set itemdelimiter to slash
+   create folder pPaths["newPath"]
+   put item -1 of pPaths["newPath"] into tFilename
+   put pPaths["newPath"] & "/" & tFileName & ".how" into tFullName
+   put pPaths["fileData"] into URL ("file:" & tFullName)
+   return tFullName
+   --   put "saved" into sMain[sNowDoc][0]["saveStatus"]
+   --   put tFullName into sMain[sNowDoc][0]["filepath"]
+   --   put item -1 of tFullName into tForShow
+   --   replace ".how" with "" in tForShow
+   --   put tForShow into field "filenameLabel" stack "HowstrBeta"
+end saveNewProject
+
+function loadNewProject pPaths
+   -- pPaths["newProjectFolder"] = path to the folder containing the project
+   put "Error in loadNewProject: some-project.how not found" into tForReturn["data"]
+   put pPaths["newProjectFolder"] into tFullPath
+   set itemdelimiter to slash
+   put "/" & item -1 of tFullPath & ".how" after tFullPath
+   if there is a file tFullPath then
+      put URL ("file:" & tFullPath) into tForReturn["data"]
+      put tFullPath into tForReturn["fullPath"]
+   end if
+   return tForReturn
+end loadNewProject

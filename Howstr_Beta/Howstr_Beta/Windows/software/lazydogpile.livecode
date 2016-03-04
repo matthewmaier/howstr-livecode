@@ -246,7 +246,8 @@ on mouseTrackerTracker
    --   put true into sBusy -- !
    set the cBusy of stack "HowstrBeta" to true
    put "on mouseTrackerTracker" into xX["write"];   devLog xX
-   put mouseTracker(sGUIstuff,sMouseHistory,s1Down,s1Enter,sNowFocus,sNodeSize) into tResponse -- displayerang.livecode
+   put sMain[sNowDoc][0]["filepath"] into tPath
+   put mouseTracker(sGUIstuff,sMouseHistory,s1Down,s1Enter,sNowFocus,sNodeSize,tPath) into tResponse -- displayerang.livecode
    -- set dive/rise link creation buttons
    if the number of items of sMouseHistory["nodeSelected"] is 1 then
       put sMouseHistory["nodeSelected"] into tRec
@@ -339,8 +340,9 @@ on detailsListMouseUp pLine
       set the visible of button "snapCaptureButt" stack "NodeDetails" to false
    else if tLabel is "figure" then
       if tDeets[pLine]["figure"] is not "[empty]" then
-         -- this means there's an image file in the graph
-         set the filename of image "figureHolder" stack "NodeDetails" to tDeets[pLine]["figure"]
+         put tDeets[pLine]["figure"] into tReq["targetMedia"]
+         put sMain[sNowDoc][0]["filepath"] into tReq["projectFile"]
+         set the filename of image "figureHolder" stack "NodeDetails" to correctAbsoluteMediaPath(tReq)
          put the rect of field "editData" stack "NodeDetails" into tQuery["maxRect"]
          put the long id of image "figureHolder" stack "NodeDetails" into tQuery["longID"]
          put fitImageToConstraint(tQuery) into tGimme
@@ -432,7 +434,7 @@ on clearImgButtMouseUp pLine
    -- there can be a file in the graph, which will show up in [figure]
    -- there can be a file just added in nodeDetails, which will show up in [new][copyfrom]
    -- if a new file was just loaded, clear will get rid of the new one
-   -- if there's ONLY an existing file, clear will remove it from the graph
+   -- if there's ONLY an existing file, clear will create a request to remove it from the graph
    if tDeets[pLine]["new"] is not empty then
       delete variable tDeets[pLine]["new"]
       put false into tDeets["newFigure"]
@@ -443,7 +445,9 @@ on clearImgButtMouseUp pLine
          set the visible of button "expandImgButt" stack "NodeDetails" to false 
       else
          -- cleared the just loaded image, so set the preview back to the image currently in the tag
-         set the filename of image "figureHolder" stack "NodeDetails" to tDeets[pLine]["figure"]
+         put tDeets[pLine]["figure"] into tReq["targetMedia"]
+         put sMain[sNowDoc][0]["filepath"] into tReq["projectFile"]
+         set the filename of image "figureHolder" stack "NodeDetails" to correctAbsoluteMediaPath(tReq)
          put the rect of field "editData" stack "NodeDetails" into tQuery["maxRect"]
          put the long id of image "figureHolder" stack "NodeDetails" into tQuery["longID"]
          put fitImageToConstraint(tQuery) into tGimme
@@ -501,10 +505,12 @@ on nodeDetailsChanged
                -- user had to change the original file name to not conflict with what's already in the folder
                put tDeets[tKey]["new"]["newName"] into tImgName
             end if
-            put sMain[sNowDoc][0]["filepath"] into tStuff["data"]
-            put tImgName into item -1 of tStuff["data"]
-            --               export image "figureHolder" stack "nodeDetails" to URL ("binfile"& tStuff["data"])
-            put URL("binfile:"& tOldImgPath) into URL("binfile:"& tStuff["data"])
+            --            put sMain[sNowDoc][0]["filepath"] into tStuff["data"]
+            --            put tImgName into item -1 of tStuff["data"]
+            put tImgName into tStuff["data"] -- relative path to media in same proj folder as *.how file
+            put sMain[sNowDoc][0]["filepath"] into tReq["projectFile"]
+            put tImgName into tReq["targetMedia"]
+            put URL("binfile:"& tOldImgPath) into URL("binfile:" & correctAbsoluteMediaPath(tReq))
             --            changeInfo sMain,tStuff -- grapheriffic
          else if tDeets[tKey]["node"] is a number then ------- weight ----------
             put tDeets[tKey]["link"] into tStuff["rec"] -- overwrite cuz data stored differently
@@ -637,52 +643,65 @@ on loadButtMouseUp
       answer "Load new without saving current?" with "Close current" or "Cancel"
       if it is "cancel" then exit loadButtMouseUp
    end if
-   -- get the file path for this stack
-   put the effective filename of this stack into tPath
-   set the itemDelimiter to slash
-   -- if this is a standalone application running on a Mac, find the path to the .app file
-   if the platform = "MacOS" and the environment = "standalone application" then
-      repeat until last item of tPath contains ".app"
-         delete last item of tPath
-      end repeat
-   end if
-   -- if not on a Mac, remove the last item to get the path to the containing folder
-   --   delete last item of tPath
-   put "data" into item -1 of tPath -- use the data folder
-   --Ask the user to choose a file
-   answer file "Select a file to open" with tPath
-   if the result is not "Cancel" then
-      if it ends with ".how" or ".txt" then
-         put it into tChosenFile
-         --         userOpen tChosenFile
-         put URL ("file:" & tChosenFile) into tJason
+   put specialFolderPath("documents") into tDocsPath
+   answer folder "Select project folder"  with tDocsPath
+   if the result is not "cancel" then
+      put it into tReq["newProjectFolder"]
+      put loadNewProject(tReq) into tFileData
+      if not (tFileData["data"] begins with "Error") then
          put empty into sMain
-         put arrayFromJson(tJason) into sMain[1]
+         put arrayFromJson(tFileData["data"]) into sMain[1]
          put 1 into sNowDoc
          -- filepath
-         put tChosenFile into sMain[sNowDoc][0]["filepath"]
-         put item -1 of tChosenFile into tForShow
+         put tFileData["fullPath"] into sMain[sNowDoc][0]["filepath"] -- absolute path to *.how file
+         set itemdelimiter to slash
+         put item -1 of tFileData["fullPath"] into tForShow
          replace ".how" with "" in tForShow
          put tForShow into field "filenameLabel" stack "HowstrBeta"
          refreshDraw
-         --         -- find a good node to focus on; highest is probably the last place they worked
-         --         put the keys of sMainShort[sNowDoc] into tKeys
-         --         sort tKeys numeric descending
-         --         repeat for each line tAkey in tKeys
-         --            if sMainShort[sNowDoc][tAkey]["type"] is "state" then
-         --               put tAkey into sNowFocus
-         --               exit repeat
-         --            end if
-         --         end repeat
-         --         -- now middleOut can proceed
          refreshDisplay
-      else
-         break
       end if
    end if
    -- this will overwrite the "unsaved" that the build handler flags
    -- since in this case there aren't any unsaved changes yet
    put "opened" into sMain[sNowDoc][0]["saveStatus"]
+   
+   -- get the file path for this stack
+   --   put the effective filename of this stack into tPath
+   --   set the itemDelimiter to slash
+   --   -- if this is a standalone application running on a Mac, find the path to the .app file
+   --   if the platform = "MacOS" and the environment = "standalone application" then
+   --      repeat until last item of tPath contains ".app"
+   --         delete last item of tPath
+   --      end repeat
+   --   end if
+   --   -- if not on a Mac, remove the last item to get the path to the containing folder
+   --   --   delete last item of tPath
+   --   put "data" into item -1 of tPath -- use the data folder
+   --   --Ask the user to choose a file
+   --   answer file "Select a file to open" with tPath
+   --   if the result is not "Cancel" then
+   --      if it ends with ".how" or ".txt" then
+   --         put it into tChosenFile
+   --         --         userOpen tChosenFile
+   --         put URL ("file:" & tChosenFile) into tJason
+   --         put empty into sMain
+   --         put arrayFromJson(tJason) into sMain[1]
+   --         put 1 into sNowDoc
+   --         -- filepath
+   --         put tChosenFile into sMain[sNowDoc][0]["filepath"] -- absolute path to *.how file
+   --         put item -1 of tChosenFile into tForShow
+   --         replace ".how" with "" in tForShow
+   --         put tForShow into field "filenameLabel" stack "HowstrBeta"
+   --         refreshDraw
+   --         refreshDisplay
+   --      else
+   --         break
+   --      end if
+   --   end if
+   -- this will overwrite the "unsaved" that the build handler flags
+   -- since in this case there aren't any unsaved changes yet
+   --   put "opened" into sMain[sNowDoc][0]["saveStatus"]
 end loadButtMouseUp
 
 on saveAsButtMouseUp
@@ -697,23 +716,41 @@ on saveAsButtMouseUp
    end if
    -- if not on a Mac, remove the last item to get the path to the containing folder
    --   delete last item of tPath
-   put "data" into item -1 of tPath -- files go into the data folder
-   -- if the case node already has a name in it, suggest that
+   
+   -- shouldn't put project folders into /data, it's inside the github dev repository
+   -- documents folder makes sense as a default, but allow for anywhere
+   put specialFolderPath("documents") into tDocsPath
    put sMainShort[sNowDoc][2]["title"] into tCaseName
-   ask ("name this file (do not include a file extension)" & cr & tPath) with tCaseName
+   if tCaseName is empty then put "[blank]" into tCaseName
+   ask file "New project name (the case title is: " & tCaseName& ")"  with tDocsPath
    if the result is not "cancel" then
-      put it into tFileName
-      put jsonFromArray(sMain[sNowDoc]) into tResult
-      -- each project can have lots of associated files, so the project file gets its own folder
-      create folder tPath & "/" & tFileName
-      put tPath & "/" & tFileName & "/" & tFileName & ".how" into tFullName
-      put tResult into URL ("file:" & tFullName)
+      put it into tReq["newPath"]
+      put jsonFromArray(sMain[sNowDoc]) into tReq["fileData"]
+      put saveNewProject(tReq) into tFullName
       put "saved" into sMain[sNowDoc][0]["saveStatus"]
       put tFullName into sMain[sNowDoc][0]["filepath"]
       put item -1 of tFullName into tForShow
       replace ".how" with "" in tForShow
       put tForShow into field "filenameLabel" stack "HowstrBeta"
-   end if
+   end if -- the result is not cancel
+   
+   --   put "data" into item -1 of tPath -- files go into the data folder
+   --   -- if the case node already has a name in it, suggest that
+   --   put sMainShort[sNowDoc][2]["title"] into tCaseName
+   --   ask ("name this file (do not include a file extension)" & cr & tPath) with tCaseName
+   --   if the result is not "cancel" then
+   --      put it into tFileName
+   --      put jsonFromArray(sMain[sNowDoc]) into tResult
+   --      -- each project can have lots of associated files, so the project file gets its own folder
+   --      create folder tPath & "/" & tFileName
+   --      put tPath & "/" & tFileName & "/" & tFileName & ".how" into tFullName
+   --      put tResult into URL ("file:" & tFullName)
+   --   put "saved" into sMain[sNowDoc][0]["saveStatus"]
+   --   put tFullName into sMain[sNowDoc][0]["filepath"]
+   --   put item -1 of tFullName into tForShow
+   --   replace ".how" with "" in tForShow
+   --   put tForShow into field "filenameLabel" stack "HowstrBeta"
+   --   end if
 end saveAsButtMouseUp
 
 on iconCloseMouseUp
