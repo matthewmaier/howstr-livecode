@@ -604,6 +604,11 @@ end instrButtMouseUp
 
 on resoButtMouseUp
    put "on resoButtMouseUP" into xX["write"];    devLog xX
+   -- need to save so there's a place to put stuff
+   if sMain[sNowDoc][0]["filepath"] is empty then
+      saveAsButtMouseUp
+      if sMain[sNowDoc][0]["filepath"] is empty then exit resoButtMouseUp
+   end if
    -- adjList already called on every change
    --   topoSort sMainShort,sTopoSort,sNotVisited,sNoteList
    supplyDemand sMainShort,sScopeSketch,sResources,sSomethingChanged,sNotVisited
@@ -952,3 +957,7 @@ on setCaptureIconMouseUp pArea
    put pArea into sCaptureAreaGeometry["captureAreaRect"]
    close stack "captureArea"
 end setCaptureIconMouseUp
+
+on iconHelpMouseUp
+   launch url "http://github.howstr.com/dictionary.html"
+end iconHelpMouseUp
