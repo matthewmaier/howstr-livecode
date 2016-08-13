@@ -257,7 +257,7 @@ on middleOut pData,@pDraw,@pFocus -- ! a hacky way to draw the provided graph, c
    assignLayers pData,pFocus,0
    -- remove duplicates in layers ------------------------------------------------------------------
    repeat for each key tLayer in pData["layers"]
-      put pData["layers"][tLayer]into tOneLayer
+      put pData["layers"][tLayer] into tOneLayer
       split tOneLayer by comma
       combine tOneLayer using comma
       if char -1 of tOneLayer is not "," then put "," after tOneLayer
@@ -278,18 +278,19 @@ on middleOut pData,@pDraw,@pFocus -- ! a hacky way to draw the provided graph, c
          put item 1 of pData["links"][tLink]["next"] into tEnd
          put pData["nodes"][tStart]["layer"] into tStartLayer
          put pData["nodes"][tEnd]["layer"] into tEndLayer
+         set the wholeMatches to true
          if not (tStartLayer < tEndLayer) then
             if tEnd is pFocus then
                -- shuffle start more negative
                put true into tAgain
                --               delete item itemOffset(tStart,pData["layers"][tStartLayer]) of pData["layers"][tStartLayer]
-               set the wholeMatches to true
+               --               set the wholeMatches to true
                put itemOffset(tStart,pData["layers"][tStartLayer]) into tNum
                delete item tNum of pData["layers"][tStartLayer]
                put tStart & "," after pData["layers"][tStartLayer -1]
                put tStartLayer -1 into pData["nodes"][tStart]["layer"]
                put cr & tStart & "-" after tShuffles
-               filter tShuffles without empty
+               --               filter tShuffles without empty
             else if tEnd & "-" is among the lines of tShuffles then
                -- have to catch a situation where a node just shuffles back and forth
                -- shuffle start more negative
@@ -298,7 +299,7 @@ on middleOut pData,@pDraw,@pFocus -- ! a hacky way to draw the provided graph, c
                put tStart & "," after pData["layers"][tStartLayer -1]
                put tStartLayer -1 into pData["nodes"][tStart]["layer"]
                put cr & tStart & "-" after tShuffles
-               filter tShuffles without empty
+               --               filter tShuffles without empty
             else
                -- shuffle end more positive
                put true into tAgain
@@ -306,9 +307,11 @@ on middleOut pData,@pDraw,@pFocus -- ! a hacky way to draw the provided graph, c
                put tEnd & "," after pData["layers"][tEndLayer +1]
                put tEndLayer +1 into pData["nodes"][tEnd]["layer"]
                put cr & tEnd & "+" after tShuffles
-               filter tShuffles without empty
+               --               filter tShuffles without empty
             end if
          end if -- is tStart < tEnd?
+         filter tShuffles without empty
+         set the wholeMatches to false
       end repeat -- tLink in sLinksVisited
    end repeat -- tAgain
    -- order in layer by node #, ascending ----------------------------------------------------------
@@ -368,6 +371,7 @@ on displayManager pInfo,@pGUI,pSizes,pNow,@pHist -- ! creates/changes/deletes co
    -- sGraphDrawing,sGUIstuff,tSizes,sNowFocus,sMouseHistory
    --pSizes[width/height/layer/node]
    lock messages
+      lock screen
    -- delete old node graphics; brute force but not much to draw at the moment   
    if pGUI is not empty then
       repeat for each word tKind in "nodes links"
@@ -380,7 +384,6 @@ on displayManager pInfo,@pGUI,pSizes,pNow,@pHist -- ! creates/changes/deletes co
    put pSizes["width"] into tWinWidth
    put pSizes["height"] into tWinHeight
    put tWinWidth/2 into tCenterH
-   lock screen
    put empty into pGUI
    -- specify case node
    put pInfo["case"] into pGUI["case"]

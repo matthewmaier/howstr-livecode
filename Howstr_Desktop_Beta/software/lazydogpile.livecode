@@ -484,7 +484,7 @@ on loadImgButtMouseUp pLine
    put the cNodeDetails of stack "NodeDetails" into tDeets
    put specialfolderpath("documents") into tStart
    answer file "choose an image (it doesn't actually force you to pick an image file at the moment)" with tStart
-   if the result is not cancel then
+   if the result is not "cancel" then
       put empty into tDeets[pLine]["new"]
       put true into tDeets["newFigure"]
       set the itemdelimiter to slash
@@ -727,7 +727,12 @@ on saveButtMouseUp
       put "saved" into sMain[sNowDoc][0]["saveStatus"]
       set itemdelimiter to slash
       put item -1 of sMain[sNowDoc][0]["filepath"] into tForShow
-      replace ".how" with "" in tForShow
+      --      replace ".how" with "" in tForShow
+      -- Monte says this is more robust
+      set the itemDelimiter to "."
+      if item -1 of tForShow is "how" then
+         delete item -1 of tForShow
+      end if
       put tForShow into field "filenameLabel" stack "HowstrBeta"
    end if
 end saveButtMouseUp
@@ -858,11 +863,11 @@ on iconCloseMouseUp
    quit
 end iconCloseMouseUp
 
-on closeStackRequest
-   -- for whatever reason this only gets sent by the window decoration (at least in Windows where I tested it)
-   -- so this blocks the window decorations from closing any of the stacks
-   -- forces user to use the "X" icons
-end closeStackRequest
+--on closeStackRequest
+--   -- for whatever reason this only gets sent by the window decoration (at least in Windows where I tested it)
+--   -- so this blocks the window decorations from closing any of the stacks
+--   -- forces user to use the "X" icons
+--end closeStackRequest
 
 on hideButtMouseUp
    put "on hideButtMouseUp" into xX["write"];    devLog xX
