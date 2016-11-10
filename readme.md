@@ -1,1 +1,1 @@
-See [the documentation here](https://github.howstr.com).
+See [the documentation here](http://github.howstr.com).
