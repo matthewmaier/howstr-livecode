@@ -1057,3 +1057,11 @@ end setCaptureIconMouseUp
 on iconHelpMouseUp
    launch url "http://github.howstr.com/dictionary.html"
 end iconHelpMouseUp
+
+on repoButtMouseUp
+   put the filename of me into tMe
+   set the itemdelimiter to "/"
+   put item 1 to -2 of tMe into tMeShort
+   set the defaultFolder to tMeShort
+   go stack "software/repowrangler.livecode"
+end repoButtMouseUp
