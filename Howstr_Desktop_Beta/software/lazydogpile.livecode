@@ -153,6 +153,21 @@ local sCaptureAreaGeometry
 -----------------------------[captureAreaRect] 400,400,800,800 (width and height)
 -- square icons set to middle of height and equally spaced across width, 1/5th each
 
+local sForBubbleA
+-----------------[project][title]=text
+---------------------------[memo]=text
+---------------------------[figure]=URL
+---------------------------[bubble_id]=unique id from bubble's database
+---------------------------[filepath]=URL from pMain
+-----------------[action][#][inputs/thruput/outputs]=#,#,#
+----------------------------[weights]=string, each input and output with its multiple, if larger than 1
+----------------------------[bubble_id]=unique id from bubble's database
+-----------------[node][#][title]=text
+----------------------------[memo]=text
+----------------------------[figure]=URL
+----------------------------[record]=#
+----------------------------[bubble_id]=unique id from bubble's database
+
 on setupAsOf3FEB2016
    set the defaultstack to "HowstrBeta"
    -- setup the window
@@ -713,6 +728,20 @@ on resoButtMouseUp
    put tRes into URL ("file:" & tPath)
    launch url ("file:" & tPath)
 end resoButtMouseUp
+
+on repoButtMouseUp
+   -- need to save first (commit to local repository)
+   if sMain[sNowDoc][0]["filepath"] is empty then
+      saveAsButtMouseUp
+      if sMain[sNowDoc][0]["filepath"] is empty then exit repoButtMouseUp
+   end if
+      -- adjList already called on every change
+   topoSort sMainShort,sTopoSort,sNotVisited,sNoteList
+   --   put  writeInstructions(sMain,sMainShort,sTopoSort,sNotVisited) into tInstr
+   arrayForBubble sMain,sMainShort,sTopoSort,sNotVisited,sForBubbleA -- in displayerang
+   set the cPayload of stack "repowrangler" to sForBubbleA
+   go to stack "repowrangler"
+end repoButtMouseUp
 
 on saveButtMouseUp
    put "on saveButtMouseUP" into xX["write"];    devLog xX
