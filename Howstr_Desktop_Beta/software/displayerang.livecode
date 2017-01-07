@@ -1706,6 +1706,7 @@ command arrayForBubble @pMain,@pShort,pTopo,pNoVisit,@pBubbleA
    put pShort[1][tCase]["title"] into pBubbleA["project"]["title"]
    if pBubbleA["project"]["title"] is empty then put "[untitled]" into pBubbleA["project"]["title"]
    put pMain[1][0]["filepath"] into pBubbleA["project"]["filepath"]
+   put pMain[1][0]["UUID"] into pBubbleA["project"]["UUID"]
    
    set the wholematches to true
    delete item (itemoffset(tCase,pTopo[1])) of pTopo[1]

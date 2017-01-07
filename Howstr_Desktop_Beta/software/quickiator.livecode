@@ -1,6 +1,6 @@
 ﻿script "quickiator"
 on quickModeSetup @pMain,@pNowDoc,@pNowItem,@pPointerTags
-      put "on quickModeSetup" into xX["write"];    devLog xX
+   put "on quickModeSetup" into xX["write"];    devLog xX
    -- pArray becomes initial data structure
    -- return default focus node
    -- configure simplest possible model array based on NotionAll schema
@@ -10,7 +10,8 @@ on quickModeSetup @pMain,@pNowDoc,@pNowItem,@pPointerTags
    put empty into sMain
    put 1 into sNowDoc
    --   put true into sMain[sNowDoc][0]["hide"]
-   put 0 into sMain[sNowDoc][0][lastKey]
+   put 0 into sMain[sNowDoc][0]["lastkey"]
+   put uuid("random") into sMain[sNowDoc][0]["UUID"]
    put empty into sNowItem
    
    --   put "2,1" & cr & "3,1" & cr & "4,1" into sMain[sNowDoc][1]["step"]

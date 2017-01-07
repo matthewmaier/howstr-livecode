@@ -11,6 +11,7 @@ local sMain -- main[doc][rec][tag]=data/pointers
 -- pointers are always edited in mirrored pairs, so if record 17 points to 58, 58 also points to 17
 --------------[filepath] = URL to the *.how file
 --------------[saveStatus] = opened/saved/unsaved
+--------------[UUID] = a Livecode generated Universally Unique IDentifier; distinguishes this project from all others
 -- sMain[1][1-n] = record keys
 ----------------[step] = this record is pointing to all of the information tags that together make up a graph element
 ----------------[myStep] = points back to the step that owns a tag
@@ -795,43 +796,11 @@ on loadButtMouseUp
    -- this will overwrite the "unsaved" that the build handler flags
    -- since in this case there aren't any unsaved changes yet
    put "opened" into sMain[sNowDoc][0]["saveStatus"]
-   
-   -- get the file path for this stack
-   --   put the effective filename of this stack into tPath
-   --   set the itemDelimiter to slash
-   --   -- if this is a standalone application running on a Mac, find the path to the .app file
-   --   if the platform = "MacOS" and the environment = "standalone application" then
-   --      repeat until last item of tPath contains ".app"
-   --         delete last item of tPath
-   --      end repeat
-   --   end if
-   --   -- if not on a Mac, remove the last item to get the path to the containing folder
-   --   --   delete last item of tPath
-   --   put "data" into item -1 of tPath -- use the data folder
-   --   --Ask the user to choose a file
-   --   answer file "Select a file to open" with tPath
-   --   if the result is not "Cancel" then
-   --      if it ends with ".how" or ".txt" then
-   --         put it into tChosenFile
-   --         --         userOpen tChosenFile
-   --         put URL ("file:" & tChosenFile) into tJason
-   --         put empty into sMain
-   --         put arrayFromJson(tJason) into sMain[1]
-   --         put 1 into sNowDoc
-   --         -- filepath
-   --         put tChosenFile into sMain[sNowDoc][0]["filepath"] -- absolute path to *.how file
-   --         put item -1 of tChosenFile into tForShow
-   --         replace ".how" with "" in tForShow
-   --         put tForShow into field "filenameLabel" stack "HowstrBeta"
-   --         refreshDraw
-   --         refreshDisplay
-   --      else
-   --         break
-   --      end if
-   --   end if
-   -- this will overwrite the "unsaved" that the build handler flags
-   -- since in this case there aren't any unsaved changes yet
-   --   put "opened" into sMain[sNowDoc][0]["saveStatus"]
+   if sMain[sNowDoc][0]["UUID"] is empty then 
+      put uuid("random") into sMain[sNowDoc][0]["UUID"]
+      --       put "unsaved" into sMain[sNowDoc][0]["saveStatus"]
+      saveButtMouseUp
+   end if
 end loadButtMouseUp
 
 on saveAsButtMouseUp
