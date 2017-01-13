@@ -160,6 +160,9 @@ local sForBubbleA
 ---------------------------[figure]=URL
 ---------------------------[bubble_id]=unique id from bubble's database
 ---------------------------[filepath]=URL from pMain
+---------------------------[UUID]=UUID of project
+---------------------------[resources]=list of nodes
+---------------------------[results]=list of nodes
 -----------------[action][#][inputs/thruput/outputs]=#,#,#
 ----------------------------[weights]=string, each input and output with its multiple, if larger than 1
 ----------------------------[bubble_id]=unique id from bubble's database
@@ -168,6 +171,7 @@ local sForBubbleA
 ----------------------------[figure]=URL
 ----------------------------[record]=#
 ----------------------------[bubble_id]=unique id from bubble's database
+----------------------------[as_resource/as_result]=need #x total cr #x for title cr etc / have #x total cr #x from title cr etc
 
 on setupAsOf3FEB2016
    set the defaultstack to "HowstrBeta"
@@ -736,10 +740,11 @@ on repoButtMouseUp
       saveAsButtMouseUp
       if sMain[sNowDoc][0]["filepath"] is empty then exit repoButtMouseUp
    end if
-      -- adjList already called on every change
+   -- adjList already called on every change
    topoSort sMainShort,sTopoSort,sNotVisited,sNoteList
+   supplyDemand sMainShort,sScopeSketch,sResources,sSomethingChanged,sNotVisited
    --   put  writeInstructions(sMain,sMainShort,sTopoSort,sNotVisited) into tInstr
-   arrayForBubble sMain,sMainShort,sTopoSort,sNotVisited,sForBubbleA -- in displayerang
+   arrayForBubble sMain,sMainShort,sTopoSort,sNotVisited,sForBubbleA,sScopeSketch,sResources -- in displayerang
    set the cPayload of stack "repowrangler" to sForBubbleA
    go to stack "repowrangler"
 end repoButtMouseUp

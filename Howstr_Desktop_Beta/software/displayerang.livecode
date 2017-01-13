@@ -1691,7 +1691,7 @@ function writeInstructionsHTML @pMain,@pShort,pTopo,pNoVisit
    return tInstructions
 end writeInstructionsHTML
 
-command arrayForBubble @pMain,@pShort,pTopo,pNoVisit,@pBubbleA   
+command arrayForBubble @pMain,@pShort,pTopo,pNoVisit,@pBubbleA ,@pSketch,@pResources  
    -- ! assumes only one doc (doc 1) and only one scope level as of 14FEB2016
    put empty into pBubbleA
    -- ! pTopo has case node listed first and last, which is redundant as long as we're only allowing one scope level 15FEB2016
@@ -1701,6 +1701,7 @@ command arrayForBubble @pMain,@pShort,pTopo,pNoVisit,@pBubbleA
    -- ! maybe just zip the whole thing? there will probably be trouble with absolute/relative file paths
    -- put pMain[1][0]["filepath"] into tPath -- absolute path to *.how file
    
+   ------------------------------------------------------------------- start instructions --------------------------------------------
    set the itemdelimiter to comma
    put item 1 of pTopo[1] into tCase
    put pShort[1][tCase]["title"] into pBubbleA["project"]["title"]
@@ -1717,12 +1718,7 @@ command arrayForBubble @pMain,@pShort,pTopo,pNoVisit,@pBubbleA
    repeat for each item tBlerg in pTopo[1]
       if pShort[1][tBlerg]["type"] is "change" then put tBlerg into item (the number of items of tTopoChanges)+1 of tTopoChanges
    end repeat
-   -- start action table
-   -- column header list
-   -- column input states
-   -- column change
-   -- column output states
-   -- end action table
+   
    put 0 into tCount -- maintains the order the actions should be listed in
    repeat for each item tRec in tTopoChanges
       put tCount + 1 into tCount
@@ -1793,6 +1789,36 @@ command arrayForBubble @pMain,@pShort,pTopo,pNoVisit,@pBubbleA
          end if
       end repeat
    end repeat -- item tRec in tTopoChanges
+   --------------------------------------------------------- end instructions ------------------------------------------------
+   --------------------------------------------------------- start resources -------------------------------------------------
+   -- assumes one doc (doc[1])
+   put "in out thru" into tPutOrder
+   put empty into tResources
+   repeat for each key tPut in pSketch[1][2] -- keys will be in, thru, and out
+      set itemdelimiter to comma
+      repeat for each item tRec in pSketch[1][2][tPut]
+         switch tPut
+            case "in"
+               --                put pBubbleA["node"][tRec]["bubble_id"] into item (the number of items of pBubbleA["project"]["resources"])+1 of pBubbleA["project"]["resources"]
+               put tRec into item (the number of items of pBubbleA["project"]["resources_recs"])+1 of pBubbleA["project"]["resources_recs"]
+               put "need" && pResources[1][tRec]["totDemand"] & "x total" into pBubbleA["node"][tRec]["as_resource"]
+               break
+            case "thru"
+               if pResources[1][tRec]["excess"] is not empty then
+                  --                put pBubbleA["node"][tRec]["bubble_id"] into item (the number of items of pBubbleA["project"]["results"])+1 of pBubbleA["project"]["results"]
+                  put tRec into item (the number of items of pBubbleA["project"]["results_recs"])+1 of pBubbleA["project"]["results_recs"]
+                  put "have" && pResources[1][tRec]["totDemand"] & "x total (excess)" into pBubbleA["node"][tRec]["as_result"]
+               end if
+               break
+            case "out"
+               --                put pBubbleA["node"][tRec]["bubble_id"] into item (the number of items of pBubbleA["project"]["results"])+1 of pBubbleA["project"]["results"]
+               put tRec into item (the number of items of pBubbleA["project"]["results_recs"])+1 of pBubbleA["project"]["results_recs"]
+               put "have" && pResources[1][tRec]["totDemand"] & "x total" into pBubbleA["node"][tRec]["as_result"]
+               break
+         end switch
+      end repeat -- each item tRec in pSketch[1][2][tPut]
+   end repeat -- each key tPut in pSketch[1][2]
+   --------------------------------------------------------- end resources --------------------------------------------------   
 end arrayForBubble
 
 -- ! 15FEB2016 using summarizeResourcesHTML now, but this logic is more general so don't delete
