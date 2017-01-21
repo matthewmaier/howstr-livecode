@@ -1733,6 +1733,7 @@ command arrayForBubble @pMain,@pShort,pTopo,pNoVisit,@pBubbleA ,@pSketch,@pResou
          set itemdelimiter to "/"
          put tFilename into item -1 of tFilepath
          put tFilepath into pBubbleA["node"][tRec]["figure"]
+         set itemdelimiter to comma
       end if
       put pShort[1][tRec]["title"] into pBubbleA["node"][tRec]["title"]
       if pBubbleA["node"][tRec]["title"] is empty then put "[untitled]" into pBubbleA["node"][tRec]["title"]
@@ -1753,6 +1754,7 @@ command arrayForBubble @pMain,@pShort,pTopo,pNoVisit,@pBubbleA ,@pSketch,@pResou
             set itemdelimiter to "/"
             put tFilename into item -1 of tFilepath
             put tFilepath into pBubbleA["node"][tNode]["figure"]
+            set itemdelimiter to comma
          end if
          put pShort[1][tNode]["title"] into pBubbleA["node"][tNode]["title"]
          if pBubbleA["node"][tNode]["title"] is empty then put "[untitled]" into pBubbleA["node"][tNode]["title"]
@@ -1778,6 +1780,7 @@ command arrayForBubble @pMain,@pShort,pTopo,pNoVisit,@pBubbleA ,@pSketch,@pResou
             set itemdelimiter to "/"
             put tFilename into item -1 of tFilepath
             put tFilepath into pBubbleA["node"][tNode]["figure"]
+            set itemdelimiter to comma
          end if
          put pShort[1][tNode]["title"] into pBubbleA["node"][tNode]["title"]
          if pBubbleA["node"][tNode]["title"] is empty then put "[undescribed]" into pBubbleA["node"][tNode]["title"]
@@ -1804,7 +1807,7 @@ command arrayForBubble @pMain,@pShort,pTopo,pNoVisit,@pBubbleA ,@pSketch,@pResou
                put "need" && pResources[1][tRec]["totDemand"] & "x total" into pBubbleA["node"][tRec]["as_resource"]
                break
             case "thru"
-               if pResources[1][tRec]["excess"] is not empty then
+               if pResources[1][tRec]["excess"] > 0 then
                   --                put pBubbleA["node"][tRec]["bubble_id"] into item (the number of items of pBubbleA["project"]["results"])+1 of pBubbleA["project"]["results"]
                   put tRec into item (the number of items of pBubbleA["project"]["results_recs"])+1 of pBubbleA["project"]["results_recs"]
                   put "have" && pResources[1][tRec]["totDemand"] & "x total (excess)" into pBubbleA["node"][tRec]["as_result"]
