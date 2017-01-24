@@ -1704,10 +1704,22 @@ command arrayForBubble @pMain,@pShort,pTopo,pNoVisit,@pBubbleA ,@pSketch,@pResou
    ------------------------------------------------------------------- start instructions --------------------------------------------
    set the itemdelimiter to comma
    put item 1 of pTopo[1] into tCase
-   put pShort[1][tCase]["title"] into pBubbleA["project"]["title"]
-   if pBubbleA["project"]["title"] is empty then put "[untitled]" into pBubbleA["project"]["title"]
    put pMain[1][0]["filepath"] into pBubbleA["project"]["filepath"]
    put pMain[1][0]["UUID"] into pBubbleA["project"]["UUID"]
+   
+   put pShort[1][tCase]["title"] into pBubbleA["project"]["title"]
+   if pBubbleA["project"]["title"] is empty then put "[untitled]" into pBubbleA["project"]["title"]
+   put pShort[1][tCase]["memo"] into pBubbleA["project"]["memo"]
+   if pBubbleA["project"]["memo"] is empty then put "[undescribed]" into pBubbleA["project"]["memo"]
+   put pShort[1][tCase]["figure"] into pBubbleA["project"]["figure"]
+   if pBubbleA["project"]["figure"] is not empty then
+      put pBubbleA["project"]["figure"] into tFilename
+      put pBubbleA["project"]["filepath"] into tFilepath
+      set itemdelimiter to "/"
+      put tFilename into item -1 of tFilepath
+      put tFilepath into pBubbleA["project"]["figure"]
+      set itemdelimiter to comma
+   end if
    
    set the wholematches to true
    delete item (itemoffset(tCase,pTopo[1])) of pTopo[1]

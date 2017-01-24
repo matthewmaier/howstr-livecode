@@ -899,23 +899,27 @@ on busySwitchChange
 end busySwitchChange
 
 on caseButtMouseUp
-   -- load up existing case node title if it exists
-   put sMainShort[sNowDoc][2]["title"] into tCurrent
-   if tCurrent is empty then
-      ask "name for case node"
-   else
-      ask "name for case node" with tCurrent
-   end if
-   -- only request a change if the case node title actually changed
-   if it is not tCurrent then
-      put it into tStuff["data"]
-      put "title" into tStuff["tag"]
-      put sNowDoc into tStuff["doc"]
-      put 2 into tStuff["rec"]
-      changeInfo sMain,tStuff -- grapheriffic
-      refreshDraw
-      refreshDisplay
-   end if
+   put 2 into tStuff["info"]
+   put 1 into tStuff["doc"]
+   launchNodeDetails tStuff
+   
+   --    -- load up existing case node title if it exists
+   --    put sMainShort[sNowDoc][2]["title"] into tCurrent
+   --    if tCurrent is empty then
+   --       ask "name for case node"
+   --    else
+   --       ask "name for case node" with tCurrent
+   --    end if
+   --    -- only request a change if the case node title actually changed
+   --    if it is not tCurrent then
+   --       put it into tStuff["data"]
+   --       put "title" into tStuff["tag"]
+   --       put sNowDoc into tStuff["doc"]
+   --       put 2 into tStuff["rec"]
+   --       changeInfo sMain,tStuff -- grapheriffic
+   --       refreshDraw
+   --       refreshDisplay
+   --    end if
 end caseButtMouseUp
 
 on miscRightButtMouseUp
