@@ -1834,6 +1834,7 @@ command arrayForBubble @pMain,@pShort,pTopo,pNoVisit,@pBubbleA ,@pSketch,@pResou
       end repeat -- each item tRec in pSketch[1][2][tPut]
    end repeat -- each key tPut in pSketch[1][2]
    --------------------------------------------------------- end resources --------------------------------------------------   
+   
 end arrayForBubble
 
 -- ! 15FEB2016 using summarizeResourcesHTML now, but this logic is more general so don't delete
