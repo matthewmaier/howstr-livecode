@@ -371,7 +371,7 @@ on displayManager pInfo,@pGUI,pSizes,pNow,@pHist -- ! creates/changes/deletes co
    -- sGraphDrawing,sGUIstuff,tSizes,sNowFocus,sMouseHistory
    --pSizes[width/height/layer/node]
    lock messages
-      lock screen
+   lock screen
    -- delete old node graphics; brute force but not much to draw at the moment   
    if pGUI is not empty then
       repeat for each word tKind in "nodes links"
@@ -381,6 +381,7 @@ on displayManager pInfo,@pGUI,pSizes,pNow,@pHist -- ! creates/changes/deletes co
          end repeat
       end repeat
    end if
+   put 70 into tMenuReserve -- try to reserve some space at the top of the window for the controls
    put pSizes["width"] into tWinWidth
    put pSizes["height"] into tWinHeight
    put tWinWidth/2 into tCenterH
@@ -394,11 +395,15 @@ on displayManager pInfo,@pGUI,pSizes,pNow,@pHist -- ! creates/changes/deletes co
    repeat for each key tLayer in pInfo["layers"]
       put ((pSizes["node"] + pSizes["layer"]) * tLayer) + tCenterH into tNodeH
       put the number of items of pInfo["layers"][tLayer] into tStack
-      put tWinHeight/(tStack + 1) into tStackV
+      --       put tWinHeight/(tStack + 1) into tStackV
+      put (tWinHeight-tMenuReserve-pSizes["node"])/(tStack + 1) into tStackV
+      
       put 1 into tCount
       repeat for each item tNode in pInfo["layers"][tLayer]
          -- start positioning from top of window
-         put tStackV * tCount into tNodeV
+         --          put tStackV * tCount into tNodeV
+         put (tStackV * tCount) + tMenuReserve into tNodeV
+         
          -- node coordinates
          put tNodeH into pGUI["nodes"][tNode]["horz"]
          put tNodeV into pGUI["nodes"][tNode]["vert"]

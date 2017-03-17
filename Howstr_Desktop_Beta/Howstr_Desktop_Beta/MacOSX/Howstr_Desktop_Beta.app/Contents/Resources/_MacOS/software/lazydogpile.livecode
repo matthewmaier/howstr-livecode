@@ -1,0 +1,1086 @@
+﻿script "lazydogpile"
+local sMain -- main[doc][rec][tag]=data/pointers
+-- sMain[1] = first DOCUMENT/DOC; theoretically there could be more, but not supported as of 16MAR2016
+-- sMain[1][0] = document's RECORD/REC (primary) key for metadata
+--------------[lastKey] = the highest record key used in this documentt, incremented as necessary
+--------------[pointerTags] = a " " delimited list of tags in this document which contain pointer(s)
+-- as of 16MAR2016 it's "step myStep turn myTurn bond prev next skim read bulk trim"
+-- pointers are comma delimited & return delimited lists of numbers "#,# cr #,#"
+-- the first number is the record being pointed to
+-- the second number is the turn record that created this particular pointer
+-- pointers are always edited in mirrored pairs, so if record 17 points to 58, 58 also points to 17
+--------------[filepath] = URL to the *.how file
+--------------[saveStatus] = opened/saved/unsaved
+--------------[UUID] = a Livecode generated Universally Unique IDentifier; distinguishes this project from all others
+-- sMain[1][1-n] = record keys
+----------------[step] = this record is pointing to all of the information tags that together make up a graph element
+----------------[myStep] = points back to the step that owns a tag
+----------------[turn] = this record is pointing to all of the records created by this alteration
+----------------[myTurn] = points back to the turn that created this record
+----------------[bond] = DEPRECATED (unnecessary)
+----------------[prev] = pointer to a [next] tag backwards along a flow link
+----------------[next] = pointer to a [prev] tag forwards along a flow link
+----------------[skim] = pointer to a [read] tag backwards along a dive link
+----------------[read] = pointer to a [skim] tag forwards along a dive link
+----------------[bulk] = pointer to a [trim] tag backwards along a rise link
+----------------[trim] = pointer to a [bulk] tag forwards along a rise link
+----------------[act] = contains string uniquely identifying the alteration (probably the handler name, EX: newItem, newFlow, newDive, newRise)
+----------------[type] = this is an information tag specifying what kind of graph element the step it's attached to is (EX: state, change, flow, dive)
+
+local sPointerTags -- space delimited list of pointer categories
+
+local sMainShort
+-- sMainShort = a simplification of sMain
+-- sMainShort[1][0] = metadata (doesn't contain [lastKey] because sMainShort is not edited)
+-------------------[undo] = true if something can be undone
+-------------------[redo] = true if something can be redone
+-- sMainShort[1][1-n] = record keys (but only the ones representing graph elements)
+---------------------[type] = they should all have this tag, since they're all graph elements
+-- other tags will appear when that step contains them (title, links, etc)
+
+local sTopoSort
+-- sTopoSort[1] = #,#,#,etc list of step record keys; theoretically could have more than one document
+-- sTopoSort is a topological sort of the network in document [n]
+
+local sNoteList -- ! probably not used anymore since bonds aren't used and hence aren't interpreted as footnotes in instructions
+
+local sNotVisited -- used during graph walking
+
+local sNowDoc -- the document the user is currently focused on
+
+local sNowItem -- cr delimited list of records currently selected
+
+local sNowFocus -- the record key of the node that is "focused", or where middleOut will start assigning layers from
+
+local sGraphDrawing
+-- sGraphDrawing (same as sGraphData plus the following)
+-------------------[layers] (keys are numbers working out from 0, both negative and positive)
+---------------------------[-x to 0 to y] = #,#,#,etc (nodes are sorted into layers starting from the focused node)
+-------------------[visited] (records of graph elements visited)
+----------------------------[links/nodes] = #,#,#,etc
+-------------------[unvisited] (records of graph elements not visited)
+------------------------------[links/nodes] = #,#,#,etc
+
+local sGUIstuff
+-- sGUIstuff (abutDive, abutRise, abutFlow, case are same as in sGraphData & sGraphDrawing)
+------------[links] (all drawn links)
+-------------------[graphic] = Livecode's long id for the link's graphic
+------------[nodes] (all drawn nodes)
+-------------------[abutFlow/abutRise] = same as what's in higher level of same name
+-------------------[displayString/displayStringExtended] = same as sGraphData & sGraphDrawing)
+-------------------[graphic] = Livecode's long id for the node's graphic
+-------------------[type] = the node's type
+-------------------[horz/vert] = on screen coordinates of node in pixels
+-------------------[figure] = might contain URL of image(?)
+
+local sNodeSize -- node graphic height and width in pixels
+
+local sLayerSize -- layer width in pixels
+
+local sLinkSize -- link graphic "thickness" (Livecode decides how to scale the whole arrow)
+
+local s1Down -- empty/# (anchor where button first went down)
+
+local s1Enter -- empty/#/background (changes as mouse enters things, empty means never left anchor)
+
+local sMouseHistory
+-- sMouseHistory (what happened the last cycle the user interface was checked)
+----------------[1down] = true/false (if mouse button 1/left was down)
+----------------[3down] = true/false (if mouse button 3/right was down)
+----------------[fixed] = empty or X,Y (coordinates where mouse button when down)
+----------------[inside] = empty or # (record key if mouse inside a graph element)
+----------------[linkSelected] = #,#,#,etc (record keys of links selected with selectBox)
+----------------[moving] = X,Y (pixel coordinates of mouse)
+----------------[nodeSelected] = #,#,#,etc (record keys of nodes selected with selectBox)
+----------------[tooltip] = true or false
+----------------[tooltipRect] = left,top,right,bottom of tooltipRect
+
+local sPreviewGraphics -- graphic preLinkLeft, field preNode, graphic PreLinkRight ! maybe this isn't used anymore ?
+
+local sGraphData
+-- sGraphData (can't hold more than one document)
+---------------[abutFlow] (also abutRise & abutDive) (key for each node that has the named type of link)
+---------------------------[x] = y,z cr y,z cr y,z
+-- x, y and z are record keys; x is linked to z thru y
+---------------[case] = the record key of the case node
+---------------[pointerTags] = same as sMain[0]
+---------------[redo/undo] = same sMainShort[0]
+---------------[links] = key for each link
+----------------------[type] = type of link
+----------------------[tags] = # (will be a tag like [bulk] pointing to a node)
+---------------[nodes] = key for each node
+----------------------[displayString] = EX: <p>&#9632; This is a node's title</p>
+----------------------[displayStringExtended] = same as displayString plus memo & figure info
+----------------------[info] = text string dump of tags (EX: title:some title cr memo: some memo)
+----------------------[memo] = content of the memo tag
+----------------------[title] = content of the title tag
+----------------------[type] = content of the type tag
+----------------------[relevant pointer tag(s)] = one or more tags like [next] with a node's key
+
+local sResources
+-- sResources
+-------------[1] (document; theoretically there could be more)
+----------------[#] (node record key)
+-------------------[excess] = however many units of supply exceed demand
+-------------------[totDemand] = total units demanded from forward
+-------------------[totSupply] = total units supplied from backward
+-------------------[scopeRef] = #,role (# is rec of encasing node; role can be in/thru/out/case)
+-- in means this node's "role" is to begin the encased flow
+-- thru means this node's "role" is to be between in and out
+-- out means this node's "role" is to end the encased flow
+-- case means this node's "role" is (also) to encase a level of flow
+-- the algorithm allows for a node to have a case role in addition to in, thru, or out
+
+local sScopeSketch -- array[doc][case][role]=rec,rec,rec... start at case 0, then each [top]
+
+--local sBusy -- added 15DEC2015 to block messages when a handler is still running; replaced with cBusy of stack howstrBeta 17FEB2016
+
+local sTooltipVisible -- ! this isn't actually being passed; the handler just checks the control itself
+
+local sNodeDetailsGeometry
+-- sNodeDetailGeometry
+---------------------------[startWidth] 400
+---------------------------[startHeight] 400
+---------------------------[tagDataList] 5,30,200,395
+---------------------------[tagLabel] 205,30,395,51
+---------------------------[editData] 205,56,395,395
+---------------------------[loadImgButt] 219,41
+---------------------------[clearImgButt] 256,41
+---------------------------[expandImgButt] 300,41
+---------------------------[setCaptureButt] 340,41
+---------------------------[snapCaptureButt] 372,41
+
+local sCaptureAreaGeometry
+-----------------------------[captureAreaRect] 400,400,800,800 (width and height)
+-- square icons set to middle of height and equally spaced across width, 1/5th each
+
+local sForBubbleA
+-----------------[project][title]=text
+---------------------------[memo]=text
+---------------------------[figure]=URL
+---------------------------[bubble_id]=unique id from bubble's database
+---------------------------[filepath]=URL from pMain
+---------------------------[UUID]=UUID of project
+---------------------------[resources]=list of nodes
+---------------------------[results]=list of nodes
+-----------------[action][#][inputs/thruput/outputs]=#,#,#
+----------------------------[weights]=string, each input and output with its multiple, if larger than 1
+----------------------------[bubble_id]=unique id from bubble's database
+-----------------[node][#][title]=text
+----------------------------[memo]=text
+----------------------------[figure]=URL
+----------------------------[record]=#
+----------------------------[bubble_id]=unique id from bubble's database
+----------------------------[as_resource/as_result]=need #x total cr #x for title cr etc / have #x total cr #x from title cr etc
+
+on setupAsOf3FEB2016
+   set the defaultstack to "HowstrBeta"
+   -- setup the window
+   set the decorations of stack "howstrBeta" to "title"
+   --   set the decorations of this stack to empty
+   --   set the windowShape of this stack to 2868
+   set the windowshape of stack "howstrBeta" to 0
+   set the minHeight of stack "howstrBeta" to 400
+   set the minWidth of stack "howstrBeta" to 500
+   --   -- shouldn't be necessary forever, but a good hack for now
+   set the foregroundColor of card 1 of stack "Ask Dialog" to "0,220,220"
+   --   set the opaque  of button "Ok" of card 1 of stack "Ask Dialog" to false
+   --   set the opaque  of button "Cancel" of card 1 of stack "Ask Dialog" to false
+   set the foregroundColor of card 1 of stack "Answer Dialog" to "0,220,220"
+   --   set the opaque  of button "Ok" of card 1 of stack "Answer Dialog" to false
+   --   set the opaque  of button "close current" of card 1 of stack "Answer Dialog" to false
+   --   set the opaque  of button "close" of card 1 of stack "Answer Dialog" to false
+   
+   repeat with i = 1 to the number of buttons of card 1 of stack "Ask Dialog"
+      --      put the name of button i of group "mygroup" after field 1
+      set the opaque  of button i of card 1 of stack "Ask Dialog" to false
+   end repeat
+   repeat with i = 1 to the number of buttons of card 1 of stack "Answer Dialog"
+      --      put the name of button i of group "mygroup" after field 1
+      set the opaque  of button i of card 1 of stack "Answer Dialog" to false
+   end repeat
+   
+   put empty into sMain
+   put empty into sNowDoc
+   put empty into sNowItem
+   put empty into sPointerTags
+   -- initiate development logging
+   put "initiate" into xX["write"];    devLog xX
+   quickModeSetup sMain,sNowDoc,sNowItem,sPointerTags -- quickiator
+   put empty into sMainShort
+   adjList sMain,sMainShort
+   put empty into sGraphData
+   tempConvertData sMainShort,sGraphData,sNowDoc -- backend alpha and frontend alpha used different data structures
+   put empty into sGraphDrawing
+   --   put 8 into sNowFocus 
+   --   -- find a good node to focus on; highest is probably the last place they worked
+   --   put the keys of sMainShort[sNowDoc] into tKeys
+   --   sort tKeys numeric descending
+   --   repeat for each line tAkey in tKeys
+   --      if sMainShort[sNowDoc][tAkey]["type"] is "state" then
+   --         put tAkey into sNowFocus
+   --         exit repeat
+   --      end if
+   --   end repeat
+   --   -- now middleOut can start
+   middleOut sGraphData,sGraphDrawing,sNowFocus -- displayerang.livecode
+   put the width of stack "howstrBeta" into tSizes["width"]
+   put the height of stack "howstrBeta" into tSizes["height"]
+   put 40 into sLayerSize
+   put 60 into sNodeSize
+   put 8 into sLinkSize
+   set the width of field "preState" stack "howstrBeta" to sNodeSize
+   set the height of field "preState" stack "howstrBeta" to sNodeSize
+   set the width of field "preChange" stack "howstrBeta" to sNodeSize
+   set the height of field "preChange" stack "howstrBeta" to sNodeSize
+   put sLayerSize into tSizes["layer"]
+   put sNodeSize into tSizes["node"]
+   put sLinkSize into tSizes["link"]
+   displayManager sGraphDrawing,sGUIstuff,tSizes,sNowFocus,sMouseHistory -- displayerang.livecode
+   put "unsaved" into sMain[sNowDoc][0]["saveStatus"]
+   --   put false into sBusy
+   set the cBusy of stack "HowstrBeta" to false
+   put empty into field "filenameLabel" stack "HowstrBeta"
+   -- initial geometry for node detail window
+   put 400 into sNodeDetailsGeometry["startWidth"]
+   put 400 into sNodeDetailsGeometry["startHeight"]
+   put "5,30,200,395" into sNodeDetailsGeometry["tagDataList"]
+   put "205,30,395,51" into sNodeDetailsGeometry["tagLabel"]
+   put "205,56,395,395" into sNodeDetailsGeometry["editData"]
+   put "219,41" into sNodeDetailsGeometry["loadImgButt"]
+   put "256,41" into sNodeDetailsGeometry["clearImgButt"]
+   put "300,41" into sNodeDetailsGeometry["expandImgButt"]
+   put "340,41" into sNodeDetailsGeometry["setCaptureButt"]
+   put "372,41" into sNodeDetailsGeometry["snapCaptureButt"]
+   -- initial geometry for screen capture area window
+   put 400,400,800,800 into sCaptureAreaGeometry["captureAreaRect"]
+end setupAsOf3FEB2016
+
+on resizeNodeDetails pWidth,pHeight
+   set itemdelimiter to comma
+   -- tagDataList is on left
+   -- 1) tagLabel is above editData on right
+   -- 2) load & clear buttons are above figureHolder on right
+   -- either (1) or (2)
+   put item 3 of sNodeDetailsGeometry["tagDataList"] into tOldMid
+   put item 4 of sNodeDetailsGeometry["tagDataList"] into tOldFloor
+   put pHeight-tOldFloor into tHeightDelta
+   put pWidth/2 into tHalfWidth
+   put tHalfWidth-tOldMid into tWidthDelta
+   put pWidth-5 into tPadWidth
+   put pHeight-5 into tPadHeight
+   
+   put tHalfWidth into item 3 of sNodeDetailsGeometry["tagDataList"]
+   put tPadHeight into item 4 of sNodeDetailsGeometry["tagDataList"]
+   put tHalfWidth+5 into item 1 of sNodeDetailsGeometry["tagLabel"]
+   put tPadWidth into item 3 of sNodeDetailsGeometry["tagLabel"]
+   put tHalfWidth+5 into item 1 of sNodeDetailsGeometry["editData"]
+   put tPadWidth into item 3 of sNodeDetailsGeometry["editData"]
+   put tPadHeight into item 4 of sNodeDetailsGeometry["editData"]
+   put item 1 of sNodeDetailsGeometry["loadImgButt"] into tX
+   put tX+tWidthDelta into item 1 of sNodeDetailsGeometry["loadImgButt"]
+   put item 1 of sNodeDetailsGeometry["clearImgButt"] into tX
+   put tX+tWidthDelta into item 1 of sNodeDetailsGeometry["clearImgButt"]
+   put item 1 of sNodeDetailsGeometry["expandImgButt"] into tX
+   put tX+tWidthDelta into item 1 of sNodeDetailsGeometry["expandImgButt"]
+   put item 1 of sNodeDetailsGeometry["setCaptureButt"] into tX
+   put tX+tWidthDelta into item 1 of sNodeDetailsGeometry["setCaptureButt"]
+   put item 1 of sNodeDetailsGeometry["snapCaptureButt"] into tX
+   put tX+tWidthDelta into item 1 of sNodeDetailsGeometry["snapCaptureButt"]
+   put pWidth into sNodeDetailsGeometry["startWidth"]
+   put pHeight into sNodeDetailsGeometry["startHeight"]
+   
+   set the rect of field "tagDataList" stack "NodeDetails" to sNodeDetailsGeometry["tagDataList"]
+   set the rect of field "tagLabel" stack "NodeDetails" to sNodeDetailsGeometry["tagLabel"]
+   set the rect of field "editData" stack "NodeDetails" to sNodeDetailsGeometry["editData"]
+   set the loc of button "loadImgButt" stack "NodeDetails" to sNodeDetailsGeometry["loadImgButt"]
+   set the loc of button "clearImgButt" stack "NodeDetails" to sNodeDetailsGeometry["clearImgButt"]
+   set the loc of button "expandImgButt" stack "NodeDetails" to sNodeDetailsGeometry["expandImgButt"]
+   set the loc of button "setCaptureButt" stack "NodeDetails" to sNodeDetailsGeometry["setCaptureButt"]
+   set the loc of button "snapCaptureButt" stack "NodeDetails" to sNodeDetailsGeometry["snapCaptureButt"]
+   
+   get the filename of image "figureHolder" stack "NodeDetails"
+   if it is not empty then 
+      put the rect of field "editData" stack "NodeDetails" into tQuery["maxRect"]
+      put the long id of image "figureHolder" stack "NodeDetails" into tQuery["longID"]
+      put fitImageToConstraint(tQuery) into tGimme
+      set the width of image "figureHolder" stack "NodeDetails" to tGimme["width"]
+      set the height of image "figureHolder" stack "NodeDetails" to tGimme["height"]
+      set the loc of image "figureHolder" stack "NodeDetails" to tGimme["center"]
+   end if
+end resizeNodeDetails
+
+on expandImgButtMouseUp
+   -- create a substack
+   -- put an image to hold the file in it
+   -- give it scroll bars? or maybe direction arrows?
+   -- maybe just drag the image to scroll
+   -- zoom in/out buttons
+   set the filename of image "figureFull" stack "figureFocus" to the filename of image "figureHolder" stack "nodeDetails"
+   put the formattedwidth of image "figureFull" stack "figureFocus" into tWidth
+   put the formattedHeight of image "figureFull" stack "figureFocus" into tHeight
+   put the working screenrects into tScreen
+   -- stuff[longID]=livecode longID of image
+   -- stuff[maxWidth]=maximum width
+   -- stuff[maxHeight]=maximum height
+   -- stuff[maxRect]=left,top,right,bottom
+   put line 1 of tScreen into tQuery["maxRect"]
+   put the long ID of image "figureFull" stack "figureFocus" into tQuery["longID"]
+   put fitImageToConstraint(tQuery) into tReply
+   if tReply["width"] < tWidth then 
+      set the width of stack "figureFocus" to tReply["width"]
+   else
+      set the width of stack "figureFocus" to tWidth
+   end if
+   if tReply["height"] < tHeight then
+      set the height of stack "figureFocus" to tReply["height"]
+   else
+      set the height of stack "figureFocus" to tHeight
+   end if
+   set the loc of stack "figureFocus" to tReply["center"]
+   set the topleft of image "figureFull" stack "figureFocus" to "0,0"
+   go stack "figureFocus"
+end expandImgButtMouseUp
+
+-- End minimise when clicked in Taskbar
+on unIconifyStack
+   --set back to the window shape
+   --   set windowShape of me to 1014 //your graphic id
+   --   set the windowShape of this stack to 2868
+   set the decorations of this stack to "title"
+   --   set the decorations of this stack to empty
+   -- set to float above all other windows
+   --   set the systemWindow of me to true
+end unIconifyStack
+
+on mouseTrackerTracker
+   --   put true into sBusy -- !
+   set the cBusy of stack "HowstrBeta" to true
+   put "on mouseTrackerTracker" into xX["write"];   devLog xX
+   put sMain[sNowDoc][0]["filepath"] into tPath
+   put mouseTracker(sGUIstuff,sMouseHistory,s1Down,s1Enter,sNowFocus,sNodeSize,tPath) into tResponse -- displayerang.livecode
+   -- set dive/rise link creation buttons
+   if the number of items of sMouseHistory["nodeSelected"] is 1 then
+      put sMouseHistory["nodeSelected"] into tRec
+      put the keys of sMainShort[sNowDoc][tRec] into tKeys
+      if "next" is not among the lines of tKeys and "trim" is not among the lines of tKeys then
+         set the visible of button "riseButt" stack "HowstrBeta" to true
+      end if
+      if "prev" is not among the lines of tKeys and "skim" is not among the lines of tKeys then 
+         set the visible of button "diveButt" stack "HowstrBeta" to true
+      end if
+   else
+      set the visible of button "riseButt" stack "HowstrBeta" to false
+      set the visible of button "diveButt" stack "HowstrBeta" to false
+   end if -- only 1 node selected
+   if tResponse is not "nothing" then
+      if "focus" is among the keys of tResponse then
+         set the visible of graphic "preFocus" stack "HowstrBeta" to false -- ! shouldn't have to do this here, but it helps prevent lag
+         -- since the graph data is already in place
+         -- just changing the focus node and recalculate the layout
+         put tResponse["focus"] into sNowFocus
+         put "mouseTrackerTracker(tResponse has 'focus') > refreshDisplay" into xX["write"];    devLog xX
+         --         refreshDisplay
+         send refreshDisplay to me in 50 milliseconds -- ! seems to have fix freeze 11FEB2016
+         put "refreshDisplay > mouseTrackerTracker(tResponse has 'focus')" into xX["write"];    devLog xX
+      else if "info" is among the keys of tResponse then -- launch node details window
+         put sNowDoc into tResponse["doc"]
+         launchNodeDetails tResponse
+      else
+         changeRequest tResponse,sMain,sNowDoc -- grapherrific.livecode
+         refreshDraw
+         refreshDisplay
+      end if
+   end if
+   --   put false into sBusy -- !
+   set the cBusy of stack "HowstrBeta" to false
+end mouseTrackerTracker
+
+on launchNodeDetails pStuff
+   put tempNodeDetails(sMainShort,pStuff) into tDeets -- in displayerang
+   -- x[string]=cr delimited list of details
+   -- x[line #][link]=rec of link
+   -- x[line #][node]=rec of linked node
+   set the cNodeDetails of stack "NodeDetails" to tDeets
+   
+   set the height of stack "NodeDetails" to sNodeDetailsGeometry["startHeight"]
+   set the width of stack "NodeDetails" to sNodeDetailsGeometry["startWidth"]
+   set the rect of field "tagDataList" stack "NodeDetails" to sNodeDetailsGeometry["tagDataList"]
+   set the rect of field "tagLabel" stack "NodeDetails" to sNodeDetailsGeometry["tagLabel"]
+   set the rect of field "editData" stack "NodeDetails" to sNodeDetailsGeometry["editData"]
+   set the loc of button "loadImgButt" stack "NodeDetails" to sNodeDetailsGeometry["loadImgButt"]
+   set the loc of button "clearImgButt" stack "NodeDetails" to sNodeDetailsGeometry["clearImgButt"]
+   set the loc of button "expandImgButt" stack "NodeDetails" to sNodeDetailsGeometry["expandImgButt"]
+   set the loc of button "setCaptureButt" stack "NodeDetails" to sNodeDetailsGeometry["setCaptureButt"]
+   set the loc of button "snapCaptureButt" stack "NodeDetails" to sNodeDetailsGeometry["snapCaptureButt"]
+   put empty into field "tagLabel" stack "NodeDetails"
+   set the textAlign of field "tagLabel" stack "NodeDetails" to left
+   put empty into field "editData" stack "NodeDetails"
+   set the dontwrap of field "editData" stack "NodeDetails" to false
+   set the filename of image "figureHolder" stack "NodeDetails" to empty
+   put empty into image "figureHolder" stack "nodeDetails"
+   set the visible of field "tagLabel" stack "NodeDetails" to true
+   set the visible of field "editData" stack "NodeDetails" to true
+   set the visible of image "figureHolder" stack "NodeDetails" to false
+   set the visible of button "loadImgButt" stack "NodeDetails" to false
+   set the visible of button "clearImgButt" stack "NodeDetails" to false
+   set the visible of button "expandImgButt" stack "NodeDetails" to false
+   set the visible of button "setCaptureButt" stack "NodeDetails" to false
+   set the visible of button "snapCaptureButt" stack "NodeDetails" to false
+   set the text of field "tagDataList" stack "NodeDetails" to tDeets["string"]
+   set the loc of stack "nodeDetails" to the screenmouseloc -- set nodedetails to popup under the mouse
+   go stack "NodeDetails"
+end launchNodeDetails
+
+on detailsListMouseUp pLine
+   put "on detailsListMouseUp" into xX["write"];   devLog xX
+   put the cNodeDetails of stack "NodeDetails" into tDeets
+   put pLine into tDeets["hiLine"]
+   put tDeets[pLine]["label"] into tLabel
+   if tLabel is "divider" then
+      -- whatever
+      put empty into field "tagLabel" stack "NodeDetails"
+      put empty into field "editData" stack "NodeDetails"
+      set the visible of field "editData" stack "NodeDetails" to false
+      set the visible of field "tagLabel" stack "NodeDetails" to false
+      set the visible of image "figureHolder" stack "NodeDetails" to false
+      set the visible of button "loadImgButt" stack "NodeDetails" to false
+      set the visible of button "clearImgButt" stack "NodeDetails" to false 
+      set the visible of button "expandImgButt" stack "NodeDetails" to false 
+      set the visible of button "setCaptureButt" stack "NodeDetails" to false
+      set the visible of button "snapCaptureButt" stack "NodeDetails" to false
+   else if tLabel is "figure" then
+      if tDeets[pLine]["figure"] is not "[empty]" then
+         put tDeets[pLine]["figure"] into tReq["targetMedia"]
+         put sMain[sNowDoc][0]["filepath"] into tReq["projectFile"]
+         set the filename of image "figureHolder" stack "NodeDetails" to correctAbsoluteMediaPath(tReq)
+         put the rect of field "editData" stack "NodeDetails" into tQuery["maxRect"]
+         put the long id of image "figureHolder" stack "NodeDetails" into tQuery["longID"]
+         put fitImageToConstraint(tQuery) into tGimme
+         set the width of image "figureHolder" stack "NodeDetails" to tGimme["width"]
+         set the height of image "figureHolder" stack "NodeDetails" to tGimme["height"]
+         set the loc of image "figureHolder" stack "NodeDetails" to tGimme["center"]
+      else if tDeets[pLine]["new"] is not empty then
+         -- this means there's an image file in node details that hasn't been committed to the graph yet
+         -- I guess we don't really have to to anything special for this
+         -- the image is already set up and the next part will make the right things visible
+      end if -- [figure] is not [empty]
+      set the visible of field "editData" stack "NodeDetails" to false
+      set the visible of field "tagLabel" stack "NodeDetails" to false
+      set the visible of image "figureHolder" stack "NodeDetails" to true
+      set the visible of button "loadImgButt" stack "NodeDetails" to true
+      set the visible of button "clearImgButt" stack "NodeDetails" to false 
+      set the visible of button "expandImgButt" stack "NodeDetails" to false 
+      set the visible of button "setCaptureButt" stack "NodeDetails" to true
+      set the visible of button "snapCaptureButt" stack "NodeDetails" to true
+      if tDeets[pLine]["figure"] is not "[empty]" or (tDeets[pLine]["new"] is not empty and tDeets[pLine]["new"] is not "hide") then
+         -- allow clear if 1) [figure] already has a file or 2) a new file has been loaded in [new]
+         -- don't allow clear if "hide" is in [new], which is trying to get rid of what's in [figure]
+         set the visible of button "clearImgButt" stack "NodeDetails" to true 
+         set the visible of button "expandImgButt" stack "NodeDetails" to true 
+      end if
+   else if tLabel is among the words "title memo weight" then
+      set the visible of field "editData" stack "NodeDetails" to true
+      set the visible of field "tagLabel" stack "NodeDetails" to true
+      set the visible of image "figureHolder" stack "NodeDetails" to false
+      set the visible of button "loadImgButt" stack "NodeDetails" to false
+      set the visible of button "clearImgButt" stack "NodeDetails" to false 
+      set the visible of button "expandImgButt" stack "NodeDetails" to false 
+      set the visible of button "setCaptureButt" stack "NodeDetails" to false
+      set the visible of button "snapCaptureButt" stack "NodeDetails" to false
+      put tLabel into field "tagLabel" stack "NodeDetails"
+      if tDeets[pLine]["new"] is not empty and tDeets[pLine]["new"] is not "hide" then
+         put tDeets[pLine]["new"] into field "editData" stack "NodeDetails"
+      else 
+         put tDeets[pLine][tLabel] into field "editData" stack "NodeDetails"
+      end if
+      select the text of field "editData" stack "NodeDetails"
+   end if -- if label is divider
+   set the cNodeDetails of stack "NodeDetails" to tDeets
+end detailsListMouseUp
+
+on loadImgButtMouseUp pLine
+   -- on nodeDetails for loading a figure from an existing file
+   put the cNodeDetails of stack "NodeDetails" into tDeets
+   put specialfolderpath("documents") into tStart
+   answer file "choose an image (it doesn't actually force you to pick an image file at the moment)" with tStart
+   if the result is not "cancel" then
+      put empty into tDeets[pLine]["new"]
+      put true into tDeets["newFigure"]
+      set the itemdelimiter to slash
+      put it into tImgPath
+      put item -1 of tImgPath into tImgName
+      if sMain[sNowDoc][0]["filepath"] is not empty then
+         put sMain[sNowDoc][0]["filepath"] into tProjFolder
+         delete item -1 of tProjFolder
+         set the defaultfolder to tProjFolder
+         put the files into tFiles
+         if tImgName is among the lines of tFiles then
+            ask "This filename is already in use. If you don't change it the old file will be overwritten. (Include the file extension)" with tImgName
+            put it into tDeets[pLine]["new"]["newName"]
+         end if
+      end if -- the project has a save location
+      put tImgPath into tDeets[pLine]["new"]["copyFrom"]
+      -- put the image on screen
+      set the filename of image "figureHolder" stack "NodeDetails" to tDeets[pLine]["new"]["copyFrom"]
+      put the rect of field "editData" stack "NodeDetails" into tQuery["maxRect"]
+      put the long id of image "figureHolder" stack "NodeDetails" into tQuery["longID"]
+      put fitImageToConstraint(tQuery) into tGimme
+      set the width of image "figureHolder" stack "NodeDetails" to tGimme["width"]
+      set the height of image "figureHolder" stack "NodeDetails" to tGimme["height"]
+      set the loc of image "figureHolder" stack "NodeDetails" to tGimme["center"]
+      -- the clear button can be show now
+      set the visible of button "clearImgButt" stack "NodeDetails" to true 
+      set the visible of button "expandImgButt" stack "NodeDetails" to true 
+      -- the window is impossible to dismiss if these controls get covered up
+      set the layer of widget "iconOkay" to top
+      set the layer of widget "iconCancel" to top
+   end if -- the result is not cancel
+   set the cNodeDetails of stack "NodeDetails" to tDeets
+end loadImgButtMouseUp
+
+on clearImgButtMouseUp pLine
+   -- this button should only be available if there is something to clear
+   put the cNodeDetails of stack "NodeDetails" into tDeets
+   -- there can be a file in the graph, which will show up in [figure]
+   -- there can be a file just added in nodeDetails, which will show up in [new][copyfrom]
+   -- if a new file was just loaded, clear will get rid of the new one
+   -- if there's ONLY an existing file, clear will create a request to remove it from the graph
+   if tDeets[pLine]["new"] is not empty then
+      delete variable tDeets[pLine]["new"]
+      put false into tDeets["newFigure"]
+      if tDeets[pLine]["figure"] is "[empty]" then
+         -- cleared the just loaded image, so back to empty
+         set the filename of image "figureHolder" stack "NodeDetails" to empty
+         set the visible of button "clearImgButt" stack "NodeDetails" to false 
+         set the visible of button "expandImgButt" stack "NodeDetails" to false 
+      else
+         -- cleared the just loaded image, so set the preview back to the image currently in the tag
+         put tDeets[pLine]["figure"] into tReq["targetMedia"]
+         put sMain[sNowDoc][0]["filepath"] into tReq["projectFile"]
+         set the filename of image "figureHolder" stack "NodeDetails" to correctAbsoluteMediaPath(tReq)
+         put the rect of field "editData" stack "NodeDetails" into tQuery["maxRect"]
+         put the long id of image "figureHolder" stack "NodeDetails" into tQuery["longID"]
+         put fitImageToConstraint(tQuery) into tGimme
+         set the width of image "figureHolder" stack "NodeDetails" to tGimme["width"]
+         set the height of image "figureHolder" stack "NodeDetails" to tGimme["height"]
+         set the loc of image "figureHolder" stack "NodeDetails" to tGimme["center"]  
+      end if -- [figure] is empty
+   else
+      -- [new] is empty, so remove existing tag from graph
+      put "hide" into tDeets[pLine]["new"]
+      set the filename of image "figureHolder" stack "NodeDetails" to empty
+   end if -- [new] is not empty
+   set the cNodeDetails of stack "NodeDetails" to tDeets
+end clearImgButtMouseUp
+
+on nodeDetailsChanged
+   -- technically, this means node details MIGHT have something new
+   put "initiate" into xX["write"];    devLog xX
+   put the cNodeDetails of stack "NodeDetails" into tDeets
+   -- save check; if there's a new figure, but this project's never been saved, then there's nowhere to put it
+   if tDeets["newFigure"] is true and sMain[sNowDoc][0]["filepath"] is empty then
+      saveAsButtMouseUp
+      if sMain[sNowDoc][0]["filepath"] is empty then exit nodeDetailsChanged
+   end if
+   close stack "nodeDetails"
+   go to stack "HowstrBeta"
+   -- so, if they have a new figure in tDeets, and they didn't save the project, and they commit (check), it leaves them at the nodeDetails window
+   -- if they want to close the nodeDetails window, without saving the project, they'll have to click the cancel (x) icon instead
+   repeat for each key tKey in tDeets
+      if tKey is a number and "new" is among the keys of tDeets[tKey] and tDeets[tKey]["new"] is not "[empty]" then
+         put sNowDoc into tStuff["doc"]
+         put tDeets[tKey]["rec"] into tStuff["rec"]
+         put tDeets[tKey]["label"] into tStuff["tag"]
+         if tDeets[tKey]["new"] is "hide" then
+            -- hide this tag of this rec
+            -- only used for [figure] at the moment 22JAN2016
+            -- pBlerg["doc"] = doc in address
+            -- pBlerg["rec"] = step's record key
+            -- pBlerg["tag"] = tag string (this will be in a rec different from the step's rec)
+            -- pBlerg["data"] = new data
+            -- pBlerg["hide"] = true 
+            --            put sNowDoc into tStuff["doc"]
+            put true into tStuff["hide"]
+            --            put tDeets[tKey]["rec"] into tStuff["rec"]
+            --            put tDeets[tKey]["label"] into tStuff["tag"]
+            --            changeInfo sMain,tStuff
+         else if tDeets[tKey]["label"] is "figure" then --------------------------------- figure ---------------
+            --            put tDeets[tKey]["rec"] into tStuff["rec"]
+            --            put tDeets[tKey]["label"] into tStuff["tag"]
+            --            put sNowDoc into tStuff["doc"]
+            set the itemdelimiter to slash
+            put tDeets[tKey]["new"]["copyFrom"] into tOldImgPath
+            put item -1 of tOldImgPath into tImgName
+            if tDeets[tKey]["new"]["newName"] is not empty then 
+               -- user had to change the original file name to not conflict with what's already in the folder
+               put tDeets[tKey]["new"]["newName"] into tImgName
+            end if
+            --            put sMain[sNowDoc][0]["filepath"] into tStuff["data"]
+            --            put tImgName into item -1 of tStuff["data"]
+            put tImgName into tStuff["data"] -- relative path to media in same proj folder as *.how file
+            put sMain[sNowDoc][0]["filepath"] into tReq["projectFile"]
+            put tImgName into tReq["targetMedia"]
+            put URL("binfile:"& tOldImgPath) into URL("binfile:" & correctAbsoluteMediaPath(tReq))
+            --            changeInfo sMain,tStuff -- grapheriffic
+         else if tDeets[tKey]["node"] is a number then ------- weight ----------
+            put tDeets[tKey]["link"] into tStuff["rec"] -- overwrite cuz data stored differently
+            put tDeets[tKey]["new"] into tStuff["data"]
+         else  --------- title, memo ----
+            --            put tDeets[tKey]["rec"] into tStuff["rec"]
+            --            put tDeets[tKey]["label"] into tStuff["tag"]
+            --            put sNowDoc into tStuff["doc"]
+            put tDeets[tKey]["new"] into tStuff["data"]
+            --            changeInfo sMain,tStuff -- grapheriffic
+         end if -- 'new' is hide
+         changeInfo sMain,tStuff -- grapheriffic
+      end if -- tKey is a num and 'new' is not [empty]
+   end repeat
+   refreshDraw
+   refreshDisplay
+end nodeDetailsChanged
+
+on refreshDraw
+   --   put true into sBusy -- !
+   set the cBusy of stack "HowstrBeta" to true
+   put "on refreshDraw" into xX["write"];    devLog xX
+   -- takes raw graph data, simplifies it, and preps it for display  
+   adjList sMain,sMainShort
+   put empty into sGraphData
+   tempConvertData sMainShort,sGraphData,sNowDoc -- backend alpha and frontend alpha used different data structures
+   put "unsaved" into sMain[sNowDoc][0]["saveStatus"]
+   put "end refreshDraw -------" into xX["write"];    devLog xX
+   --   put false into sBusy -- !
+   set the cBusy of stack "HowstrBeta" to false
+end refreshDraw
+
+on refreshDisplay
+   --   put true into sBusy -- !
+   set the cBusy of stack "HowstrBeta" to true
+   --   set the hilite of button "busySwitch" stack "howstrBeta" to sBusy
+   set the hilite of button "busySwitch" stack "HowstrBeta" to the cBusy of stack "HowstrBeta"
+   put "on refreshDisplay" into xX["write"];    devLog xX
+   -- takes simple graph data, lays it out, and puts it on screen
+   put empty into sGraphDrawing
+   middleOut sGraphData,sGraphDrawing,sNowFocus -- adds info to sGraphData, becomes sGraphDrawing; displayerang.livecode
+   put the width of stack "howstrBeta" into tSizes["width"]
+   put the height of stack "howstrBeta" into tSizes["height"]
+   put sLayerSize into tSizes["layer"]
+   put sNodeSize into tSizes["node"]
+   put sLinkSize into tSizes["link"]
+   displayManager sGraphDrawing,sGUIstuff,tSizes,sNowFocus,sMouseHistory -- displayerang.livecode
+   put "unsaved" into sMain[sNowDoc][0]["saveStatus"]
+   put "end refreshDisplay ---------" into xX["write"];    devLog xX
+   --   put false into sBusy -- !
+   set the cBusy of stack "HowstrBeta" to false
+   set the hilite of button "busySwitch" stack "howstrBeta" to the cBusy of stack "HowstrBeta"
+end refreshDisplay
+
+on userUndo
+   put "on userUndo" into xX["write"];    devLog xX
+   put true into tDo["undo"]
+   changeRequest tDo,sMain,sNowDoc
+   refreshDraw
+   refreshDisplay
+end userUndo
+
+on userRedo
+      put "on userRedo" into xX["write"];    devLog xX
+   put true into tDo["redo"]
+   changeRequest tDo,sMain,sNowDoc
+   refreshDraw
+   refreshDisplay
+end userRedo
+
+on instrButtMouseUp
+   put "on instrButtMouseUp" into xX["write"];    devLog xX
+   -- need to save so there's a place to put stuff
+   if sMain[sNowDoc][0]["filepath"] is empty then
+      saveAsButtMouseUp
+      if sMain[sNowDoc][0]["filepath"] is empty then exit instrButtMouseUp
+   end if
+   -- adjList already called on every change
+   topoSort sMainShort,sTopoSort,sNotVisited,sNoteList
+   --   put  writeInstructions(sMain,sMainShort,sTopoSort,sNotVisited) into tInstr
+   put writeInstructionsHTML(sMain,sMainShort,sTopoSort,sNotVisited) into tInstr
+   --   set the clipboardData["text"] to tInstr
+   --   answer tInstr
+   -- create or overwrite the instructions.html file
+   put sMain[sNowDoc][0]["filepath"] into tPath -- path for the *.how file
+   set the itemdelimiter to slash
+   put "instructions.html" into item -1 of tPath
+   put tInstr into URL ("file:" & tPath)
+   launch url ("file:" & tPath)
+end instrButtMouseUp
+
+on resoButtMouseUp
+   put "on resoButtMouseUP" into xX["write"];    devLog xX
+   -- need to save so there's a place to put stuff
+   if sMain[sNowDoc][0]["filepath"] is empty then
+      saveAsButtMouseUp
+      if sMain[sNowDoc][0]["filepath"] is empty then exit resoButtMouseUp
+   end if
+   -- adjList already called on every change
+   --   topoSort sMainShort,sTopoSort,sNotVisited,sNoteList
+   supplyDemand sMainShort,sScopeSketch,sResources,sSomethingChanged,sNotVisited
+   --   put summarizeResources(sMain,sScopeSketch,sResources,sNowDoc) into tRes
+   put summarizeResourcesHTML(sMain,sMainShort,sScopeSketch,sResources,sNowDoc) into tRes
+   --   answer tRes   
+   -- create or overwrite the instructions.html file
+   put sMain[sNowDoc][0]["filepath"] into tPath -- path for the *.how file
+   set the itemdelimiter to slash
+   put "resources.html" into item -1 of tPath
+   put tRes into URL ("file:" & tPath)
+   launch url ("file:" & tPath)
+end resoButtMouseUp
+
+on repoButtMouseUp
+   set the cSavedStatus of stack "repoWrangler" to sMain[sNowDoc][0]["saveStatus"]
+   go to stack "repowrangler"
+   -- need to save first (commit to local repository)
+   --    if sMain[sNowDoc][0]["filepath"] is empty then
+   --       saveAsButtMouseUp
+   --       if sMain[sNowDoc][0]["filepath"] is empty then exit repoButtMouseUp
+   --    end if
+   --    -- adjList already called on every change
+   --    topoSort sMainShort,sTopoSort,sNotVisited,sNoteList
+   --    supplyDemand sMainShort,sScopeSketch,sResources,sSomethingChanged,sNotVisited
+   --    --   put  writeInstructions(sMain,sMainShort,sTopoSort,sNotVisited) into tInstr
+   --    arrayForBubble sMain,sMainShort,sTopoSort,sNotVisited,sForBubbleA,sScopeSketch,sResources -- in displayerang
+   --    set the cPayload of stack "repowrangler" to sForBubbleA
+   --    go to stack "repowrangler"
+end repoButtMouseUp
+
+on uploadPrep
+   topoSort sMainShort,sTopoSort,sNotVisited,sNoteList
+   supplyDemand sMainShort,sScopeSketch,sResources,sSomethingChanged,sNotVisited
+   --   put  writeInstructions(sMain,sMainShort,sTopoSort,sNotVisited) into tInstr
+   arrayForBubble sMain,sMainShort,sTopoSort,sNotVisited,sForBubbleA,sScopeSketch,sResources -- in displayerang
+   set the cPayload of stack "repowrangler" to sForBubbleA
+end uploadPrep
+
+on saveButtMouseUp
+   put "on saveButtMouseUP" into xX["write"];    devLog xX
+   if sMain[sNowDoc][0]["filepath"] is empty then
+      saveAsButtMouseUp
+   else
+      --      dispatch "cmdJsonFromArray" to stack "easyJSON" with sMain[sNowDoc]
+      --      put cmdJsonFromArray(sMain[sNowDoc]) into tResult
+      put jsonFromArray(sMain[sNowDoc]) into tResult
+      --      put the result into URL ("file:" & sMain[sNowDoc][0]["filepath"])
+      put tResult into URL ("file:" & sMain[sNowDoc][0]["filepath"])
+      put "saved" into sMain[sNowDoc][0]["saveStatus"]
+      set the cSaveStatus of stack "repoWrangler" to "saved"
+      set itemdelimiter to slash
+      put item -1 of sMain[sNowDoc][0]["filepath"] into tForShow
+      --      replace ".how" with "" in tForShow
+      -- Monte says this is more robust
+      set the itemDelimiter to "."
+      if item -1 of tForShow is "how" then
+         delete item -1 of tForShow
+      end if
+      put tForShow into field "filenameLabel" stack "HowstrBeta"
+   end if
+end saveButtMouseUp
+
+on loadButtMouseUp
+   -- on the main stack; as in load a Howstr *.how file
+   put "on loadButtMouseUp" into xX["write"];    devLog xX
+   if sMain[sNowDoc][0]["saveStatus"] is "unsaved" then
+      answer "Load new without saving current?" with "Close current" or "Cancel"
+      if it is "cancel" then exit loadButtMouseUp
+   end if
+   put specialFolderPath("documents") into tDocsPath
+   answer folder "Select project folder"  with tDocsPath
+   if the result is not "cancel" then
+      put it into tReq["newProjectFolder"]
+      put loadNewProject(tReq) into tFileData
+      if not (tFileData["data"] begins with "Error") then
+         put empty into sMain
+         put arrayFromJson(tFileData["data"]) into sMain[1]
+         put 1 into sNowDoc
+         -- filepath
+         put tFileData["fullPath"] into sMain[sNowDoc][0]["filepath"] -- absolute path to *.how file
+         set itemdelimiter to slash
+         put item -1 of tFileData["fullPath"] into tForShow
+         replace ".how" with "" in tForShow
+         put tForShow into field "filenameLabel" stack "HowstrBeta"
+         refreshDraw
+         refreshDisplay
+      end if
+   end if
+   -- this will overwrite the "unsaved" that the build handler flags
+   -- since in this case there aren't any unsaved changes yet
+   put "opened" into sMain[sNowDoc][0]["saveStatus"]
+   if sMain[sNowDoc][0]["UUID"] is empty then 
+      put uuid("random") into sMain[sNowDoc][0]["UUID"]
+      --       put "unsaved" into sMain[sNowDoc][0]["saveStatus"]
+      saveButtMouseUp
+   end if
+end loadButtMouseUp
+
+on saveAsButtMouseUp
+   -- get the file path for this stack
+   put the effective filename of this stack into tPath
+   set the itemDelimiter to slash
+   -- if this is a standalone application running on a Mac, find the path to the .app file
+   if the platform = "MacOS" and the environment = "standalone application" then
+      repeat until last item of tPath contains ".app"
+         delete last item of tPath
+      end repeat
+   end if
+   -- if not on a Mac, remove the last item to get the path to the containing folder
+   --   delete last item of tPath
+   
+   -- shouldn't put project folders into /data, it's inside the github dev repository
+   -- documents folder makes sense as a default, but allow for anywhere
+   put specialFolderPath("documents") into tDocsPath
+   put sMainShort[sNowDoc][2]["title"] into tCaseName
+   if tCaseName is empty then put "[blank]" into tCaseName
+   ask file "New project name (the case title is: " & tCaseName& ")"  with tDocsPath
+   if the result is not "cancel" then
+      put it into tReq["newPath"]
+      put jsonFromArray(sMain[sNowDoc]) into tReq["fileData"]
+      put saveNewProject(tReq) into tFullName
+      put "saved" into sMain[sNowDoc][0]["saveStatus"]
+      set the cSaveStatus of stack "repoWrangler" to "saved"
+      put tFullName into sMain[sNowDoc][0]["filepath"]
+      put item -1 of tFullName into tForShow
+      replace ".how" with "" in tForShow
+      put tForShow into field "filenameLabel" stack "HowstrBeta"
+   end if -- the result is not cancel
+   
+   --   put "data" into item -1 of tPath -- files go into the data folder
+   --   -- if the case node already has a name in it, suggest that
+   --   put sMainShort[sNowDoc][2]["title"] into tCaseName
+   --   ask ("name this file (do not include a file extension)" & cr & tPath) with tCaseName
+   --   if the result is not "cancel" then
+   --      put it into tFileName
+   --      put jsonFromArray(sMain[sNowDoc]) into tResult
+   --      -- each project can have lots of associated files, so the project file gets its own folder
+   --      create folder tPath & "/" & tFileName
+   --      put tPath & "/" & tFileName & "/" & tFileName & ".how" into tFullName
+   --      put tResult into URL ("file:" & tFullName)
+   --   put "saved" into sMain[sNowDoc][0]["saveStatus"]
+   --   put tFullName into sMain[sNowDoc][0]["filepath"]
+   --   put item -1 of tFullName into tForShow
+   --   replace ".how" with "" in tForShow
+   --   put tForShow into field "filenameLabel" stack "HowstrBeta"
+   --   end if
+end saveAsButtMouseUp
+
+on iconCloseMouseUp
+   put "on closeStackRequest" into xX["write"];    devLog xX
+   if sMain[sNowDoc][0]["saveStatus"] is "unsaved" then
+      answer "Close without saving?" with "Close" or "Cancel"
+      if it is "cancel" then exit iconCloseMouseUp
+   end if
+   quit
+end iconCloseMouseUp
+
+--on closeStackRequest
+--   -- for whatever reason this only gets sent by the window decoration (at least in Windows where I tested it)
+--   -- so this blocks the window decorations from closing any of the stacks
+--   -- forces user to use the "X" icons
+--end closeStackRequest
+
+on hideButtMouseUp
+   put "on hideButtMouseUp" into xX["write"];    devLog xX
+   -- hides whatever elements are selected 
+   -- but it won't hide the focused node
+   -- shouldn't be able to get this message unless something selected cuz button wouldn't be visible
+   -- changeRequest pAsk,@pMain,pDoc
+   -- x[hide]=#,#,#
+   put sMouseHistory["linkSelected"] into tBlerg["hide"]
+   put sMouseHIstory["nodeSelected"] into item (the number of items of tBlerg["hide"])+1 of tBlerg["hide"]
+   put "on hideButtMouseUp > changeRequest with " & tBlerg["hide"] into xX["write"];    devLog xX
+   changeRequest tBlerg,sMain,sNowDoc -- grapherrific.livecode
+   refreshDraw
+   refreshDisplay
+end hideButtMouseUp
+
+on tooltipSwitchChange
+   put the hilite of button "tooltipSwitch" stack "howstrBeta" into tX
+   put tX into sTooltipVisible
+end tooltipSwitchChange
+
+on busySwitchChange
+   get the hilite of button "busySwitch" stack "howstrBeta"
+   --   put it into sBusy
+   set the cBusy of stack "HowstrBeta" to it
+end busySwitchChange
+
+on caseButtMouseUp
+   put 2 into tStuff["info"]
+   put 1 into tStuff["doc"]
+   launchNodeDetails tStuff
+   
+   --    -- load up existing case node title if it exists
+   --    put sMainShort[sNowDoc][2]["title"] into tCurrent
+   --    if tCurrent is empty then
+   --       ask "name for case node"
+   --    else
+   --       ask "name for case node" with tCurrent
+   --    end if
+   --    -- only request a change if the case node title actually changed
+   --    if it is not tCurrent then
+   --       put it into tStuff["data"]
+   --       put "title" into tStuff["tag"]
+   --       put sNowDoc into tStuff["doc"]
+   --       put 2 into tStuff["rec"]
+   --       changeInfo sMain,tStuff -- grapheriffic
+   --       refreshDraw
+   --       refreshDisplay
+   --    end if
+end caseButtMouseUp
+
+on miscRightButtMouseUp
+   -- slide all of the misc nodes one place to the right
+   repeat for each key tRec in sGUIstuff["nodes"]
+      if sGUIstuff["nodes"][tRec]["misc"] is true then 
+         put sGUIstuff["nodes"][tRec]["horz"] into tH
+         put sGUIstuff["nodes"][tRec]["vert"] into tV
+         put tH + sNodeSize + sLayerSize into tH
+         set the loc of sGUIstuff["nodes"][tRec]["graphic"] to tH & "," & tV
+         put tH into sGUIstuff["nodes"][tRec]["horz"]
+      end if
+   end repeat
+end miscRightButtMouseUp
+
+on miscLeftButtMouseUp
+   -- slide all of the misc nodes one place to the left
+   repeat for each key tRec in sGUIstuff["nodes"]
+      if sGUIstuff["nodes"][tRec]["misc"] is true then 
+         put sGUIstuff["nodes"][tRec]["horz"] into tH
+         put sGUIstuff["nodes"][tRec]["vert"] into tV
+         put tH - sNodeSize - sLayerSize into tH
+         set the loc of sGUIstuff["nodes"][tRec]["graphic"] to tH & "," & tV
+         put tH into sGUIstuff["nodes"][tRec]["horz"]
+      end if
+   end repeat
+end miscLeftButtMouseUp
+
+on diveButtMouseUp
+   -- dive from the case node to the focused node
+   -- new elements are identified by letters (a, b, c, etc); existing elements id'd by their record #
+   -- x[letter][tag]
+   -- x[ltr][type]=flow/dive/rise/state/change
+   -- x[ltr][backward/forward]=ltr/#
+   put "dive" into tDo["a"]["type"]
+   put sGUIstuff["case"] into tDo["a"]["backward"]
+   put sMouseHistory["nodeSelected"] into tDo["a"]["forward"]
+   changeRequest tDo,sMain,sNowDoc
+   refreshDraw
+   refreshDisplay
+end diveButtMouseUp
+
+on riseButtMouseUp
+   -- rise from the focused node to the case node
+   put "rise" into tDo["a"]["type"]
+   put sGUIstuff["case"] into tDo["a"]["forward"]
+   put sMouseHistory["nodeSelected"] into tDo["a"]["backward"]
+   changeRequest tDo,sMain,sNowDoc
+   refreshDraw
+   refreshDisplay
+end riseButtMouseUp
+
+on zoomInButtMouseUp
+   -- increase dimensions by 10%
+   put the width of image "figureFull" stack "figureFocus" into tWidth
+   put the height of image "figureFull" stack "figureFocus" into tHeight
+   put tWidth*1.1 into tWidth
+   put tHeight*1.1 into tHeight
+   set the width of image "figureFull" stack "figureFocus" to tWidth
+   set the height of image "figureFull" stack "figureFocus" to tHeight   
+end zoomInButtMouseUp
+
+on zoomOutButtMouseUp
+   -- decrease dimensions by 10%
+   put the width of image "figureFull" stack "figureFocus" into tWidth
+   put the height of image "figureFull" stack "figureFocus" into tHeight
+   put tWidth*0.9 into tWidth
+   put tHeight*0.9 into tHeight
+   set the width of image "figureFull" stack "figureFocus" to tWidth
+   set the height of image "figureFull" stack "figureFocus" to tHeight
+end zoomOutButtMouseUp
+
+on setCaptureButtMouseUp tLine
+   -- clicked in node details to launch captureArea window
+   set the rect of stack "captureArea" to sCaptureAreaGeometry["captureAreaRect"]
+   set the blendlevel of stack "captureArea" to 50
+   resizeCaptureArea sCaptureAreaGeometry["captureAreaRect"]
+   go stack "captureArea"
+end setCaptureButtMouseUp
+
+on snapCaptureButtMouseUp pLine
+   -- clicked in node details to capture a screenshot from the previously committed captureArea rect
+   --   set the loc of stack "captureArea" to -1000,-1000
+   --   close stack "captureArea"
+   -- should already be closed
+   --   export snapshot from rect sCaptureAreaGeometry["captureAreaRect"] to image "figureHolder" stack "nodeDetails"
+   put the effective filename of this stack into tPath
+   set the itemDelimiter to slash
+   put "temp/screenshot.gif" into item -1 of tPath
+   export snapshot from rect sCaptureAreaGeometry["captureAreaRect"] to file tPath as GIF
+   set the filename of image "figureHolder" stack "nodeDetails" to tPath
+   -- size the image
+   put the rect of field "editData" stack "NodeDetails" into tQuery["maxRect"]
+   put the long id of image "figureHolder" stack "NodeDetails" into tQuery["longID"]
+   put fitImageToConstraint(tQuery) into tGimme
+   set the width of image "figureHolder" stack "NodeDetails" to tGimme["width"]
+   set the height of image "figureHolder" stack "NodeDetails" to tGimme["height"]
+   set the loc of image "figureHolder" stack "NodeDetails" to tGimme["center"]
+   -- the clear button can be show now
+   set the visible of button "clearImgButt" stack "NodeDetails" to true 
+   set the visible of button "expandImgButt" stack "NodeDetails" to true 
+   
+   put the cNodeDetails of stack "NodeDetails" into tDeets
+   put empty into tDeets[pLine]["new"]
+   put true into tDeets["newFigure"]	
+   --   put "screenshot" into tDeets[pLine]["new"]["copyFrom"]
+   put tPath into tDeets[pLine]["new"]["copyFrom"]
+   put uuid("random") into tUUID
+   put tUUID & ".gif" into tDeets[pLine]["new"]["newName"]
+   set the cNodeDetails of stack "NodeDetails" to tDeets
+end snapCaptureButtMouseUp
+
+on resizeCaptureArea pArea
+   -- pArea = rect of window
+   -- checkmark (commit) and cross (exit) icons
+   -- midway from top to bottom
+   -- each icon's width & height is 1/5th of the width of the window
+   -- 1/5th of window width between and on either side of icons
+   put item 1 of pArea into tLeft
+   put item 2 of pArea into tTop
+   put item 3 of pArea into tRight
+   put item 4 of pArea into tFloor
+   put (tFloor - tTop) / 2 into tMid
+   put (tRight - tLeft) / 5 into tFifth
+   put tFifth * 1.5 into tCheck
+   put tFifth * 3.5 into tCross
+   
+   set the width of widget "setCaptureIcon" stack "captureArea" to tFifth
+   set the width of widget "exitCaptureIcon" stack "captureArea" to tFifth
+   set the height of widget "setCaptureIcon" stack "captureArea" to tFifth
+   set the height of widget "exitCaptureIcon" stack "captureArea" to tFifth
+   set the loc of widget "setCaptureIcon" stack "captureArea" to tCheck & "," & tMid
+   set the loc of widget "exitCaptureIcon" stack "captureArea" to tCross & "," & tMid
+end resizeCaptureArea
+
+on setCaptureIconMouseUp pArea
+   -- checkmark on capture area window commits window's rect as screenshot capture area
+   put pArea into sCaptureAreaGeometry["captureAreaRect"]
+   close stack "captureArea"
+end setCaptureIconMouseUp
+
+on iconHelpMouseUp
+   launch url "http://github.howstr.com/dictionary.html"
+end iconHelpMouseUp
+
+on repoButtMouseUp
+   put the filename of me into tMe
+   set the itemdelimiter to "/"
+   put item 1 to -2 of tMe into tMeShort
+   set the defaultFolder to tMeShort
+   go stack "software/repowrangler.livecode"
+end repoButtMouseUp

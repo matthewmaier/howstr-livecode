@@ -735,19 +735,29 @@ on resoButtMouseUp
 end resoButtMouseUp
 
 on repoButtMouseUp
+   set the cSavedStatus of stack "repoWrangler" to sMain[sNowDoc][0]["saveStatus"]
+   go to stack "repowrangler"
    -- need to save first (commit to local repository)
-   if sMain[sNowDoc][0]["filepath"] is empty then
-      saveAsButtMouseUp
-      if sMain[sNowDoc][0]["filepath"] is empty then exit repoButtMouseUp
-   end if
-   -- adjList already called on every change
+   --    if sMain[sNowDoc][0]["filepath"] is empty then
+   --       saveAsButtMouseUp
+   --       if sMain[sNowDoc][0]["filepath"] is empty then exit repoButtMouseUp
+   --    end if
+   --    -- adjList already called on every change
+   --    topoSort sMainShort,sTopoSort,sNotVisited,sNoteList
+   --    supplyDemand sMainShort,sScopeSketch,sResources,sSomethingChanged,sNotVisited
+   --    --   put  writeInstructions(sMain,sMainShort,sTopoSort,sNotVisited) into tInstr
+   --    arrayForBubble sMain,sMainShort,sTopoSort,sNotVisited,sForBubbleA,sScopeSketch,sResources -- in displayerang
+   --    set the cPayload of stack "repowrangler" to sForBubbleA
+   --    go to stack "repowrangler"
+end repoButtMouseUp
+
+on uploadPrep
    topoSort sMainShort,sTopoSort,sNotVisited,sNoteList
    supplyDemand sMainShort,sScopeSketch,sResources,sSomethingChanged,sNotVisited
    --   put  writeInstructions(sMain,sMainShort,sTopoSort,sNotVisited) into tInstr
    arrayForBubble sMain,sMainShort,sTopoSort,sNotVisited,sForBubbleA,sScopeSketch,sResources -- in displayerang
    set the cPayload of stack "repowrangler" to sForBubbleA
-   go to stack "repowrangler"
-end repoButtMouseUp
+end uploadPrep
 
 on saveButtMouseUp
    put "on saveButtMouseUP" into xX["write"];    devLog xX
@@ -760,6 +770,7 @@ on saveButtMouseUp
       --      put the result into URL ("file:" & sMain[sNowDoc][0]["filepath"])
       put tResult into URL ("file:" & sMain[sNowDoc][0]["filepath"])
       put "saved" into sMain[sNowDoc][0]["saveStatus"]
+      set the cSaveStatus of stack "repoWrangler" to "saved"
       set itemdelimiter to slash
       put item -1 of sMain[sNowDoc][0]["filepath"] into tForShow
       --      replace ".how" with "" in tForShow
@@ -832,6 +843,7 @@ on saveAsButtMouseUp
       put jsonFromArray(sMain[sNowDoc]) into tReq["fileData"]
       put saveNewProject(tReq) into tFullName
       put "saved" into sMain[sNowDoc][0]["saveStatus"]
+      set the cSaveStatus of stack "repoWrangler" to "saved"
       put tFullName into sMain[sNowDoc][0]["filepath"]
       put item -1 of tFullName into tForShow
       replace ".how" with "" in tForShow
