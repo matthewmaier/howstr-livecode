@@ -572,7 +572,7 @@ function makeNode pDetails
    set the dontwrap of the templateField to false
    set the height of the templateField to pDetails["size"]
    set the width of the templateField to pDetails["size"]
-   set the name of the templateField to pDetails["node"] & "NodeGraphic"
+   set the name of the templateField to pDetails["node"] & "NodeGraphicDeleteMe"
    set the location of the templateField to pDetails["coord"]
    set the threeD of the templatefield to false
    set the showborder of the templatefield to false
@@ -625,7 +625,7 @@ function makeLink pThis
    set the endArrow of the templateGraphic to true
    set the foregroundColor of the templategraphic to "0,220,220"
    set the points of the templateGraphic to pThis["line"]
-   set the name of the templateGraphic to pThis["link"] & "LinkGraphic"
+   set the name of the templateGraphic to pThis["link"] & "LinkGraphicDeleteMe"
    set the filled of the templateGraphic to false
    set the linesize of the templateGraphic to pThis["size"]
    set the outerglow["color"] of the templateGraphic to "40,40,40"
@@ -642,7 +642,7 @@ function makeScopeLink pThis
    set the endArrow of the templateGraphic to true
    set the foregroundColor of the templategraphic to "0,220,220"
    set the points of the templateGraphic to pThis["line"]
-   set the name of the templateGraphic to pThis["link"] & "LinkGraphic"
+   set the name of the templateGraphic to pThis["link"] & "LinkGraphicDeleteMe"
    set the filled of the templateGraphic to false
    set the linesize of the templateGraphic to pThis["size"]
    set the outerglow["color"] of the templateGraphic to "40,40,40"

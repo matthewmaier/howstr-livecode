@@ -870,11 +870,31 @@ on saveAsButtMouseUp
 end saveAsButtMouseUp
 
 on iconCloseMouseUp
-   put "on closeStackRequest" into xX["write"];    devLog xX
+   --    put "on closeStackRequest" into xX["write"];    devLog xX
    if sMain[sNowDoc][0]["saveStatus"] is "unsaved" then
       answer "Close without saving?" with "Close" or "Cancel"
       if it is "cancel" then exit iconCloseMouseUp
    end if
+   
+   put the openStacks into tOpen
+   if "repoWrangler" is among the lines of tOpen then
+      --       send "closeStack" to stack "repoWrangler"
+      close stack "repoWrangler"
+   end if
+   
+   put the number of controls of stack "howstrBeta" into tNumControls
+   repeat with tCount = 1 to tNumControls
+      put the name of control tCount & cr after tNames
+   end repeat
+   repeat with tCount =  1 to tNumControls
+      put the name of control tCount into tName
+      if tName contains "deleteme" then 
+         put tName & cr after tNamesGone
+      end if
+   end repeat
+   repeat for each line tLine in tNamesGone
+      delete control tLine
+   end repeat
    quit
 end iconCloseMouseUp
 
