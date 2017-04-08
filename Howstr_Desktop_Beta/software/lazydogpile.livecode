@@ -735,8 +735,12 @@ on resoButtMouseUp
 end resoButtMouseUp
 
 on repoButtMouseUp
+   put the filename of this stack into tPath
+   set the itemDelimiter to slash
+   delete last item of tPath
+   put tPath & "/software/repowrangler.livecode" into tRepoWrangler
+   go to stack tRepoWrangler
    set the cSaveStatus of stack "repoWrangler" to sMain[sNowDoc][0]["saveStatus"]
-   go to stack "repowrangler"
    -- need to save first (commit to local repository)
    --    if sMain[sNowDoc][0]["filepath"] is empty then
    --       saveAsButtMouseUp
