@@ -480,6 +480,7 @@ command changeInfo @pMain,pBlerg
    else
       --      put pMain[pDoc][0][lastKey] into tRec -- this order makes it work better
       put getTagData(pMain,pBlerg) into tOld
+      set the caseSensitive to true
       if tOld = pData then 
          exit changeInfo -- they're the same, so don't bother changing anything
       else if tOld is not empty then
@@ -487,6 +488,7 @@ command changeInfo @pMain,pBlerg
          put getTagKey(pMain,pBlerg) into tOldTag
          put cr & "-" & tOldTag & "," & tRec+1 after pMain[pDoc][pRec]["step"]
       end if
+      set the caseSensitive to false
       -- create turn
       put tRec+2 & "," & tRec+1 into pMain[pDoc][tRec+1]["turn"]
       put "changeInfo" into pMain[pDoc][tRec+1]["act"]
