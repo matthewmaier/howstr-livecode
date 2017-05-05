@@ -12,6 +12,7 @@ local sMain -- main[doc][rec][tag]=data/pointers
 --------------[filepath] = URL to the *.how file
 --------------[saveStatus] = opened/saved/unsaved
 --------------[UUID] = a Livecode generated Universally Unique IDentifier; distinguishes this project from all others
+--------------[onlyone] = #,#,# list of records, when exported as resource/result their weight should be 1
 -- sMain[1][1-n] = record keys
 ----------------[step] = this record is pointing to all of the information tags that together make up a graph element
 ----------------[myStep] = points back to the step that owns a tag
@@ -34,6 +35,7 @@ local sMainShort
 -- sMainShort[1][0] = metadata (doesn't contain [lastKey] because sMainShort is not edited)
 -------------------[undo] = true if something can be undone
 -------------------[redo] = true if something can be redone
+-------------------[onlyone] = #,#,# list of records, when exported as resource/result their weight should be 1
 -- sMainShort[1][1-n] = record keys (but only the ones representing graph elements)
 ---------------------[type] = they should all have this tag, since they're all graph elements
 -- other tags will appear when that step contains them (title, links, etc)
@@ -636,6 +638,21 @@ on nodeDetailsChanged
          changeInfo sMain,tStuff -- grapheriffic
       end if -- tKey is a num and 'new' is not [empty]
    end repeat
+   -- ! a crude hack, but this 'onlyone' check is only relevant to exporting a weight 4MAY2017
+   if tDeets["onlyone"] is "true" then
+      put sMain[sNowDoc][0]["onlyone"] into tList
+      put tDeets["rec"] into item ((the number of  items of tList) + 1) of tList
+      put noDupes(tList,comma) into tList2
+      put tList2 into sMain[sNowDoc][0]["onlyone"]
+   else
+      put sMain[sNowDoc][0]["onlyone"] into tList
+      set the wholematches to true
+      put itemoffset(tDeets["rec"],tList) into tOffset
+      if tOffset is not 0 then
+         put empty into item tOffset of tList
+         put tList into sMain[sNowDoc][0]["onlyone"]
+      end if
+   end if
    refreshDraw
    refreshDisplay
 end nodeDetailsChanged
@@ -741,18 +758,6 @@ on repoButtMouseUp
    put tPath & "/software/repowrangler.livecode" into tRepoWrangler
    go to stack tRepoWrangler
    set the cSaveStatus of stack "repoWrangler" to sMain[sNowDoc][0]["saveStatus"]
-   -- need to save first (commit to local repository)
-   --    if sMain[sNowDoc][0]["filepath"] is empty then
-   --       saveAsButtMouseUp
-   --       if sMain[sNowDoc][0]["filepath"] is empty then exit repoButtMouseUp
-   --    end if
-   --    -- adjList already called on every change
-   --    topoSort sMainShort,sTopoSort,sNotVisited,sNoteList
-   --    supplyDemand sMainShort,sScopeSketch,sResources,sSomethingChanged,sNotVisited
-   --    --   put  writeInstructions(sMain,sMainShort,sTopoSort,sNotVisited) into tInstr
-   --    arrayForBubble sMain,sMainShort,sTopoSort,sNotVisited,sForBubbleA,sScopeSketch,sResources -- in displayerang
-   --    set the cPayload of stack "repowrangler" to sForBubbleA
-   --    go to stack "repowrangler"
 end repoButtMouseUp
 
 on uploadPrep
@@ -1109,3 +1114,55 @@ on repoButtMouseUp
    go stack "software/repowrangler.livecode"
 end repoButtMouseUp
 
+function noDupes tList,tDelim,tCaseSensitive
+   /* noDupes Text Items
+   Syntax:
+   noDupes (tList,[tDelim],[tCaseSensitive])   
+   Examples:
+   assuming theList starts as a comma-delimited list
+   
+   noDupes (theList)
+   noDupes (theList,comma)   
+   noDupes (theList,comma,true)   
+   
+   following which theList will contain the original list
+   stripped of empty and duplicate items
+   
+   Description:
+   strips duplicate (and empty) lines/items from a list
+   
+   .   if tDelim = empty then looks first for the presence of cr in tList,
+   .        if found, defaults to cr as the delimiter
+   .   if no cr found, looks for the presence of comma in tList,
+   .        if found, defaults to comma as the delimiter
+   .   if neither found, returns empty (user should have specified another delim)
+   
+   returns a list with same delim as input list
+   order of list will likely be changed, may require re-sorting
+   the *command* NoDuplicates (q.v.) scales better with very large lists
+   but is inherently case-sensitive, ie, will retain both "Chuck" and "chuck"
+   
+   Source:
+   noDupes */
+   
+   if tCaseSensitive = empty then put false into tCaseSensitive
+   set the caseSensitive to tCaseSensitive
+   if tList = empty then return empty
+   if tDelim = empty then
+      if cr is in tList then
+         put sr into tDelim
+      else if comma is in tList then
+         put comma into tDelim
+      else
+         return empty
+      end if
+   end if
+   set the itemdelimiter to tDelim
+   repeat for each item i in tList
+      if i = empty then next repeat
+      put 1 into aFinal[i]
+   end repeat
+   put the keys of aFinal into finalList
+   replace cr with tDelim in finalList
+   return finalList
+end noDupes

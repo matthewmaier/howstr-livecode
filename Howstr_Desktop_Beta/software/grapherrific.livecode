@@ -902,6 +902,10 @@ command  adjList @pMain,@pShort
    repeat for each key tDoc in pMain
       put pMain[tDoc][0]["pointerTags"] into pShort[tDoc][0]["pointerTags"]
    end repeat
+   -- hacky way to track states that should export with a weight of 1
+   if pMain[1][0]["onlyone"] is not empty then
+      put pMain[1][0]["onlyone"] into pShort[1][0]["onlyone"]
+   end if
 end adjList
 
 command topoSort @pShort,@pTopo,@pNoViz,@pNotes

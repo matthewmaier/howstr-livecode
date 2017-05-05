@@ -4,9 +4,15 @@ function tempNodeDetails @pShort,tDo
    -- pShort = sMainShort
    put tDo["info"] into tNodeRec
    put tDo["doc"] into tDoc
+   put tNodeRec into tList["rec"] -- 4MAY2017 added so it's easy to specify the step record for this node
    -- build a cr separated string to put into a list field
    -- in links&node, then this node's title, then out links&node
    put pShort[tDoc][tNodeRec]["title"] into tTitle -- may or may not actually have a title
+   put pShort[tDoc][tNodeRec]["type"] into tList["type"] -- 4MAY2017 added so node details can distinguish state/change
+   -- pass onlyone along if required
+   if tNodeRec is among the items of pShort[tDoc][0]["onlyone"] then
+      put "true" into tList["onlyone"]
+   end if
    put "prev skim" into tInTags
    put "next trim" into tOutTags
    put 0 into tLineCount
@@ -36,7 +42,8 @@ function tempNodeDetails @pShort,tDo
    -- main body of tag:data pairs for the node   
    put "title memo figure" into tDefaults
    repeat for each key tKey in pShort[tDoc][tNodeRec] -- ? this one might only actually catch "title"
-      if tKey is not among the words of "type next prev skim trim read bulk info" then
+      --       if tKey is not among the words of "type next prev skim trim read bulk info" then
+      if tKey is not among the words of "type next prev skim trim read bulk info onlyone" then
          put tLineCount + 1 into tLineCount
          put tNodeRec into tList[tLineCount]["rec"]
          put tKey into tList[tLineCount]["label"]
@@ -1839,7 +1846,16 @@ command arrayForBubble @pMain,@pShort,pTopo,pNoVisit,@pBubbleA ,@pSketch,@pResou
       end repeat -- each item tRec in pSketch[1][2][tPut]
    end repeat -- each key tPut in pSketch[1][2]
    --------------------------------------------------------- end resources --------------------------------------------------   
+   --------------------------------------------------------- start all text ----------------------------------------------------
+   -- this is a string containing every unique word that appears in the project
+   -- this way it's easier to search later on the interwebs
+   --    repeat for each item tNode in pBubbleA["node"]
    
+   --       memo
+   --       title
+   --    end repeat -- each node
+   --    pBubbleA[project][uuid/memo/title]
+   --------------------------------------------------------- end all text -----------------------------------------------------
 end arrayForBubble
 
 -- ! 15FEB2016 using summarizeResourcesHTML now, but this logic is more general so don't delete
