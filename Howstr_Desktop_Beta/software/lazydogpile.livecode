@@ -779,7 +779,7 @@ on saveButtMouseUp
       --      put the result into URL ("file:" & sMain[sNowDoc][0]["filepath"])
       put tResult into URL ("file:" & sMain[sNowDoc][0]["filepath"])
       put "saved" into sMain[sNowDoc][0]["saveStatus"]
-      set the cSaveStatus of stack "repoWrangler" to "saved"
+      --       set the cSaveStatus of stack "repoWrangler" to "saved"
       set itemdelimiter to slash
       put item -1 of sMain[sNowDoc][0]["filepath"] into tForShow
       --      replace ".how" with "" in tForShow
@@ -852,7 +852,7 @@ on saveAsButtMouseUp
       put jsonFromArray(sMain[sNowDoc]) into tReq["fileData"]
       put saveNewProject(tReq) into tFullName
       put "saved" into sMain[sNowDoc][0]["saveStatus"]
-      set the cSaveStatus of stack "repoWrangler" to "saved"
+      --       set the cSaveStatus of stack "repoWrangler" to "saved"
       put tFullName into sMain[sNowDoc][0]["filepath"]
       put item -1 of tFullName into tForShow
       replace ".how" with "" in tForShow
