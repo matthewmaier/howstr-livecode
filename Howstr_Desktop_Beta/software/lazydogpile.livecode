@@ -160,20 +160,19 @@ local sForBubbleA
 -----------------[project][title]=text
 ---------------------------[memo]=text
 ---------------------------[figure]=URL
----------------------------[bubble_id]=unique id from bubble's database
+---------------------------[bubble_id]=bubble's unique id for project_ver
 ---------------------------[filepath]=URL from pMain
 ---------------------------[UUID]=UUID of project
----------------------------[resources]=list of nodes
----------------------------[results]=list of nodes
------------------[action][#][inputs/thruput/outputs]=#,#,#
-----------------------------[weights]=string, each input and output with its multiple, if larger than 1
+---------------------------[resources/results][rec]=weight
+-----------------[action][#][thruput]=rec
+----------------------------[inputs/outputs][rec]=weight
 ----------------------------[bubble_id]=unique id from bubble's database
 -----------------[node][#][title]=text
 ----------------------------[memo]=text
 ----------------------------[figure]=URL
 ----------------------------[record]=#
 ----------------------------[bubble_id]=unique id from bubble's database
-----------------------------[as_resource/as_result]=need #x total cr #x for title cr etc / have #x total cr #x from title cr etc
+
 
 on setupAsOf3FEB2016
    set the defaultstack to "HowstrBeta"

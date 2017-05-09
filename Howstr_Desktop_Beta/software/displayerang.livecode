@@ -1720,9 +1720,9 @@ command arrayForBubble @pMain,@pShort,pTopo,pNoVisit,@pBubbleA ,@pSketch,@pResou
    put pMain[1][0]["UUID"] into pBubbleA["project"]["UUID"]
    
    put pShort[1][tCase]["title"] into pBubbleA["project"]["title"]
-   if pBubbleA["project"]["title"] is empty then put "[untitled]" into pBubbleA["project"]["title"]
+   --    if pBubbleA["project"]["title"] is empty then put "[untitled]" into pBubbleA["project"]["title"]
    put pShort[1][tCase]["memo"] into pBubbleA["project"]["memo"]
-   if pBubbleA["project"]["memo"] is empty then put "[undescribed]" into pBubbleA["project"]["memo"]
+   --    if pBubbleA["project"]["memo"] is empty then put "[undescribed]" into pBubbleA["project"]["memo"]
    put pShort[1][tCase]["figure"] into pBubbleA["project"]["figure"]
    if pBubbleA["project"]["figure"] is not empty then
       put pBubbleA["project"]["figure"] into tFilename
@@ -1747,9 +1747,12 @@ command arrayForBubble @pMain,@pShort,pTopo,pNoVisit,@pBubbleA ,@pSketch,@pResou
    repeat for each item tRec in tTopoChanges
       put tCount + 1 into tCount
       put tRec into pBubbleA["action"][tCount]["thruput"]
+      -- this rec's node details
       put tRec into pBubbleA["node"][tRec]["record"]
+      put pShort[1][tRec]["title"] into pBubbleA["node"][tRec]["title"]
+      --       if pBubbleA["node"][tRec]["title"] is empty then put "[untitled]" into pBubbleA["node"][tRec]["title"]
       put pShort[1][tRec]["memo"] into pBubbleA["node"][tRec]["memo"]
-      if pBubbleA["node"][tRec]["memo"] is empty then put "[undescribed]" into pBubbleA["node"][tRec]["memo"]
+      --       if pBubbleA["node"][tRec]["memo"] is empty then put "[undescribed]" into pBubbleA["node"][tRec]["memo"]
       put pShort[1][tRec]["figure"] into pBubbleA["node"][tRec]["figure"]
       if pBubbleA["node"][tRec]["figure"] is not empty then
          put pBubbleA["node"][tRec]["figure"] into tFilename
@@ -1759,18 +1762,20 @@ command arrayForBubble @pMain,@pShort,pTopo,pNoVisit,@pBubbleA ,@pSketch,@pResou
          put tFilepath into pBubbleA["node"][tRec]["figure"]
          set itemdelimiter to comma
       end if
-      put pShort[1][tRec]["title"] into pBubbleA["node"][tRec]["title"]
-      if pBubbleA["node"][tRec]["title"] is empty then put "[untitled]" into pBubbleA["node"][tRec]["title"]
+      
       put empty into tStuff
       -- inputs and outputs (and weights)
-      repeat for each line tLine in pShort[1][tRec]["prev"]
-         -- this change needs tNode times tWeight as an input
+      repeat for each line tLine in pShort[1][tRec]["prev"] ------------------ inputs -------------------------
          put pShort[1][tLine]["prev"] into tNode
          put pShort[1][tLine]["weight"] into tWeight
-         put tNode into item (the number of items of pBubbleA["action"][tCount]["inputs"])+1 of pBubbleA["action"][tCount]["inputs"]
+         --          put tNode into item (the number of items of pBubbleA["action"][tCount]["inputs"])+1 of pBubbleA["action"][tCount]["inputs"]
+         put tWeight into pBubbleA["action"][tCount]["inputs"][tNode]
+         if pBubbleA["action"][tCount]["inputs"][tNode] is empty then put 1 into pBubbleA["action"][tCount]["inputs"][tNode]
          put tNode into pBubbleA["node"][tNode]["record"]
+         put pShort[1][tNode]["title"] into pBubbleA["node"][tNode]["title"]
+         --          if pBubbleA["node"][tNode]["title"] is empty then put "[untitled]" into pBubbleA["node"][tNode]["title"]
          put pShort[1][tNode]["memo"] into pBubbleA["node"][tNode]["memo"]
-         if pBubbleA["node"][tNode]["memo"] is empty then put "[undescribed]" into pBubbleA["node"][tNode]["memo"]
+         --          if pBubbleA["node"][tNode]["memo"] is empty then put "[undescribed]" into pBubbleA["node"][tNode]["memo"]
          put pShort[1][tNode]["figure"] into pBubbleA["node"][tNode]["figure"]
          if pBubbleA["node"][tNode]["figure"] is not empty then
             put pBubbleA["node"][tNode]["figure"] into tFilename
@@ -1780,23 +1785,24 @@ command arrayForBubble @pMain,@pShort,pTopo,pNoVisit,@pBubbleA ,@pSketch,@pResou
             put tFilepath into pBubbleA["node"][tNode]["figure"]
             set itemdelimiter to comma
          end if
-         put pShort[1][tNode]["title"] into pBubbleA["node"][tNode]["title"]
-         if pBubbleA["node"][tNode]["title"] is empty then put "[untitled]" into pBubbleA["node"][tNode]["title"]
-         if tWeight > 1 then
-            put 1 into tStuff["doc"]
-            put tNode into tStuff["rec"]
-            put cr & "use" && tWeight & "x" && pBubbleA["node"][tNode]["title"] after pBubbleA["action"][tCount]["weights"]
-            filter pBubbleA["action"][tCount]["weights"] without empty
-         end if
+         --          if tWeight > 1 then
+         --             put 1 into tStuff["doc"]
+         --             put tNode into tStuff["rec"]
+         --             put cr & "use" && tWeight & "x" && pBubbleA["node"][tNode]["title"] after pBubbleA["action"][tCount]["weights"]
+         --             filter pBubbleA["action"][tCount]["weights"] without empty
+         --          end if
       end repeat
-      repeat for each line tLine in pShort[1][tRec]["next"]
-         -- this change makes tNode times tWeight as an output
+      repeat for each line tLine in pShort[1][tRec]["next"] ------------------- outputs ----------------------
          put pShort[1][tLine]["next"] into tNode
          put pShort[1][tLine]["weight"] into tWeight
-         put tNode into item (the number of items of pBubbleA["action"][tCount]["outputs"])+1 of pBubbleA["action"][tCount]["outputs"]
+         --          put tNode into item (the number of items of pBubbleA["action"][tCount]["outputs"])+1 of pBubbleA["action"][tCount]["outputs"]
+         put tWeight into pBubbleA["action"][tCount]["outputs"][tNode]
+         if pBubbleA["action"][tCount]["outputs"][tNode] is empty then put 1 into pBubbleA["action"][tCount]["outputs"][tNode]
          put tNode into pBubbleA["node"][tNode]["record"]
+         put pShort[1][tNode]["title"] into pBubbleA["node"][tNode]["title"]
+         --          if pBubbleA["node"][tNode]["title"] is empty then put "[undescribed]" into pBubbleA["node"][tNode]["title"]
          put pShort[1][tNode]["memo"] into pBubbleA["node"][tNode]["memo"]
-         if pBubbleA["node"][tNode]["memo"] is empty then put "[undescribed]" into pBubbleA["node"][tNode]["memo"]
+         --          if pBubbleA["node"][tNode]["memo"] is empty then put "[undescribed]" into pBubbleA["node"][tNode]["memo"]
          put pShort[1][tNode]["figure"] into pBubbleA["node"][tNode]["figure"]
          if pBubbleA["node"][tNode]["figure"] is not empty then
             put pBubbleA["node"][tNode]["figure"] into tFilename
@@ -1806,14 +1812,12 @@ command arrayForBubble @pMain,@pShort,pTopo,pNoVisit,@pBubbleA ,@pSketch,@pResou
             put tFilepath into pBubbleA["node"][tNode]["figure"]
             set itemdelimiter to comma
          end if
-         put pShort[1][tNode]["title"] into pBubbleA["node"][tNode]["title"]
-         if pBubbleA["node"][tNode]["title"] is empty then put "[undescribed]" into pBubbleA["node"][tNode]["title"]
-         if tWeight > 1 then
-            put 1 into tStuff["doc"]
-            put tNode into tStuff["rec"]
-            put cr & "get" && tWeight & "x" && pBubbleA["node"][tNode]["title"] after pBubbleA["action"][tCount]["weights"]
-            filter pBubbleA["action"][tCount]["weights"] without empty
-         end if
+         --          if tWeight > 1 then
+         --             put 1 into tStuff["doc"]
+         --             put tNode into tStuff["rec"]
+         --             put cr & "get" && tWeight & "x" && pBubbleA["node"][tNode]["title"] after pBubbleA["action"][tCount]["weights"]
+         --             filter pBubbleA["action"][tCount]["weights"] without empty
+         --          end if
       end repeat
    end repeat -- item tRec in tTopoChanges
    --------------------------------------------------------- end instructions ------------------------------------------------
@@ -1827,35 +1831,29 @@ command arrayForBubble @pMain,@pShort,pTopo,pNoVisit,@pBubbleA ,@pSketch,@pResou
          switch tPut
             case "in"
                --                put pBubbleA["node"][tRec]["bubble_id"] into item (the number of items of pBubbleA["project"]["resources"])+1 of pBubbleA["project"]["resources"]
-               put tRec into item (the number of items of pBubbleA["project"]["resources_recs"])+1 of pBubbleA["project"]["resources_recs"]
-               put "need" && pResources[1][tRec]["totDemand"] & "x total" into pBubbleA["node"][tRec]["as_resource"]
+               --                put tRec into item (the number of items of pBubbleA["project"]["resources_recs"])+1 of pBubbleA["project"]["resources_recs"]
+               --                put "need" && pResources[1][tRec]["totDemand"] & "x total" into pBubbleA["node"][tRec]["as_resource"]
+               put pResources[1][tRec]["totDemand"] into pBubbleA["project"]["resources"][tRec]
+               if tRec is among the items of pShort[1][0]["onlyone"] then put 1 into pBubbleA["project"]["resources"][tRec]
                break
             case "thru"
                if pResources[1][tRec]["excess"] > 0 then
                   --                put pBubbleA["node"][tRec]["bubble_id"] into item (the number of items of pBubbleA["project"]["results"])+1 of pBubbleA["project"]["results"]
-                  put tRec into item (the number of items of pBubbleA["project"]["results_recs"])+1 of pBubbleA["project"]["results_recs"]
-                  put "have" && pResources[1][tRec]["totDemand"] & "x total (excess)" into pBubbleA["node"][tRec]["as_result"]
+                  --                   put tRec into item (the number of items of pBubbleA["project"]["results_recs"])+1 of pBubbleA["project"]["results_recs"]
+                  --                   put "have" && pResources[1][tRec]["totDemand"] & "x total (excess)" into pBubbleA["node"][tRec]["as_result"]
+                  put pResources[1][tRec]["totDemand"] into pBubbleA["project"]["results"][tRec]
                end if
                break
             case "out"
                --                put pBubbleA["node"][tRec]["bubble_id"] into item (the number of items of pBubbleA["project"]["results"])+1 of pBubbleA["project"]["results"]
-               put tRec into item (the number of items of pBubbleA["project"]["results_recs"])+1 of pBubbleA["project"]["results_recs"]
-               put "have" && pResources[1][tRec]["totDemand"] & "x total" into pBubbleA["node"][tRec]["as_result"]
+               --                put tRec into item (the number of items of pBubbleA["project"]["results_recs"])+1 of pBubbleA["project"]["results_recs"]
+               --                put "have" && pResources[1][tRec]["totDemand"] & "x total" into pBubbleA["node"][tRec]["as_result"]
+               put pResources[1][tRec]["totDemand"] into pBubbleA["project"]["results"][tRec]
                break
          end switch
       end repeat -- each item tRec in pSketch[1][2][tPut]
    end repeat -- each key tPut in pSketch[1][2]
    --------------------------------------------------------- end resources --------------------------------------------------   
-   --------------------------------------------------------- start all text ----------------------------------------------------
-   -- this is a string containing every unique word that appears in the project
-   -- this way it's easier to search later on the interwebs
-   --    repeat for each item tNode in pBubbleA["node"]
-   
-   --       memo
-   --       title
-   --    end repeat -- each node
-   --    pBubbleA[project][uuid/memo/title]
-   --------------------------------------------------------- end all text -----------------------------------------------------
 end arrayForBubble
 
 -- ! 15FEB2016 using summarizeResourcesHTML now, but this logic is more general so don't delete
