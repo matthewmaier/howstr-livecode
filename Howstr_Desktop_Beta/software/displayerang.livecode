@@ -543,7 +543,8 @@ on displayManager pInfo,@pGUI,pSizes,pNow,@pHist -- ! creates/changes/deletes co
    set the layer of field "preChange" stack "HowstrBeta" to top
    -- highlight focused node (since all nodes new, old highlighted one was deleted)
    put pGUI["nodes"][pNow]["graphic"] into tBlerg
-   set the backgroundColor of tBlerg to "0,100,100"
+   --    set the backgroundColor of tBlerg to "0,100,100"
+   set the backgroundColor of tBlerg to gray
    -- undo/redo icons
    -- for quick mode, don't allow user to undo the graph smaller than the minimum action group
    -- ! 15DEC2015 hide can take graph down to 4 nodes with undo still being acceptable
@@ -553,6 +554,27 @@ on displayManager pInfo,@pGUI,pSizes,pNow,@pHist -- ! creates/changes/deletes co
    --   else
    --      set the visible of widget "iconUndo" to pInfo["undo"]
    --   end if
+   
+   -- Kit: setting all widgets/buttons to black
+   set the foregroundColor of widget "iconUndo" stack "howstrBeta" to black
+   set the foregroundColor of widget "iconRedo" stack "howstrBeta" to black
+   set the foregroundColor of widget "iconHelp" stack "howstrBeta" to black
+   set the foregroundColor of widget "iconClose" stack "howstrBeta" to black
+   set the foregroundColor of widget "iconMaximize" stack "howstrBeta" to black
+   set the foregroundColor of widget "iconMinimize" stack "howstrBeta" to black
+   set the foregroundColor of widget "iconMediumsize" stack "howstrBeta" to black
+   set the foregroundColor of button "repoButt" stack "howstrBeta" to black
+   set the foregroundColor of button "caseButt" stack "howstrBeta" to black
+   set the foregroundColor of button "loadButt" stack "howstrBeta" to black
+   set the foregroundColor of button "saveAsButt" stack "howstrBeta" to black
+   set the foregroundColor of button "saveButt" stack "howstrBeta" to black
+   set the foregroundColor of button "resoButt" stack "howstrBeta" to black
+   set the foregroundColor of button "instrButt" stack "howstrBeta" to black
+   set the foregroundColor of button "jeremyBugButt" stack "howstrBeta" to black
+   set the foregroundColor of button "busySwitch" stack "howstrBeta" to black
+   set the foregroundColor of button "tooltipSwitch" stack "howstrBeta" to black
+   
+   
    set the visible of widget "iconUndo" stack "howstrBeta" to pInfo["undo"]
    set the visible of widget "iconRedo" stack "howstrBeta" to pInfo["redo"]
    -- empty out selection and hide hide button
@@ -581,12 +603,16 @@ function makeNode pDetails
    set the width of the templateField to pDetails["size"]
    set the name of the templateField to pDetails["node"] & "NodeGraphicDeleteMe"
    set the location of the templateField to pDetails["coord"]
-   set the threeD of the templatefield to false
-   set the showborder of the templatefield to false
-   set the bordercolor of the templatefield to white
-   set the backgroundcolor of the templatefield to "0,220,220"
-   set the textSize of the templatefield to 14
-   set the outerglow["color"] of the templatefield to "40,40,40"
+   set the threeD of the templateField to false
+   set the showborder of the templateField to true
+   --    set the bordercolor of the templateField to "80,80,80"
+   set the bordercolor of the templateField to black
+   set the borderwidth of the templateField to 2
+   --    set the backgroundcolor of the templateField to "0,250,250"
+   set the backgroundcolor of the templateField to white
+   set the textSize of the templateField to 14
+   --set the style of the templateField to oval
+   set the outerglow["color"] of the templateField to "40,40,40"
    --   set the behavior of the templatefield to the long id of button "graphBehave"
    set the defaultstack to "HowstrBeta"
    put the defaultstack into tTemp
@@ -630,7 +656,8 @@ function makeLink pThis
    -- pThis[link/line/type]
    set the style of the templateGraphic to "line"
    set the endArrow of the templateGraphic to true
-   set the foregroundColor of the templategraphic to "0,220,220"
+   --    set the foregroundColor of the templategraphic to "0,220,220"
+   set the foregroundColor of the templategraphic to black
    set the points of the templateGraphic to pThis["line"]
    set the name of the templateGraphic to pThis["link"] & "LinkGraphicDeleteMe"
    set the filled of the templateGraphic to false
@@ -647,7 +674,8 @@ end makeLink
 function makeScopeLink pThis
    set the style of the templateGraphic to "line"
    set the endArrow of the templateGraphic to true
-   set the foregroundColor of the templategraphic to "0,220,220"
+   --    set the foregroundColor of the templategraphic to "0,220,220"
+   set the foregroundColor of the templategraphic to black
    set the points of the templateGraphic to pThis["line"]
    set the name of the templateGraphic to pThis["link"] & "LinkGraphicDeleteMe"
    set the filled of the templateGraphic to false
@@ -712,8 +740,10 @@ function mouseTracker @pGUI,@pHist,@p1Down,@p1Enter,pFocus,pNode,pPath
             put tNum into tNow["inside"]
          end if
          -- clear hilite; will be reapplied later if element still selected
-         if tType is "nodes" and tNum is not among the items of pHist["nodeSelected"] then set the showborder of pGUI[tType][tNum]["graphic"] to false
-         if tType is "links" and tNum is not among the items of pHist["linkSelected"] then  set the foregroundColor of pGUI[tType][tNum]["graphic"] to "0,220,220"
+         --          if tType is "nodes" and tNum is not among the items of pHist["nodeSelected"] then set the showborder of pGUI[tType][tNum]["graphic"] to false
+         if tType is "nodes" and tNum is not among the items of pHist["nodeSelected"] then set the bordercolor of pGUI[tType][tNum]["graphic"] to black
+         --          if tType is "links" and tNum is not among the items of pHist["linkSelected"] then  set the foregroundColor of pGUI[tType][tNum]["graphic"] to "0,220,220"
+         if tType is "links" and tNum is not among the items of pHist["linkSelected"] then  set the foregroundColor of pGUI[tType][tNum]["graphic"] to gray
          -- selection box
          if tNow["3down"] and intersect(pGUI[tType][tNum]["graphic"],graphic "selectBox" stack "HowstrBeta","pixels") then
             -- add any new selection to lists
@@ -743,10 +773,12 @@ function mouseTracker @pGUI,@pHist,@p1Down,@p1Enter,pFocus,pNode,pPath
    end repeat
    -- hilite selected elements
    repeat for each item tNum in tNow["nodeSelected"]
-      set the showborder of pGUI["nodes"][tNum]["graphic"] to true
+      --       set the showborder of pGUI["nodes"][tNum]["graphic"] to true
+      set the bordercolor of pGUI["nodes"][tNum]["graphic"] to cyan
    end repeat
    repeat for each item tNum in tNow["linkSelected"]
-      set the foregroundColor of pGUI["links"][tNum]["graphic"] to white
+      --       set the foregroundColor of pGUI["links"][tNum]["graphic"] to white
+      set the foregroundColor of pGUI["links"][tNum]["graphic"] to cyan
    end repeat
    --   put tNow["nodeSelected"] & cr & tNow["linkSelected"] into field "showMe" stack "HowstrBeta" -- ! for development
    -- selection box calculation

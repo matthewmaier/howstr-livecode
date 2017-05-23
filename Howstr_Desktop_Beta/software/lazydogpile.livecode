@@ -184,10 +184,10 @@ on setupAsOf3FEB2016
    set the minHeight of stack "howstrBeta" to 400
    set the minWidth of stack "howstrBeta" to 500
    --   -- shouldn't be necessary forever, but a good hack for now
-   set the foregroundColor of card 1 of stack "Ask Dialog" to "0,220,220"
+   set the foregroundColor of card 1 of stack "Ask Dialog" to "0,0,0"
    --   set the opaque  of button "Ok" of card 1 of stack "Ask Dialog" to false
    --   set the opaque  of button "Cancel" of card 1 of stack "Ask Dialog" to false
-   set the foregroundColor of card 1 of stack "Answer Dialog" to "0,220,220"
+   set the foregroundColor of card 1 of stack "Answer Dialog" to "0,0,0"
    --   set the opaque  of button "Ok" of card 1 of stack "Answer Dialog" to false
    --   set the opaque  of button "close current" of card 1 of stack "Answer Dialog" to false
    --   set the opaque  of button "close" of card 1 of stack "Answer Dialog" to false
