@@ -140,8 +140,12 @@ function loadNewProject pPaths
    -- pPaths["newProjectFolder"] = path to the folder containing the project
    put "Error in loadNewProject: some-project.how not found" into tForReturn["data"]
    put pPaths["newProjectFolder"] into tFullPath
-   set itemdelimiter to slash
-   put "/" & item -1 of tFullPath & ".how" after tFullPath
+   if not (tFullPath ends with ".how") then
+      set itemdelimiter to slash
+      put "/" & item -1 of tFullPath & ".how" after tFullPath
+   end if
+   --    set itemdelimiter to slash
+   --    put "/" & item -1 of tFullPath & ".how" after tFullPath
    if there is a file tFullPath then
       put URL ("file:" & tFullPath) into tForReturn["data"]
       put tFullPath into tForReturn["fullPath"]

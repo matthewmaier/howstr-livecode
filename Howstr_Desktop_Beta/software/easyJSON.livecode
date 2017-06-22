@@ -122,7 +122,7 @@ end toJsonValue
 //
 
 function arrayFromJson pJson
-   replace cr with empty in pJson
+   replace cr with empty in pJson -- ! this deleted the "n" from all "\n", leaving the escape "\" instead of the newline in the real data
    -- MDW-2013-09-23 faster trim
    put word 1 to -1 of pJson into pJson
    if pJson is empty then return "Parser Error: no content found in JSON string."

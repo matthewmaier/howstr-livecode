@@ -389,6 +389,7 @@ on mouseTrackerTracker
          launchNodeDetails tResponse
       else
          changeRequest tResponse,sMain,sNowDoc -- grapherrific.livecode
+         --          set the backgroundcolor of button "saveButt" stack "howstrBeta" to cyan
          refreshDraw
          refreshDisplay
       end if
@@ -665,6 +666,7 @@ on refreshDraw
    put empty into sGraphData
    tempConvertData sMainShort,sGraphData,sNowDoc -- backend alpha and frontend alpha used different data structures
    put "unsaved" into sMain[sNowDoc][0]["saveStatus"]
+   set the backgroundcolor of button "saveButt" stack "howstrBeta" to cyan
    put "end refreshDraw -------" into xX["write"];    devLog xX
    --   put false into sBusy -- !
    set the cBusy of stack "HowstrBeta" to false
@@ -788,18 +790,21 @@ on saveButtMouseUp
          delete item -1 of tForShow
       end if
       put tForShow into field "filenameLabel" stack "HowstrBeta"
+      set the backgroundcolor of button "saveButt" stack "howstrBeta" to white
    end if
 end saveButtMouseUp
 
-on loadButtMouseUp
+on loadButtMouseUp pPath
    -- on the main stack; as in load a Howstr *.how file
    put "on loadButtMouseUp" into xX["write"];    devLog xX
    if sMain[sNowDoc][0]["saveStatus"] is "unsaved" then
       answer "Load new without saving current?" with "Close current" or "Cancel"
       if it is "cancel" then exit loadButtMouseUp
    end if
-   put specialFolderPath("documents") into tDocsPath
-   answer folder "Select project folder"  with tDocsPath
+   if pPath is empty then
+      put specialFolderPath("documents") into pPath
+   end if
+   answer folder "Select project folder"  with pPath
    if the result is not "cancel" then
       put it into tReq["newProjectFolder"]
       put loadNewProject(tReq) into tFileData
@@ -820,6 +825,7 @@ on loadButtMouseUp
    -- this will overwrite the "unsaved" that the build handler flags
    -- since in this case there aren't any unsaved changes yet
    put "opened" into sMain[sNowDoc][0]["saveStatus"]
+   set the backgroundcolor of button "saveButt" stack "howstrBeta" to white
    if sMain[sNowDoc][0]["UUID"] is empty then 
       put uuid("random") into sMain[sNowDoc][0]["UUID"]
       --       put "unsaved" into sMain[sNowDoc][0]["saveStatus"]
@@ -857,6 +863,7 @@ on saveAsButtMouseUp
       replace ".how" with "" in tForShow
       put tForShow into field "filenameLabel" stack "HowstrBeta"
    end if -- the result is not cancel
+   set the backgroundcolor of button "saveButt" stack "howstrBeta" to white
    
    --   put "data" into item -1 of tPath -- files go into the data folder
    --   -- if the case node already has a name in it, suggest that
@@ -1165,3 +1172,7 @@ function noDupes tList,tDelim,tCaseSensitive
    replace cr with tDelim in finalList
    return finalList
 end noDupes
+
+function giveMeTheHowFile
+   return sMain[1][0]["filepath"]
+end giveMeTheHowFile
