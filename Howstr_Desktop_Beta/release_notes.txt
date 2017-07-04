@@ -1,4 +1,1 @@
-- logic and status messages to handle when new_project API call times out
-- dispatch payload in upload button handles "error 400" case
-- save button hilites after changes and unhilites after saving
-- zip file is gone; upload and download work with individual files
+- syncydynk retries upload 3 times if it doesn't work; terminates upload after 3 failures

@@ -255,15 +255,17 @@ on uploadMe
    put tPayloadA["project"] into tMission["payload"]
    --    put empty into tMission["payload"]["filepath"]
    --    put dispatchPayload(tMIssion) into tPayloadA["project"]["bubble_id"]
-   put dispatchPayload(tMIssion) into tGotBack
-   if tGotBack is "didn't work" then
-      --       delete file tZipFile
+   put dispatchPayload(tMIssion) into tFinal
+   if tFinal is "error" then
+      repoWranglerLog("error creating project, ending upload")
       put "done" into field "statusLabel" stack "repowrangler"
-      --       repoWranglerLog("temp zip archive deleted")
       exit uploadMe
+   else
+      put tFinal into tPayloadA["project"]["bubble_id"]
    end if
+   
    --    put dispatchPayload(tMIssion) into tPayloadA["project"]["bubble_id"]
-   put tGotBack into tPayloadA["project"]["bubble_id"]
+   --    put tGotBack into tPayloadA["project"]["bubble_id"]
    repoWranglerLog("new project version created in Howstr.com repository")
    
    -- nest action(s) and node(s)
@@ -278,8 +280,15 @@ on uploadMe
       put "action" into tMission["type"]
       put tPayloadA["project"]["bubble_id"] into tMission["payload"]["project"]
       put tCounter into tMission["payload"]["step_num"]
-      --       put tPayloadA["action"][tCounter]["weights"] into tMission["payload"]["weights"]
-      put dispatchPayload(tMIssion) into tPayloadA["action"][tCounter]["bubble_id"]
+      --       put dispatchPayload(tMIssion) into tPayloadA["action"][tCounter]["bubble_id"]
+      put dispatchPayload(tMission) into tFinal
+      if tFinal is "error" then
+         repoWranglerLog("error creating action, ending upload")
+         put "done" into field "statusLabel" stack "repowrangler"
+         exit uploadMe
+      else
+         put tFinal into tPayloadA["action"][tCounter]["bubble_id"]
+      end if
       
       -- create nodes and/or link existing nodes in action's input(s), thruput, output(s)
       put empty into tNodesMade
@@ -291,7 +300,15 @@ on uploadMe
       put "thruput" into tMission["payload"]["put"]
       put tPayloadA["action"][tCounter]["bubble_id"] into tMission["payload"]["action"]
       put tPayloadA["project"]["bubble_id"] into tMission["payload"]["project"]
-      put dispatchPayload(tMIssion) into tPayloadA["node"][tNode]["bubble_id"]
+      put dispatchPayload(tMIssion) into tFinal
+      if tFinal is "error" then
+         repoWranglerLog("error creating node, ending upload")
+         put "done" into field "statusLabel" stack "repowrangler"
+         exit uploadMe
+      else
+         put tFinal into tPayloadA["node"][tNode]["bubble_id"]  
+      end if
+      
       set the itemdelimiter to comma
       put tNode into item (the number of items of tNodesMade)+1 of tNodesMade
       
@@ -307,6 +324,11 @@ on uploadMe
             if tNode is among the items of tNodesMade then
                put "link" into tMission["type"]
                put dispatchPayload(tMIssion) into tWhatever
+               if tWhatever is "no success" then
+                  put "done" into field "statusLabel" stack "repowrangler"
+                  repoWranglerLog("creation failure, please try again")
+                  exit uploadMe
+               end if
             else -- node needs to be made
                put "node" into tMission["type"]
                put tPayloadA["node"][tNode]["title"] into tMission["payload"]["title"]
@@ -321,6 +343,11 @@ on uploadMe
                   put tPayloadA["project"]["results"][tNode] into tMission["payload"]["weight_result"]
                end if
                put dispatchPayload(tMIssion) into tPayloadA["node"][tNode]["bubble_id"]
+               if tPayloadA["node"][tNode]["bubble_id"] is "no success" then
+                  put "done" into field "statusLabel" stack "repowrangler"
+                  repoWranglerLog("creation failure, please try again")
+                  exit uploadMe
+               end if               
                set the itemdelimiter to comma
                put tNode into item (the number of items of tNodesMade)+1 of tNodesMade
             end if
@@ -371,27 +398,56 @@ function dispatchPayload pMsn
    put jsonfromarray(tPLA) into tPLAJSON
    put tPLAJSON into tWat["payload"]
    put tType into tWat["type"]
-   --    put the cToken of stack "repowrangler" into tToken
    set the httpHeaders to "Content-Type: application/json" & cr & "Authorization: Bearer" && tToken
    
-   put dispatchPayload2(tWat) into tWhatNowA
-   -- handle response
-   if tWhatNowA["statusCode"] is "400" then
-      put tWhatNowA["body"] into tMessage
-      replace cr with "" in tMessage
-      repoWranglerLog("API returned 400, body: " & tMessage)
-      return "didn't work"
-   else if tWhatNowA["statusCode"] is "401" then
-      --       return "could not authenticate"      
-      repoWranglerLog("could not authenticate")
-      return "didn't work"
-   else if tWhatNowA["message"] contains "error" then
-      --       return "API timed out. Try again later."
-      repoWranglerLog("timed out, try again later")
-      return "didn't work"
-   else
-      return tWhatNowA["response"]["result"]
-   end if
+   put empty into tForReturn
+   repeat for 3 times
+      put dispatchPayload2(tWat) into tWhatNowA
+      switch
+         case tWhatNowA["message"] contains "error"
+            repoWranglerLog("message contains error")
+            put "error" into tForReturn
+            break
+         case tWhatNowA["statusCode"] is "400"
+            replace cr with "" in tWhatNowA["body"]
+            repoWranglerLog("error 400" && tWhatNowA["body"])
+            put "error" into tForReturn
+            break
+         case tWhatNowA["statusCode"] is "401"
+            repoWranglerLog("error 401 authentication")
+            put "error" into tForReturn
+            break
+         case tWhatNowA["status"] is not "success"
+            repoWranglerLog("message does not contain success")
+            put "error" into tForReturn
+            break
+         default
+            put tWhatNowA["response"]["result"] into tForReturn
+            exit repeat
+      end switch
+   end repeat
+   return tForReturn
+   
+   --    put dispatchPayload2(tWat) into tWhatNowA
+   --    if tWhatNowA["statusCode"] is "400" then
+   --       put tWhatNowA["body"] into tMessage
+   --       replace cr with "" in tMessage
+   --       repoWranglerLog("API returned 400, body: " & tMessage)
+   --       return "didn't work"
+   --    else if tWhatNowA["statusCode"] is "401" then
+   --       --       return "could not authenticate"      
+   --       repoWranglerLog("could not authenticate")
+   --       return "didn't work"
+   --    else if tWhatNowA["message"] contains "error" then
+   --       --       return "API timed out. Try again later."
+   --       repoWranglerLog("timed out, try again later")
+   --       return "didn't work"
+   --    else if tWhatNowA["status"] is not "success" then
+   --       repoWranglerLog("no success, try again")
+   --       return "no success"
+   --    else
+   --       return tWhatNowA["response"]["result"]
+   --    end if
 end dispatchPayload
 
 function dispatchPayload2 pWat  

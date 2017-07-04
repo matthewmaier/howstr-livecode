@@ -31859,3 +31859,61 @@ Histogram: nosniff.usage recorded 14 samples, average = 0.0 (flags = 0x1)
 1  ... 
 
 
+[0704/112327:VERBOSE1:pref_proxy_config_tracker_impl.cc(216)] 0757D8F0: set chrome proxy config service to 0757EC50
+[0704/112327:VERBOSE1:pref_proxy_config_tracker_impl.cc(353)] 0757D8F0: Done pushing proxy to UpdateProxyConfig
+[0704/112327:VERBOSE1:webrtc_internals.cc(51)] Could not get the download directory.
+[0704/112327:INFO:systeminfo.cc(82)] Available number of cores: 4
+[0704/112327:VERBOSE1:child_thread_impl.cc(367)] Mojo is disabled on child
+[0704/112327:VERBOSE1:navigator_impl.cc(168)] Failed Provisional Load: http://libbrowser_dummy_url/, error_code: -3, error_description: , showing_repost_interstitial: 0, frame_id: 1
+[0704/112327:VERBOSE1:navigator_impl.cc(168)] Failed Provisional Load: file:///Applications/LiveCode%20Community%208.0%20(dp%2011).app/Contents/Tools/Documentation/html_viewer/viewer.html, error_code: -3, error_description: , showing_repost_interstitial: 0, frame_id: 1
+[0704/112327:VERBOSE1:script_context.cc(110)] Created context:
+  extension id:           (none)
+  frame:                  4CA74080
+  URL:                    file:///C:/Users/theyogi/AppData/Local/RunRev/Documentation%20Cache/9_0_0_dp_6_professional/api.html
+  context_type:           WEB_PAGE
+  effective extension id: (none)
+  effective context type: WEB_PAGE
+[0704/112327:VERBOSE1:script_context.cc(110)] Created context:
+  extension id:           (none)
+  frame:                  00000000
+  URL:                    
+  context_type:           UNSPECIFIED
+  effective extension id: (none)
+  effective context type: UNSPECIFIED
+[0704/112327:VERBOSE1:dispatcher.cc(327)] Num tracked contexts: 1
+[0704/112327:VERBOSE1:child_thread_impl.cc(367)] Mojo is disabled on child
+[0704/112327:VERBOSE1:gles2_cmd_decoder.cc(2799)] GL_OES_packed_depth_stencil supported.
+[0704/112327:VERBOSE1:gles2_cmd_decoder.cc(2799)] GL_OES_packed_depth_stencil supported.
+[0704/112327:VERBOSE1:cookie_monster.cc(2192)] WARNING: Unsupported cookie scheme: file
+[0704/112327:VERBOSE1:cookie_monster.cc(2192)] WARNING: Unsupported cookie scheme: file
+[0704/112327:VERBOSE1:cookie_monster.cc(2192)] WARNING: Unsupported cookie scheme: file
+[0704/112327:VERBOSE1:mime_type_resource_handler.cc(270)] To buffer: file:///C:/Program%20Files%20(x86)/RunRev/LiveCode%20Business%209.0%20(dp%206)/Documentation/html_viewer/fonts/glyphicons-halflings-regular.woff2
+[0704/112335:VERBOSE1:cookie_monster.cc(2192)] WARNING: Unsupported cookie scheme: file
+[0704/115231:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115231:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115232:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115232:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115232:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115233:VERBOSE1:proxy_service.cc(1237)] Failed configuring with PAC script, falling-back to manual proxy servers.
+[0704/115241:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115241:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115241:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115241:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115241:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115244:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115244:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115244:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115244:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115244:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115245:VERBOSE1:proxy_service.cc(1237)] Failed configuring with PAC script, falling-back to manual proxy servers.
+[0704/115253:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115253:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115253:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115253:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115253:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115257:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115257:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115257:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115257:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115257:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115258:VERBOSE1:proxy_service.cc(1237)] Failed configuring with PAC script, falling-back to manual proxy servers.
