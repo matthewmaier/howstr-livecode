@@ -151,6 +151,7 @@ local sNodeDetailsGeometry
 ---------------------------[expandImgButt] 300,41
 ---------------------------[setCaptureButt] 340,41
 ---------------------------[snapCaptureButt] 372,41
+---------------------------[pasteCaptureButt] 409,41
 
 local sCaptureAreaGeometry
 -----------------------------[captureAreaRect] 400,400,800,800 (width and height)
@@ -243,7 +244,7 @@ on setupAsOf3FEB2016
    set the cBusy of stack "HowstrBeta" to false
    put empty into field "filenameLabel" stack "HowstrBeta"
    -- initial geometry for node detail window
-   put 400 into sNodeDetailsGeometry["startWidth"]
+   put 470 into sNodeDetailsGeometry["startWidth"]
    put 400 into sNodeDetailsGeometry["startHeight"]
    put "5,30,200,395" into sNodeDetailsGeometry["tagDataList"]
    put "205,30,395,51" into sNodeDetailsGeometry["tagLabel"]
@@ -253,6 +254,7 @@ on setupAsOf3FEB2016
    put "300,41" into sNodeDetailsGeometry["expandImgButt"]
    put "340,41" into sNodeDetailsGeometry["setCaptureButt"]
    put "372,41" into sNodeDetailsGeometry["snapCaptureButt"]
+   put "409,41" into sNodeDetailsGeometry["pasteCaptureButt"]
    -- initial geometry for screen capture area window
    put 400,400,800,800 into sCaptureAreaGeometry["captureAreaRect"]
 end setupAsOf3FEB2016
@@ -288,6 +290,8 @@ on resizeNodeDetails pWidth,pHeight
    put tX+tWidthDelta into item 1 of sNodeDetailsGeometry["setCaptureButt"]
    put item 1 of sNodeDetailsGeometry["snapCaptureButt"] into tX
    put tX+tWidthDelta into item 1 of sNodeDetailsGeometry["snapCaptureButt"]
+   put item 1 of sNodeDetailsGeometry["pasteCaptureButt"] into tX
+   put tX+tWidthDelta into item 1 of sNodeDetailsGeometry["pasteCaptureButt"]
    put pWidth into sNodeDetailsGeometry["startWidth"]
    put pHeight into sNodeDetailsGeometry["startHeight"]
    
@@ -299,6 +303,7 @@ on resizeNodeDetails pWidth,pHeight
    set the loc of button "expandImgButt" stack "NodeDetails" to sNodeDetailsGeometry["expandImgButt"]
    set the loc of button "setCaptureButt" stack "NodeDetails" to sNodeDetailsGeometry["setCaptureButt"]
    set the loc of button "snapCaptureButt" stack "NodeDetails" to sNodeDetailsGeometry["snapCaptureButt"]
+   set the loc of button "pasteCaptureButt" stack "NodeDetails" to sNodeDetailsGeometry["pasteCaptureButt"]
    
    get the filename of image "figureHolder" stack "NodeDetails"
    if it is not empty then 
@@ -308,6 +313,7 @@ on resizeNodeDetails pWidth,pHeight
       set the width of image "figureHolder" stack "NodeDetails" to tGimme["width"]
       set the height of image "figureHolder" stack "NodeDetails" to tGimme["height"]
       set the loc of image "figureHolder" stack "NodeDetails" to tGimme["center"]
+      set the repeatCount of image "figureHolder" stack "NodeDetails" to -1
    end if
 end resizeNodeDetails
 
@@ -415,6 +421,7 @@ on launchNodeDetails pStuff
    set the loc of button "expandImgButt" stack "NodeDetails" to sNodeDetailsGeometry["expandImgButt"]
    set the loc of button "setCaptureButt" stack "NodeDetails" to sNodeDetailsGeometry["setCaptureButt"]
    set the loc of button "snapCaptureButt" stack "NodeDetails" to sNodeDetailsGeometry["snapCaptureButt"]
+   set the loc of button "pasteCaptureButt" stack "NodeDetails" to sNodeDetailsGeometry["pasteCaptureButt"]
    put empty into field "tagLabel" stack "NodeDetails"
    set the textAlign of field "tagLabel" stack "NodeDetails" to left
    put empty into field "editData" stack "NodeDetails"
@@ -429,6 +436,7 @@ on launchNodeDetails pStuff
    set the visible of button "expandImgButt" stack "NodeDetails" to false
    set the visible of button "setCaptureButt" stack "NodeDetails" to false
    set the visible of button "snapCaptureButt" stack "NodeDetails" to false
+   set the visible of button "pasteCaptureButt" stack "NodeDetails" to false
    set the text of field "tagDataList" stack "NodeDetails" to tDeets["string"]
    set the loc of stack "nodeDetails" to the screenmouseloc -- set nodedetails to popup under the mouse
    go stack "NodeDetails"
@@ -451,6 +459,8 @@ on detailsListMouseUp pLine
       set the visible of button "expandImgButt" stack "NodeDetails" to false 
       set the visible of button "setCaptureButt" stack "NodeDetails" to false
       set the visible of button "snapCaptureButt" stack "NodeDetails" to false
+      set the visible of button "pasteCaptureButt" stack "NodeDetails" to false
+      
    else if tLabel is "figure" then
       if tDeets[pLine]["figure"] is not "[empty]" then
          put tDeets[pLine]["figure"] into tReq["targetMedia"]
@@ -475,11 +485,13 @@ on detailsListMouseUp pLine
       set the visible of button "expandImgButt" stack "NodeDetails" to false 
       set the visible of button "setCaptureButt" stack "NodeDetails" to true
       set the visible of button "snapCaptureButt" stack "NodeDetails" to true
+      set the visible of button "pasteCaptureButt" stack "NodeDetails" to true
       if tDeets[pLine]["figure"] is not "[empty]" or (tDeets[pLine]["new"] is not empty and tDeets[pLine]["new"] is not "hide") then
          -- allow clear if 1) [figure] already has a file or 2) a new file has been loaded in [new]
          -- don't allow clear if "hide" is in [new], which is trying to get rid of what's in [figure]
          set the visible of button "clearImgButt" stack "NodeDetails" to true 
          set the visible of button "expandImgButt" stack "NodeDetails" to true 
+         set the visible of button "pasteCaptureButt" stack "NodeDetails" to false
       end if
    else if tLabel is among the words "title memo weight" then
       set the visible of field "editData" stack "NodeDetails" to true
@@ -490,6 +502,7 @@ on detailsListMouseUp pLine
       set the visible of button "expandImgButt" stack "NodeDetails" to false 
       set the visible of button "setCaptureButt" stack "NodeDetails" to false
       set the visible of button "snapCaptureButt" stack "NodeDetails" to false
+      set the visible of button "pasteCaptureButt" stack "NodeDetails" to false
       put tLabel into field "tagLabel" stack "NodeDetails"
       if tDeets[pLine]["new"] is not empty and tDeets[pLine]["new"] is not "hide" then
          put tDeets[pLine]["new"] into field "editData" stack "NodeDetails"
@@ -507,10 +520,15 @@ on loadImgButtMouseUp pLine
    put specialfolderpath("documents") into tStart
    answer file "choose an image (it doesn't actually force you to pick an image file at the moment)" with tStart
    if the result is not "cancel" then
+      put it into tImgPath
+      set the itemdelimiter to "."
+      put item -1 of tImgPath into tExtension
+      if tExtension is not among the words of "gif png jpeg jpg" then exit loadImgButtMouseUp
+      
       put empty into tDeets[pLine]["new"]
       put true into tDeets["newFigure"]
       set the itemdelimiter to slash
-      put it into tImgPath
+      --       put it into tImgPath
       put item -1 of tImgPath into tImgName
       if sMain[sNowDoc][0]["filepath"] is not empty then
          put sMain[sNowDoc][0]["filepath"] into tProjFolder
@@ -534,6 +552,7 @@ on loadImgButtMouseUp pLine
       -- the clear button can be show now
       set the visible of button "clearImgButt" stack "NodeDetails" to true 
       set the visible of button "expandImgButt" stack "NodeDetails" to true 
+      set the visible of button "pasteCaptureButt" stack "NodeDetails" to false
       -- the window is impossible to dismiss if these controls get covered up
       set the layer of widget "iconOkay" to top
       set the layer of widget "iconCancel" to top
@@ -556,6 +575,7 @@ on clearImgButtMouseUp pLine
          set the filename of image "figureHolder" stack "NodeDetails" to empty
          set the visible of button "clearImgButt" stack "NodeDetails" to false 
          set the visible of button "expandImgButt" stack "NodeDetails" to false 
+         set the visible of button "pasteCaptureButt" stack "NodeDetails" to true
       else
          -- cleared the just loaded image, so set the preview back to the image currently in the tag
          put tDeets[pLine]["figure"] into tReq["targetMedia"]
@@ -941,7 +961,6 @@ end tooltipSwitchChange
 
 on busySwitchChange
    get the hilite of button "busySwitch" stack "howstrBeta"
-   --   put it into sBusy
    set the cBusy of stack "HowstrBeta" to it
 end busySwitchChange
 
@@ -949,24 +968,6 @@ on caseButtMouseUp
    put 2 into tStuff["info"]
    put 1 into tStuff["doc"]
    launchNodeDetails tStuff
-   
-   --    -- load up existing case node title if it exists
-   --    put sMainShort[sNowDoc][2]["title"] into tCurrent
-   --    if tCurrent is empty then
-   --       ask "name for case node"
-   --    else
-   --       ask "name for case node" with tCurrent
-   --    end if
-   --    -- only request a change if the case node title actually changed
-   --    if it is not tCurrent then
-   --       put it into tStuff["data"]
-   --       put "title" into tStuff["tag"]
-   --       put sNowDoc into tStuff["doc"]
-   --       put 2 into tStuff["rec"]
-   --       changeInfo sMain,tStuff -- grapheriffic
-   --       refreshDraw
-   --       refreshDisplay
-   --    end if
 end caseButtMouseUp
 
 on miscRightButtMouseUp
@@ -1058,6 +1059,57 @@ on snapCaptureButtMouseUp pLine
    put "temp/screenshot.gif" into item -1 of tPath
    export snapshot from rect sCaptureAreaGeometry["captureAreaRect"] to file tPath as GIF
    set the filename of image "figureHolder" stack "nodeDetails" to tPath
+   figureHOlderHasImage
+   --    -- size the image
+   --    put the rect of field "editData" stack "NodeDetails" into tQuery["maxRect"]
+   --    put the long id of image "figureHolder" stack "NodeDetails" into tQuery["longID"]
+   --    put fitImageToConstraint(tQuery) into tGimme
+   --    set the width of image "figureHolder" stack "NodeDetails" to tGimme["width"]
+   --    set the height of image "figureHolder" stack "NodeDetails" to tGimme["height"]
+   --    set the loc of image "figureHolder" stack "NodeDetails" to tGimme["center"]
+   --    -- the clear button can be show now
+   --    set the visible of button "clearImgButt" stack "NodeDetails" to true 
+   --    set the visible of button "expandImgButt" stack "NodeDetails" to true 
+   
+   put the cNodeDetails of stack "NodeDetails" into tDeets
+   put empty into tDeets[pLine]["new"]
+   put true into tDeets["newFigure"]	
+   put tPath into tDeets[pLine]["new"]["copyFrom"]
+   put uuid("random") into tUUID
+   put tUUID & ".gif" into tDeets[pLine]["new"]["newName"]
+   set the cNodeDetails of stack "NodeDetails" to tDeets
+end snapCaptureButtMouseUp
+
+on pasteCaptureButtMouseUp pLine
+   unlock the clipboard
+   lock the clipboard
+   --    answer the keys of the fullClipboardData
+   --    put the keys of clipboarddata into tKeys
+   --    put the clipboarddata["image"] into tFigure
+   --    put the fullClipboardData["image"] into tFigure1
+   put the fullclipboarddata["image"] into tFigure
+   --    put  fullclipboarddata["windows bitmap"] into tFigure2
+   --    put the keys of clipboarddata
+   if tFigure is not empty then
+      put the effective filename of this stack into tPath
+      set the itemDelimiter to slash
+      put "temp/screenshot.png" into item -1 of tPath
+      put tFigure into url ("binfile:" & tPath)
+      set the filename of image "figureHolder" stack "nodeDetails" to empty
+      set the filename of image "figureHolder" stack "nodeDetails" to tPath
+      figureHOlderHasImage
+      put the cNodeDetails of stack "NodeDetails" into tDeets
+      put empty into tDeets[pLine]["new"]
+      put true into tDeets["newFigure"]	
+      put tPath into tDeets[pLine]["new"]["copyFrom"]
+      put uuid("random") into tUUID
+      put tUUID & ".png" into tDeets[pLine]["new"]["newName"]
+      set the cNodeDetails of stack "NodeDetails" to tDeets
+   end if
+   unlock the clipboard
+end pasteCaptureButtMouseUp
+
+on figureHolderHasImage
    -- size the image
    put the rect of field "editData" stack "NodeDetails" into tQuery["maxRect"]
    put the long id of image "figureHolder" stack "NodeDetails" into tQuery["longID"]
@@ -1068,16 +1120,8 @@ on snapCaptureButtMouseUp pLine
    -- the clear button can be show now
    set the visible of button "clearImgButt" stack "NodeDetails" to true 
    set the visible of button "expandImgButt" stack "NodeDetails" to true 
-   
-   put the cNodeDetails of stack "NodeDetails" into tDeets
-   put empty into tDeets[pLine]["new"]
-   put true into tDeets["newFigure"]	
-   --   put "screenshot" into tDeets[pLine]["new"]["copyFrom"]
-   put tPath into tDeets[pLine]["new"]["copyFrom"]
-   put uuid("random") into tUUID
-   put tUUID & ".gif" into tDeets[pLine]["new"]["newName"]
-   set the cNodeDetails of stack "NodeDetails" to tDeets
-end snapCaptureButtMouseUp
+   set the visible of button "pasteCaptureButt" stack "NodeDetails" to false
+end figureHolderHasImage
 
 on resizeCaptureArea pArea
    -- pArea = rect of window

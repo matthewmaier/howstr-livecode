@@ -31917,3 +31917,2743 @@ Histogram: nosniff.usage recorded 14 samples, average = 0.0 (flags = 0x1)
 [0704/115257:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
 [0704/115257:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
 [0704/115258:VERBOSE1:proxy_service.cc(1237)] Failed configuring with PAC script, falling-back to manual proxy servers.
+[0704/115306:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115306:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115306:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115306:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115306:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115309:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115309:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115309:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115309:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115309:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115310:VERBOSE1:proxy_service.cc(1237)] Failed configuring with PAC script, falling-back to manual proxy servers.
+[0704/115318:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115318:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115318:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115318:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115318:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115322:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115322:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115322:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115322:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115322:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115323:VERBOSE1:proxy_service.cc(1237)] Failed configuring with PAC script, falling-back to manual proxy servers.
+[0704/115331:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115331:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115331:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115331:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115331:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115340:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115340:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115340:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115340:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115340:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115341:VERBOSE1:proxy_service.cc(1237)] Failed configuring with PAC script, falling-back to manual proxy servers.
+[0704/115349:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115349:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115349:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115349:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115349:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115407:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115407:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115407:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115407:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115407:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115408:VERBOSE1:proxy_service.cc(1237)] Failed configuring with PAC script, falling-back to manual proxy servers.
+[0704/115416:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115416:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115416:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115416:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115416:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115424:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115424:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115424:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115424:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115424:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115425:VERBOSE1:proxy_service.cc(1237)] Failed configuring with PAC script, falling-back to manual proxy servers.
+[0704/115433:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115433:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115433:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115433:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115433:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115457:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115457:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115457:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115457:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115457:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115458:VERBOSE1:proxy_service.cc(1237)] Failed configuring with PAC script, falling-back to manual proxy servers.
+[0704/115506:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115506:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115506:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115506:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115506:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115518:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115518:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115518:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115518:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115518:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115519:VERBOSE1:proxy_service.cc(1237)] Failed configuring with PAC script, falling-back to manual proxy servers.
+[0704/115527:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115527:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115527:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115527:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115527:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115557:INFO:systeminfo.cc(82)] Available number of cores: 4
+[0704/115557:VERBOSE1:child_thread_impl.cc(367)] Mojo is disabled on child
+[0704/115557:VERBOSE1:script_context.cc(110)] Created context:
+  extension id:           (none)
+  frame:                  5D474080
+  URL:                    http://libbrowser_dummy_url/
+  context_type:           WEB_PAGE
+  effective extension id: (none)
+  effective context type: WEB_PAGE
+[0704/115557:VERBOSE1:script_context.cc(110)] Created context:
+  extension id:           (none)
+  frame:                  00000000
+  URL:                    
+  context_type:           UNSPECIFIED
+  effective extension id: (none)
+  effective context type: UNSPECIFIED
+[0704/115557:VERBOSE1:dispatcher.cc(327)] Num tracked contexts: 1
+[0704/115557:VERBOSE1:navigator_impl.cc(168)] Failed Provisional Load: http://libbrowser_dummy_url/, error_code: -3, error_description: , showing_repost_interstitial: 0, frame_id: 1
+[0704/115557:VERBOSE1:gles2_cmd_decoder.cc(2799)] GL_OES_packed_depth_stencil supported.
+[0704/115557:VERBOSE1:cookie_monster.cc(2192)] WARNING: Unsupported cookie scheme: file
+[0704/115557:VERBOSE1:cookie_monster.cc(2192)] WARNING: Unsupported cookie scheme: file
+[0704/115557:VERBOSE1:cookie_monster.cc(2192)] WARNING: Unsupported cookie scheme: file
+[0704/115557:VERBOSE1:mime_type_resource_handler.cc(270)] To buffer: file:///C:/Program%20Files%20(x86)/RunRev/LiveCode%20Business%209.0%20(dp%206)/Documentation/html_viewer/fonts/glyphicons-halflings-regular.woff2
+[0704/115557:VERBOSE1:dispatcher.cc(435)] Num tracked contexts: 0
+[0704/115557:VERBOSE1:script_context.cc(110)] Created context:
+  extension id:           (none)
+  frame:                  5D474080
+  URL:                    file:///C:/Users/theyogi/AppData/Local/RunRev/Documentation%20Cache/9_0_0_dp_6_professional/api.html
+  context_type:           WEB_PAGE
+  effective extension id: (none)
+  effective context type: WEB_PAGE
+[0704/115557:VERBOSE1:script_context.cc(110)] Created context:
+  extension id:           (none)
+  frame:                  00000000
+  URL:                    
+  context_type:           UNSPECIFIED
+  effective extension id: (none)
+  effective context type: UNSPECIFIED
+[0704/115557:VERBOSE1:dispatcher.cc(327)] Num tracked contexts: 1
+[0704/115557:VERBOSE1:script_context.cc(117)] Destroyed context for extension
+  extension id: 
+  effective extension id: 
+[0704/115557:VERBOSE1:script_context.cc(117)] Destroyed context for extension
+  extension id: 
+  effective extension id: 
+[0704/115557:VERBOSE1:mime_type_resource_handler.cc(270)] To buffer: file:///C:/Program%20Files%20(x86)/RunRev/LiveCode%20Business%209.0%20(dp%206)/Documentation/html_viewer/fonts/glyphicons-halflings-regular.woff2
+[0704/115557:VERBOSE1:cookie_monster.cc(2192)] WARNING: Unsupported cookie scheme: file
+[0704/115557:VERBOSE1:cookie_monster.cc(2192)] WARNING: Unsupported cookie scheme: file
+[0704/115557:VERBOSE1:cookie_monster.cc(2192)] WARNING: Unsupported cookie scheme: file
+[0704/115606:VERBOSE1:cookie_monster.cc(2192)] WARNING: Unsupported cookie scheme: file
+[0704/115608:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115608:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115608:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115608:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115608:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115609:VERBOSE1:proxy_service.cc(1237)] Failed configuring with PAC script, falling-back to manual proxy servers.
+[0704/115617:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115617:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115617:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115617:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115617:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115619:VERBOSE1:cookie_monster.cc(2192)] WARNING: Unsupported cookie scheme: file
+[0704/115915:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115915:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115915:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115915:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115915:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115916:VERBOSE1:proxy_service.cc(1237)] Failed configuring with PAC script, falling-back to manual proxy servers.
+[0704/115924:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115924:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115924:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115924:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/115924:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120037:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120037:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120037:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120037:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120037:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120038:VERBOSE1:proxy_service.cc(1237)] Failed configuring with PAC script, falling-back to manual proxy servers.
+[0704/120046:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120046:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120046:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120046:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120046:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120231:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120231:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120231:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120231:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120231:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120232:VERBOSE1:proxy_service.cc(1237)] Failed configuring with PAC script, falling-back to manual proxy servers.
+[0704/120240:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120240:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120240:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120240:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120240:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120450:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120450:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120450:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120450:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120450:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120451:VERBOSE1:proxy_service.cc(1237)] Failed configuring with PAC script, falling-back to manual proxy servers.
+[0704/120459:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120459:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120459:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120459:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120459:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120530:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120530:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120530:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120530:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120530:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120531:VERBOSE1:proxy_service.cc(1237)] Failed configuring with PAC script, falling-back to manual proxy servers.
+[0704/120539:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120539:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120539:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120539:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120539:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120550:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120550:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120550:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120550:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120550:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120551:VERBOSE1:proxy_service.cc(1237)] Failed configuring with PAC script, falling-back to manual proxy servers.
+[0704/120559:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120559:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120559:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120559:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120559:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120633:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120633:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120633:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120633:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120633:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120634:VERBOSE1:proxy_service.cc(1237)] Failed configuring with PAC script, falling-back to manual proxy servers.
+[0704/120642:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120642:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120642:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120642:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120642:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120742:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120742:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120742:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120742:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120742:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120743:VERBOSE1:proxy_service.cc(1237)] Failed configuring with PAC script, falling-back to manual proxy servers.
+[0704/120751:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120751:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120751:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120751:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120751:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120838:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120838:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120838:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120838:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120838:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120839:VERBOSE1:proxy_service.cc(1237)] Failed configuring with PAC script, falling-back to manual proxy servers.
+[0704/120847:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120847:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120847:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120847:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120847:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120926:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120926:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120926:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120926:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120926:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120927:VERBOSE1:proxy_service.cc(1237)] Failed configuring with PAC script, falling-back to manual proxy servers.
+[0704/120935:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120935:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120935:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120935:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/120935:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121009:VERBOSE1:cookie_monster.cc(2192)] WARNING: Unsupported cookie scheme: file
+[0704/121033:VERBOSE1:cookie_monster.cc(2192)] WARNING: Unsupported cookie scheme: file
+[0704/121112:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121112:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121112:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121112:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121112:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121113:VERBOSE1:proxy_service.cc(1237)] Failed configuring with PAC script, falling-back to manual proxy servers.
+[0704/121121:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121121:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121121:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121121:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121121:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121247:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121247:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121247:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121247:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121247:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121248:VERBOSE1:proxy_service.cc(1237)] Failed configuring with PAC script, falling-back to manual proxy servers.
+[0704/121256:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121256:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121256:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121256:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121256:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121311:VERBOSE1:cookie_monster.cc(2192)] WARNING: Unsupported cookie scheme: file
+[0704/121326:VERBOSE1:cookie_monster.cc(2192)] WARNING: Unsupported cookie scheme: file
+[0704/121335:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121335:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121335:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121335:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121335:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121336:VERBOSE1:proxy_service.cc(1237)] Failed configuring with PAC script, falling-back to manual proxy servers.
+[0704/121344:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121344:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121344:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121344:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121344:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121358:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121358:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121358:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121358:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121358:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121359:VERBOSE1:proxy_service.cc(1237)] Failed configuring with PAC script, falling-back to manual proxy servers.
+[0704/121407:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121407:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121407:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121407:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121407:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121540:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121540:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121540:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121540:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121540:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121541:VERBOSE1:proxy_service.cc(1237)] Failed configuring with PAC script, falling-back to manual proxy servers.
+[0704/121549:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121549:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121549:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121549:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121549:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121715:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121715:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121715:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121715:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121715:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121716:VERBOSE1:proxy_service.cc(1237)] Failed configuring with PAC script, falling-back to manual proxy servers.
+[0704/121724:VERBOSE1:cookie_monster.cc(2192)] WARNING: Unsupported cookie scheme: file
+[0704/121724:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121724:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121724:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121724:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121724:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121725:VERBOSE1:cookie_monster.cc(2192)] WARNING: Unsupported cookie scheme: file
+[0704/121740:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121740:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121740:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121740:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121740:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121741:VERBOSE1:proxy_service.cc(1237)] Failed configuring with PAC script, falling-back to manual proxy servers.
+[0704/121749:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121749:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121749:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121749:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121749:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121804:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121804:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121804:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121804:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121804:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121805:VERBOSE1:proxy_service.cc(1237)] Failed configuring with PAC script, falling-back to manual proxy servers.
+[0704/121813:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121813:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121813:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121813:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121813:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121827:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121827:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121827:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121827:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121827:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121828:VERBOSE1:proxy_service.cc(1237)] Failed configuring with PAC script, falling-back to manual proxy servers.
+[0704/121835:VERBOSE1:cookie_monster.cc(2192)] WARNING: Unsupported cookie scheme: file
+[0704/121836:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121836:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121836:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121836:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121836:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121907:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121907:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121907:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121907:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121907:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121908:VERBOSE1:proxy_service.cc(1237)] Failed configuring with PAC script, falling-back to manual proxy servers.
+[0704/121916:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121916:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121916:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121916:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121916:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121934:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121934:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121934:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121934:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121934:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121935:VERBOSE1:proxy_service.cc(1237)] Failed configuring with PAC script, falling-back to manual proxy servers.
+[0704/121943:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121943:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121943:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121943:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/121943:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/122009:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/122009:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/122009:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/122009:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/122009:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/122010:VERBOSE1:proxy_service.cc(1237)] Failed configuring with PAC script, falling-back to manual proxy servers.
+[0704/122011:VERBOSE1:cookie_monster.cc(2192)] WARNING: Unsupported cookie scheme: file
+[0704/122018:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/122018:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/122018:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/122018:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/122018:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/122033:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/122033:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/122033:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/122033:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/122033:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/122034:VERBOSE1:proxy_service.cc(1237)] Failed configuring with PAC script, falling-back to manual proxy servers.
+[0704/122042:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/122042:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/122042:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/122042:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/122042:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/122053:VERBOSE1:cookie_monster.cc(2192)] WARNING: Unsupported cookie scheme: file
+[0704/122104:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/122104:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/122104:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/122104:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/122104:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/122105:VERBOSE1:proxy_service.cc(1237)] Failed configuring with PAC script, falling-back to manual proxy servers.
+[0704/122113:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/122113:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/122113:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/122113:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/122113:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/122615:VERBOSE1:cookie_monster.cc(2192)] WARNING: Unsupported cookie scheme: file
+[0704/122722:VERBOSE1:cookie_monster.cc(2192)] WARNING: Unsupported cookie scheme: file
+[0704/122723:VERBOSE1:cookie_monster.cc(2192)] WARNING: Unsupported cookie scheme: file
+[0704/122724:VERBOSE1:cookie_monster.cc(2192)] WARNING: Unsupported cookie scheme: file
+[0704/122941:VERBOSE1:cookie_monster.cc(2192)] WARNING: Unsupported cookie scheme: file
+[0704/123007:VERBOSE1:cookie_monster.cc(2192)] WARNING: Unsupported cookie scheme: file
+[0704/123012:VERBOSE1:cookie_monster.cc(2192)] WARNING: Unsupported cookie scheme: file
+[0704/123017:VERBOSE1:cookie_monster.cc(2192)] WARNING: Unsupported cookie scheme: file
+[0704/124249:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/124249:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/124249:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/124249:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/124249:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/124250:VERBOSE1:proxy_service.cc(1237)] Failed configuring with PAC script, falling-back to manual proxy servers.
+[0704/124258:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/124258:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/124258:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/124258:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/124258:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/130931:VERBOSE1:component_updater_service.cc(90)] CrxUpdateService stopping
+[0704/130931:VERBOSE1:ipc_sync_channel.cc(386)] Canceling pending sends
+[0704/130931:VERBOSE1:ipc_sync_channel.cc(386)] Canceling pending sends
+[0704/130931:VERBOSE1:ipc_sync_channel.cc(386)] Canceling pending sends
+[0704/130931:VERBOSE1:ipc_sync_channel.cc(386)] Canceling pending sends
+[0704/130932:VERBOSE1:statistics_recorder.cc(332)] Collections of all histograms
+Histogram: Accessibility.InvertedColors recorded 1 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (1 = 100.0%)
+1  ... 
+
+Histogram: Accessibility.ManuallyEnabled recorded 1 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (1 = 100.0%)
+1  ... 
+
+Histogram: Accessibility.State recorded 1 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (1 = 100.0%)
+1  ... 
+
+Histogram: Accessibility.WinAudioDescription recorded 1 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (1 = 100.0%)
+1  ... 
+
+Histogram: Accessibility.WinJAWS recorded 1 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (1 = 100.0%)
+1  ... 
+
+Histogram: Accessibility.WinNVDA recorded 1 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (1 = 100.0%)
+1  ... 
+
+Histogram: Accessibility.WinSAToGo recorded 1 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (1 = 100.0%)
+1  ... 
+
+Histogram: Accessibility.WinScreenReader recorded 1 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (1 = 100.0%)
+1  ... 
+
+Histogram: Accessibility.WinStickyKeys recorded 1 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (1 = 100.0%)
+1  ... 
+
+Histogram: Accessibility.WinZoomText recorded 1 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (1 = 100.0%)
+1  ... 
+
+Histogram: AsyncDNS.ConfigChange recorded 169 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (168 = 99.4%)
+1  O                                                                         (1 = 0.6%) {99.4%}
+2  O                                                                         (0 = 0.0%) {100.0%}
+
+Histogram: AsyncDNS.ConfigNotifyInterval recorded 1788 samples, average = 2633.1 (flags = 0x1)
+0        ------------------------------------------------------------------------O (1345 = 75.2%)
+1        -----O                                                                    (91 = 5.1%) {75.2%}
+2        ----O                                                                     (76 = 4.3%) {80.3%}
+3        ---O                                                                      (63 = 3.5%) {84.6%}
+4        --O                                                                       (41 = 2.3%) {88.1%}
+5        -O                                                                        (47 = 2.6%) {90.4%}
+7        O                                                                         (28 = 1.6%) {93.0%}
+10       O                                                                         (12 = 0.7%) {94.6%}
+14       O                                                                         (7 = 0.4%) {95.2%}
+19       O                                                                         (0 = 0.0%) {95.6%}
+26       O                                                                         (3 = 0.2%) {95.6%}
+35       O                                                                         (4 = 0.2%) {95.8%}
+47       O                                                                         (1 = 0.1%) {96.0%}
+64       O                                                                         (2 = 0.1%) {96.1%}
+87       O                                                                         (1 = 0.1%) {96.2%}
+118      ... 
+4516     O                                                                         (2 = 0.1%) {96.3%}
+6118     ... 
+11230    O                                                                         (9 = 0.5%) {96.4%}
+15215    O                                                                         (11 = 0.6%) {96.9%}
+20614    O                                                                         (10 = 0.6%) {97.5%}
+27929    O                                                                         (5 = 0.3%) {98.0%}
+37840    O                                                                         (7 = 0.4%) {98.3%}
+51267    O                                                                         (5 = 0.3%) {98.7%}
+69459    O                                                                         (5 = 0.3%) {99.0%}
+94106    O                                                                         (8 = 0.4%) {99.3%}
+127499   O                                                                         (1 = 0.1%) {99.7%}
+172742   O                                                                         (2 = 0.1%) {99.8%}
+234039   O                                                                         (1 = 0.1%) {99.9%}
+317087   ... 
+1068417  O                                                                         (1 = 0.1%) {99.9%}
+1447542  ... 
+
+Histogram: AsyncDNS.ConfigParseDuration recorded 468 samples, average = 3.9 (flags = 0x1)
+0   ... 
+2   -----------O                                                              (45 = 9.6%) {0.0%}
+3   ------------------------------------------------------------------------O (297 = 63.5%) {9.6%}
+4   ---------O                                                                (37 = 7.9%) {73.1%}
+5   ------O                                                                   (23 = 4.9%) {81.0%}
+6   -----O                                                                    (22 = 4.7%) {85.9%}
+7   --O                                                                       (10 = 2.1%) {90.6%}
+8   --O                                                                       (18 = 3.8%) {92.7%}
+10  -O                                                                        (5 = 1.1%) {96.6%}
+12  -O                                                                        (5 = 1.1%) {97.6%}
+14  O                                                                         (2 = 0.4%) {98.7%}
+17  O                                                                         (0 = 0.0%) {99.1%}
+20  O                                                                         (3 = 0.6%) {99.1%}
+24  O                                                                         (1 = 0.2%) {99.8%}
+29  ... 
+
+Histogram: AsyncDNS.ConfigParseResult recorded 468 samples, average = 1.0 (flags = 0x1)
+0  O                                                                         (0 = 0.0%)
+1  ------------------------------------------------------------------------O (468 = 100.0%) {0.0%}
+2  O                                                                         (0 = 0.0%) {100.0%}
+
+Histogram: AsyncDNS.ConfigParseWin recorded 468 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (468 = 100.0%)
+1  ... 
+
+Histogram: AsyncDNS.HostParseResult recorded 67 samples, average = 1.0 (flags = 0x1)
+0  O                                                                         (0 = 0.0%)
+1  ------------------------------------------------------------------------O (67 = 100.0%) {0.0%}
+2  O                                                                         (0 = 0.0%) {100.0%}
+
+Histogram: AsyncDNS.HostsChange recorded 67 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (66 = 98.5%)
+1  -O                                                                        (1 = 1.5%) {98.5%}
+2  O                                                                         (0 = 0.0%) {100.0%}
+
+Histogram: AsyncDNS.HostsNotifyInterval recorded 65 samples, average = 72438.1 (flags = 0x1)
+0        ... 
+11230    ------------------------------------------------O                         (8 = 12.3%) {0.0%}
+15215    ------------------------------------------------------------------------O (12 = 18.5%) {12.3%}
+20614    ------------------------------------------------------------O             (10 = 15.4%) {30.8%}
+27929    ------------------------------O                                           (5 = 7.7%) {46.2%}
+37840    ------------------------------------------O                               (7 = 10.8%) {53.8%}
+51267    ------------------------------O                                           (5 = 7.7%) {64.6%}
+69459    ------------------------------O                                           (5 = 7.7%) {72.3%}
+94106    ------------------------------------------------O                         (8 = 12.3%) {80.0%}
+127499   ------O                                                                   (1 = 1.5%) {92.3%}
+172742   ------------O                                                             (2 = 3.1%) {93.8%}
+234039   ------O                                                                   (1 = 1.5%) {96.9%}
+317087   ... 
+1068417  ------O                                                                   (1 = 1.5%) {98.5%}
+1447542  ... 
+
+Histogram: AsyncDNS.HostsParseDuration recorded 67 samples, average = 4.6 (flags = 0x1)
+0   O                                                                         (0 = 0.0%)
+1   -------------------------O                                                (7 = 10.4%) {0.0%}
+2   ------------------------------------------------------------------------O (20 = 29.9%) {10.4%}
+3   ----------------------O                                                   (6 = 9.0%) {40.3%}
+4   -----------------------------O                                            (8 = 11.9%) {49.3%}
+5   ----------------------O                                                   (6 = 9.0%) {61.2%}
+6   -------------------------O                                                (7 = 10.4%) {70.1%}
+7   -------O                                                                  (2 = 3.0%) {80.6%}
+8   -------O                                                                  (4 = 6.0%) {83.6%}
+10  -----O                                                                    (3 = 4.5%) {89.6%}
+12  --O                                                                       (1 = 1.5%) {94.0%}
+14  -O                                                                        (1 = 1.5%) {95.5%}
+17  --O                                                                       (2 = 3.0%) {97.0%}
+20  ... 
+
+Histogram: AsyncDNS.HostsParseWin recorded 67 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (67 = 100.0%)
+1  ... 
+
+Histogram: AsyncDNS.HostsSize recorded 67 samples, average = 824.0 (flags = 0x1)
+0    ... 
+777  ------------------------------------------------------------------------O (67 = 100.0%) {0.0%}
+1023 ... 
+
+Histogram: AsyncDNS.NameServersType recorded 169 samples, average = 2.0 (flags = 0x1)
+0  ... 
+2  ------------------------------------------------------------------------O (169 = 100.0%) {0.0%}
+3  ... 
+
+Histogram: AsyncDNS.WatchStatus recorded 1 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (1 = 100.0%)
+1  ... 
+
+Histogram: Aura.CreatedGpuBrowserCompositor recorded 2 samples, average = 1.0 (flags = 0x1)
+0  O                                                                         (0 = 0.0%)
+1  ------------------------------------------------------------------------O (2 = 100.0%) {0.0%}
+2  O                                                                         (0 = 0.0%) {100.0%}
+
+Histogram: ChildProcessSecurityPolicy.PerChildFilePermissions recorded 2 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (2 = 100.0%)
+1  ... 
+
+Histogram: Compositing.Browser.DisplayListRecordingSource.UpdateInvalidatedAreaPerMs recorded 19 samples, average = 15196037.0 (flags = 0x1)
+0        ... 
+5        -----------O                                                              (1 = 5.3%) {0.0%}
+7        ... 
+12       ------O                                                                   (1 = 5.3%) {5.3%}
+16       ... 
+28       -----O                                                                    (1 = 5.3%) {10.5%}
+37       ... 
+1000000  ------------------------------------------------------------------------O (16 = 84.2%) {15.8%}
+
+Histogram: Compositing.Browser.DisplayListRecordingSource.UpdateUs recorded 19 samples, average = 147.2 (flags = 0x1)
+0    ... 
+49   ------------------------------------------------------------------------O (6 = 31.6%) {0.0%}
+65   ------------------------------------------------------------O             (5 = 26.3%) {31.6%}
+86   ------------------------------------O                                     (3 = 15.8%) {57.9%}
+113  ------------O                                                             (1 = 5.3%) {73.7%}
+149  ------------------------O                                                 (2 = 10.5%) {78.9%}
+196  ... 
+590  ------------------------O                                                 (2 = 10.5%) {89.5%}
+777  ... 
+
+Histogram: Compositing.Browser.PictureMemoryUsageKb recorded 32 samples, average = 9.0 (flags = 0x1)
+0  ... 
+9  ------------------------------------------------------------------------O (32 = 100.0%) {0.0%}
+12 ... 
+
+Histogram: Compositing.NumActiveLayers recorded 32 samples, average = 6.8 (flags = 0x1)
+0  ... 
+4  --------------O                                                           (2 = 6.3%) {0.0%}
+5  O                                                                         (0 = 0.0%) {6.3%}
+7  ------------------------------------------------------------------------O (30 = 93.8%) {6.3%}
+10 ... 
+
+Histogram: Compositing.RenderPass.AppendQuadData.CheckerboardedNeedRasterContentArea recorded 1 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (1 = 100.0%)
+1  ... 
+
+Histogram: Compositing.RenderPass.AppendQuadData.CheckerboardedNoRecordingContentArea recorded 1 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (1 = 100.0%)
+1  ... 
+
+Histogram: Compositing.RenderPass.AppendQuadData.NumIncompleteTiles recorded 1 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (1 = 100.0%)
+1  ... 
+
+Histogram: Compositing.RenderPass.AppendQuadData.NumMissingTiles recorded 1 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (1 = 100.0%)
+1  ... 
+
+Histogram: ContentSettings.DefaultCookiesSetting recorded 1 samples, average = 1.0 (flags = 0x1)
+0  O                                                                         (0 = 0.0%)
+1  ------------------------------------------------------------------------O (1 = 100.0%) {0.0%}
+2  ... 
+
+Histogram: ContentSettings.DefaultImagesSetting recorded 1 samples, average = 1.0 (flags = 0x1)
+0  O                                                                         (0 = 0.0%)
+1  ------------------------------------------------------------------------O (1 = 100.0%) {0.0%}
+2  ... 
+
+Histogram: ContentSettings.DefaultJavaScriptSetting recorded 1 samples, average = 1.0 (flags = 0x1)
+0  O                                                                         (0 = 0.0%)
+1  ------------------------------------------------------------------------O (1 = 100.0%) {0.0%}
+2  ... 
+
+Histogram: ContentSettings.DefaultLocationSetting recorded 1 samples, average = 3.0 (flags = 0x1)
+0  ... 
+3  ------------------------------------------------------------------------O (1 = 100.0%) {0.0%}
+4  ... 
+
+Histogram: ContentSettings.DefaultMIDISysExSetting recorded 1 samples, average = 3.0 (flags = 0x1)
+0  ... 
+3  ------------------------------------------------------------------------O (1 = 100.0%) {0.0%}
+4  ... 
+
+Histogram: ContentSettings.DefaultMediaStreamCameraSetting recorded 1 samples, average = 3.0 (flags = 0x1)
+0  ... 
+3  ------------------------------------------------------------------------O (1 = 100.0%) {0.0%}
+4  ... 
+
+Histogram: ContentSettings.DefaultMediaStreamMicSetting recorded 1 samples, average = 3.0 (flags = 0x1)
+0  ... 
+3  ------------------------------------------------------------------------O (1 = 100.0%) {0.0%}
+4  ... 
+
+Histogram: ContentSettings.DefaultMouseCursorSetting recorded 1 samples, average = 3.0 (flags = 0x1)
+0  ... 
+3  ------------------------------------------------------------------------O (1 = 100.0%) {0.0%}
+4  ... 
+
+Histogram: ContentSettings.DefaultNotificationsSetting recorded 1 samples, average = 3.0 (flags = 0x1)
+0  ... 
+3  ------------------------------------------------------------------------O (1 = 100.0%) {0.0%}
+4  ... 
+
+Histogram: ContentSettings.DefaultPluginsSetting recorded 1 samples, average = 1.0 (flags = 0x1)
+0  O                                                                         (0 = 0.0%)
+1  ------------------------------------------------------------------------O (1 = 100.0%) {0.0%}
+2  ... 
+
+Histogram: ContentSettings.DefaultPopupsSetting recorded 1 samples, average = 2.0 (flags = 0x1)
+0  ... 
+2  ------------------------------------------------------------------------O (1 = 100.0%) {0.0%}
+3  ... 
+
+Histogram: ContentSettings.DefaultPushMessagingSetting recorded 1 samples, average = 3.0 (flags = 0x1)
+0  ... 
+3  ------------------------------------------------------------------------O (1 = 100.0%) {0.0%}
+4  ... 
+
+Histogram: ContentSettings.NumberOfAllowCookiesExceptions recorded 1 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (1 = 100.0%)
+1  ... 
+
+Histogram: ContentSettings.NumberOfBlockCookiesExceptions recorded 1 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (1 = 100.0%)
+1  ... 
+
+Histogram: ContentSettings.NumberOfExceptions recorded 1 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (1 = 100.0%)
+1  ... 
+
+Histogram: ContentSettings.NumberOfSessionOnlyCookiesExceptions recorded 1 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (1 = 100.0%)
+1  ... 
+
+Histogram: Cookie.CookieSourceScheme recorded 0 samples (flags = 0x1)
+0 ... 
+
+Histogram: Cookie.Count recorded 1 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (1 = 100.0%)
+1  ... 
+
+Histogram: Cookie.DeletionCause recorded 0 samples (flags = 0x1)
+0 ... 
+
+Histogram: Cookie.EvictedLastAccessMinutes recorded 0 samples (flags = 0x1)
+0 ... 
+
+Histogram: Cookie.ExpirationDurationMinutes recorded 0 samples (flags = 0x1)
+0 ... 
+
+Histogram: Cookie.TimeBlockedOnLoad recorded 0 samples (flags = 0x1)
+0 ... 
+
+Histogram: Cookie.Type recorded 0 samples (flags = 0x1)
+0 ... 
+
+Histogram: DNS.AttemptCancelled recorded 72 samples, average = 1.0 (flags = 0x1)
+0  O                                                                         (0 = 0.0%)
+1  ------------------------------------------------------------------------O (72 = 100.0%) {0.0%}
+2  ... 
+
+Histogram: DNS.AttemptDiscarded recorded 73 samples, average = 1.0 (flags = 0x1)
+0  O                                                                         (0 = 0.0%)
+1  ------------------------------------------------------------------------O (73 = 100.0%) {0.0%}
+2  ... 
+
+Histogram: DNS.AttemptFailDuration recorded 73 samples, average = 2236.9 (flags = 0x1)
+0     ... 
+878   -O                                                                        (1 = 1.4%) {0.0%}
+1013  ... 
+2074  ------------------------------------------------------------------------O (72 = 98.6%) {1.4%}
+2394  ... 
+
+Histogram: DNS.AttemptFailure recorded 73 samples, average = 1.0 (flags = 0x1)
+0  O                                                                         (0 = 0.0%)
+1  ------------------------------------------------------------------------O (73 = 100.0%) {0.0%}
+2  ... 
+
+Histogram: DNS.AttemptTimeSavedByRetry recorded 1 samples, average = 229636992.0 (flags = 0x1)
+0        ... 
+3600000  ------------------------------------------------------------------------O (1 = 100.0%) {0.0%}
+
+Histogram: DNS.EmptyAddressListAndNoError recorded 73 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (73 = 100.0%)
+1  ... 
+
+Histogram: DNS.JobQueueTime recorded 73 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (73 = 100.0%)
+1  ... 
+
+Histogram: DNS.JobQueueTimeAfterChange recorded 73 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (73 = 100.0%)
+1  ... 
+
+Histogram: DNS.JobQueueTimeAfterChange_HIGHEST recorded 73 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (73 = 100.0%)
+1  ... 
+
+Histogram: DNS.JobQueueTime_HIGHEST recorded 73 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (73 = 100.0%)
+1  ... 
+
+Histogram: DNS.ResolveCategory recorded 73 samples, average = 1.0 (flags = 0x1)
+0  O                                                                         (0 = 0.0%)
+1  ------------------------------------------------------------------------O (73 = 100.0%) {0.0%}
+2  ... 
+
+Histogram: DNS.ResolveFail recorded 73 samples, average = 2236.9 (flags = 0x1)
+0     ... 
+878   -O                                                                        (1 = 1.4%) {0.0%}
+1013  ... 
+2074  ------------------------------------------------------------------------O (72 = 98.6%) {1.4%}
+2394  ... 
+
+Histogram: DNS.ResolveFail_FAMILY_IPV4 recorded 73 samples, average = 2236.9 (flags = 0x1)
+0     ... 
+878   -O                                                                        (1 = 1.4%) {0.0%}
+1013  ... 
+2074  ------------------------------------------------------------------------O (72 = 98.6%) {1.4%}
+2394  ... 
+
+Histogram: DNS.TotalTime recorded 1 samples, average = 891.0 (flags = 0x1)
+0    ... 
+878  ------------------------------------------------------------------------O (1 = 100.0%) {0.0%}
+1013 ... 
+
+Histogram: Event.Latency.Browser recorded 5007 samples, average = 190543.1 (flags = 0x1)
+0       ... 
+162351  --------------O                                                           (788 = 15.7%) {0.0%}
+184863  ------------------------------------------------------------------------O (4201 = 83.9%) {15.7%}
+210497  O                                                                         (10 = 0.2%) {99.6%}
+239686  O                                                                         (4 = 0.1%) {99.8%}
+272922  O                                                                         (2 = 0.0%) {99.9%}
+310767  O                                                                         (0 = 0.0%) {100.0%}
+353860  O                                                                         (2 = 0.0%) {100.0%}
+402928  ... 
+
+Histogram: Event.Latency.Browser.ET_KEY_PRESSED recorded 100 samples, average = 189914.0 (flags = 0x1)
+0       ... 
+162351  --------------O                                                           (16 = 16.0%) {0.0%}
+184863  ------------------------------------------------------------------------O (84 = 84.0%) {16.0%}
+210497  ... 
+
+Histogram: Event.Latency.Browser.ET_KEY_RELEASED recorded 85 samples, average = 189109.1 (flags = 0x1)
+0       ... 
+162351  ----------------------O                                                   (20 = 23.5%) {0.0%}
+184863  ------------------------------------------------------------------------O (65 = 76.5%) {23.5%}
+210497  ... 
+
+Histogram: Event.Latency.Browser.ET_MOUSEWHEEL recorded 348 samples, average = 189750.9 (flags = 0x1)
+0       ... 
+162351  ----------------O                                                         (64 = 18.4%) {0.0%}
+184863  ------------------------------------------------------------------------O (284 = 81.6%) {18.4%}
+210497  ... 
+
+Histogram: Event.Latency.Browser.ET_MOUSE_DRAGGED recorded 318 samples, average = 189791.6 (flags = 0x1)
+0       ... 
+162351  --------------------O                                                     (68 = 21.4%) {0.0%}
+184863  ------------------------------------------------------------------------O (248 = 78.0%) {21.4%}
+210497  O                                                                         (1 = 0.3%) {99.4%}
+239686  O                                                                         (0 = 0.0%) {99.7%}
+272922  O                                                                         (1 = 0.3%) {99.7%}
+310767  ... 
+
+Histogram: Event.Latency.Browser.ET_MOUSE_EXITED recorded 95 samples, average = 189313.3 (flags = 0x1)
+0       ... 
+162351  ----------------------O                                                   (22 = 23.2%) {0.0%}
+184863  ------------------------------------------------------------------------O (73 = 76.8%) {23.2%}
+210497  ... 
+
+Histogram: Event.Latency.Browser.ET_MOUSE_MOVED recorded 3983 samples, average = 190619.3 (flags = 0x1)
+0       ... 
+162351  -------------O                                                            (591 = 14.8%) {0.0%}
+184863  ------------------------------------------------------------------------O (3385 = 85.0%) {14.8%}
+210497  O                                                                         (5 = 0.1%) {99.8%}
+239686  ... 
+353860  O                                                                         (2 = 0.1%) {99.9%}
+402928  ... 
+
+Histogram: Event.Latency.Browser.ET_MOUSE_PRESSED recorded 39 samples, average = 202322.5 (flags = 0x1)
+0       ... 
+162351  --------------O                                                           (5 = 12.8%) {0.0%}
+184863  ------------------------------------------------------------------------O (25 = 64.1%) {12.8%}
+210497  ------------O                                                             (4 = 10.3%) {76.9%}
+239686  ------------O                                                             (4 = 10.3%) {87.2%}
+272922  ---O                                                                      (1 = 2.6%) {97.4%}
+310767  ... 
+
+Histogram: Event.Latency.Browser.ET_MOUSE_RELEASED recorded 39 samples, average = 191908.0 (flags = 0x1)
+0       ... 
+162351  ----O                                                                     (2 = 5.1%) {0.0%}
+184863  ------------------------------------------------------------------------O (37 = 94.9%) {5.1%}
+210497  ... 
+
+Histogram: Event.Latency.Browser.WheelAcked recorded 174 samples, average = 2597.3 (flags = 0x1)
+0      ... 
+217    -------O                                                                  (2 = 1.1%) {0.0%}
+247    ------------------O                                                       (5 = 2.9%) {1.1%}
+281    -------------------------------------------O                              (12 = 6.9%) {4.0%}
+320    -----------------------------------------------------------------O        (18 = 10.3%) {10.9%}
+364    ------------------------------------------------------O                   (15 = 8.6%) {21.3%}
+414    ------------------------------------------------------------------------O (20 = 11.5%) {29.9%}
+471    -------------------------------------------------------------O            (17 = 9.8%) {41.4%}
+536    ----------------------------------------O                                 (11 = 6.3%) {51.1%}
+610    -----------O                                                              (3 = 1.7%) {57.5%}
+695    ------------------------------------O                                     (10 = 5.7%) {59.2%}
+791    -------------------------------------------O                              (12 = 6.9%) {64.9%}
+901    -----------O                                                              (3 = 1.7%) {71.8%}
+1026   ... 
+1330   ----O                                                                     (1 = 0.6%) {73.6%}
+1514   O                                                                         (0 = 0.0%) {74.1%}
+1724   ----O                                                                     (1 = 0.6%) {74.1%}
+1963   -----------O                                                              (3 = 1.7%) {74.7%}
+2235   -------O                                                                  (2 = 1.1%) {76.4%}
+2545   -------O                                                                  (2 = 1.1%) {77.6%}
+2898   ----------------------O                                                   (6 = 3.4%) {78.7%}
+3300   O                                                                         (0 = 0.0%) {82.2%}
+3758   ----O                                                                     (1 = 0.6%) {82.2%}
+4279   ------------------O                                                       (5 = 2.9%) {82.8%}
+4872   O                                                                         (0 = 0.0%) {85.6%}
+5548   -------O                                                                  (2 = 1.1%) {85.6%}
+6317   -------O                                                                  (2 = 1.1%) {86.8%}
+7193   -----------O                                                              (3 = 1.7%) {87.9%}
+8190   -----------O                                                              (3 = 1.7%) {89.7%}
+9326   --------------O                                                           (4 = 2.3%) {91.4%}
+10619  O                                                                         (0 = 0.0%) {93.7%}
+12092  --------------O                                                           (4 = 2.3%) {93.7%}
+13769  ----O                                                                     (1 = 0.6%) {96.0%}
+15678  ----O                                                                     (1 = 0.6%) {96.6%}
+17852  ----O                                                                     (1 = 0.6%) {97.1%}
+20328  -------O                                                                  (2 = 1.1%) {97.7%}
+23147  O                                                                         (0 = 0.0%) {98.9%}
+26357  ----O                                                                     (1 = 0.6%) {98.9%}
+30012  O                                                                         (0 = 0.0%) {99.4%}
+34174  ----O                                                                     (1 = 0.6%) {99.4%}
+38913  ... 
+
+Histogram: Extensions.FeatureProviderStaticInitTime recorded 1 samples, average = 6.0 (flags = 0x1)
+0  ... 
+6  ------------------------------------------------------------------------O (1 = 100.0%) {0.0%}
+7  ... 
+
+Histogram: GPU.AtExitContextGroupCount recorded 1 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (1 = 100.0%)
+1  ... 
+
+Histogram: GPU.AtExitMBytesAllocated recorded 1 samples, average = 32.0 (flags = 0x1)
+0   ... 
+29  ------------------------------------------------------------------------O (1 = 100.0%) {0.0%}
+33  ... 
+
+Histogram: GPU.AtExitMBytesAllocatedMax recorded 1 samples, average = 32.0 (flags = 0x1)
+0   ... 
+29  ------------------------------------------------------------------------O (1 = 100.0%) {0.0%}
+33  ... 
+
+Histogram: GPU.AtExitMBytesLimit recorded 1 samples, average = 512.0 (flags = 0x1)
+0    ... 
+511  ------------------------------------------------------------------------O (1 = 100.0%) {0.0%}
+586  ... 
+
+Histogram: GPU.AtExitManagedMemoryClientCount recorded 1 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (1 = 100.0%)
+1  ... 
+
+Histogram: GPU.AtExitReceivedMemoryStats recorded 1 samples, average = 1.0 (flags = 0x1)
+0  O                                                                         (0 = 0.0%)
+1  ------------------------------------------------------------------------O (1 = 100.0%) {0.0%}
+2  O                                                                         (0 = 0.0%) {100.0%}
+
+Histogram: GPU.AtExitSurfaceCount recorded 1 samples, average = 2.0 (flags = 0x1)
+0  ... 
+2  ------------------------------------------------------------------------O (1 = 100.0%) {0.0%}
+3  ... 
+
+Histogram: GPU.BlacklistFeatureTestResults.Accelerated2dCanvas recorded 2 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (2 = 100.0%)
+1  ... 
+
+Histogram: GPU.BlacklistFeatureTestResults.GpuCompositing recorded 2 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (2 = 100.0%)
+1  ... 
+
+Histogram: GPU.BlacklistFeatureTestResults.GpuRasterization recorded 2 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (2 = 100.0%)
+1  ... 
+
+Histogram: GPU.BlacklistFeatureTestResults.Webgl recorded 2 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (2 = 100.0%)
+1  ... 
+
+Histogram: GPU.BlacklistFeatureTestResultsWindows.Accelerated2dCanvas recorded 2 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (2 = 100.0%)
+1  ... 
+
+Histogram: GPU.BlacklistFeatureTestResultsWindows.GpuCompositing recorded 2 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (2 = 100.0%)
+1  ... 
+
+Histogram: GPU.BlacklistFeatureTestResultsWindows.GpuRasterization recorded 2 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (2 = 100.0%)
+1  ... 
+
+Histogram: GPU.BlacklistFeatureTestResultsWindows.Webgl recorded 2 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (2 = 100.0%)
+1  ... 
+
+Histogram: GPU.BlacklistTestResultsPerEntry recorded 2 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (2 = 100.0%)
+1  ... 
+
+Histogram: GPU.CreateBrowserCompositor recorded 2 samples, average = 1.5 (flags = 0x1)
+0  ------------------------------------------------------------------------O (1 = 50.0%)
+1  ... 
+3  ------------------------------------------------------------------------O (1 = 50.0%) {50.0%}
+4  ... 
+
+Histogram: GPU.D3DShaderModel recorded 1 samples, average = 5.0 (flags = 0x1)
+0  ... 
+5  ------------------------------------------------------------------------O (1 = 100.0%) {0.0%}
+6  O                                                                         (0 = 0.0%) {100.0%}
+
+Histogram: GPU.DisplayLinkInstallationStatus recorded 1 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (1 = 100.0%)
+1  ... 
+
+Histogram: GPU.GLResetNotificationStrategy recorded 2 samples (flags = 0x1)
+0      ------------------------------------------------------------------------O (1 = 50.0%)
+33362  ------------------------------------------------------------------------O (1 = 50.0%)
+
+Histogram: GPU.GPU.GPUProcessSoftwareRendering recorded 1 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (1 = 100.0%)
+1  ... 
+
+Histogram: GPU.GPUProcessInitialized recorded 1 samples, average = 1.0 (flags = 0x1)
+0  O                                                                         (0 = 0.0%)
+1  ------------------------------------------------------------------------O (1 = 100.0%) {0.0%}
+2  O                                                                         (0 = 0.0%) {100.0%}
+
+Histogram: GPU.GPUProcessLaunchCause recorded 1 samples, average = 8.0 (flags = 0x1)
+0  ... 
+8  ------------------------------------------------------------------------O (1 = 100.0%) {0.0%}
+9  ... 
+
+Histogram: GPU.GPUProcessLaunchTime recorded 1 samples, average = 174.0 (flags = 0x1)
+0    ... 
+160  ------------------------------------------------------------------------O (1 = 100.0%) {0.0%}
+190  ... 
+
+Histogram: GPU.GPUProcessLifetimeEvents recorded 1 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (1 = 100.0%)
+1  ... 
+
+Histogram: GPU.GPUProcessTerminationStatus recorded 1 samples, average = 4.0 (flags = 0x1)
+0  ... 
+4  ------------------------------------------------------------------------O (1 = 100.0%) {0.0%}
+5  ... 
+
+Histogram: HttpCache.EntryLockWait recorded 1 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (1 = 100.0%)
+1  ... 
+
+Histogram: MPArch.ChildProcessLaunchFirst recorded 1 samples, average = 171.0 (flags = 0x1)
+0    ... 
+160  ------------------------------------------------------------------------O (1 = 100.0%) {0.0%}
+190  ... 
+
+Histogram: MPArch.ChildProcessLaunchSubsequent recorded 2 samples, average = 1.0 (flags = 0x1)
+0  O                                                                         (0 = 0.0%)
+1  ------------------------------------------------------------------------O (2 = 100.0%) {0.0%}
+2  ... 
+
+Histogram: MPArch.IIR_InputEventDelta recorded 4854 samples, average = 12.0 (flags = 0x1)
+0     ------------------------------------------------------------------------O (4049 = 83.4%)
+1     -----O                                                                    (286 = 5.9%) {83.4%}
+2     -O                                                                        (64 = 1.3%) {89.3%}
+3     O                                                                         (28 = 0.6%) {90.6%}
+4     O                                                                         (27 = 0.6%) {91.2%}
+5     O                                                                         (16 = 0.3%) {91.8%}
+6     O                                                                         (19 = 0.4%) {92.1%}
+7     O                                                                         (7 = 0.1%) {92.5%}
+8     O                                                                         (22 = 0.5%) {92.6%}
+10    O                                                                         (8 = 0.2%) {93.1%}
+12    O                                                                         (12 = 0.2%) {93.2%}
+14    -O                                                                        (160 = 3.3%) {93.5%}
+17    O                                                                         (17 = 0.4%) {96.8%}
+20    O                                                                         (8 = 0.2%) {97.1%}
+24    O                                                                         (9 = 0.2%) {97.3%}
+29    O                                                                         (7 = 0.1%) {97.5%}
+34    O                                                                         (9 = 0.2%) {97.6%}
+40    O                                                                         (6 = 0.1%) {97.8%}
+48    O                                                                         (6 = 0.1%) {97.9%}
+57    O                                                                         (6 = 0.1%) {98.1%}
+68    O                                                                         (8 = 0.2%) {98.2%}
+81    O                                                                         (2 = 0.0%) {98.4%}
+96    O                                                                         (1 = 0.0%) {98.4%}
+114   O                                                                         (1 = 0.0%) {98.4%}
+135   O                                                                         (1 = 0.0%) {98.4%}
+160   O                                                                         (4 = 0.1%) {98.5%}
+190   O                                                                         (2 = 0.0%) {98.5%}
+226   O                                                                         (3 = 0.1%) {98.6%}
+268   O                                                                         (6 = 0.1%) {98.6%}
+318   O                                                                         (1 = 0.0%) {98.8%}
+378   O                                                                         (9 = 0.2%) {98.8%}
+449   O                                                                         (17 = 0.4%) {99.0%}
+533   O                                                                         (2 = 0.0%) {99.3%}
+633   O                                                                         (13 = 0.3%) {99.4%}
+752   O                                                                         (4 = 0.1%) {99.6%}
+894   O                                                                         (2 = 0.0%) {99.7%}
+1062  O                                                                         (3 = 0.1%) {99.8%}
+1262  O                                                                         (0 = 0.0%) {99.8%}
+1500  O                                                                         (3 = 0.1%) {99.8%}
+1782  O                                                                         (6 = 0.1%) {99.9%}
+2117  ... 
+
+Histogram: MPArch.RWH_DidUpdateBackingStore recorded 6 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (6 = 100.0%)
+1  ... 
+
+Histogram: MPArch.RWH_OnMsgUpdateRect recorded 6 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (6 = 100.0%)
+1  ... 
+
+Histogram: MPArch.RWH_TabSwitchPaintDuration recorded 2 samples, average = 472.5 (flags = 0x1)
+0    ... 
+160  ------------------------------------------------------------------------O (1 = 50.0%) {0.0%}
+190  ... 
+752  ------------------------------------------------------------------------O (1 = 50.0%) {50.0%}
+894  ... 
+
+Histogram: Media.Midi.ResultOnShutdown recorded 1 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (1 = 100.0%)
+1  ... 
+
+Histogram: Media.Midi.Usage recorded 1 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (1 = 100.0%)
+1  ... 
+
+Histogram: Memory.PressureLevel recorded 1272 samples, average = 0.4 (flags = 0x1)
+0  ------------------------------------------------------------------------O (703 = 55.3%)
+1  ----------------------------------------------------------O               (569 = 44.7%) {55.3%}
+2  ... 
+
+Histogram: Navigation.RedirectChainSize recorded 3 samples, average = 100.0 (flags = 0x1)
+0   ... 
+86  ------------------------------------------------------------------------O (3 = 100.0%) {0.0%}
+113 ... 
+
+Histogram: Navigation.TimeToCommit recorded 3 samples, average = 163.7 (flags = 0x1)
+0    ... 
+34   ------------------------------------------------------------------------O (1 = 33.3%) {0.0%}
+40   ... 
+135  ------------------------------------------------------------------------O (1 = 33.3%) {33.3%}
+160  ... 
+268  ------------------------------------------------------------------------O (1 = 33.3%) {66.7%}
+318  ... 
+
+Histogram: Navigation.TimeToCommit_ExistingRenderer_BeforeUnloadDiscounted recorded 3 samples, average = 163.7 (flags = 0x1)
+0    ... 
+34   ------------------------------------------------------------------------O (1 = 33.3%) {0.0%}
+40   ... 
+135  ------------------------------------------------------------------------O (1 = 33.3%) {33.3%}
+160  ... 
+268  ------------------------------------------------------------------------O (1 = 33.3%) {66.7%}
+318  ... 
+
+Histogram: Navigation.TimeToURLJobStart recorded 3 samples, average = 92.3 (flags = 0x1)
+0    ... 
+29   ------------------------------------------------------------------------O (1 = 33.3%) {0.0%}
+34   ... 
+96   ------------------------------------------------------------------------O (1 = 33.3%) {33.3%}
+114  O                                                                         (0 = 0.0%) {66.7%}
+135  ------------------------------------------------------------------------O (1 = 33.3%) {66.7%}
+160  ... 
+
+Histogram: Navigation.TimeToURLJobStart_ExistingRenderer_BeforeUnloadDiscounted recorded 3 samples, average = 92.3 (flags = 0x1)
+0    ... 
+29   ------------------------------------------------------------------------O (1 = 33.3%) {0.0%}
+34   ... 
+96   ------------------------------------------------------------------------O (1 = 33.3%) {33.3%}
+114  O                                                                         (0 = 0.0%) {66.7%}
+135  ------------------------------------------------------------------------O (1 = 33.3%) {66.7%}
+160  ... 
+
+Histogram: Net.ErrorCodesForImages recorded 3 samples (flags = 0x1)
+0  ------------------------------------------------------------------------O (3 = 100.0%)
+
+Histogram: Net.ErrorCodesForMainFrame3 recorded 6 samples (flags = 0x1)
+0  ------------------------------------------------------------------------O (3 = 50.0%)
+3  ------------------------------------------------------------------------O (3 = 50.0%)
+
+Histogram: Net.ErrorCodesForSubresources2 recorded 29 samples (flags = 0x1)
+0  ------------------------------------------------------------------------O (28 = 96.6%)
+3  ---O                                                                      (1 = 3.4%)
+
+Histogram: Net.HttpJob.TotalTime recorded 1 samples, average = 10.0 (flags = 0x1)
+0   ... 
+10  ------------------------------------------------------------------------O (1 = 100.0%) {0.0%}
+12  ... 
+
+Histogram: Net.HttpJob.TotalTimeCancel recorded 1 samples, average = 10.0 (flags = 0x1)
+0   ... 
+10  ------------------------------------------------------------------------O (1 = 100.0%) {0.0%}
+12  ... 
+
+Histogram: Net.NotifyAddrChangeFailures recorded 67 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (67 = 100.0%)
+1  ... 
+
+Histogram: Net.OSErrorsForGetAddrinfo_Win recorded 73 samples, average = 11001.0 (flags = 0x1)
+0      ... 
+11001  ------------------------------------------------------------------------O (73 = 100.0%) {0.0%}
+11002  ... 
+
+Histogram: Net.PrefProxyConfig.GooglezipProxyRemovalCount recorded 1 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (1 = 100.0%)
+1  ... 
+
+Histogram: Net.ProxyService.ResolveProxyTime recorded 1 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (1 = 100.0%)
+1  ... 
+
+Histogram: Net.ProxyService.ResolvedUsingScript recorded 1 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (1 = 100.0%)
+1  ... 
+
+Histogram: Net.ProxyService.ScriptTerminatedOnInit recorded 36 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (36 = 100.0%)
+1  ... 
+
+Histogram: Net.QuicSession.PreferAesGcm recorded 1 samples, average = 1.0 (flags = 0x1)
+0  O                                                                         (0 = 0.0%)
+1  ------------------------------------------------------------------------O (1 = 100.0%) {0.0%}
+2  O                                                                         (0 = 0.0%) {100.0%}
+
+Histogram: Net.RequestTime2.ErrAborted recorded 3 samples, average = 5.7 (flags = 0x1)
+0   ------------------------------------------------------------------------O (1 = 33.3%)
+1   ------------------------------------------------------------------------O (1 = 33.3%) {33.3%}
+2   ... 
+14  --------------O                                                           (1 = 33.3%) {66.7%}
+19  ... 
+
+Histogram: Net.RequestTime2.Success recorded 3 samples, average = 1.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (2 = 66.7%)
+1  ... 
+3  ------------------------------------O                                     (1 = 33.3%) {66.7%}
+4  ... 
+
+Histogram: Net.UDPSocketWinClose recorded 73 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (73 = 100.0%)
+1  ... 
+
+Histogram: Net.WpadQuickCheckFailure recorded 72 samples, average = 1000.4 (flags = 0x1)
+0    ... 
+894  ------------------------------------------------------------------------O (72 = 100.0%) {0.0%}
+1062 ... 
+
+Histogram: PluginFinder.BuiltInPluginList.ErrorCode recorded 1 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (1 = 100.0%)
+1  ... 
+
+Histogram: Renderer.DrawDuration recorded 32 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (32 = 100.0%)
+1  ... 
+
+Histogram: Renderer.DrawDurationOverestimate recorded 32 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (32 = 100.0%)
+1  ... 
+
+Histogram: Renderer.DrawDurationUnderestimate recorded 32 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (32 = 100.0%)
+1  ... 
+
+Histogram: Renderer.KeyboardQueueSize recorded 271 samples, average = 2.8
+0   O                                                                         (0 = 0.0%)
+1   ------------------------------------------------------------------------O (125 = 46.1%) {0.0%}
+2   ----------------------------------------O                                 (70 = 25.8%) {46.1%}
+3   --------O                                                                 (14 = 5.2%) {72.0%}
+4   -------O                                                                  (12 = 4.4%) {77.1%}
+5   ------O                                                                   (10 = 3.7%) {81.5%}
+6   -----O                                                                    (9 = 3.3%) {85.2%}
+7   ---O                                                                      (5 = 1.8%) {88.6%}
+8   ---O                                                                      (5 = 1.8%) {90.4%}
+9   ---O                                                                      (5 = 1.8%) {92.3%}
+10  ---O                                                                      (5 = 1.8%) {94.1%}
+11  --O                                                                       (3 = 1.1%) {95.9%}
+12  --O                                                                       (4 = 1.5%) {97.0%}
+13  -O                                                                        (2 = 0.7%) {98.5%}
+14  -O                                                                        (1 = 0.4%) {99.3%}
+15  -O                                                                        (1 = 0.4%) {99.6%}
+16  ... 
+
+Histogram: Renderer.WheelQueueSize recorded 174 samples, average = 0.0
+0  ------------------------------------------------------------------------O (174 = 100.0%)
+1  ... 
+
+Histogram: Renderer4.renderPassCount recorded 1003 samples, average = 1.0 (flags = 0x1)
+0  O                                                                         (0 = 0.0%)
+1  ------------------------------------------------------------------------O (1003 = 100.0%) {0.0%}
+2  ... 
+
+Histogram: ResourceScheduler.ClientLoadedTime.Active recorded 3 samples, average = 1368.7 (flags = 0x1)
+0     ------------------------------------------------------------------------O (1 = 33.3%)
+1     ... 
+1547  --------------O                                                           (1 = 33.3%) {33.3%}
+1988  --------------O                                                           (1 = 33.3%) {66.7%}
+2555  ... 
+
+Histogram: ResourceScheduler.ClientLoadedTime.Active.1Client recorded 2 samples, average = 1177.0 (flags = 0x1)
+0     ------------------------------------------------------------------------O (1 = 50.0%)
+1     ... 
+1988  --------------O                                                           (1 = 50.0%) {50.0%}
+2555  ... 
+
+Histogram: ResourceScheduler.ClientLoadedTime.Active.Max5Clients recorded 1 samples, average = 1752.0 (flags = 0x1)
+0     ... 
+1547  ------------------------------------------------------------------------O (1 = 100.0%) {0.0%}
+1988  ... 
+
+Histogram: ResourceScheduler.ClientLoadedTime.Other recorded 2 samples, average = 177.0 (flags = 0x1)
+0    ... 
+76   ------------------------------------------------------------------------O (1 = 50.0%) {0.0%}
+98   ... 
+267  ------------------------------------------------------------------------O (1 = 50.0%) {50.0%}
+343  ... 
+
+Histogram: ResourceScheduler.ClientLoadedTime.Other.1Client recorded 1 samples, average = 276.0 (flags = 0x1)
+0    ... 
+267  ------------------------------------------------------------------------O (1 = 100.0%) {0.0%}
+343  ... 
+
+Histogram: ResourceScheduler.ClientLoadedTime.Other.Max5Clients recorded 1 samples, average = 78.0 (flags = 0x1)
+0   ... 
+76  ------------------------------------------------------------------------O (1 = 100.0%) {0.0%}
+98  ... 
+
+Histogram: ResourceScheduler.ClientLoadedTime.Other.SwitchedToActive recorded 2 samples, average = 130.0 (flags = 0x1)
+0    ... 
+28   ------------------------------------------------------------------------O (1 = 50.0%) {0.0%}
+36   ... 
+208  ------------------------------------------------------------------------O (1 = 50.0%) {50.0%}
+267  ... 
+
+Histogram: ResourceScheduler.ClientLoadedTime.Other.SwitchedToActive.1Client recorded 1 samples, average = 227.0 (flags = 0x1)
+0    ... 
+208  ------------------------------------------------------------------------O (1 = 100.0%) {0.0%}
+267  ... 
+
+Histogram: ResourceScheduler.ClientLoadedTime.Other.SwitchedToActive.Max5Clients recorded 1 samples, average = 33.0 (flags = 0x1)
+0   ... 
+28  ------------------------------------------------------------------------O (1 = 100.0%) {0.0%}
+36  ... 
+
+Histogram: ResourceScheduler.RequestTimeDeferred.Active recorded 35 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (35 = 100.0%)
+1  ... 
+
+Histogram: ResourceScheduler.RequestTimeThrottled.Active recorded 35 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (35 = 100.0%)
+1  ... 
+
+Histogram: Scheduling.Browser.ActivateDuration recorded 31 samples, average = 7.5 (flags = 0x1)
+0   ... 
+3   ----------O                                                               (1 = 3.2%) {0.0%}
+4   -----------------------------------------O                                (4 = 12.9%) {3.2%}
+5   ------------------------------------------------------------------------O (7 = 22.6%) {16.1%}
+6   --------------------------------------------------------------O           (6 = 19.4%) {38.7%}
+7   -------------------------------O                                          (3 = 9.7%) {58.1%}
+8   ... 
+10  -----------------------------------------O                                (4 = 12.9%) {67.7%}
+11  ----------O                                                               (2 = 6.5%) {80.6%}
+13  ----------O                                                               (2 = 6.5%) {87.1%}
+15  ----------O                                                               (2 = 6.5%) {93.5%}
+17  ... 
+
+Histogram: Scheduling.Browser.ActivateDuration.Overestimate recorded 31 samples, average = 3.7 (flags = 0x1)
+0   ------------------------------------------------------------------------O (10 = 32.3%)
+1   --------------O                                                           (2 = 6.5%) {32.3%}
+2   -------O                                                                  (1 = 3.2%) {38.7%}
+3   -------O                                                                  (1 = 3.2%) {41.9%}
+4   --------------O                                                           (2 = 6.5%) {45.2%}
+5   ------------------------------------O                                     (5 = 16.1%) {51.6%}
+6   -----------------------------O                                            (4 = 12.9%) {67.7%}
+7   -------O                                                                  (1 = 3.2%) {80.6%}
+8   --------------O                                                           (2 = 6.5%) {83.9%}
+9   --------------O                                                           (2 = 6.5%) {90.3%}
+10  -------O                                                                  (1 = 3.2%) {96.8%}
+11  ... 
+
+Histogram: Scheduling.Browser.ActivateDuration.Underestimate recorded 31 samples, average = 1.3 (flags = 0x1)
+0  ------------------------------------------------------------------------O (22 = 71.0%)
+1  ---O                                                                      (1 = 3.2%) {71.0%}
+2  -------O                                                                  (2 = 6.5%) {74.2%}
+3  ---O                                                                      (1 = 3.2%) {80.6%}
+4  O                                                                         (0 = 0.0%) {83.9%}
+5  ----------O                                                               (3 = 9.7%) {83.9%}
+6  O                                                                         (0 = 0.0%) {93.5%}
+7  ---O                                                                      (1 = 3.2%) {93.5%}
+8  O                                                                         (0 = 0.0%) {96.8%}
+9  ---O                                                                      (1 = 3.2%) {96.8%}
+10 ... 
+
+Histogram: Scheduling.Browser.BeginMainFrameToCommitDuration recorded 31 samples, average = 387.4 (flags = 0x1)
+0     ... 
+88    ------------O                                                             (1 = 3.2%) {0.0%}
+100   ------------------------O                                                 (2 = 6.5%) {3.2%}
+114   O                                                                         (0 = 0.0%) {9.7%}
+130   ------------------------O                                                 (2 = 6.5%) {9.7%}
+148   ------------O                                                             (1 = 3.2%) {16.1%}
+168   ------------------------------------------------------------------------O (6 = 19.4%) {19.4%}
+191   ------------O                                                             (1 = 3.2%) {38.7%}
+217   ------------------------------------O                                     (3 = 9.7%) {41.9%}
+247   ------------------------------------O                                     (3 = 9.7%) {51.6%}
+281   ------------------------O                                                 (2 = 6.5%) {61.3%}
+320   ------------------------O                                                 (2 = 6.5%) {67.7%}
+364   ------------------------O                                                 (2 = 6.5%) {74.2%}
+414   ------------O                                                             (1 = 3.2%) {80.6%}
+471   ------------O                                                             (1 = 3.2%) {83.9%}
+536   ... 
+1026  ------------O                                                             (1 = 3.2%) {87.1%}
+1168  ------------O                                                             (1 = 3.2%) {90.3%}
+1330  O                                                                         (0 = 0.0%) {93.5%}
+1514  ------------------------O                                                 (2 = 6.5%) {93.5%}
+1724  ... 
+
+Histogram: Scheduling.Browser.BeginMainFrameToCommitDuration.Overestimate recorded 31 samples, average = 347.5 (flags = 0x1)
+0     ------------------------------------------------------------------------O (10 = 32.3%)
+1     ... 
+17    ----O                                                                     (1 = 3.2%) {32.3%}
+19    ... 
+53    -O                                                                        (1 = 3.2%) {35.5%}
+60    -O                                                                        (1 = 3.2%) {38.7%}
+68    ... 
+88    -O                                                                        (1 = 3.2%) {41.9%}
+100   O                                                                         (0 = 0.0%) {45.2%}
+114   -O                                                                        (1 = 3.2%) {45.2%}
+130   O                                                                         (0 = 0.0%) {48.4%}
+148   ------O                                                                   (4 = 12.9%) {48.4%}
+168   ---O                                                                      (2 = 6.5%) {61.3%}
+191   O                                                                         (0 = 0.0%) {67.7%}
+217   ----O                                                                     (3 = 9.7%) {67.7%}
+247   O                                                                         (0 = 0.0%) {77.4%}
+281   -O                                                                        (1 = 3.2%) {77.4%}
+320   ... 
+1168  -O                                                                        (1 = 3.2%) {80.6%}
+1330  -------O                                                                  (5 = 16.1%) {83.9%}
+1514  ... 
+
+Histogram: Scheduling.Browser.BeginMainFrameToCommitDuration.Underestimate recorded 31 samples, average = 118.7 (flags = 0x1)
+0     ------------------------------------------------------------------------O (21 = 67.7%)
+1     ... 
+11    --O                                                                       (1 = 3.2%) {67.7%}
+13    ... 
+19    -O                                                                        (1 = 3.2%) {71.0%}
+22    ... 
+28    -O                                                                        (1 = 3.2%) {74.2%}
+32    ... 
+68    -O                                                                        (1 = 3.2%) {77.4%}
+77    O                                                                         (0 = 0.0%) {80.6%}
+88    -O                                                                        (1 = 3.2%) {80.6%}
+100   ... 
+130   -O                                                                        (1 = 3.2%) {83.9%}
+148   ... 
+191   -O                                                                        (1 = 3.2%) {87.1%}
+217   ... 
+610   -O                                                                        (1 = 3.2%) {90.3%}
+695   O                                                                         (0 = 0.0%) {93.5%}
+791   -O                                                                        (1 = 3.2%) {93.5%}
+901   ... 
+1514  -O                                                                        (1 = 3.2%) {96.8%}
+1724  ... 
+
+Histogram: Scheduling.Browser.CommitToReadyToActivateDuration recorded 31 samples, average = 51.7 (flags = 0x1)
+0    ... 
+17   --------------------------------O                                         (2 = 6.5%) {0.0%}
+19   -----------O                                                              (1 = 3.2%) {6.5%}
+22   ---------------------O                                                    (2 = 6.5%) {9.7%}
+25   ---------------------O                                                    (2 = 6.5%) {16.1%}
+28   ------------------------------------------------------------------------O (9 = 29.0%) {22.6%}
+32   ------------------------O                                                 (3 = 9.7%) {51.6%}
+36   O                                                                         (0 = 0.0%) {61.3%}
+41   ------O                                                                   (1 = 3.2%) {61.3%}
+47   ------O                                                                   (1 = 3.2%) {64.5%}
+53   -------------------O                                                      (3 = 9.7%) {67.7%}
+60   O                                                                         (0 = 0.0%) {77.4%}
+68   -------------O                                                            (2 = 6.5%) {77.4%}
+77   -------------------O                                                      (3 = 9.7%) {83.9%}
+88   ------O                                                                   (1 = 3.2%) {93.5%}
+100  ... 
+320  ------O                                                                   (1 = 3.2%) {96.8%}
+364  ... 
+
+Histogram: Scheduling.Browser.CommitToReadyToActivateDuration.Overestimate recorded 31 samples, average = 85.6 (flags = 0x1)
+0    ------------------------------------------------------------------------O (7 = 22.6%)
+1    ... 
+11   -----O                                                                    (1 = 3.2%) {22.6%}
+13   ... 
+19   ---O                                                                      (1 = 3.2%) {25.8%}
+22   ---O                                                                      (1 = 3.2%) {29.0%}
+25   --------------O                                                           (4 = 12.9%) {32.3%}
+28   --------O                                                                 (3 = 9.7%) {45.2%}
+32   ---O                                                                      (1 = 3.2%) {54.8%}
+36   ----O                                                                     (2 = 6.5%) {58.1%}
+41   ----O                                                                     (2 = 6.5%) {64.5%}
+47   ----O                                                                     (2 = 6.5%) {71.0%}
+53   ... 
+247  ----O                                                                     (2 = 6.5%) {77.4%}
+281  ------O                                                                   (3 = 9.7%) {83.9%}
+320  ----O                                                                     (2 = 6.5%) {93.5%}
+364  ... 
+
+Histogram: Scheduling.Browser.CommitToReadyToActivateDuration.Underestimate recorded 31 samples, average = 14.7 (flags = 0x1)
+0    ------------------------------------------------------------------------O (24 = 77.4%)
+1    O                                                                         (0 = 0.0%) {77.4%}
+2    ---O                                                                      (1 = 3.2%) {77.4%}
+3    ... 
+6    ---O                                                                      (1 = 3.2%) {80.6%}
+7    ... 
+9    ---O                                                                      (1 = 3.2%) {83.9%}
+10   ---O                                                                      (1 = 3.2%) {87.1%}
+11   ... 
+22   -O                                                                        (1 = 3.2%) {90.3%}
+25   ... 
+53   -O                                                                        (1 = 3.2%) {93.5%}
+60   ... 
+320  -O                                                                        (1 = 3.2%) {96.8%}
+364  ... 
+
+Histogram: Scheduling.Browser.DrawDuration recorded 32 samples, average = 89.2 (flags = 0x1)
+0    ... 
+32   -------------O                                                            (1 = 3.1%) {0.0%}
+36   ---------------------O                                                    (2 = 6.3%) {3.1%}
+41   -------------------------------O                                          (3 = 9.4%) {9.4%}
+47   ------------------------------------------------------------------------O (7 = 21.9%) {18.8%}
+53   ---------------------O                                                    (2 = 6.3%) {40.6%}
+60   -------------------------------O                                          (3 = 9.4%) {46.9%}
+68   ---------------------O                                                    (2 = 6.3%) {56.3%}
+77   ---------------------O                                                    (2 = 6.3%) {62.5%}
+88   ----------O                                                               (1 = 3.1%) {68.8%}
+100  ---------------------O                                                    (2 = 6.3%) {71.9%}
+114  ---------------------O                                                    (2 = 6.3%) {78.1%}
+130  ---------------------O                                                    (2 = 6.3%) {84.4%}
+148  ----------O                                                               (1 = 3.1%) {90.6%}
+168  ... 
+281  ----------O                                                               (1 = 3.1%) {93.8%}
+320  O                                                                         (0 = 0.0%) {96.9%}
+364  ----------O                                                               (1 = 3.1%) {96.9%}
+414  ... 
+
+Histogram: Scheduling.Browser.DrawDuration.Overestimate recorded 32 samples, average = 81.7 (flags = 0x1)
+0    ------------------------------------------------------------------------O (7 = 21.9%)
+1    ----------O                                                               (1 = 3.1%) {21.9%}
+2    ... 
+7    ----------O                                                               (1 = 3.1%) {25.0%}
+8    ... 
+25   ---O                                                                      (1 = 3.1%) {28.1%}
+28   ... 
+47   --O                                                                       (1 = 3.1%) {31.3%}
+53   ------O                                                                   (3 = 9.4%) {34.4%}
+60   --O                                                                       (1 = 3.1%) {43.8%}
+68   ------O                                                                   (3 = 9.4%) {46.9%}
+77   ----------O                                                               (5 = 15.6%) {56.3%}
+88   ------O                                                                   (3 = 9.4%) {71.9%}
+100  ... 
+148  --O                                                                       (1 = 3.1%) {81.3%}
+168  O                                                                         (0 = 0.0%) {84.4%}
+191  --O                                                                       (1 = 3.1%) {84.4%}
+217  --O                                                                       (1 = 3.1%) {87.5%}
+247  ------O                                                                   (3 = 9.4%) {90.6%}
+281  ... 
+
+Histogram: Scheduling.Browser.DrawDuration.Underestimate recorded 32 samples, average = 16.8 (flags = 0x1)
+0    ------------------------------------------------------------------------O (25 = 78.1%)
+1    ... 
+6    ---O                                                                      (1 = 3.1%) {78.1%}
+7    ... 
+32   -O                                                                        (2 = 6.3%) {81.3%}
+36   O                                                                         (0 = 0.0%) {87.5%}
+41   -O                                                                        (1 = 3.1%) {87.5%}
+47   O                                                                         (0 = 0.0%) {90.6%}
+53   -O                                                                        (2 = 6.3%) {90.6%}
+60   ... 
+281  -O                                                                        (1 = 3.1%) {96.9%}
+320  ... 
+
+Histogram: Scheduling.Browser.PrepareTilesDuration recorded 33 samples, average = 34.2 (flags = 0x1)
+0   ... 
+15  -------------------------------O                                          (2 = 6.1%) {0.0%}
+17  ---------------O                                                          (1 = 3.0%) {6.1%}
+19  -----------------------------------------O                                (4 = 12.1%) {9.1%}
+22  ------------------------------------------------------------------------O (7 = 21.2%) {21.2%}
+25  -------------------------------O                                          (3 = 9.1%) {42.4%}
+28  -----------------------O                                                  (3 = 9.1%) {51.5%}
+32  ---------------O                                                          (2 = 6.1%) {60.6%}
+36  O                                                                         (0 = 0.0%) {66.7%}
+41  -------------------------O                                                (4 = 12.1%) {66.7%}
+47  ------------O                                                             (2 = 6.1%) {78.8%}
+53  ------------O                                                             (2 = 6.1%) {84.8%}
+60  ------O                                                                   (1 = 3.0%) {90.9%}
+68  ------O                                                                   (1 = 3.0%) {93.9%}
+77  O                                                                         (0 = 0.0%) {97.0%}
+88  ------O                                                                   (1 = 3.0%) {97.0%}
+100 ... 
+
+Histogram: Scheduling.Browser.PrepareTilesDuration.Overestimate recorded 33 samples, average = 18.0 (flags = 0x1)
+0   ------------------------------------------------------------------------O (10 = 30.3%)
+1   ... 
+6   -------O                                                                  (1 = 3.0%) {30.3%}
+7   ... 
+9   -------O                                                                  (1 = 3.0%) {33.3%}
+10  O                                                                         (0 = 0.0%) {36.4%}
+11  ----O                                                                     (1 = 3.0%) {36.4%}
+13  ----O                                                                     (1 = 3.0%) {39.4%}
+15  ----O                                                                     (1 = 3.0%) {42.4%}
+17  O                                                                         (0 = 0.0%) {45.5%}
+19  -----O                                                                    (2 = 6.1%) {45.5%}
+22  -----O                                                                    (2 = 6.1%) {51.5%}
+25  ------------O                                                             (5 = 15.2%) {57.6%}
+28  ----O                                                                     (2 = 6.1%) {72.7%}
+32  -----O                                                                    (3 = 9.1%) {78.8%}
+36  ---O                                                                      (2 = 6.1%) {87.9%}
+41  ---O                                                                      (2 = 6.1%) {93.9%}
+47  ... 
+
+Histogram: Scheduling.Browser.PrepareTilesDuration.Underestimate recorded 33 samples, average = 5.7 (flags = 0x1)
+0   ------------------------------------------------------------------------O (23 = 69.7%)
+1   ---O                                                                      (1 = 3.0%) {69.7%}
+2   ... 
+5   ---O                                                                      (1 = 3.0%) {72.7%}
+6   ... 
+10  ---O                                                                      (1 = 3.0%) {75.8%}
+11  --O                                                                       (1 = 3.0%) {78.8%}
+13  O                                                                         (0 = 0.0%) {81.8%}
+15  --O                                                                       (1 = 3.0%) {81.8%}
+17  ---O                                                                      (2 = 6.1%) {84.8%}
+19  O                                                                         (0 = 0.0%) {90.9%}
+22  -O                                                                        (1 = 3.0%) {90.9%}
+25  ... 
+41  -O                                                                        (2 = 6.1%) {93.9%}
+47  ... 
+
+Histogram: SpellCheck.CheckedWords recorded 1 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (1 = 100.0%)
+1  ... 
+
+Histogram: SpellCheck.CustomWords recorded 2 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (2 = 100.0%)
+1  ... 
+
+Histogram: SpellCheck.Enabled recorded 1 samples, average = 1.0 (flags = 0x1)
+0  O                                                                         (0 = 0.0%)
+1  ------------------------------------------------------------------------O (1 = 100.0%) {0.0%}
+2  O                                                                         (0 = 0.0%) {100.0%}
+
+Histogram: SpellCheck.MisspelledWords recorded 1 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (1 = 100.0%)
+1  ... 
+
+Histogram: SpellCheck.ReplacedWords recorded 1 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (1 = 100.0%)
+1  ... 
+
+Histogram: SpellCheck.ShownSuggestions recorded 1 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (1 = 100.0%)
+1  ... 
+
+Histogram: SpellCheck.SpellingService.Enabled recorded 1 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (1 = 100.0%)
+1  ... 
+
+Histogram: SpellCheck.UniqueWords recorded 1 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (1 = 100.0%)
+1  ... 
+
+Histogram: Startup.BrowserMainRunnerImplInitializeLongTime recorded 1 samples, average = 87.0 (flags = 0x1)
+0   ... 
+77  ------------------------------------------------------------------------O (1 = 100.0%) {0.0%}
+89  ... 
+
+Histogram: Startup.BrowserMainRunnerImplInitializeStep1Time recorded 1 samples, average = 21.0 (flags = 0x1)
+0   ... 
+20  ------------------------------------------------------------------------O (1 = 100.0%) {0.0%}
+24  ... 
+
+Histogram: Startup.BrowserMainRunnerImplInitializeStep2Time recorded 1 samples, average = 65.0 (flags = 0x1)
+0   ... 
+57  ------------------------------------------------------------------------O (1 = 100.0%) {0.0%}
+68  ... 
+
+Histogram: TileManager.ExceededMemoryBudget recorded 33 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (33 = 100.0%)
+1  ... 
+
+Histogram: V8.Initializer.LoadV8Snapshot.Result recorded 1 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (1 = 100.0%)
+1  ... 
+
+Histogram: V8.Initializer.OpenV8File.Result recorded 2 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (2 = 100.0%)
+1  ... 
+
+Histogram: Windows.Win32kRendererLockdown recorded 1 samples, average = 1.0 (flags = 0x1)
+0  O                                                                         (0 = 0.0%)
+1  ------------------------------------------------------------------------O (1 = 100.0%) {0.0%}
+2  O                                                                         (0 = 0.0%) {100.0%}
+
+Histogram: appcache.CompletionQueueTime recorded 2 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (2 = 100.0%)
+1  ... 
+
+Histogram: appcache.CompletionRunTime recorded 2 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (2 = 100.0%)
+1  ... 
+
+Histogram: appcache.JobStartDelay.Network recorded 1 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (1 = 100.0%)
+1  ... 
+
+Histogram: appcache.TaskQueueTime recorded 2 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (2 = 100.0%)
+1  ... 
+
+Histogram: appcache.TaskRunTime recorded 2 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (2 = 100.0%)
+1  ... 
+
+Histogram: mime_sniffer.ShouldSniffMimeType2 recorded 32 samples, average = 1.1 (flags = 0x1)
+0  O                                                                         (0 = 0.0%)
+1  ------------------------------------------------------------------------O (29 = 90.6%) {0.0%}
+2  O                                                                         (3 = 9.4%) {90.6%}
+
+Histogram: mime_sniffer.kByteOrderMark2 recorded 0 samples (flags = 0x1)
+0 ... 
+
+Histogram: mime_sniffer.kMagicNumbers2 recorded 0 samples (flags = 0x1)
+0 ... 
+
+Histogram: mime_sniffer.kSniffCRX recorded 0 samples (flags = 0x1)
+0 ... 
+
+Histogram: mime_sniffer.kSniffableTags2 recorded 0 samples (flags = 0x1)
+0 ... 
+
+Histogram: mime_sniffer.kSniffableTypes2 recorded 3 samples, average = 18.0 (flags = 0x1)
+0   ... 
+18  ------------------------------------------------------------------------O (3 = 100.0%) {0.0%}
+
+Histogram: mime_sniffer.kUnknownMimeTypes2 recorded 6 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (6 = 100.0%)
+1  ... 
+
+Histogram: nosniff.usage recorded 32 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (32 = 100.0%)
+1  ... 
+
+
+[0704/161312:VERBOSE1:pref_proxy_config_tracker_impl.cc(216)] 0119F100: set chrome proxy config service to 011A0178
+[0704/161312:VERBOSE1:pref_proxy_config_tracker_impl.cc(353)] 0119F100: Done pushing proxy to UpdateProxyConfig
+[0704/161312:VERBOSE1:webrtc_internals.cc(51)] Could not get the download directory.
+[0704/161312:INFO:systeminfo.cc(82)] Available number of cores: 4
+[0704/161312:VERBOSE1:child_thread_impl.cc(367)] Mojo is disabled on child
+[0704/161313:VERBOSE1:navigator_impl.cc(168)] Failed Provisional Load: http://libbrowser_dummy_url/, error_code: -3, error_description: , showing_repost_interstitial: 0, frame_id: 1
+[0704/161313:VERBOSE1:script_context.cc(110)] Created context:
+  extension id:           (none)
+  frame:                  5F474080
+  URL:                    file:///Applications/LiveCode%20Community%208.0%20(dp%2011).app/Contents/Tools/Documentation/html_viewer/viewer.html
+  context_type:           WEB_PAGE
+  effective extension id: (none)
+  effective context type: WEB_PAGE
+[0704/161313:VERBOSE1:script_context.cc(110)] Created context:
+  extension id:           (none)
+  frame:                  00000000
+  URL:                    
+  context_type:           UNSPECIFIED
+  effective extension id: (none)
+  effective context type: UNSPECIFIED
+[0704/161313:VERBOSE1:dispatcher.cc(327)] Num tracked contexts: 1
+[0704/161313:VERBOSE1:child_thread_impl.cc(367)] Mojo is disabled on child
+[0704/161313:VERBOSE1:gles2_cmd_decoder.cc(2799)] GL_OES_packed_depth_stencil supported.
+[0704/161313:VERBOSE1:gles2_cmd_decoder.cc(2799)] GL_OES_packed_depth_stencil supported.
+[0704/161313:VERBOSE1:navigator_impl.cc(168)] Failed Provisional Load: file:///Applications/LiveCode%20Community%208.0%20(dp%2011).app/Contents/Tools/Documentation/html_viewer/viewer.html, error_code: -6, error_description: , showing_repost_interstitial: 0, frame_id: 1
+[0704/161313:VERBOSE1:navigator_impl.cc(168)] Failed Provisional Load: data:text/html,chromewebdata, error_code: -3, error_description: , showing_repost_interstitial: 0, frame_id: 1
+[0704/161313:VERBOSE1:cookie_monster.cc(2192)] WARNING: Unsupported cookie scheme: file
+[0704/161313:VERBOSE1:cookie_monster.cc(2192)] WARNING: Unsupported cookie scheme: file
+[0704/161313:VERBOSE1:cookie_monster.cc(2192)] WARNING: Unsupported cookie scheme: file
+[0704/161313:VERBOSE1:mime_type_resource_handler.cc(270)] To buffer: file:///C:/Program%20Files%20(x86)/RunRev/LiveCode%20Business%209.0%20(dp%206)/Documentation/html_viewer/fonts/glyphicons-halflings-regular.woff2
+[0704/185134:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/185134:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/185134:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/185134:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/185134:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/185135:VERBOSE1:proxy_service.cc(1237)] Failed configuring with PAC script, falling-back to manual proxy servers.
+[0704/185143:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/185143:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/185143:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/185143:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/185143:VERBOSE1:dhcp_proxy_script_adapter_fetcher_win.cc(262)] Error fetching PAC URL from DHCP: 2
+[0704/192804:VERBOSE1:component_updater_service.cc(90)] CrxUpdateService stopping
+[0704/192804:VERBOSE1:ipc_sync_channel.cc(386)] Canceling pending sends
+[0704/192805:VERBOSE1:ipc_sync_channel.cc(386)] Canceling pending sends
+[0704/192805:VERBOSE1:ipc_sync_channel.cc(386)] Canceling pending sends
+[0704/192805:VERBOSE1:ipc_sync_channel.cc(386)] Canceling pending sends
+[0704/192805:VERBOSE1:statistics_recorder.cc(332)] Collections of all histograms
+Histogram: Accessibility.InvertedColors recorded 1 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (1 = 100.0%)
+1  ... 
+
+Histogram: Accessibility.ManuallyEnabled recorded 1 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (1 = 100.0%)
+1  ... 
+
+Histogram: Accessibility.State recorded 1 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (1 = 100.0%)
+1  ... 
+
+Histogram: Accessibility.WinAudioDescription recorded 1 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (1 = 100.0%)
+1  ... 
+
+Histogram: Accessibility.WinJAWS recorded 1 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (1 = 100.0%)
+1  ... 
+
+Histogram: Accessibility.WinNVDA recorded 1 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (1 = 100.0%)
+1  ... 
+
+Histogram: Accessibility.WinSAToGo recorded 1 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (1 = 100.0%)
+1  ... 
+
+Histogram: Accessibility.WinScreenReader recorded 1 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (1 = 100.0%)
+1  ... 
+
+Histogram: Accessibility.WinStickyKeys recorded 1 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (1 = 100.0%)
+1  ... 
+
+Histogram: Accessibility.WinZoomText recorded 1 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (1 = 100.0%)
+1  ... 
+
+Histogram: AsyncDNS.ConfigChange recorded 8 samples, average = 0.1 (flags = 0x1)
+0  ------------------------------------------------------------------------O (7 = 87.5%)
+1  ----------O                                                               (1 = 12.5%) {87.5%}
+2  O                                                                         (0 = 0.0%) {100.0%}
+
+Histogram: AsyncDNS.ConfigNotifyInterval recorded 97 samples, average = 4499.1 (flags = 0x1)
+0       ------------------------------------------------------------------------O (73 = 75.3%)
+1       -------O                                                                  (7 = 7.2%) {75.3%}
+2       ---O                                                                      (3 = 3.1%) {82.5%}
+3       -O                                                                        (1 = 1.0%) {85.6%}
+4       ---O                                                                      (3 = 3.1%) {86.6%}
+5       -O                                                                        (3 = 3.1%) {89.7%}
+7       O                                                                         (1 = 1.0%) {92.8%}
+10      O                                                                         (2 = 2.1%) {93.8%}
+14      O                                                                         (0 = 0.0%) {95.9%}
+19      O                                                                         (1 = 1.0%) {95.9%}
+26      ... 
+15215   O                                                                         (1 = 1.0%) {96.9%}
+20614   ... 
+37840   O                                                                         (1 = 1.0%) {97.9%}
+51267   ... 
+317087  O                                                                         (1 = 1.0%) {99.0%}
+429605  ... 
+
+Histogram: AsyncDNS.ConfigParseDuration recorded 24 samples, average = 5.9 (flags = 0x1)
+0   ... 
+3   ------------------------------------------------------------------------O (5 = 20.8%) {0.0%}
+4   ----------------------------------------------------------O               (4 = 16.7%) {20.8%}
+5   ------------------------------------------------------------------------O (5 = 20.8%) {37.5%}
+6   -----------------------------O                                            (2 = 8.3%) {58.3%}
+7   ----------------------------------------------------------O               (4 = 16.7%) {66.7%}
+8   --------------O                                                           (2 = 8.3%) {83.3%}
+10  O                                                                         (0 = 0.0%) {91.7%}
+12  -------O                                                                  (1 = 4.2%) {91.7%}
+14  -----O                                                                    (1 = 4.2%) {95.8%}
+17  ... 
+
+Histogram: AsyncDNS.ConfigParseResult recorded 24 samples, average = 1.0 (flags = 0x1)
+0  O                                                                         (0 = 0.0%)
+1  ------------------------------------------------------------------------O (24 = 100.0%) {0.0%}
+2  O                                                                         (0 = 0.0%) {100.0%}
+
+Histogram: AsyncDNS.ConfigParseWin recorded 24 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (24 = 100.0%)
+1  ... 
+
+Histogram: AsyncDNS.HostParseResult recorded 5 samples, average = 1.0 (flags = 0x1)
+0  O                                                                         (0 = 0.0%)
+1  ------------------------------------------------------------------------O (5 = 100.0%) {0.0%}
+2  O                                                                         (0 = 0.0%) {100.0%}
+
+Histogram: AsyncDNS.HostsChange recorded 5 samples, average = 0.2 (flags = 0x1)
+0  ------------------------------------------------------------------------O (4 = 80.0%)
+1  ------------------O                                                       (1 = 20.0%) {80.0%}
+2  O                                                                         (0 = 0.0%) {100.0%}
+
+Histogram: AsyncDNS.HostsNotifyInterval recorded 3 samples, average = 145498.0 (flags = 0x1)
+0       ... 
+15215   ------------------------------------------------------------------------O (1 = 33.3%) {0.0%}
+20614   ... 
+37840   ------------------------------------------------------------------------O (1 = 33.3%) {33.3%}
+51267   ... 
+317087  ------------------------------------------------------------------------O (1 = 33.3%) {66.7%}
+429605  ... 
+
+Histogram: AsyncDNS.HostsParseDuration recorded 5 samples, average = 5.0 (flags = 0x1)
+0  ... 
+2  ------------------------------------O                                     (1 = 20.0%) {0.0%}
+3  O                                                                         (0 = 0.0%) {20.0%}
+4  ------------------------------------------------------------------------O (2 = 40.0%) {20.0%}
+5  O                                                                         (0 = 0.0%) {60.0%}
+6  ------------------------------------O                                     (1 = 20.0%) {60.0%}
+7  O                                                                         (0 = 0.0%) {80.0%}
+8  ------------------O                                                       (1 = 20.0%) {80.0%}
+10 ... 
+
+Histogram: AsyncDNS.HostsParseWin recorded 5 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (5 = 100.0%)
+1  ... 
+
+Histogram: AsyncDNS.HostsSize recorded 5 samples, average = 824.0 (flags = 0x1)
+0    ... 
+777  ------------------------------------------------------------------------O (5 = 100.0%) {0.0%}
+1023 ... 
+
+Histogram: AsyncDNS.NameServersType recorded 8 samples, average = 2.0 (flags = 0x1)
+0  ... 
+2  ------------------------------------------------------------------------O (8 = 100.0%) {0.0%}
+3  ... 
+
+Histogram: AsyncDNS.WatchStatus recorded 1 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (1 = 100.0%)
+1  ... 
+
+Histogram: Aura.CreatedGpuBrowserCompositor recorded 1 samples, average = 1.0 (flags = 0x1)
+0  O                                                                         (0 = 0.0%)
+1  ------------------------------------------------------------------------O (1 = 100.0%) {0.0%}
+2  O                                                                         (0 = 0.0%) {100.0%}
+
+Histogram: ChildProcessSecurityPolicy.PerChildFilePermissions recorded 1 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (1 = 100.0%)
+1  ... 
+
+Histogram: Compositing.Browser.DisplayListRecordingSource.UpdateInvalidatedAreaPerMs recorded 3 samples, average = 15514112.0 (flags = 0x1)
+0        ... 
+1000000  ------------------------------------------------------------------------O (3 = 100.0%) {0.0%}
+
+Histogram: Compositing.Browser.DisplayListRecordingSource.UpdateUs recorded 3 samples, average = 331.3 (flags = 0x1)
+0    ... 
+49   ------------------------------------------------------------------------O (1 = 33.3%) {0.0%}
+65   O                                                                         (0 = 0.0%) {33.3%}
+86   ------------------------------------------------------------------------O (1 = 33.3%) {33.3%}
+113  ... 
+777  ------------------------------------------------------------------------O (1 = 33.3%) {66.7%}
+1023 ... 
+
+Histogram: Compositing.Browser.PictureMemoryUsageKb recorded 7 samples, average = 9.0 (flags = 0x1)
+0  ... 
+9  ------------------------------------------------------------------------O (7 = 100.0%) {0.0%}
+12 ... 
+
+Histogram: Compositing.NumActiveLayers recorded 7 samples, average = 6.6 (flags = 0x1)
+0  ... 
+4  ------------------------------------O                                     (1 = 14.3%) {0.0%}
+5  O                                                                         (0 = 0.0%) {14.3%}
+7  ------------------------------------------------------------------------O (6 = 85.7%) {14.3%}
+10 ... 
+
+Histogram: ContentSettings.DefaultCookiesSetting recorded 1 samples, average = 1.0 (flags = 0x1)
+0  O                                                                         (0 = 0.0%)
+1  ------------------------------------------------------------------------O (1 = 100.0%) {0.0%}
+2  ... 
+
+Histogram: ContentSettings.DefaultImagesSetting recorded 1 samples, average = 1.0 (flags = 0x1)
+0  O                                                                         (0 = 0.0%)
+1  ------------------------------------------------------------------------O (1 = 100.0%) {0.0%}
+2  ... 
+
+Histogram: ContentSettings.DefaultJavaScriptSetting recorded 1 samples, average = 1.0 (flags = 0x1)
+0  O                                                                         (0 = 0.0%)
+1  ------------------------------------------------------------------------O (1 = 100.0%) {0.0%}
+2  ... 
+
+Histogram: ContentSettings.DefaultLocationSetting recorded 1 samples, average = 3.0 (flags = 0x1)
+0  ... 
+3  ------------------------------------------------------------------------O (1 = 100.0%) {0.0%}
+4  ... 
+
+Histogram: ContentSettings.DefaultMIDISysExSetting recorded 1 samples, average = 3.0 (flags = 0x1)
+0  ... 
+3  ------------------------------------------------------------------------O (1 = 100.0%) {0.0%}
+4  ... 
+
+Histogram: ContentSettings.DefaultMediaStreamCameraSetting recorded 1 samples, average = 3.0 (flags = 0x1)
+0  ... 
+3  ------------------------------------------------------------------------O (1 = 100.0%) {0.0%}
+4  ... 
+
+Histogram: ContentSettings.DefaultMediaStreamMicSetting recorded 1 samples, average = 3.0 (flags = 0x1)
+0  ... 
+3  ------------------------------------------------------------------------O (1 = 100.0%) {0.0%}
+4  ... 
+
+Histogram: ContentSettings.DefaultMouseCursorSetting recorded 1 samples, average = 3.0 (flags = 0x1)
+0  ... 
+3  ------------------------------------------------------------------------O (1 = 100.0%) {0.0%}
+4  ... 
+
+Histogram: ContentSettings.DefaultNotificationsSetting recorded 1 samples, average = 3.0 (flags = 0x1)
+0  ... 
+3  ------------------------------------------------------------------------O (1 = 100.0%) {0.0%}
+4  ... 
+
+Histogram: ContentSettings.DefaultPluginsSetting recorded 1 samples, average = 1.0 (flags = 0x1)
+0  O                                                                         (0 = 0.0%)
+1  ------------------------------------------------------------------------O (1 = 100.0%) {0.0%}
+2  ... 
+
+Histogram: ContentSettings.DefaultPopupsSetting recorded 1 samples, average = 2.0 (flags = 0x1)
+0  ... 
+2  ------------------------------------------------------------------------O (1 = 100.0%) {0.0%}
+3  ... 
+
+Histogram: ContentSettings.DefaultPushMessagingSetting recorded 1 samples, average = 3.0 (flags = 0x1)
+0  ... 
+3  ------------------------------------------------------------------------O (1 = 100.0%) {0.0%}
+4  ... 
+
+Histogram: ContentSettings.NumberOfAllowCookiesExceptions recorded 1 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (1 = 100.0%)
+1  ... 
+
+Histogram: ContentSettings.NumberOfBlockCookiesExceptions recorded 1 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (1 = 100.0%)
+1  ... 
+
+Histogram: ContentSettings.NumberOfExceptions recorded 1 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (1 = 100.0%)
+1  ... 
+
+Histogram: ContentSettings.NumberOfSessionOnlyCookiesExceptions recorded 1 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (1 = 100.0%)
+1  ... 
+
+Histogram: Cookie.CookieSourceScheme recorded 0 samples (flags = 0x1)
+0 ... 
+
+Histogram: Cookie.Count recorded 0 samples (flags = 0x1)
+0 ... 
+
+Histogram: Cookie.DeletionCause recorded 0 samples (flags = 0x1)
+0 ... 
+
+Histogram: Cookie.EvictedLastAccessMinutes recorded 0 samples (flags = 0x1)
+0 ... 
+
+Histogram: Cookie.ExpirationDurationMinutes recorded 0 samples (flags = 0x1)
+0 ... 
+
+Histogram: Cookie.TimeBlockedOnLoad recorded 0 samples (flags = 0x1)
+0 ... 
+
+Histogram: Cookie.Type recorded 0 samples (flags = 0x1)
+0 ... 
+
+Histogram: DNS.AttemptCancelled recorded 2 samples, average = 1.0 (flags = 0x1)
+0  O                                                                         (0 = 0.0%)
+1  ------------------------------------------------------------------------O (2 = 100.0%) {0.0%}
+2  ... 
+
+Histogram: DNS.AttemptDiscarded recorded 2 samples, average = 1.0 (flags = 0x1)
+0  O                                                                         (0 = 0.0%)
+1  ------------------------------------------------------------------------O (2 = 100.0%) {0.0%}
+2  ... 
+
+Histogram: DNS.AttemptFailDuration recorded 2 samples, average = 2292.5 (flags = 0x1)
+0     ... 
+2074  ------------------------------------------------------------------------O (2 = 100.0%) {0.0%}
+2394  ... 
+
+Histogram: DNS.AttemptFailure recorded 2 samples, average = 1.0 (flags = 0x1)
+0  O                                                                         (0 = 0.0%)
+1  ------------------------------------------------------------------------O (2 = 100.0%) {0.0%}
+2  ... 
+
+Histogram: DNS.EmptyAddressListAndNoError recorded 2 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (2 = 100.0%)
+1  ... 
+
+Histogram: DNS.JobQueueTime recorded 2 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (2 = 100.0%)
+1  ... 
+
+Histogram: DNS.JobQueueTimeAfterChange recorded 2 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (2 = 100.0%)
+1  ... 
+
+Histogram: DNS.JobQueueTimeAfterChange_HIGHEST recorded 2 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (2 = 100.0%)
+1  ... 
+
+Histogram: DNS.JobQueueTime_HIGHEST recorded 2 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (2 = 100.0%)
+1  ... 
+
+Histogram: DNS.ResolveCategory recorded 2 samples, average = 1.0 (flags = 0x1)
+0  O                                                                         (0 = 0.0%)
+1  ------------------------------------------------------------------------O (2 = 100.0%) {0.0%}
+2  ... 
+
+Histogram: DNS.ResolveFail recorded 2 samples, average = 2292.5 (flags = 0x1)
+0     ... 
+2074  ------------------------------------------------------------------------O (2 = 100.0%) {0.0%}
+2394  ... 
+
+Histogram: DNS.ResolveFail_FAMILY_IPV4 recorded 2 samples, average = 2292.5 (flags = 0x1)
+0     ... 
+2074  ------------------------------------------------------------------------O (2 = 100.0%) {0.0%}
+2394  ... 
+
+Histogram: Event.Latency.Browser recorded 274 samples, average = 190118.5 (flags = 0x1)
+0       ... 
+162351  ---------------O                                                          (47 = 17.2%) {0.0%}
+184863  ------------------------------------------------------------------------O (227 = 82.8%) {17.2%}
+210497  ... 
+
+Histogram: Event.Latency.Browser.ET_KEY_PRESSED recorded 10 samples, average = 189800.8 (flags = 0x1)
+0       ... 
+162351  ------------------O                                                       (2 = 20.0%) {0.0%}
+184863  ------------------------------------------------------------------------O (8 = 80.0%) {20.0%}
+210497  ... 
+
+Histogram: Event.Latency.Browser.ET_KEY_RELEASED recorded 11 samples, average = 186782.3 (flags = 0x1)
+0       ... 
+162351  -----------------------------------------O                                (4 = 36.4%) {0.0%}
+184863  ------------------------------------------------------------------------O (7 = 63.6%) {36.4%}
+210497  ... 
+
+Histogram: Event.Latency.Browser.ET_MOUSE_DRAGGED recorded 99 samples, average = 190187.4 (flags = 0x1)
+0       ... 
+162351  ----------------O                                                         (18 = 18.2%) {0.0%}
+184863  ------------------------------------------------------------------------O (81 = 81.8%) {18.2%}
+210497  ... 
+
+Histogram: Event.Latency.Browser.ET_MOUSE_EXITED recorded 1 samples, average = 183690.0 (flags = 0x1)
+0       ... 
+162351  ------------------------------------------------------------------------O (1 = 100.0%) {0.0%}
+184863  ... 
+
+Histogram: Event.Latency.Browser.ET_MOUSE_MOVED recorded 149 samples, average = 190375.5 (flags = 0x1)
+0       ... 
+162351  ------------O                                                             (22 = 14.8%) {0.0%}
+184863  ------------------------------------------------------------------------O (127 = 85.2%) {14.8%}
+210497  ... 
+
+Histogram: Event.Latency.Browser.ET_MOUSE_PRESSED recorded 2 samples, average = 191187.0 (flags = 0x1)
+0       ... 
+184863  ------------------------------------------------------------------------O (2 = 100.0%) {0.0%}
+210497  ... 
+
+Histogram: Event.Latency.Browser.ET_MOUSE_RELEASED recorded 2 samples, average = 189637.5 (flags = 0x1)
+0       ... 
+184863  ------------------------------------------------------------------------O (2 = 100.0%) {0.0%}
+210497  ... 
+
+Histogram: Extensions.FeatureProviderStaticInitTime recorded 1 samples, average = 7.0 (flags = 0x1)
+0  ... 
+7  ------------------------------------------------------------------------O (1 = 100.0%) {0.0%}
+8  ... 
+
+Histogram: GPU.AtExitContextGroupCount recorded 1 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (1 = 100.0%)
+1  ... 
+
+Histogram: GPU.AtExitMBytesAllocated recorded 1 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (1 = 100.0%)
+1  ... 
+
+Histogram: GPU.AtExitMBytesAllocatedMax recorded 1 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (1 = 100.0%)
+1  ... 
+
+Histogram: GPU.AtExitMBytesLimit recorded 1 samples, average = 512.0 (flags = 0x1)
+0    ... 
+511  ------------------------------------------------------------------------O (1 = 100.0%) {0.0%}
+586  ... 
+
+Histogram: GPU.AtExitManagedMemoryClientCount recorded 1 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (1 = 100.0%)
+1  ... 
+
+Histogram: GPU.AtExitReceivedMemoryStats recorded 1 samples, average = 1.0 (flags = 0x1)
+0  O                                                                         (0 = 0.0%)
+1  ------------------------------------------------------------------------O (1 = 100.0%) {0.0%}
+2  O                                                                         (0 = 0.0%) {100.0%}
+
+Histogram: GPU.AtExitSurfaceCount recorded 1 samples, average = 1.0 (flags = 0x1)
+0  O                                                                         (0 = 0.0%)
+1  ------------------------------------------------------------------------O (1 = 100.0%) {0.0%}
+2  ... 
+
+Histogram: GPU.BlacklistFeatureTestResults.Accelerated2dCanvas recorded 2 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (2 = 100.0%)
+1  ... 
+
+Histogram: GPU.BlacklistFeatureTestResults.GpuCompositing recorded 2 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (2 = 100.0%)
+1  ... 
+
+Histogram: GPU.BlacklistFeatureTestResults.GpuRasterization recorded 2 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (2 = 100.0%)
+1  ... 
+
+Histogram: GPU.BlacklistFeatureTestResults.Webgl recorded 2 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (2 = 100.0%)
+1  ... 
+
+Histogram: GPU.BlacklistFeatureTestResultsWindows.Accelerated2dCanvas recorded 2 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (2 = 100.0%)
+1  ... 
+
+Histogram: GPU.BlacklistFeatureTestResultsWindows.GpuCompositing recorded 2 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (2 = 100.0%)
+1  ... 
+
+Histogram: GPU.BlacklistFeatureTestResultsWindows.GpuRasterization recorded 2 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (2 = 100.0%)
+1  ... 
+
+Histogram: GPU.BlacklistFeatureTestResultsWindows.Webgl recorded 2 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (2 = 100.0%)
+1  ... 
+
+Histogram: GPU.BlacklistTestResultsPerEntry recorded 2 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (2 = 100.0%)
+1  ... 
+
+Histogram: GPU.CreateBrowserCompositor recorded 1 samples, average = 13.0 (flags = 0x1)
+0   ... 
+12  ------------------------------------------------------------------------O (1 = 100.0%) {0.0%}
+14  ... 
+
+Histogram: GPU.D3DShaderModel recorded 1 samples, average = 5.0 (flags = 0x1)
+0  ... 
+5  ------------------------------------------------------------------------O (1 = 100.0%) {0.0%}
+6  O                                                                         (0 = 0.0%) {100.0%}
+
+Histogram: GPU.DisplayLinkInstallationStatus recorded 1 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (1 = 100.0%)
+1  ... 
+
+Histogram: GPU.GLResetNotificationStrategy recorded 2 samples (flags = 0x1)
+0      ------------------------------------------------------------------------O (1 = 50.0%)
+33362  ------------------------------------------------------------------------O (1 = 50.0%)
+
+Histogram: GPU.GPU.GPUProcessSoftwareRendering recorded 1 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (1 = 100.0%)
+1  ... 
+
+Histogram: GPU.GPUProcessInitialized recorded 1 samples, average = 1.0 (flags = 0x1)
+0  O                                                                         (0 = 0.0%)
+1  ------------------------------------------------------------------------O (1 = 100.0%) {0.0%}
+2  O                                                                         (0 = 0.0%) {100.0%}
+
+Histogram: GPU.GPUProcessLaunchCause recorded 1 samples, average = 8.0 (flags = 0x1)
+0  ... 
+8  ------------------------------------------------------------------------O (1 = 100.0%) {0.0%}
+9  ... 
+
+Histogram: GPU.GPUProcessLaunchTime recorded 1 samples, average = 228.0 (flags = 0x1)
+0    ... 
+226  ------------------------------------------------------------------------O (1 = 100.0%) {0.0%}
+268  ... 
+
+Histogram: GPU.GPUProcessLifetimeEvents recorded 1 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (1 = 100.0%)
+1  ... 
+
+Histogram: GPU.GPUProcessTerminationStatus recorded 1 samples, average = 4.0 (flags = 0x1)
+0  ... 
+4  ------------------------------------------------------------------------O (1 = 100.0%) {0.0%}
+5  ... 
+
+Histogram: MPArch.ChildProcessLaunchFirst recorded 1 samples, average = 225.0 (flags = 0x1)
+0    ... 
+190  ------------------------------------------------------------------------O (1 = 100.0%) {0.0%}
+226  ... 
+
+Histogram: MPArch.ChildProcessLaunchSubsequent recorded 1 samples, average = 1.0 (flags = 0x1)
+0  O                                                                         (0 = 0.0%)
+1  ------------------------------------------------------------------------O (1 = 100.0%) {0.0%}
+2  ... 
+
+Histogram: MPArch.IIR_InputEventDelta recorded 261 samples, average = 12.3 (flags = 0x1)
+0    ------------------------------------------------------------------------O (210 = 80.5%)
+1    ------O                                                                   (17 = 6.5%) {80.5%}
+2    -O                                                                        (2 = 0.8%) {87.0%}
+3    O                                                                         (1 = 0.4%) {87.7%}
+4    -O                                                                        (4 = 1.5%) {88.1%}
+5    -O                                                                        (2 = 0.8%) {89.7%}
+6    -O                                                                        (2 = 0.8%) {90.4%}
+7    O                                                                         (1 = 0.4%) {91.2%}
+8    O                                                                         (2 = 0.8%) {91.6%}
+10   ... 
+14   O                                                                         (4 = 1.5%) {92.3%}
+17   O                                                                         (1 = 0.4%) {93.9%}
+20   ... 
+29   O                                                                         (1 = 0.4%) {94.3%}
+34   ... 
+48   O                                                                         (3 = 1.1%) {94.6%}
+57   O                                                                         (0 = 0.0%) {95.8%}
+68   O                                                                         (2 = 0.8%) {95.8%}
+81   O                                                                         (1 = 0.4%) {96.6%}
+96   O                                                                         (4 = 1.5%) {96.9%}
+114  ... 
+226  O                                                                         (1 = 0.4%) {98.5%}
+268  O                                                                         (1 = 0.4%) {98.9%}
+318  ... 
+752  O                                                                         (2 = 0.8%) {99.2%}
+894  ... 
+
+Histogram: MPArch.RWH_DidUpdateBackingStore recorded 3 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (3 = 100.0%)
+1  ... 
+
+Histogram: MPArch.RWH_OnMsgUpdateRect recorded 3 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (3 = 100.0%)
+1  ... 
+
+Histogram: MPArch.RWH_TabSwitchPaintDuration recorded 1 samples, average = 618.0 (flags = 0x1)
+0    ... 
+533  ------------------------------------------------------------------------O (1 = 100.0%) {0.0%}
+633  ... 
+
+Histogram: Media.Midi.ResultOnShutdown recorded 1 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (1 = 100.0%)
+1  ... 
+
+Histogram: Media.Midi.Usage recorded 1 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (1 = 100.0%)
+1  ... 
+
+Histogram: Memory.PressureLevel recorded 2337 samples, average = 0.3 (flags = 0x1)
+0  ------------------------------------------------------------------------O (1565 = 67.0%)
+1  ------------------------------------O                                     (772 = 33.0%) {67.0%}
+2  ... 
+
+Histogram: Navigation.RedirectChainSize recorded 1 samples, average = 100.0 (flags = 0x1)
+0   ... 
+86  ------------------------------------------------------------------------O (1 = 100.0%) {0.0%}
+113 ... 
+
+Histogram: Navigation.TimeToCommit recorded 1 samples, average = 87.0 (flags = 0x1)
+0   ... 
+81  ------------------------------------------------------------------------O (1 = 100.0%) {0.0%}
+96  ... 
+
+Histogram: Navigation.TimeToCommit_ExistingRenderer_BeforeUnloadDiscounted recorded 1 samples, average = 87.0 (flags = 0x1)
+0   ... 
+81  ------------------------------------------------------------------------O (1 = 100.0%) {0.0%}
+96  ... 
+
+Histogram: Navigation.TimeToURLJobStart recorded 2 samples, average = 137.5 (flags = 0x1)
+0    ... 
+81   ------------------------------------------------------------------------O (1 = 50.0%) {0.0%}
+96   ... 
+190  ------------------------------------------------------------------------O (1 = 50.0%) {50.0%}
+226  ... 
+
+Histogram: Navigation.TimeToURLJobStart_ExistingRenderer_BeforeUnloadDiscounted recorded 1 samples, average = 81.0 (flags = 0x1)
+0   ... 
+81  ------------------------------------------------------------------------O (1 = 100.0%) {0.0%}
+96  ... 
+
+Histogram: Net.ErrorCodesForImages recorded 1 samples (flags = 0x1)
+0  ------------------------------------------------------------------------O (1 = 100.0%)
+
+Histogram: Net.ErrorCodesForMainFrame3 recorded 3 samples (flags = 0x1)
+0  ------------------------------------------------------------------------O (1 = 33.3%)
+3  ------------------------------------------------------------------------O (1 = 33.3%)
+6  ------------------------------------------------------------------------O (1 = 33.3%)
+
+Histogram: Net.ErrorCodesForSubresources2 recorded 13 samples (flags = 0x1)
+0  ------------------------------------------------------------------------O (13 = 100.0%)
+
+Histogram: Net.NotifyAddrChangeFailures recorded 5 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (5 = 100.0%)
+1  ... 
+
+Histogram: Net.OSErrorsForGetAddrinfo_Win recorded 2 samples, average = 11001.0 (flags = 0x1)
+0      ... 
+11001  ------------------------------------------------------------------------O (2 = 100.0%) {0.0%}
+11002  ... 
+
+Histogram: Net.PrefProxyConfig.GooglezipProxyRemovalCount recorded 1 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (1 = 100.0%)
+1  ... 
+
+Histogram: Net.ProxyService.ScriptTerminatedOnInit recorded 1 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (1 = 100.0%)
+1  ... 
+
+Histogram: Net.QuicSession.PreferAesGcm recorded 1 samples, average = 1.0 (flags = 0x1)
+0  O                                                                         (0 = 0.0%)
+1  ------------------------------------------------------------------------O (1 = 100.0%) {0.0%}
+2  O                                                                         (0 = 0.0%) {100.0%}
+
+Histogram: Net.RequestTime2.ErrAborted recorded 1 samples, average = 1.0 (flags = 0x1)
+0  O                                                                         (0 = 0.0%)
+1  ------------------------------------------------------------------------O (1 = 100.0%) {0.0%}
+2  ... 
+
+Histogram: Net.RequestTime2.MiscError recorded 1 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (1 = 100.0%)
+1  ... 
+
+Histogram: Net.RequestTime2.Success recorded 1 samples, average = 2.0 (flags = 0x1)
+0  ... 
+2  ------------------------------------------------------------------------O (1 = 100.0%) {0.0%}
+3  ... 
+
+Histogram: Net.UDPSocketWinClose recorded 2 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (2 = 100.0%)
+1  ... 
+
+Histogram: Net.WpadQuickCheckFailure recorded 2 samples, average = 1001.0 (flags = 0x1)
+0    ... 
+894  ------------------------------------------------------------------------O (2 = 100.0%) {0.0%}
+1062 ... 
+
+Histogram: PluginFinder.BuiltInPluginList.ErrorCode recorded 1 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (1 = 100.0%)
+1  ... 
+
+Histogram: Renderer.DrawDuration recorded 7 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (7 = 100.0%)
+1  ... 
+
+Histogram: Renderer.DrawDurationOverestimate recorded 7 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (7 = 100.0%)
+1  ... 
+
+Histogram: Renderer.DrawDurationUnderestimate recorded 7 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (7 = 100.0%)
+1  ... 
+
+Histogram: Renderer.KeyboardQueueSize recorded 30 samples, average = 2.7
+0   O                                                                         (0 = 0.0%)
+1   ------------------------------------------------------------------------O (14 = 46.7%) {0.0%}
+2   -----------------------------------------O                                (8 = 26.7%) {46.7%}
+3   -----O                                                                    (1 = 3.3%) {73.3%}
+4   -----O                                                                    (1 = 3.3%) {76.7%}
+5   -----O                                                                    (1 = 3.3%) {80.0%}
+6   -----O                                                                    (1 = 3.3%) {83.3%}
+7   -----O                                                                    (1 = 3.3%) {86.7%}
+8   -----O                                                                    (1 = 3.3%) {90.0%}
+9   -----O                                                                    (1 = 3.3%) {93.3%}
+10  -----O                                                                    (1 = 3.3%) {96.7%}
+11  ... 
+
+Histogram: Renderer4.renderPassCount recorded 103 samples, average = 1.0 (flags = 0x1)
+0  O                                                                         (0 = 0.0%)
+1  ------------------------------------------------------------------------O (103 = 100.0%) {0.0%}
+2  ... 
+
+Histogram: ResourceScheduler.ClientLoadedTime.Active recorded 2 samples, average = 1030.5 (flags = 0x1)
+0     ... 
+76    ------------------------------------------------------------------------O (1 = 50.0%) {0.0%}
+98    ... 
+1547  ------------------------------------------------------------------------O (1 = 50.0%) {50.0%}
+1988  ... 
+
+Histogram: ResourceScheduler.ClientLoadedTime.Active.1Client recorded 2 samples, average = 1030.5 (flags = 0x1)
+0     ... 
+76    ------------------------------------------------------------------------O (1 = 50.0%) {0.0%}
+98    ... 
+1547  ------------------------------------------------------------------------O (1 = 50.0%) {50.0%}
+1988  ... 
+
+Histogram: ResourceScheduler.ClientLoadedTime.Other recorded 1 samples, average = 309.0 (flags = 0x1)
+0    ... 
+267  ------------------------------------------------------------------------O (1 = 100.0%) {0.0%}
+343  ... 
+
+Histogram: ResourceScheduler.ClientLoadedTime.Other.1Client recorded 1 samples, average = 309.0 (flags = 0x1)
+0    ... 
+267  ------------------------------------------------------------------------O (1 = 100.0%) {0.0%}
+343  ... 
+
+Histogram: ResourceScheduler.ClientLoadedTime.Other.SwitchedToActive recorded 1 samples, average = 195.0 (flags = 0x1)
+0    ... 
+162  ------------------------------------------------------------------------O (1 = 100.0%) {0.0%}
+208  ... 
+
+Histogram: ResourceScheduler.ClientLoadedTime.Other.SwitchedToActive.1Client recorded 1 samples, average = 195.0 (flags = 0x1)
+0    ... 
+162  ------------------------------------------------------------------------O (1 = 100.0%) {0.0%}
+208  ... 
+
+Histogram: ResourceScheduler.RequestTimeDeferred.Active recorded 16 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (16 = 100.0%)
+1  ... 
+
+Histogram: ResourceScheduler.RequestTimeThrottled.Active recorded 16 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (16 = 100.0%)
+1  ... 
+
+Histogram: Scheduling.Browser.ActivateDuration recorded 7 samples, average = 5.1 (flags = 0x1)
+0  ... 
+4  ------------------------------------------------------------------------O (3 = 42.9%) {0.0%}
+5  ------------------------------------------------O                         (2 = 28.6%) {42.9%}
+6  ------------------------O                                                 (1 = 14.3%) {71.4%}
+7  O                                                                         (0 = 0.0%) {85.7%}
+8  ------------------------O                                                 (1 = 14.3%) {85.7%}
+9  ... 
+
+Histogram: Scheduling.Browser.ActivateDuration.Overestimate recorded 7 samples, average = 2.9 (flags = 0x1)
+0  ------------------------O                                                 (1 = 14.3%)
+1  O                                                                         (0 = 0.0%) {14.3%}
+2  ------------------------O                                                 (1 = 14.3%) {14.3%}
+3  ------------------------------------------------O                         (2 = 28.6%) {28.6%}
+4  ------------------------------------------------------------------------O (3 = 42.9%) {57.1%}
+5  ... 
+
+Histogram: Scheduling.Browser.ActivateDuration.Underestimate recorded 7 samples, average = 1.1 (flags = 0x1)
+0  ------------------------------------------------------------------------O (6 = 85.7%)
+1  ... 
+8  ------------O                                                             (1 = 14.3%) {85.7%}
+9  ... 
+
+Histogram: Scheduling.Browser.BeginMainFrameToCommitDuration recorded 7 samples, average = 800.0 (flags = 0x1)
+0     ... 
+77    ------------------------------------------------------------------------O (1 = 14.3%) {0.0%}
+88    ------------------------------------------------------------------------O (1 = 14.3%) {14.3%}
+100   ... 
+168   ------------------------------------------------------------------------O (1 = 14.3%) {28.6%}
+191   ... 
+247   ------------------------------------------------------------------------O (1 = 14.3%) {42.9%}
+281   ------------------------------------------------------------------------O (1 = 14.3%) {57.1%}
+320   ... 
+1514  ------------------------------------------------------------------------O (1 = 14.3%) {71.4%}
+1724  ... 
+2898  ------------------------------------------------------------------------O (1 = 14.3%) {85.7%}
+3300  ... 
+
+Histogram: Scheduling.Browser.BeginMainFrameToCommitDuration.Overestimate recorded 7 samples, average = 1064.6 (flags = 0x1)
+0     ------------------------------------------------------------------------O (2 = 28.6%)
+1     ... 
+1330  ----------------------O                                                   (3 = 42.9%) {28.6%}
+1514  --------------O                                                           (2 = 28.6%) {71.4%}
+1724  ... 
+
+Histogram: Scheduling.Browser.BeginMainFrameToCommitDuration.Underestimate recorded 7 samples, average = 434.0 (flags = 0x1)
+0     ------------------------------------------------------------------------O (5 = 71.4%)
+1     ... 
+1330  ---O                                                                      (1 = 14.3%) {71.4%}
+1514  ---O                                                                      (1 = 14.3%) {85.7%}
+1724  ... 
+
+Histogram: Scheduling.Browser.CommitToReadyToActivateDuration recorded 7 samples, average = 230.9 (flags = 0x1)
+0    ... 
+17   ------------------------------------------------------------------------O (1 = 14.3%) {0.0%}
+19   ------------------------------------------------O                         (1 = 14.3%) {14.3%}
+22   O                                                                         (0 = 0.0%) {28.6%}
+25   ------------------------------------------------O                         (1 = 14.3%) {28.6%}
+28   ------------------------------------O                                     (1 = 14.3%) {42.9%}
+32   O                                                                         (0 = 0.0%) {57.1%}
+36   -----------------------------O                                            (1 = 14.3%) {57.1%}
+41   ... 
+610  -----------------------------O                                            (1 = 14.3%) {71.4%}
+695  O                                                                         (0 = 0.0%) {85.7%}
+791  -----------------------------O                                            (1 = 14.3%) {85.7%}
+901  ... 
+
+Histogram: Scheduling.Browser.CommitToReadyToActivateDuration.Overestimate recorded 7 samples, average = 419.7 (flags = 0x1)
+0    ------------------------------------------------------------------------O (2 = 28.6%)
+1    ... 
+536  ------------------------------------O                                     (5 = 71.4%) {28.6%}
+610  ... 
+
+Histogram: Scheduling.Browser.CommitToReadyToActivateDuration.Underestimate recorded 7 samples, average = 124.3 (flags = 0x1)
+0    ------------------------------------------------------------------------O (5 = 71.4%)
+1    ... 
+247  ---O                                                                      (1 = 14.3%) {71.4%}
+281  ... 
+610  ---O                                                                      (1 = 14.3%) {85.7%}
+695  ... 
+
+Histogram: Scheduling.Browser.DrawDuration recorded 7 samples, average = 180.7 (flags = 0x1)
+0    ... 
+36   ------------------------------------------------------------------------O (1 = 14.3%) {0.0%}
+41   O                                                                         (0 = 0.0%) {14.3%}
+47   ------------------------------------------------------------------------O (1 = 14.3%) {14.3%}
+53   ------------------------------------------------------------------------O (1 = 14.3%) {28.6%}
+60   ... 
+88   ------------------------------------------------------------------------O (1 = 14.3%) {42.9%}
+100  O                                                                         (0 = 0.0%) {57.1%}
+114  ------------------------------------------------------------------------O (1 = 14.3%) {57.1%}
+130  ... 
+320  ------------------------------------------------------------------------O (1 = 14.3%) {71.4%}
+364  ... 
+536  ------------------------------------------------------------------------O (1 = 14.3%) {85.7%}
+610  ... 
+
+Histogram: Scheduling.Browser.DrawDuration.Overestimate recorded 7 samples, average = 187.4 (flags = 0x1)
+0    ------------------------------------------------------------------------O (2 = 28.6%)
+1    ... 
+191  -------O                                                                  (1 = 14.3%) {28.6%}
+217  -------O                                                                  (1 = 14.3%) {42.9%}
+247  -------O                                                                  (1 = 14.3%) {57.1%}
+281  --------------O                                                           (2 = 28.6%) {71.4%}
+320  ... 
+
+Histogram: Scheduling.Browser.DrawDuration.Underestimate recorded 7 samples, average = 83.6 (flags = 0x1)
+0    ------------------------------------------------------------------------O (5 = 71.4%)
+1    ... 
+247  ---O                                                                      (1 = 14.3%) {71.4%}
+281  O                                                                         (0 = 0.0%) {85.7%}
+320  ---O                                                                      (1 = 14.3%) {85.7%}
+364  ... 
+
+Histogram: Scheduling.Browser.PrepareTilesDuration recorded 8 samples, average = 110.6 (flags = 0x1)
+0    ... 
+17   ------------------------------------------------------------------------O (3 = 37.5%) {0.0%}
+19   ... 
+28   ------------O                                                             (1 = 12.5%) {37.5%}
+32   ------------O                                                             (1 = 12.5%) {50.0%}
+36   ----------O                                                               (1 = 12.5%) {62.5%}
+41   ... 
+68   ----------O                                                               (1 = 12.5%) {75.0%}
+77   ... 
+610  ----------O                                                               (1 = 12.5%) {87.5%}
+695  ... 
+
+Histogram: Scheduling.Browser.PrepareTilesDuration.Overestimate recorded 8 samples, average = 35.9 (flags = 0x1)
+0   ------------------------------------------------------------------------O (2 = 25.0%)
+1   ... 
+36  --------------O                                                           (2 = 25.0%) {25.0%}
+41  -------O                                                                  (1 = 12.5%) {50.0%}
+47  O                                                                         (0 = 0.0%) {62.5%}
+53  ----------------------O                                                   (3 = 37.5%) {62.5%}
+60  ... 
+
+Histogram: Scheduling.Browser.PrepareTilesDuration.Underestimate recorded 8 samples, average = 81.8 (flags = 0x1)
+0    ------------------------------------------------------------------------O (6 = 75.0%)
+1    ... 
+68   --O                                                                       (1 = 12.5%) {75.0%}
+77   ... 
+536  --O                                                                       (1 = 12.5%) {87.5%}
+610  ... 
+
+Histogram: Startup.BrowserMainRunnerImplInitializeLongTime recorded 1 samples, average = 90.0 (flags = 0x1)
+0   ... 
+89  ------------------------------------------------------------------------O (1 = 100.0%) {0.0%}
+103 ... 
+
+Histogram: Startup.BrowserMainRunnerImplInitializeStep1Time recorded 1 samples, average = 22.0 (flags = 0x1)
+0   ... 
+20  ------------------------------------------------------------------------O (1 = 100.0%) {0.0%}
+24  ... 
+
+Histogram: Startup.BrowserMainRunnerImplInitializeStep2Time recorded 1 samples, average = 68.0 (flags = 0x1)
+0   ... 
+68  ------------------------------------------------------------------------O (1 = 100.0%) {0.0%}
+81  ... 
+
+Histogram: TileManager.ExceededMemoryBudget recorded 8 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (8 = 100.0%)
+1  ... 
+
+Histogram: V8.Initializer.LoadV8Snapshot.Result recorded 1 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (1 = 100.0%)
+1  ... 
+
+Histogram: V8.Initializer.OpenV8File.Result recorded 2 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (2 = 100.0%)
+1  ... 
+
+Histogram: Windows.Win32kRendererLockdown recorded 1 samples, average = 1.0 (flags = 0x1)
+0  O                                                                         (0 = 0.0%)
+1  ------------------------------------------------------------------------O (1 = 100.0%) {0.0%}
+2  O                                                                         (0 = 0.0%) {100.0%}
+
+Histogram: appcache.CompletionQueueTime recorded 2 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (2 = 100.0%)
+1  ... 
+
+Histogram: appcache.CompletionRunTime recorded 2 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (2 = 100.0%)
+1  ... 
+
+Histogram: appcache.TaskQueueTime recorded 2 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (2 = 100.0%)
+1  ... 
+
+Histogram: appcache.TaskRunTime recorded 2 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (2 = 100.0%)
+1  ... 
+
+Histogram: mime_sniffer.ShouldSniffMimeType2 recorded 14 samples, average = 1.1 (flags = 0x1)
+0  O                                                                         (0 = 0.0%)
+1  ------------------------------------------------------------------------O (13 = 92.9%) {0.0%}
+2  O                                                                         (1 = 7.1%) {92.9%}
+
+Histogram: mime_sniffer.kByteOrderMark2 recorded 0 samples (flags = 0x1)
+0 ... 
+
+Histogram: mime_sniffer.kMagicNumbers2 recorded 0 samples (flags = 0x1)
+0 ... 
+
+Histogram: mime_sniffer.kSniffCRX recorded 0 samples (flags = 0x1)
+0 ... 
+
+Histogram: mime_sniffer.kSniffableTags2 recorded 0 samples (flags = 0x1)
+0 ... 
+
+Histogram: mime_sniffer.kSniffableTypes2 recorded 1 samples, average = 18.0 (flags = 0x1)
+0   ... 
+18  ------------------------------------------------------------------------O (1 = 100.0%) {0.0%}
+
+Histogram: mime_sniffer.kUnknownMimeTypes2 recorded 2 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (2 = 100.0%)
+1  ... 
+
+Histogram: nosniff.usage recorded 14 samples, average = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (14 = 100.0%)
+1  ... 
+
+

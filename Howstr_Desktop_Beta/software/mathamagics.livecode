@@ -15,6 +15,9 @@ function fitImageToConstraint pStuff
       put pStuff["maxHeight"] into tHeight
    end if
    
+   put the formattedwidth of tImage into tTest
+   if tTest is 0 then exit fitImageToConstraint
+   
    put (the formattedWidth of tImage) / tWidth into tRatio
    put (the formattedHeight of tImage) / tRatio into tProportionalHeight
    put (the formattedHeight of tImage) / tHeight into tRatio
